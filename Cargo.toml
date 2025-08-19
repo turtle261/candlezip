@@ -1,0 +1,31 @@
+[package]
+name = "gptzip"
+version = "0.1.0"
+edition = "2021"
+description = "Model-based text compressor using Candle + HF Transformers (LLaMA-compatible) with a 64-bit arithmetic coder"
+license = "Apache-2.0 OR MIT"
+repository = "https://example.com/your-repo"
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+opt-level = 3
+panic = "abort"
+
+[dependencies]
+anyhow = "1.0"
+blake3 = "1.5"
+byteorder = "1.5"
+clap = { version = "4.5", features = ["derive"] }
+hf-hub = "0.4"
+indicatif = "0.17"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "1.0"
+tokenizers = "0.19"
+
+# Candle (GPU build: enable the cuda features if CUDA is available)
+candle-core = { version = "0.9.1", features = ["cuda"] }
+candle-nn = { version = "0.9.1", features = ["cuda"] }
+candle-transformers = { version = "0.9.1", features = ["cuda"] }
+
