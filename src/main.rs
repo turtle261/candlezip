@@ -105,6 +105,7 @@ struct Cli {
     reprime_interval: usize,
 
     /// Block size for batched processing to improve performance (default 32)
+    /// Larger values improve speed but use more memory. Range: 1-256
     #[arg(long, default_value = "32")]
     block_size: usize,
 
@@ -1019,8 +1020,8 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     let char_count = String::from_utf8_lossy(&data).chars().count() as u64;
     let bpc = if char_count > 0 { (8.0 * enc_bytes as f64) / (char_count as f64) } else { f64::NAN };
     println!(
-        "Encoded: {} bytes -> {} bytes | bits/byte={:.3} | bits/char={:.3} | context={} | time={:.2?}",
-        orig_len_bytes, enc_bytes, bpb, bpc, cli.context, elapsed
+        "Encoded: {} bytes -> {} bytes | bits/byte={:.3} | bits/char={:.3} | context={} | block_size={} | time={:.2?}",
+        orig_len_bytes, enc_bytes, bpb, bpc, cli.context, cli.block_size, elapsed
     );
     Ok(())
 }
