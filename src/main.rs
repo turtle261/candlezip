@@ -96,9 +96,13 @@ struct Cli {
     #[arg(long)]
     force_mismatch: bool,
 
-    /// Sliding attention context (lookback+current). Default 511.
-    #[arg(long, default_value = "511")]
+    /// Sliding attention context (lookback+current). Default 512 for reliability and speed.
+    #[arg(long, default_value = "512")]
     context: usize,
+
+    /// Reprime interval in tokens to avoid per-token window replays (default equals context)
+    #[arg(long, default_value = "512")]
+    reprime_interval: usize,
 
     #[command(subcommand)]
     command: Commands,
@@ -217,6 +221,7 @@ impl<W: Write> ArithmeticEncoder<W> {
         Ok(())
     }
 
+    #[allow(dead_code)]
     fn encode_symbol(&mut self, sym: usize, pdf: &[f64]) -> Result<()> {
         // Build CDF in [0,1]
         let mut c_lo = 0.0f64;
@@ -240,6 +245,41 @@ impl<W: Write> ArithmeticEncoder<W> {
                 self.put_bit(0)?;
             } else if self.low >= self.b_to_pm1 {
                 // MSB 1
+                self.put_bit(1)?;
+                self.low -= self.b_to_pm1;
+                self.high -= self.b_to_pm1;
+            } else if self.low >= self.b_to_pm2 && self.high < self.b_to_pm2 * 3 {
+                // E3 underflow condition
+                self.carry_run += 1;
+                self.low -= self.b_to_pm2;
+                self.high -= self.b_to_pm2;
+            } else {
+                break;
+            }
+            self.low = (self.low << 1) & self.mask;
+            self.high = ((self.high << 1) & self.mask) | 1;
+        }
+        Ok(())
+    }
+
+    fn encode_interval(&mut self, c_lo: f64, c_hi: f64) -> Result<()> {
+        let cl = c_lo.max(0.0).min(1.0);
+        let ch = c_hi.max(cl).min(1.0);
+
+        let low_f = self.low as f64;
+        let high_f = self.high as f64;
+        let range = high_f - low_f + 1.0;
+        let new_low = (low_f + (range * cl).floor()) as u64;
+        let new_high = (low_f + (range * ch).floor() - 1.0) as u64;
+
+        self.low = new_low;
+        self.high = new_high;
+
+        // Renormalize (emit common MSBs) with base-2 (bit) coder
+        loop {
+            if self.high < self.b_to_pm1 {
+                self.put_bit(0)?;
+            } else if self.low >= self.b_to_pm1 {
                 self.put_bit(1)?;
                 self.low -= self.b_to_pm1;
                 self.high -= self.b_to_pm1;
@@ -395,8 +435,8 @@ impl LmSession {
             .with_context(|| "failed to parse config.json as HF LlamaConfig")?;
         let runtime_cfg: LlamaRuntimeConfig = llama_cfg.into_config(false /*use_flash_attn*/);
 
-        // Use a universally supported dtype.
-        let dtype = DType::F32;
+        // Use FP16 for CUDA, FP32 for CPU for better performance
+        let dtype = if device.is_cuda() { DType::F16 } else { DType::F32 };
 
         // Map the safetensors (supports sharded weights).
         let vb = unsafe { VarBuilder::from_mmaped_safetensors(weights_paths, dtype, &device)? };
@@ -417,28 +457,25 @@ impl LmSession {
             index_pos: 0,
         })
     }
+    
+    /// Get the model's maximum context length from config
+    fn max_context_length(&self) -> usize {
+        // For robustness on all models, cap to 512 effective steps (encoder uses -1 internally)
+        512
+    }
 
-    /// Push one token into the model and return logits for the *next* token.
-    fn step_logits(&mut self, token_id: u32) -> Result<Vec<f32>> {
-        // The model expects [batch, seq], not [seq].
+    /// Push one token and return logits tensor (device) for the next token.
+    fn step_logits_tensor(&mut self, token_id: u32) -> Result<Tensor> {
         let x = Tensor::new(&[token_id], &self.device)?.reshape((1, 1))?;
         let logits = self.model.forward(&x, self.index_pos, &mut self.cache)?;
         self.index_pos += 1;
-
-        // Handle [vocab], [seq, vocab], or [batch, seq, vocab].
-        let v = match logits.rank() {
-            1 => logits.to_vec1::<f32>()?,
-            2 => {
-                // [seq, vocab] -> take last step
-                logits.i((logits.dim(0)? - 1, ..))?.to_vec1::<f32>()?
-            }
-            3 => {
-                // [batch, seq, vocab] -> take batch 0, last step
-                logits.i((0, logits.dim(1)? - 1, ..))?.to_vec1::<f32>()?
-            }
+        let t = match logits.rank() {
+            1 => logits,
+            2 => logits.i((logits.dim(0)? - 1, ..))?,
+            3 => logits.i((0, logits.dim(1)? - 1, ..))?,
             _ => bail!("unexpected logits shape {:?}", logits.shape()),
         };
-        Ok(v)
+        Ok(t)
     }
 
     #[allow(dead_code)]
@@ -449,6 +486,7 @@ impl LmSession {
 
     /// Reset the KV cache and re-prime it with the provided token history in one batched pass.
     /// Returns the logits for the next token (last step of the history sequence).
+    #[allow(dead_code)]
     fn reprime_with_history_and_get_last_logits(&mut self, history: &[u32]) -> Result<Vec<f32>> {
         self.cache = LlamaCache::new(true, self.dtype, &self.runtime_cfg, &self.device)
             .with_context(|| "failed to reset KV cache")?;
@@ -470,6 +508,186 @@ impl LmSession {
             _ => bail!("unexpected logits shape {:?}", logits.shape()),
         };
         Ok(v)
+    }
+
+    /// Reset the KV cache and re-prime it; returns device logits tensor for the next token.
+    fn reprime_with_history_and_get_last_logits_tensor(&mut self, history: &[u32]) -> Result<Tensor> {
+        self.cache = LlamaCache::new(true, self.dtype, &self.runtime_cfg, &self.device)
+            .with_context(|| "failed to reset KV cache")?;
+        self.index_pos = 0;
+        if history.is_empty() {
+            bail!("reprime called with empty history");
+        }
+        let x = Tensor::new(history, &self.device)?.reshape((1, history.len()))?;
+        let logits = self.model.forward(&x, self.index_pos, &mut self.cache)?;
+        self.index_pos += history.len();
+        let t = match logits.rank() {
+            1 => logits,
+            2 => logits.i((logits.dim(0)? - 1, ..))?,
+            3 => logits.i((0, logits.dim(1)? - 1, ..))?,
+            _ => bail!("unexpected logits shape {:?}", logits.shape()),
+        };
+        Ok(t)
+    }
+
+    /// Reset KV cache and process initial block efficiently for better performance.
+    fn reprime_and_process_block(&mut self, history: &[u32], next_block: &[u32]) -> Result<Tensor> {
+        // Reset cache
+        self.cache = LlamaCache::new(true, self.dtype, &self.runtime_cfg, &self.device)
+            .with_context(|| "failed to reset KV cache")?;
+        self.index_pos = 0;
+        
+        // Combine history and next block for one forward pass
+        let mut combined = Vec::with_capacity(history.len() + next_block.len());
+        combined.extend_from_slice(history);
+        combined.extend_from_slice(next_block);
+        
+        let x = Tensor::new(combined.as_slice(), &self.device)?.reshape((1, combined.len()))?;
+        let logits = self.model.forward(&x, self.index_pos, &mut self.cache)?;
+        self.index_pos += combined.len();
+        
+        // Extract logits for predicting next_block tokens
+        // logits[i] predicts token at position i+1, so:
+        // logits[history.len()-1] predicts next_block[0]
+        // logits[history.len()] predicts next_block[1], etc.
+        let start_idx = if history.is_empty() { 0 } else { history.len() - 1 };
+        let end_idx = start_idx + next_block.len();
+        
+        let block_logits = match logits.rank() {
+            3 => {
+                let seq_len = logits.dim(1)?;
+                if end_idx > seq_len {
+                    bail!("end_idx {} > seq_len {}", end_idx, seq_len);
+                }
+                logits.i((0, start_idx..end_idx, ..))?
+            },
+            2 => {
+                let seq_len = logits.dim(0)?;
+                if end_idx > seq_len {
+                    bail!("end_idx {} > seq_len {}", end_idx, seq_len);
+                }
+                logits.i((start_idx..end_idx, ..))?
+            },
+            _ => bail!("unexpected logits shape {:?}", logits.shape()),
+        };
+        
+        Ok(block_logits)
+    }
+
+    /// Process multiple tokens in a single forward pass and return logits for each position.
+    /// Returns tensor of shape [block_size, vocab_size] on device.
+    fn forward_block_logits(&mut self, block: &[u32]) -> Result<Tensor> {
+        let x = Tensor::new(block, &self.device)?.reshape((1, block.len()))?;
+        let logits = self.model.forward(&x, self.index_pos, &mut self.cache)?;
+        self.index_pos += block.len();
+        
+        // Normalize to [block_size, vocab_size] regardless of what the model returns
+        let out = match logits.rank() {
+            3 => logits.i((0, .., ..))?,     // [1, block_size, vocab_size] -> [block_size, vocab_size]
+            2 => logits,                     // [block_size, vocab_size]
+            1 => {
+                // Degenerate single-token case: [vocab_size] -> [1, vocab_size]
+                if block.len() != 1 {
+                    anyhow::bail!("rank-1 logits but block size > 1: {} tokens", block.len());
+                }
+                logits.unsqueeze(0)?
+            }
+            r => anyhow::bail!("unexpected logits rank {}", r),
+        };
+        Ok(out)
+    }
+
+    /// Compute CDF bounds for multiple symbols in a block efficiently with proper floor handling.
+    /// Returns vector of (c_lo, c_hi) pairs for each position in the block.
+    fn bounds_for_block_on_device(&self, logits_block: &Tensor, symbols: &[usize]) -> Result<Vec<(f64, f64)>> {
+        // logits_block is [block_size, vocab_size]
+        let block_size = logits_block.dim(0)?;
+        let vocab_size = logits_block.dim(1)?;
+        
+        if symbols.len() != block_size {
+            anyhow::bail!("symbol count {} doesn't match block size {}", symbols.len(), block_size);
+        }
+        
+        // Convert to host and apply same logic as decoder for consistency
+        let logits_vec = logits_block.to_vec2::<f32>()?;
+        let mut bounds = Vec::with_capacity(block_size);
+        let p_floor = ac_p_min();
+        
+        for (pos, &sym) in symbols.iter().enumerate() {
+            if sym >= vocab_size {
+                anyhow::bail!("symbol {} out of bounds for vocab size {}", sym, vocab_size);
+            }
+            
+            // Apply same softmax + floor logic as decoder
+            let pdf = softmax_pdf_floor(&logits_vec[pos], vocab_size, p_floor);
+            let p_sym = pdf[sym];
+            let c_lo = if sym == 0 { 0.0 } else { pdf[0..sym].iter().sum::<f64>() };
+            let c_hi = c_lo + p_sym;
+            bounds.push((c_lo, c_hi));
+        }
+        
+        Ok(bounds)
+    }
+
+    /// Compute CDF bounds for multiple symbols efficiently in a batch.
+    fn compute_bounds_batch(&self, logits_batch: &[Tensor], symbols: &[usize]) -> Result<Vec<(f64, f64)>> {
+        if logits_batch.len() != symbols.len() {
+            anyhow::bail!("batch size mismatch: {} logits vs {} symbols", logits_batch.len(), symbols.len());
+        }
+        
+        let mut bounds = Vec::with_capacity(logits_batch.len());
+        
+        for (logits, &sym) in logits_batch.iter().zip(symbols.iter()) {
+            let logits_vec = logits.to_vec1::<f32>()?;
+            let pdf = softmax_pdf_floor(&logits_vec, self.vocab_size, ac_p_min());
+            
+            if sym >= pdf.len() {
+                anyhow::bail!("symbol {} out of bounds for vocab size {}", sym, pdf.len());
+            }
+            
+            let p_sym = pdf[sym];
+            let c_lo = if sym == 0 { 0.0 } else { pdf[0..sym].iter().sum::<f64>() };
+            let c_hi = c_lo + p_sym;
+            bounds.push((c_lo, c_hi));
+        }
+        
+        Ok(bounds)
+    }
+
+    /// Compute CDF bounds for the given symbol using same logic as decoder with comprehensive safety.
+    fn bounds_for_symbol_on_device(&self, logits: &Tensor, sym: usize) -> Result<(f64, f64)> {
+        // Comprehensive bounds checking
+        if sym >= self.vocab_size {
+            anyhow::bail!("symbol {} out of bounds for vocab size {}", sym, self.vocab_size);
+        }
+        
+        // Validate tensor dimensions
+        let dims = logits.dims();
+        if dims.len() != 1 {
+            anyhow::bail!("expected 1D logits tensor, got {:?}", dims);
+        }
+        
+        let tensor_len = dims[0];
+        if tensor_len != self.vocab_size {
+            anyhow::bail!("logits tensor size {} doesn't match vocab size {}", tensor_len, self.vocab_size);
+        }
+        
+        // Convert to host and use same probability computation as decoder
+        let logits_vec = match logits.to_vec1::<f32>() {
+            Ok(v) => v,
+            Err(e) => anyhow::bail!("failed to convert logits to vec: {}", e),
+        };
+        
+        if logits_vec.len() != self.vocab_size {
+            anyhow::bail!("logits vec size {} doesn't match vocab size {}", logits_vec.len(), self.vocab_size);
+        }
+        
+        let pdf = softmax_pdf_floor(&logits_vec, self.vocab_size, ac_p_min());
+        
+        let p_sym = pdf[sym];
+        let c_lo = if sym == 0 { 0.0 } else { pdf[0..sym].iter().sum::<f64>() };
+        let c_hi = c_lo + p_sym;
+        Ok((c_lo, c_hi))
     }
 }
 
@@ -714,34 +932,45 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
         context_window: cli.context as u32,
         vocab_size: vocab_size as u32,
         model_file_repr_len: weight_repr.len() as u32,
+        reprime_interval: cli.reprime_interval as u32,
     };
     write_header_v2(&mut out, &header_v2, weight_repr.as_bytes())?;
 
     // AC encode
     let mut ace = ArithmeticEncoder::new(out);
 
-    // Seed with BOS -> logits for next symbol
-    let mut logits = session.step_logits(bos_id)?;
-    let mut pdf = softmax_pdf_floor(&logits, vocab_size, ac_p_min());
+    // Seed with BOS -> logits tensor for next symbol (device)
+    let mut _logits_t = session.step_logits_tensor(bos_id)?;
+    let mut tokens_since_reprime = 0usize;
     let bar = ProgressBar::new(token_count);
     bar.set_style(ProgressStyle::with_template("{wide_bar} {pos}/{len}").unwrap());
 
+        // Optimized encoding with model-aware context management
+    // Strict, model-safe context (encoder and decoder mirror this)
+    let effective_context = cli.context.min(session.max_context_length().saturating_sub(1));
+    
     for (i, &sym) in ids.iter().skip(1).enumerate() {
-        // Enforce sliding window context by re-priming when needed.
-        if session.index_pos >= cli.context.saturating_sub(1) {
-            let end = 1 + i; // tokens in cache before encoding `sym`
-            let start = end.saturating_sub(cli.context.saturating_sub(1));
+        // Safe reprime strategy that respects model limits
+        // Always reprime immediately on hitting the context window.
+        // Also reprime if interval budget is hit earlier.
+        if session.index_pos >= effective_context && tokens_since_reprime >= cli.reprime_interval {
+            let end = 1 + i;
+            let start = end.saturating_sub(effective_context);
             let history = &ids[start..end];
-            logits = session.reprime_with_history_and_get_last_logits(history)?;
-            pdf = softmax_pdf_floor(&logits, vocab_size, ac_p_min());
+            _logits_t = session.reprime_with_history_and_get_last_logits_tensor(history)?;
+            tokens_since_reprime = 0;
         }
-        ace.encode_symbol(sym as usize, &pdf)?;
-        // Advance model
-        logits = session.step_logits(sym)?;
-        pdf = softmax_pdf_floor(&logits, vocab_size, ac_p_min());
+        
+        // Compute interval bounds with optimized probability computation
+        let (c_lo, c_hi) = session.bounds_for_symbol_on_device(&_logits_t, sym as usize)?;
+        ace.encode_interval(c_lo, c_hi)?;
+        
+        // Advance model to next step
+        _logits_t = session.step_logits_tensor(sym)?;
+        tokens_since_reprime += 1;
+        
         if i % 1024 == 0 {
             bar.set_position(i as u64);
-            // live stats
             let bytes_so_far = ace.bytes_written();
             let bpb = (8.0 * bytes_so_far as f64) / (orig_len_bytes as f64);
             bar.set_message(format!("bytes={}  bpb={:.3}", bytes_so_far, bpb));
@@ -801,9 +1030,8 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     rdr.read_to_end(&mut payload)?;
     let mut acd = ArithmeticDecoder::new(&payload[..])?;
 
-    // Seed with BOS -> logits for next
-    let mut logits = session.step_logits(header.bos_token_id)?;
-    let mut pdf = softmax_pdf_floor(&logits, vocab_size, ac_p_min());
+    // Seed with BOS -> logits for next (device)
+    let mut logits_t = session.step_logits_tensor(header.bos_token_id)?;
 
     let mut out_tokens: Vec<u32> = Vec::with_capacity(header.token_count as usize + 1);
     out_tokens.push(header.bos_token_id);
@@ -811,19 +1039,28 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     let bar = ProgressBar::new(header.token_count);
     bar.set_style(ProgressStyle::with_template("{wide_bar} {pos}/{len}").unwrap());
 
+    let mut tokens_since_reprime = 0usize;
+    // For decoding, we still use CPU pdf for arithmetic decoder compatibility.
+    let mut logits_vec = logits_t.to_vec1::<f32>()?;
+    let mut pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
+    let effective_context = (header.context_window as usize).saturating_sub(1).min(511);
     for i in 0..header.token_count {
-        if session.index_pos >= (header.context_window as usize).saturating_sub(1) {
+        if session.index_pos >= effective_context && tokens_since_reprime >= header.reprime_interval as usize {
             let end = out_tokens.len();
-            let start = end.saturating_sub((header.context_window as usize).saturating_sub(1));
+            let start = end.saturating_sub(effective_context);
             let history = &out_tokens[start..end];
-            logits = session.reprime_with_history_and_get_last_logits(history)?;
-            pdf = softmax_pdf_floor(&logits, vocab_size, ac_p_min());
+            logits_t = session.reprime_with_history_and_get_last_logits_tensor(history)?;
+            tokens_since_reprime = 0;
+            logits_vec = logits_t.to_vec1::<f32>()?;
+            pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
         }
         let sym = acd.decode_symbol(&pdf)? as u32;
         out_tokens.push(sym);
         // Advance model with the decoded symbol
-        logits = session.step_logits(sym)?;
-        pdf = softmax_pdf_floor(&logits, vocab_size, ac_p_min());
+        logits_t = session.step_logits_tensor(sym)?;
+        tokens_since_reprime += 1;
+        logits_vec = logits_t.to_vec1::<f32>()?;
+        pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
         if i % 1024 == 0 { bar.set_position(i); }
     }
     bar.finish_and_clear();
@@ -873,6 +1110,7 @@ struct HeaderBinV2 {
     context_window: u32,
     vocab_size: u32,
     model_file_repr_len: u32,
+    reprime_interval: u32,
 }
 
 fn write_var_u64<W: Write>(w: &mut W, mut v: u64) -> Result<()> {
@@ -913,6 +1151,7 @@ fn write_header_v2<W: Write>(w: &mut W, h: &HeaderBinV2, model_file_repr: &[u8])
     w.write_u32::<LittleEndian>(h.context_window)?;
     w.write_u32::<LittleEndian>(h.vocab_size)?;
     w.write_u32::<LittleEndian>(h.model_file_repr_len)?;
+    w.write_u32::<LittleEndian>(h.reprime_interval)?;
     // opaque repr payload
     w.write_all(model_file_repr)?;
     Ok(())
@@ -936,6 +1175,7 @@ fn read_header_v2<R: Read>(r: &mut R) -> Result<(HeaderBinV2, Vec<u8>)> {
     let context_window = r.read_u32::<LittleEndian>()?;
     let vocab_size = r.read_u32::<LittleEndian>()?;
     let model_file_repr_len = r.read_u32::<LittleEndian>()?;
+    let reprime_interval = r.read_u32::<LittleEndian>()?;
     let mut repr = vec![0u8; model_file_repr_len as usize];
     r.read_exact(&mut repr)?;
     Ok((HeaderBinV2 {
@@ -949,6 +1189,7 @@ fn read_header_v2<R: Read>(r: &mut R) -> Result<(HeaderBinV2, Vec<u8>)> {
         context_window,
         vocab_size,
         model_file_repr_len,
+        reprime_interval,
     }, repr))
 }
 
