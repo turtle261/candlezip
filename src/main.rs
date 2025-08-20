@@ -104,6 +104,10 @@ struct Cli {
     #[arg(long, default_value = "512")]
     reprime_interval: usize,
 
+    /// Block size for batched processing to improve performance (default 32)
+    #[arg(long, default_value = "32")]
+    block_size: usize,
+
     #[command(subcommand)]
     command: Commands,
 }
@@ -547,10 +551,10 @@ impl LmSession {
         self.index_pos += combined.len();
         
         // Extract logits for predicting next_block tokens
-        // logits[i] predicts token at position i+1, so:
-        // logits[history.len()-1] predicts next_block[0]
-        // logits[history.len()] predicts next_block[1], etc.
-        let start_idx = if history.is_empty() { 0 } else { history.len() - 1 };
+        // For sequence prediction: logits[i] predicts token at position i+1
+        // So logits[history.len()-1] predicts next_block[0], logits[history.len()] predicts next_block[1], etc.
+        // But we need to be careful about the indexing when history is empty
+        let start_idx = history.len().saturating_sub(1);
         let end_idx = start_idx + next_block.len();
         
         let block_logits = match logits.rank() {
@@ -928,7 +932,7 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
         model_hash16: model_hash16,
         tokenizer_hash16: tokenizer_hash16,
         orig_hash16: orig_blake3_16,
-        reserved_flags: 0,
+        reserved_flags: cli.block_size as u32, // Store block size in reserved field
         context_window: cli.context as u32,
         vocab_size: vocab_size as u32,
         model_file_repr_len: weight_repr.len() as u32,
@@ -939,41 +943,69 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     // AC encode
     let mut ace = ArithmeticEncoder::new(out);
 
-    // Seed with BOS -> logits tensor for next symbol (device)
-    let mut _logits_t = session.step_logits_tensor(bos_id)?;
+    // Seed the model with BOS token for consistent state
+    session.step_logits_tensor(bos_id)?;
     let mut tokens_since_reprime = 0usize;
     let bar = ProgressBar::new(token_count);
     bar.set_style(ProgressStyle::with_template("{wide_bar} {pos}/{len}").unwrap());
 
-        // Optimized encoding with model-aware context management
+    // Optimized block-based encoding with model-aware context management
     // Strict, model-safe context (encoder and decoder mirror this)
     let effective_context = cli.context.min(session.max_context_length().saturating_sub(1));
+    let block_size = cli.block_size.min(256); // Cap at 256 for safety
     
-    for (i, &sym) in ids.iter().skip(1).enumerate() {
-        // Safe reprime strategy that respects model limits
-        // Always reprime immediately on hitting the context window.
-        // Also reprime if interval budget is hit earlier.
+    let remaining_tokens = &ids[1..]; // Skip BOS token
+    let mut token_pos = 0;
+    let mut progress_update_counter = 0;
+    
+    while token_pos < remaining_tokens.len() {
+        // Determine block size for this iteration (handle remainder)
+        let current_block_size = block_size.min(remaining_tokens.len() - token_pos);
+        let block_end = token_pos + current_block_size;
+        let current_block = &remaining_tokens[token_pos..block_end];
+        
+        // Check if we need to reprime based on context window and interval
+        let current_global_pos = token_pos + 1; // +1 because we skipped BOS
         if session.index_pos >= effective_context && tokens_since_reprime >= cli.reprime_interval {
-            let end = 1 + i;
-            let start = end.saturating_sub(effective_context);
-            let history = &ids[start..end];
-            _logits_t = session.reprime_with_history_and_get_last_logits_tensor(history)?;
-            tokens_since_reprime = 0;
+            let history_end = current_global_pos;
+            let history_start = history_end.saturating_sub(effective_context);
+            let history = &ids[history_start..history_end];
+            
+            // Use batched reprime and process the current block efficiently
+            let block_logits = session.reprime_and_process_block(history, current_block)?;
+            let block_symbols: Vec<usize> = current_block.iter().map(|&t| t as usize).collect();
+            let bounds = session.bounds_for_block_on_device(&block_logits, &block_symbols)?;
+            
+            // Encode all symbols in the block
+            for &(c_lo, c_hi) in &bounds {
+                ace.encode_interval(c_lo, c_hi)?;
+            }
+            
+            tokens_since_reprime = current_block_size;
+        } else {
+            // Normal block processing without repriming
+            let block_logits = session.forward_block_logits(current_block)?;
+            let block_symbols: Vec<usize> = current_block.iter().map(|&t| t as usize).collect();
+            let bounds = session.bounds_for_block_on_device(&block_logits, &block_symbols)?;
+            
+            // Encode all symbols in the block
+            for &(c_lo, c_hi) in &bounds {
+                ace.encode_interval(c_lo, c_hi)?;
+            }
+            
+            tokens_since_reprime += current_block_size;
         }
         
-        // Compute interval bounds with optimized probability computation
-        let (c_lo, c_hi) = session.bounds_for_symbol_on_device(&_logits_t, sym as usize)?;
-        ace.encode_interval(c_lo, c_hi)?;
+        token_pos = block_end;
+        progress_update_counter += current_block_size;
         
-        // Advance model to next step
-        _logits_t = session.step_logits_tensor(sym)?;
-        tokens_since_reprime += 1;
-        
-        if i % 1024 == 0 {
-            bar.set_position(i as u64);
+        // Update progress every 1024 tokens processed or at the end
+        if progress_update_counter >= 1024 || token_pos >= remaining_tokens.len() {
+            bar.set_position(token_pos as u64);
             let bytes_so_far = ace.bytes_written();
             let bpb = (8.0 * bytes_so_far as f64) / (orig_len_bytes as f64);
             bar.set_message(format!("bytes={}  bpb={:.3}", bytes_so_far, bpb));
+            progress_update_counter = 0;
         }
     }
     bar.finish_and_clear();
