@@ -7,102 +7,124 @@ use anyhow::{bail, Context, Result};
 use blake3::Hasher;
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
 use clap::{arg, Parser, Subcommand, ValueHint};
-use hf_hub::api::sync::Api;
 use indicatif::{ProgressBar, ProgressStyle};
 use serde::{Deserialize, Serialize};
-use tokenizers::Tokenizer;
 
 // Candle
 use candle_core::{Device, Tensor, DType, IndexOp};
 use candle_nn::VarBuilder;
-use candle_transformers::models::llama::{
-    Cache as LlamaCache, Config as LlamaRuntimeConfig, Llama as LlamaModel, LlamaConfig,
-};
+
+// RWKV7
+use candlerwkv7::models::rwkv7::{Config as RwkvConfig, Model as RwkvModel, State as RwkvState, Tokenizer as RwkvTokenizer};
 
 // -------------------------------
 // Container format (very small header + AC payload)
 // -------------------------------
 //
-// Magic (u32 LE): 0x5a505447  "GPTZ"
-// Version (u16 LE): 1
-// Header JSON length (u32 LE)
-// Header JSON bytes (UTF-8)
+// Magic (u32 LE): 0x5a505447  "RWKZ" (changed from GPTZ)
+// Version (u16 LE): 3
+// Header Binary V3 (compact binary format)
 //
-// The JSON header has:
-// {
-//   "model_repo": "HuggingFaceTB/SmolLM-135M",
-//   "model_file": "model.safetensors",
-//   "tokenizer_repo": "HuggingFaceTB/SmolLM-135M",
-//   "tokenizer_file": "tokenizer.json",
-//   "model_blake3": "<64-hex>",
-//   "tokenizer_blake3": "<64-hex>",
-//   "coder_base": 256",
-//   "coder_precision": 8,
-//   "vocab_size": <u32>,
-//   "bos_token_id": <u32>,
-//   "token_count": <u64>,
-//   "orig_len_bytes": <u64>,
-//   "orig_blake3": "<64-hex>",
-// }
+// The binary header has:
+// - bos_token_id (u32)
+// - token_count (varint u64)
+// - orig_len_bytes (varint u64)
+// - model_hash16 ([u8; 16])
+// - tokenizer_hash16 ([u8; 16])
+// - orig_hash16 ([u8; 16])
+// - reserved_flags (u32)
+// - context_window (u32)
+// - vocab_size (u32)
+// - model_file_repr_len (u32)
+// - reprime_interval (u32)
+// - model_file_repr (variable bytes)
 
-const MAGIC: u32 = 0x5a505447; // "GPTZ"
-const VERSION: u16 = 2;
+const MAGIC: u32 = 0x5a4b5752; // "RWKZ"
+const VERSION: u16 = 3;
 
 // Arithmetic coder params (base-2, bitstream output)
 const AC_BASE: u32 = 2;
-const AC_PRECISION: u32 = 32;
+const AC_PRECISION: u32 = 48; // Upgraded from 32 to 48 bits for 65,536x more precision!
 
-// Defaults (HF Hub)
-const DEFAULT_MODEL_REPO: &str = "HuggingFaceTB/SmolLM-135M";
-const DEFAULT_MODEL_FILE: &str = "auto"; // "auto" downloads model.safetensors or resolves shards via index.json
-const DEFAULT_TOKENIZER_REPO: &str = "HuggingFaceTB/SmolLM-135M";
-const DEFAULT_TOKENIZER_FILE: &str = "tokenizer.json";
+// Defaults (local files)
+const DEFAULT_MODEL_PATH: &str = "modeldir/prepared/model.safetensors";
+const DEFAULT_CONFIG_PATH: &str = "modeldir/prepared/config.json";
+const DEFAULT_TOKENIZER_PATH: &str = "modeldir/rwkv_vocab_v20230424.json";
+
+// Model size configurations
+fn get_model_paths(size: &str) -> (PathBuf, PathBuf) {
+    match size {
+        "01" => (
+            PathBuf::from("modeldir/prepared/model.safetensors"),
+            PathBuf::from("modeldir/prepared/config.json")
+        ),
+        "04" => (
+            PathBuf::from("modeldir/prepared/model_04.safetensors"),
+            PathBuf::from("modeldir/prepared/config_04.json")
+        ),
+        _ => {
+            eprintln!("Warning: Unknown size '{}', using default 01", size);
+            (
+                PathBuf::from("modeldir/prepared/model.safetensors"),
+                PathBuf::from("modeldir/prepared/config.json")
+            )
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct HeaderJson {}
 
 #[derive(Parser, Debug)]
-#[command(name="gptzip", about="Model-based text compressor (Candle + HF Transformers LLaMA + 64-bit arithmetic coder)")]
+#[command(name="rwkvzip", about="Model-based text compressor using RWKV7 with 64-bit arithmetic coder")]
 struct Cli {
     /// Force running on CPU (default tries CUDA 0 then CPU)
     #[arg(long)]
     cpu: bool,
 
-    /// Optional path to local model weights (.safetensors or .index.json). If absent, download from --model-repo/--model-file
-    #[arg(long, value_hint = ValueHint::FilePath)]
-    model: Option<PathBuf>,
+    /// Enable Meta-ICL priming using deterministic, virtual prompts (not transmitted)
+    #[arg(long, default_value_t = false)]
+    meta_icl: bool,
 
-    /// HF repo id for model (if downloading)
-    #[arg(long, default_value = DEFAULT_MODEL_REPO)]
-    model_repo: String,
+    /// Interval (in tokens) at which to perform Meta-ICL virtual priming
+    #[arg(long, default_value_t = 1024)]
+    meta_icl_interval: usize,
 
-    /// File name inside the model repo (if downloading): "model.safetensors", "*.index.json", or "auto"
-    #[arg(long, default_value = DEFAULT_MODEL_FILE)]
-    model_file: String,
+    /// Window of recent tokens (count) used in the prompt template (for display only)
+    #[arg(long, default_value_t = 512)]
+    meta_icl_window: usize,
 
-    /// Path to tokenizer.json (local). If absent, download from --tokenizer-repo/--tokenizer-file
-    #[arg(long, value_hint = ValueHint::FilePath)]
-    tokenizer: Option<PathBuf>,
+    /// Max tokens to greedily generate for the virtual summary
+    #[arg(long, default_value_t = 24)]
+    meta_icl_max_new: usize,
 
-    /// HF repo id for tokenizer (if downloading).
-    #[arg(long, default_value = DEFAULT_TOKENIZER_REPO)]
-    tokenizer_repo: String,
+    /// Path to model weights (.safetensors file)
+    #[arg(long, default_value = DEFAULT_MODEL_PATH, value_hint = ValueHint::FilePath)]
+    model: PathBuf,
 
-    /// File name inside tokenizer repo (if downloading)
-    #[arg(long, default_value = DEFAULT_TOKENIZER_FILE)]
-    tokenizer_file: String,
+    /// Path to config.json file
+    #[arg(long, default_value = DEFAULT_CONFIG_PATH, value_hint = ValueHint::FilePath)]
+    config: PathBuf,
+
+    /// Path to tokenizer.json (local)
+    #[arg(long, default_value = DEFAULT_TOKENIZER_PATH, value_hint = ValueHint::FilePath)]
+    tokenizer: PathBuf,
 
     /// Allow decode even if model/tokenizer BLAKE3 do not match the container
     #[arg(long)]
     force_mismatch: bool,
 
-    /// Sliding attention context (lookback+current). Default 512 for reliability and speed.
-    #[arg(long, default_value = "512")]
+    /// Context window size (RWKV7 supports infinite context, set to 0 for full sequence)
+    #[arg(long, default_value = "0")]
     context: usize,
 
-    /// Reprime interval in tokens to avoid per-token window replays (default equals context)
-    #[arg(long, default_value = "512")]
+    /// Reprime interval in tokens (set to 0 to disable repriming for RWKV7 infinite context)
+    #[arg(long, default_value = "0")]
     reprime_interval: usize,
+
+    /// Model size variant (01 = 0.1b, 04 = 0.4b)
+    #[arg(long, default_value = "01")]
+    size: String,
 
     #[command(subcommand)]
     command: Commands,
@@ -110,7 +132,7 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
-    /// Compress a UTF-8 text file into a .gptz container
+    /// Compress a UTF-8 text file into a .rwkz container
     Compress {
         #[arg(value_hint = ValueHint::FilePath)]
         input: PathBuf,
@@ -118,7 +140,7 @@ enum Commands {
         output: PathBuf,
     },
 
-    /// Decompress a .gptz container back to a UTF-8 text file
+    /// Decompress a .rwkz container back to a UTF-8 text file
     Decompress {
         #[arg(value_hint = ValueHint::FilePath)]
         input: PathBuf,
@@ -137,8 +159,6 @@ enum Commands {
 // Small utils
 // -------------------------------
 
-// removed: hex helpers (use binary 16-byte truncation instead)
-
 fn detect_device(force_cpu: bool) -> Device {
     if force_cpu {
         Device::Cpu
@@ -156,9 +176,31 @@ fn detect_device(force_cpu: bool) -> Device {
 // -------------------------------
 
 fn ac_p_min() -> f64 {
-    // 2 * base^-(precision-2) (tiny but nonzero)
+    // Adaptive probability floor based on precision and vocabulary size
     let base = AC_BASE as f64;
-    2.0 * base.powi(-(AC_PRECISION as i32 - 2))
+    let precision = AC_PRECISION as i32;
+    // Scale floor based on available precision - more precision = smaller floor
+    2.0 * base.powi(-(precision - 8).max(16))
+}
+
+fn adaptive_probability_floor(vocab_size: usize, state_entropy: Option<f32>) -> f64 {
+    // * Base floor calculation based on vocabulary size
+    let base_floor = ac_p_min();
+    let vocab_scaling = (vocab_size as f64).log2().max(1.0) / 16.0;
+    let mut adjusted_floor = base_floor / vocab_scaling;
+    
+    // * Adjust based on state entropy if available
+    if let Some(entropy) = state_entropy {
+        // * Normalize entropy to a reasonable range (0.1 to 2.0)
+        let normalized_entropy = entropy.max(0.1).min(2.0);
+        
+        // * Higher entropy = more uncertainty = use higher floor for conservative coding
+        // * Lower entropy = more certainty = use lower floor for aggressive coding
+        let entropy_factor = 1.0 + (normalized_entropy as f64 - 1.0) * 0.3;
+        adjusted_floor *= entropy_factor;
+    }
+    
+    adjusted_floor
 }
 
 struct ArithmeticEncoder<W: Write> {
@@ -217,47 +259,6 @@ impl<W: Write> ArithmeticEncoder<W> {
         while self.carry_run > 0 {
             self.put_bit_internal((!bit) & 1)?;
             self.carry_run -= 1;
-        }
-        Ok(())
-    }
-
-    #[allow(dead_code)]
-    fn encode_symbol(&mut self, sym: usize, pdf: &[f64]) -> Result<()> {
-        // Build CDF in [0,1]
-        let mut c_lo = 0.0f64;
-        for i in 0..sym { c_lo += pdf[i]; }
-        let mut c_hi = c_lo + pdf[sym];
-        if c_hi > 1.0 { c_hi = 1.0; }
-
-        let low_f = self.low as f64;
-        let high_f = self.high as f64;
-        let range = high_f - low_f + 1.0;
-        let new_low = (low_f + (range * c_lo).floor()) as u64;
-        let new_high = (low_f + (range * c_hi).floor() - 1.0) as u64;
-
-        self.low = new_low;
-        self.high = new_high;
-
-        // Renormalize (emit common MSBs) with base-2 (bit) coder
-        loop {
-            if self.high < self.b_to_pm1 {
-                // MSB 0
-                self.put_bit(0)?;
-            } else if self.low >= self.b_to_pm1 {
-                // MSB 1
-                self.put_bit(1)?;
-                self.low -= self.b_to_pm1;
-                self.high -= self.b_to_pm1;
-            } else if self.low >= self.b_to_pm2 && self.high < self.b_to_pm2 * 3 {
-                // E3 underflow condition
-                self.carry_run += 1;
-                self.low -= self.b_to_pm2;
-                self.high -= self.b_to_pm2;
-            } else {
-                break;
-            }
-            self.low = (self.low << 1) & self.mask;
-            self.high = ((self.high << 1) & self.mask) | 1;
         }
         Ok(())
     }
@@ -412,63 +413,82 @@ impl<'a> ArithmeticDecoder<'a> {
 }
 
 // -------------------------------
-// Model runner (HF Transformers LLaMA family via safetensors + KV cache).
+// RWKV7 Model Session
 // -------------------------------
 
-struct LmSession {
+struct RwkvSession {
     device: Device,
-    model: LlamaModel,
-    cache: LlamaCache,
-    runtime_cfg: LlamaRuntimeConfig,
+    model: RwkvModel,
+    state: RwkvState,
+    config: RwkvConfig,
     dtype: DType,
     vocab_size: usize,
-    index_pos: usize, // number of tokens already in cache
+    last_state_entropy: Option<f32>,
 }
 
-impl LmSession {
-    /// Build a session from weights (one or many .safetensors files) plus the model's config.json.
-    fn load(weights_paths: &[PathBuf], config_path: &Path, device: Device) -> Result<Self> {
-        // Parse HF LlamaConfig then convert to runtime Config.
+impl RwkvSession {
+    /// Build a session from RWKV7 safetensors and config.json
+    fn load(model_path: &Path, config_path: &Path, device: Device) -> Result<Self> {
+        // Parse RWKV7 config
         let cfg_bytes = std::fs::read(config_path)
             .with_context(|| format!("failed reading {}", config_path.display()))?;
-        let llama_cfg: LlamaConfig = serde_json::from_slice(&cfg_bytes)
-            .with_context(|| "failed to parse config.json as HF LlamaConfig")?;
-        let runtime_cfg: LlamaRuntimeConfig = llama_cfg.into_config(false /*use_flash_attn*/);
+        let config: RwkvConfig = serde_json::from_slice(&cfg_bytes)
+            .with_context(|| "failed to parse config.json as RWKV7 Config")?;
 
-        // Use FP16 for CUDA, FP32 for CPU for better performance
-        let dtype = if device.is_cuda() { DType::F16 } else { DType::F32 };
+        // Use FP32 consistently to avoid dtype mismatches in RWKV operations
+        let dtype = DType::F32;
 
-        // Map the safetensors (supports sharded weights).
-        let vb = unsafe { VarBuilder::from_mmaped_safetensors(weights_paths, dtype, &device)? };
+        // Load the safetensors
+        let tensors = candle_core::safetensors::load(model_path, &device)
+            .with_context(|| format!("failed loading safetensors from {}", model_path.display()))?;
+        let vb = VarBuilder::from_tensors(tensors, dtype, &device);
 
-        // Build model + cache.
-        let model = LlamaModel::load(vb.clone(), &runtime_cfg)
-            .with_context(|| "failed constructing LLaMA model from safetensors")?;
-        let cache = LlamaCache::new(true, dtype, &runtime_cfg, &device)
-            .with_context(|| "failed to create KV cache")?;
+        // Build model + state
+        let model = RwkvModel::new(&config, vb)
+            .with_context(|| "failed constructing RWKV7 model from safetensors")?;
+        let state = RwkvState::new(1, &config, None, &device)
+            .with_context(|| "failed to create RWKV7 state")?;
 
+        let vocab_size = config.vocab_size;
         Ok(Self {
             device,
             model,
-            cache,
-            runtime_cfg,
+            state,
+            config,
             dtype,
-            vocab_size: 0, // set by caller
-            index_pos: 0,
+            vocab_size,
+            last_state_entropy: None,
         })
+    }
+    
+    /// Compute logits for each timestep in the provided sequence (teacher-forced),
+    /// returning a tensor of shape (T, V) on device. State is reset before eval.
+    fn logits_for_sequence(&mut self, sequence: &[u32]) -> Result<Tensor> {
+        if sequence.is_empty() { bail!("empty sequence for logits_for_sequence"); }
+        self.state = RwkvState::new(1, &self.config, None, &self.device)
+            .with_context(|| "failed to reset RWKV7 state")?;
+        // Build (1, T) indices tensor
+        let x = Tensor::new(sequence, &self.device)?.reshape((1, sequence.len()))?; // (1, T)
+        let logits = self.model.forward(&x, &mut self.state)?; // (1, T, V)
+        let t = match logits.rank() {
+            3 => logits.i((0, .., ..))?, // (T, V)
+            2 => logits,
+            _ => bail!("unexpected logits shape {:?}", logits.shape()),
+        };
+        Ok(t)
     }
     
     /// Get the model's maximum context length from config
     fn max_context_length(&self) -> usize {
-        // For robustness on all models, cap to 512 effective steps (encoder uses -1 internally)
-        512
+        // RWKV7 supports infinite context - return a very large value
+        usize::MAX
     }
 
     /// Push one token and return logits tensor (device) for the next token.
     fn step_logits_tensor(&mut self, token_id: u32) -> Result<Tensor> {
-        let x = Tensor::new(&[token_id], &self.device)?.reshape((1, 1))?;
-        let logits = self.model.forward(&x, self.index_pos, &mut self.cache)?;
-        self.index_pos += 1;
+        let x = Tensor::new(&[[token_id]], &self.device)?; // (1, 1)
+        let logits = self.model.forward(&x, &mut self.state)?;
+        // Extract last logits from (B, T, V) -> (V,)
         let t = match logits.rank() {
             1 => logits,
             2 => logits.i((logits.dim(0)? - 1, ..))?,
@@ -478,49 +498,27 @@ impl LmSession {
         Ok(t)
     }
 
-    #[allow(dead_code)]
-    fn reset(&mut self) -> Result<()> {
-        self.index_pos = 0;
-        Ok(())
-    }
 
-    /// Reset the KV cache and re-prime it with the provided token history in one batched pass.
+
+    /// Reset the state and re-prime it with the provided token history in one batched pass.
     /// Returns the logits for the next token (last step of the history sequence).
-    #[allow(dead_code)]
-    fn reprime_with_history_and_get_last_logits(&mut self, history: &[u32]) -> Result<Vec<f32>> {
-        self.cache = LlamaCache::new(true, self.dtype, &self.runtime_cfg, &self.device)
-            .with_context(|| "failed to reset KV cache")?;
-        self.index_pos = 0;
-        if history.is_empty() {
-            bail!("reprime called with empty history");
-        }
-        let x = Tensor::new(history, &self.device)?.reshape((1, history.len()))?;
-        let logits = self.model.forward(&x, self.index_pos, &mut self.cache)?;
-        self.index_pos += history.len();
-        let v = match logits.rank() {
-            1 => logits.to_vec1::<f32>()?,
-            2 => {
-                logits.i((logits.dim(0)? - 1, ..))?.to_vec1::<f32>()?
-            }
-            3 => {
-                logits.i((0, logits.dim(1)? - 1, ..))?.to_vec1::<f32>()?
-            }
-            _ => bail!("unexpected logits shape {:?}", logits.shape()),
-        };
-        Ok(v)
-    }
-
-    /// Reset the KV cache and re-prime it; returns device logits tensor for the next token.
     fn reprime_with_history_and_get_last_logits_tensor(&mut self, history: &[u32]) -> Result<Tensor> {
-        self.cache = LlamaCache::new(true, self.dtype, &self.runtime_cfg, &self.device)
-            .with_context(|| "failed to reset KV cache")?;
-        self.index_pos = 0;
+        // Reset state
+        self.state = RwkvState::new(1, &self.config, None, &self.device)
+            .with_context(|| "failed to reset RWKV7 state")?;
+        
         if history.is_empty() {
             bail!("reprime called with empty history");
         }
-        let x = Tensor::new(history, &self.device)?.reshape((1, history.len()))?;
-        let logits = self.model.forward(&x, self.index_pos, &mut self.cache)?;
-        self.index_pos += history.len();
+        
+        // Process history tokens one by one (RWKV is sequential)
+        let mut logits = None;
+        for &token in history {
+            let x = Tensor::new(&[[token]], &self.device)?;
+            logits = Some(self.model.forward(&x, &mut self.state)?);
+        }
+        
+        let logits = logits.unwrap();
         let t = match logits.rank() {
             1 => logits,
             2 => logits.i((logits.dim(0)? - 1, ..))?,
@@ -528,130 +526,6 @@ impl LmSession {
             _ => bail!("unexpected logits shape {:?}", logits.shape()),
         };
         Ok(t)
-    }
-
-    /// Reset KV cache and process initial block efficiently for better performance.
-    fn reprime_and_process_block(&mut self, history: &[u32], next_block: &[u32]) -> Result<Tensor> {
-        // Reset cache
-        self.cache = LlamaCache::new(true, self.dtype, &self.runtime_cfg, &self.device)
-            .with_context(|| "failed to reset KV cache")?;
-        self.index_pos = 0;
-        
-        // Combine history and next block for one forward pass
-        let mut combined = Vec::with_capacity(history.len() + next_block.len());
-        combined.extend_from_slice(history);
-        combined.extend_from_slice(next_block);
-        
-        let x = Tensor::new(combined.as_slice(), &self.device)?.reshape((1, combined.len()))?;
-        let logits = self.model.forward(&x, self.index_pos, &mut self.cache)?;
-        self.index_pos += combined.len();
-        
-        // Extract logits for predicting next_block tokens
-        // logits[i] predicts token at position i+1, so:
-        // logits[history.len()-1] predicts next_block[0]
-        // logits[history.len()] predicts next_block[1], etc.
-        let start_idx = if history.is_empty() { 0 } else { history.len() - 1 };
-        let end_idx = start_idx + next_block.len();
-        
-        let block_logits = match logits.rank() {
-            3 => {
-                let seq_len = logits.dim(1)?;
-                if end_idx > seq_len {
-                    bail!("end_idx {} > seq_len {}", end_idx, seq_len);
-                }
-                logits.i((0, start_idx..end_idx, ..))?
-            },
-            2 => {
-                let seq_len = logits.dim(0)?;
-                if end_idx > seq_len {
-                    bail!("end_idx {} > seq_len {}", end_idx, seq_len);
-                }
-                logits.i((start_idx..end_idx, ..))?
-            },
-            _ => bail!("unexpected logits shape {:?}", logits.shape()),
-        };
-        
-        Ok(block_logits)
-    }
-
-    /// Process multiple tokens in a single forward pass and return logits for each position.
-    /// Returns tensor of shape [block_size, vocab_size] on device.
-    fn forward_block_logits(&mut self, block: &[u32]) -> Result<Tensor> {
-        let x = Tensor::new(block, &self.device)?.reshape((1, block.len()))?;
-        let logits = self.model.forward(&x, self.index_pos, &mut self.cache)?;
-        self.index_pos += block.len();
-        
-        // Normalize to [block_size, vocab_size] regardless of what the model returns
-        let out = match logits.rank() {
-            3 => logits.i((0, .., ..))?,     // [1, block_size, vocab_size] -> [block_size, vocab_size]
-            2 => logits,                     // [block_size, vocab_size]
-            1 => {
-                // Degenerate single-token case: [vocab_size] -> [1, vocab_size]
-                if block.len() != 1 {
-                    anyhow::bail!("rank-1 logits but block size > 1: {} tokens", block.len());
-                }
-                logits.unsqueeze(0)?
-            }
-            r => anyhow::bail!("unexpected logits rank {}", r),
-        };
-        Ok(out)
-    }
-
-    /// Compute CDF bounds for multiple symbols in a block efficiently with proper floor handling.
-    /// Returns vector of (c_lo, c_hi) pairs for each position in the block.
-    fn bounds_for_block_on_device(&self, logits_block: &Tensor, symbols: &[usize]) -> Result<Vec<(f64, f64)>> {
-        // logits_block is [block_size, vocab_size]
-        let block_size = logits_block.dim(0)?;
-        let vocab_size = logits_block.dim(1)?;
-        
-        if symbols.len() != block_size {
-            anyhow::bail!("symbol count {} doesn't match block size {}", symbols.len(), block_size);
-        }
-        
-        // Convert to host and apply same logic as decoder for consistency
-        let logits_vec = logits_block.to_vec2::<f32>()?;
-        let mut bounds = Vec::with_capacity(block_size);
-        let p_floor = ac_p_min();
-        
-        for (pos, &sym) in symbols.iter().enumerate() {
-            if sym >= vocab_size {
-                anyhow::bail!("symbol {} out of bounds for vocab size {}", sym, vocab_size);
-            }
-            
-            // Apply same softmax + floor logic as decoder
-            let pdf = softmax_pdf_floor(&logits_vec[pos], vocab_size, p_floor);
-            let p_sym = pdf[sym];
-            let c_lo = if sym == 0 { 0.0 } else { pdf[0..sym].iter().sum::<f64>() };
-            let c_hi = c_lo + p_sym;
-            bounds.push((c_lo, c_hi));
-        }
-        
-        Ok(bounds)
-    }
-
-    /// Compute CDF bounds for multiple symbols efficiently in a batch.
-    fn compute_bounds_batch(&self, logits_batch: &[Tensor], symbols: &[usize]) -> Result<Vec<(f64, f64)>> {
-        if logits_batch.len() != symbols.len() {
-            anyhow::bail!("batch size mismatch: {} logits vs {} symbols", logits_batch.len(), symbols.len());
-        }
-        
-        let mut bounds = Vec::with_capacity(logits_batch.len());
-        
-        for (logits, &sym) in logits_batch.iter().zip(symbols.iter()) {
-            let logits_vec = logits.to_vec1::<f32>()?;
-            let pdf = softmax_pdf_floor(&logits_vec, self.vocab_size, ac_p_min());
-            
-            if sym >= pdf.len() {
-                anyhow::bail!("symbol {} out of bounds for vocab size {}", sym, pdf.len());
-            }
-            
-            let p_sym = pdf[sym];
-            let c_lo = if sym == 0 { 0.0 } else { pdf[0..sym].iter().sum::<f64>() };
-            let c_hi = c_lo + p_sym;
-            bounds.push((c_lo, c_hi));
-        }
-        
-        Ok(bounds)
     }
 
     /// Compute CDF bounds for the given symbol using same logic as decoder with comprehensive safety.
@@ -682,120 +556,101 @@ impl LmSession {
             anyhow::bail!("logits vec size {} doesn't match vocab size {}", logits_vec.len(), self.vocab_size);
         }
         
-        let pdf = softmax_pdf_floor(&logits_vec, self.vocab_size, ac_p_min());
+        let pdf = softmax_pdf_adaptive(&logits_vec, self.vocab_size, self.last_state_entropy);
         
         let p_sym = pdf[sym];
         let c_lo = if sym == 0 { 0.0 } else { pdf[0..sym].iter().sum::<f64>() };
         let c_hi = c_lo + p_sym;
         Ok((c_lo, c_hi))
     }
+
+    /// Analyze the current RWKV7 state and compute state complexity metrics.
+    /// This function computes statistics from the attention state matrices to understand
+    /// the patterns encoded in the model's internal state.
+    fn advanced_state_analysis_priming(&mut self) -> Result<f32> {
+        let mut total_entropy_estimate = 0.0;
+        let mut layer_count = 0;
+
+        // Iterate through all layers in the state
+        for layer_state in &self.state.per_layer {
+            let att_state = &layer_state.att_state;
+            
+            // Compute entropy-related metrics for this layer's attention state
+            let mean = att_state.mean_all()?;
+            let centered = att_state.broadcast_sub(&mean)?;
+            let variance = centered.sqr()?.mean_all()?;
+            let std_dev = variance.sqrt()?;
+            
+            // Compute entropy estimate based on standard deviation
+            // Higher std dev suggests more uncertainty/entropy in the state
+            let entropy_estimate = std_dev.to_scalar::<f32>()?;
+            total_entropy_estimate += entropy_estimate;
+            layer_count += 1;
+        }
+
+        if layer_count == 0 {
+            return Ok(0.0); // No attention layers found
+        }
+
+        // Return average entropy estimate across all layers
+        // This represents the overall uncertainty in the model's state
+        let avg_entropy = total_entropy_estimate / layer_count as f32;
+        Ok(avg_entropy)
+    }
+
+    /// Virtually prime the model state with a deterministic prompt and greedy summary.
+    /// These tokens are NOT transmitted; both encoder and decoder must call this identically.
+    /// Now uses state-aware intelligent triggering based on entropy analysis.
+    fn virtual_meta_icl_prime(
+        &mut self,
+        tokenizer: &RwkvTokenizer,
+        _recent_tokens: &[u32],
+        window_tokens: usize,
+        max_new_tokens: usize,
+    ) -> Result<()> {
+        // Compute state entropy before any priming
+        let current_entropy = self.advanced_state_analysis_priming()?;
+        self.last_state_entropy = Some(current_entropy);
+
+        // * Only perform Meta-ICL priming if the state entropy indicates it would be beneficial
+        // * High entropy (> 1.0) suggests the model state is uncertain and could benefit from priming
+        // * Low entropy (< 0.5) suggests the model state is confident and priming might be disruptive
+        if current_entropy < 0.5 {
+            // * Skip priming for low-entropy states to avoid disrupting confident predictions
+            return Ok(());
+        }
+
+        // Deterministic prompt which references window size (purely textual, no content inserted).
+        let prompt = format!(
+            "\nInstruction: Summarize the last {} tokens in 10 words.\nSummary:",
+            window_tokens
+        );
+        let prompt_ids = tokenizer.encode(&prompt)?;
+        let mut last_logits = None;
+        for &tok in &prompt_ids {
+            last_logits = Some(self.step_logits_tensor(tok)?);
+        }
+        // Deterministic greedy generation of a small number of tokens.
+        if let Some(mut logits) = last_logits {
+            for _ in 0..max_new_tokens {
+                let v = logits.to_vec1::<f32>()?;
+                // argmax
+                let mut best_i = 0usize;
+                let mut best_v = f32::NEG_INFINITY;
+                for (i, &vv) in v.iter().enumerate() {
+                    if vv > best_v { best_v = vv; best_i = i; }
+                }
+                let next_tok = best_i as u32;
+                logits = self.step_logits_tensor(next_tok)?;
+            }
+        }
+        Ok(())
+    }
 }
 
 // -------------------------------
-// Download helpers (HF Hub)
+// BLAKE3 helpers
 // -------------------------------
-
-/// Download a file from a HF repo (or use the explicit local path if provided).
-fn ensure_local_file(repo: &str, file_in_repo: &str, explicit: &Option<PathBuf>) -> Result<PathBuf> {
-    if let Some(p) = explicit {
-        return Ok(p.clone());
-    }
-    let api = Api::new()?;
-    let r = api.model(repo.to_string());
-    let local = r.get(file_in_repo)
-        .with_context(|| format!("hf-hub download failed for {repo}/{file_in_repo}. \
-                                  If gated, make sure you accepted the license and exported HUGGINGFACE_TOKEN"))?;
-    Ok(local)
-}
-
-/// Ensure model weights exist locally. Supports:
-/// - a single `*.safetensors`
-/// - a sharded set described by `model.safetensors.index.json`
-/// - the special name `auto` which tries `model.safetensors` then resolves the index.json
-///
-/// Returns (list_of_weight_paths, repr_filename_for_header, local_config_json).
-fn ensure_model_artifacts(repo: &str, model_file: &str, explicit_model: &Option<PathBuf>) -> Result<(Vec<PathBuf>, String, PathBuf)> {
-    // Resolve config.json from the model repo (always needed).
-    let config_path = ensure_local_file(repo, "config.json", &None)?;
-
-    // Resolve weights
-    if let Some(path) = explicit_model {
-        let p = path.clone();
-        let name_string = p
-            .file_name()
-            .and_then(|s| s.to_str())
-            .unwrap_or("weights")
-            .to_string();
-        if name_string.ends_with(".safetensors") {
-            return Ok((vec![p], name_string, config_path));
-        } else if name_string.ends_with(".index.json") {
-            let dir = p.parent().unwrap_or_else(|| Path::new("."));
-            let bytes = std::fs::read(&p)?;
-            let index: serde_json::Value = serde_json::from_slice(&bytes)?;
-            let mut files = std::collections::BTreeSet::new();
-            if let Some(map) = index.get("weight_map").and_then(|v| v.as_object()) {
-                for fname in map.values() {
-                    if let Some(f) = fname.as_str() {
-                        files.insert(f.to_string());
-                    }
-                }
-            } else {
-                bail!("index.json missing weight_map");
-            }
-            let paths = files.into_iter().map(|f| dir.join(f)).collect::<Vec<_>>();
-            return Ok((paths, name_string, config_path));
-        } else {
-            bail!("--model must point to a .safetensors or .index.json file");
-        }
-    }
-
-    // Remote resolution via hf-hub
-    let api = Api::new()?;
-    let repo_api = api.model(repo.to_string());
-    let resolve_index = |repo_api: &hf_hub::api::sync::ApiRepo, idx_name: &str| -> Result<Vec<PathBuf>> {
-        let idx = repo_api.get(idx_name)?;
-        let bytes = std::fs::read(&idx)?;
-        let index: serde_json::Value = serde_json::from_slice(&bytes)?;
-        let mut files = std::collections::BTreeSet::new();
-        if let Some(map) = index.get("weight_map").and_then(|v| v.as_object()) {
-            for fname in map.values() {
-                if let Some(f) = fname.as_str() {
-                    files.insert(f.to_string());
-                }
-            }
-        } else {
-            bail!("index.json missing weight_map");
-        }
-        let mut out = Vec::new();
-        for f in files {
-            out.push(repo_api.get(&f)?);
-        }
-        Ok(out)
-    };
-
-    match model_file {
-        "auto" => {
-            // Try single-file first, then sharded.
-            if let Ok(one) = repo_api.get("model.safetensors") {
-                Ok((vec![one], "model.safetensors".to_string(), config_path))
-            } else {
-                let shards = resolve_index(&repo_api, "model.safetensors.index.json")?;
-                Ok((shards, "model.safetensors.index.json".to_string(), config_path))
-            }
-        }
-        name if name.ends_with(".safetensors") => {
-            let p = repo_api.get(name)?;
-            Ok((vec![p], name.to_string(), config_path))
-        }
-        name if name.ends_with(".index.json") => {
-            let shards = resolve_index(&repo_api, name)?;
-            Ok((shards, name.to_string(), config_path))
-        }
-        other => bail!("Unsupported model file '{other}'. Use 'auto', '*.safetensors', or '*.index.json'."),
-    }
-}
-
-// removed: hex helpers (use binary 16-byte truncation instead)
 
 fn blake3_bytes_bin16(bytes: &[u8]) -> [u8; 16] {
     let hash = blake3::hash(bytes);
@@ -818,64 +673,14 @@ fn blake3_file_bin16(path: &Path) -> Result<[u8; 16]> {
     Ok(out)
 }
 
-fn blake3_files_bin16(paths: &[PathBuf]) -> Result<[u8; 16]> {
-    let mut hasher = Hasher::new();
-    for p in paths {
-        if let Some(name) = p.file_name().and_then(|s| s.to_str()) {
-            hasher.update(name.as_bytes());
-        }
-        let mut f = File::open(p)?;
-        let mut buf = [0u8; 1 << 16];
-        loop {
-            let n = f.read(&mut buf)?;
-            if n == 0 { break; }
-            hasher.update(&buf[..n]);
-        }
-    }
-    let mut out = [0u8; 16];
-    out.copy_from_slice(hasher.finalize().as_bytes()[..16].as_ref());
-    Ok(out)
-}
-
 // -------------------------------
 // Encode / Decode
 // -------------------------------
 
-fn read_bos_from_config(config_path: &Path) -> Option<u32> {
-    if let Ok(bytes) = fs::read(config_path) {
-        if let Ok(v) = serde_json::from_slice::<serde_json::Value>(&bytes) {
-            if let Some(id) = v.get("bos_token_id").and_then(|x| x.as_u64()) {
-                return Some(id as u32);
-            }
-        }
-    }
-    None
-}
-
-fn detect_bos_id(tokenizer: &Tokenizer, config_path: &Path) -> Result<u32> {
-    // 1) Prefer bos_token_id from config.json
-    if let Some(id) = read_bos_from_config(config_path) {
-        return Ok(id);
-    }
-
-    // 2) Fallback to common BOS strings in vocab
-    let vocab = tokenizer.get_vocab(true);
-    let candidates = [
-        "<s>",
-        "<|bos|>",
-        "<|begin_of_text|>",
-        "<BOS>",
-        "BOS",
-        "<bos>",
-        "bos",
-    ];
-    for tok in candidates {
-        if let Some(&id) = vocab.get(tok) {
-            return Ok(id);
-        }
-    }
-
-    bail!("could not determine BOS token id from tokenizer")
+fn detect_bos_id(_tokenizer: &RwkvTokenizer, _config_path: &Path) -> Result<u32> {
+    // RWKV tokenizer typically uses token 0 as BOS/start
+    // We can try to encode common BOS patterns or just use 0
+    Ok(0)
 }
 
 fn encode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
@@ -883,18 +688,18 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     let device = detect_device(cli.cpu);
     eprintln!("Device: {}", if device.is_cuda() { "CUDA" } else { "CPU" });
 
-    // Resolve artifacts
-    let (weight_paths, weight_repr, config_path) =
-        ensure_model_artifacts(&cli.model_repo, &cli.model_file, &cli.model)?;
-    let tok_path = ensure_local_file(&cli.tokenizer_repo, &cli.tokenizer_file, &cli.tokenizer)?;
+    // Get model paths based on size parameter
+    let (model_path, config_path) = get_model_paths(&cli.size);
+    println!("Using model size: {} (model: {}, config: {})", 
+             cli.size, model_path.display(), config_path.display());
 
     // Hash files (binary 16-bytes truncation)
-    let model_hash16 = blake3_files_bin16(&weight_paths)?;
-    let tokenizer_hash16 = blake3_file_bin16(&tok_path)?;
+    let model_hash16 = blake3_file_bin16(&model_path)?;
+    let tokenizer_hash16 = blake3_file_bin16(&cli.tokenizer)?;
 
     // Load tokenizer
-    let tokenizer = Tokenizer::from_file(tok_path.to_str().unwrap())
-        .map_err(|e| anyhow::anyhow!("failed loading tokenizer: {e}"))?;
+    let tokenizer = RwkvTokenizer::new(&cli.tokenizer)
+        .with_context(|| format!("failed loading tokenizer from {}", cli.tokenizer.display()))?;
 
     // Read input
     let data = fs::read(input).with_context(|| "reading input")?;
@@ -902,26 +707,65 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     let orig_blake3_16 = blake3_bytes_bin16(&data);
 
     // Determine BOS robustly
-    let bos_id = detect_bos_id(&tokenizer, &config_path)?;
+    let bos_id = detect_bos_id(&tokenizer, &cli.config)?;
 
-    // Tokenize WITHOUT auto special tokens; we add BOS ourselves.
-    let enc_ns = tokenizer.encode(String::from_utf8_lossy(&data), false)
-        .map_err(|e| anyhow::anyhow!("tokenizer.encode failed: {e}"))?;
-    let mut ids = Vec::<u32>::with_capacity(enc_ns.len() + 1);
-    ids.push(bos_id);
-    ids.extend(enc_ns.get_ids().iter().copied());
+    // Comprehensive preflight tokenizer roundtrip check
+    println!("Performing preflight tokenizer roundtrip check...");
+    let mut ids = tokenizer.encode_bytes(&data)
+        .with_context(|| "tokenizer.encode_bytes failed during preflight")?;
+    let roundtrip_bytes = tokenizer.decode_bytes(&ids);
+    
+    if roundtrip_bytes != data {
+        // Detailed analysis of the mismatch
+        let orig_len = data.len();
+        let rt_len = roundtrip_bytes.len();
+        eprintln!("PREFLIGHT FAILED: Tokenizer roundtrip mismatch detected!");
+        eprintln!("Original length: {} bytes", orig_len);
+        eprintln!("Roundtrip length: {} bytes", rt_len);
+        
+        // Find first difference
+        let min_len = orig_len.min(rt_len);
+        let mut first_diff = None;
+        for i in 0..min_len {
+            if data[i] != roundtrip_bytes[i] {
+                first_diff = Some(i);
+                break;
+            }
+        }
+        
+        if let Some(pos) = first_diff {
+            eprintln!("First byte difference at position {}: orig={:#04x} vs roundtrip={:#04x}", 
+                     pos, data[pos], roundtrip_bytes[pos]);
+        } else if orig_len != rt_len {
+            eprintln!("Length mismatch: original has {} extra bytes", orig_len.abs_diff(rt_len));
+        }
+        
+        // Check if it's a UTF-8 encoding issue
+        match String::from_utf8(data.clone()) {
+            Ok(_) => eprintln!("Original data is valid UTF-8"),
+            Err(e) => eprintln!("Original data has UTF-8 issues at byte {}: {}", e.utf8_error().valid_up_to(), e),
+        }
+        
+        bail!("Tokenizer roundtrip mismatch - aborting to avoid wasted compute time. Check input file encoding.");
+    }
+    println!("✓ Preflight tokenizer roundtrip check passed");
+    
+    // Prepend BOS token
+    ids.insert(0, bos_id);
     let token_count = (ids.len() - 1) as u64; // exclude BOS
 
     // Load model
-    let mut session = LmSession::load(&weight_paths, &config_path, device)?;
-    let vocab_size = tokenizer.get_vocab_size(true) as usize;
-    session.vocab_size = vocab_size;
+    let mut session = RwkvSession::load(&model_path, &config_path, device)?;
 
     // Prepare output
     let mut out = BufWriter::new(File::create(output)?);
 
-    // Build and serialize compact binary header v2
-    let header_v2 = HeaderBinV2 {
+    // Build and serialize compact binary header v3
+    let model_file_repr = model_path.file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or("model.safetensors")
+        .to_string();
+    let header_v3 = HeaderBinV3 {
         bos_token_id: bos_id,
         token_count,
         orig_len_bytes,
@@ -930,50 +774,54 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
         orig_hash16: orig_blake3_16,
         reserved_flags: 0,
         context_window: cli.context as u32,
-        vocab_size: vocab_size as u32,
-        model_file_repr_len: weight_repr.len() as u32,
+        vocab_size: session.vocab_size as u32,
+        model_file_repr_len: model_file_repr.len() as u32,
         reprime_interval: cli.reprime_interval as u32,
     };
-    write_header_v2(&mut out, &header_v2, weight_repr.as_bytes())?;
+    write_header_v3(&mut out, &header_v3, model_file_repr.as_bytes())?;
 
-    // AC encode
+    // AC encode with optimized RWKV7 infinite context processing
     let mut ace = ArithmeticEncoder::new(out);
-
-    // Seed with BOS -> logits tensor for next symbol (device)
+    
+    // For RWKV7 infinite context: use efficient sequential processing with full context retention
+    println!("Encoding with RWKV7 infinite context optimization...");
+    
+    // Initialize with BOS token
     let mut _logits_t = session.step_logits_tensor(bos_id)?;
-    let mut tokens_since_reprime = 0usize;
+    
+    // Compute state entropy once for adaptive probability floor
+    let current_entropy = session.advanced_state_analysis_priming()?;
+    session.last_state_entropy = Some(current_entropy);
+    
     let bar = ProgressBar::new(token_count);
-    bar.set_style(ProgressStyle::with_template("{wide_bar} {pos}/{len}").unwrap());
-
-        // Optimized encoding with model-aware context management
-    // Strict, model-safe context (encoder and decoder mirror this)
-    let effective_context = cli.context.min(session.max_context_length().saturating_sub(1));
+    bar.set_style(ProgressStyle::with_template("{wide_bar} {pos}/{len} | {msg}").unwrap());
+    let encode_start = Instant::now();
     
     for (i, &sym) in ids.iter().skip(1).enumerate() {
-        // Safe reprime strategy that respects model limits
-        // Always reprime immediately on hitting the context window.
-        // Also reprime if interval budget is hit earlier.
-        if session.index_pos >= effective_context && tokens_since_reprime >= cli.reprime_interval {
-            let end = 1 + i;
-            let start = end.saturating_sub(effective_context);
-            let history = &ids[start..end];
-            _logits_t = session.reprime_with_history_and_get_last_logits_tensor(history)?;
-            tokens_since_reprime = 0;
+        // Optional Meta-ICL virtual priming (deterministic and symmetric)
+        if cli.meta_icl && i > 0 && (i % cli.meta_icl_interval == 0) {
+            // Use the already processed portion as "recent" window indicator (we don't include content in prompt).
+            // Feeding a fixed prompt to trigger meta-ICL on existing recurrent state.
+            session.virtual_meta_icl_prime(&tokenizer, &ids[..=i], cli.meta_icl_window, cli.meta_icl_max_new)?;
+            // After priming, obtain fresh logits for the current position by stepping a no-op?
+            // Not necessary: we keep using the last logits update scheme below.
+            // We will recompute logits for sym with bounds call based on current _logits_t.
         }
-        
-        // Compute interval bounds with optimized probability computation
+
+        // Compute probability distribution for current token
         let (c_lo, c_hi) = session.bounds_for_symbol_on_device(&_logits_t, sym as usize)?;
         ace.encode_interval(c_lo, c_hi)?;
         
-        // Advance model to next step
+        // Advance model state to next token (RWKV7 automatically maintains infinite context)
         _logits_t = session.step_logits_tensor(sym)?;
-        tokens_since_reprime += 1;
         
-        if i % 1024 == 0 {
+        if i % 256 == 0 {  // More frequent updates for better UX
             bar.set_position(i as u64);
             let bytes_so_far = ace.bytes_written();
             let bpb = (8.0 * bytes_so_far as f64) / (orig_len_bytes as f64);
-            bar.set_message(format!("bytes={}  bpb={:.3}", bytes_so_far, bpb));
+            let elapsed = encode_start.elapsed().as_secs_f64();
+            let tok_per_sec = if elapsed > 0.0 { (i as f64 + 1.0) / elapsed } else { 0.0 };
+            bar.set_message(format!("bytes={}  bpb={:.3}  tok/s={:.1}", bytes_so_far, bpb, tok_per_sec));
         }
     }
     bar.finish_and_clear();
@@ -986,27 +834,26 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     let bpb = (8.0 * enc_bytes as f64) / (orig_len_bytes as f64);
     let char_count = String::from_utf8_lossy(&data).chars().count() as u64;
     let bpc = if char_count > 0 { (8.0 * enc_bytes as f64) / (char_count as f64) } else { f64::NAN };
+    let tok_per_sec = if elapsed.as_secs_f64() > 0.0 { (token_count as f64) / elapsed.as_secs_f64() } else { f64::NAN };
     println!(
         "Encoded: {} bytes -> {} bytes | bits/byte={:.3} | bits/char={:.3} | context={} | time={:.2?}",
         orig_len_bytes, enc_bytes, bpb, bpc, cli.context, elapsed
     );
+    println!("Throughput: {:.1} tokens/second", tok_per_sec);
     Ok(())
 }
 
 fn decode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     let device = detect_device(cli.cpu);
     let mut rdr = BufReader::new(File::open(input)?);
-    let (header, model_file_repr) = read_header_v2(&mut rdr)?;
+    let (header, _model_file_repr) = read_header_v3(&mut rdr)?;
 
-    // Resolve model/tokenizer
-    let model_file_str = String::from_utf8_lossy(&model_file_repr).to_string();
-    let (weight_paths, _repr, config_path) =
-        ensure_model_artifacts(&cli.model_repo, &model_file_str, &cli.model)?;
-    let tok_path = ensure_local_file(&cli.tokenizer_repo, &cli.tokenizer_file, &cli.tokenizer)?;
+    // Get model paths based on size parameter
+    let (model_path, config_path) = get_model_paths(&cli.size);
 
     // Check hashes (unless forced)
-    let model_hash16 = blake3_files_bin16(&weight_paths)?;
-    let tokenizer_hash16 = blake3_file_bin16(&tok_path)?;
+    let model_hash16 = blake3_file_bin16(&model_path)?;
+    let tokenizer_hash16 = blake3_file_bin16(&cli.tokenizer)?;
     if !cli.force_mismatch {
         if model_hash16 != header.model_hash16 {
             bail!("model hash mismatch. Use --force-mismatch to override.");
@@ -1017,13 +864,11 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     }
 
     // Load tokenizer
-    let tokenizer = Tokenizer::from_file(tok_path.to_str().unwrap())
-        .map_err(|e| anyhow::anyhow!("failed loading tokenizer: {e}"))?;
-    let vocab_size = header.vocab_size as usize;
+    let tokenizer = RwkvTokenizer::new(&cli.tokenizer)
+        .with_context(|| format!("failed loading tokenizer from {}", cli.tokenizer.display()))?;
 
     // Init model
-    let mut session = LmSession::load(&weight_paths, &config_path, device)?;
-    session.vocab_size = vocab_size;
+    let mut session = RwkvSession::load(&model_path, &config_path, device)?;
 
     // AC decoder sits on the remainder of the file
     let mut payload = Vec::new();
@@ -1032,6 +877,10 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
 
     // Seed with BOS -> logits for next (device)
     let mut logits_t = session.step_logits_tensor(header.bos_token_id)?;
+
+    // Compute state entropy once for adaptive probability floor (same as encoder)
+    let current_entropy = session.advanced_state_analysis_priming()?;
+    session.last_state_entropy = Some(current_entropy);
 
     let mut out_tokens: Vec<u32> = Vec::with_capacity(header.token_count as usize + 1);
     out_tokens.push(header.bos_token_id);
@@ -1042,33 +891,45 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> Result<()> {
     let mut tokens_since_reprime = 0usize;
     // For decoding, we still use CPU pdf for arithmetic decoder compatibility.
     let mut logits_vec = logits_t.to_vec1::<f32>()?;
-    let mut pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
-    let effective_context = (header.context_window as usize).saturating_sub(1).min(511);
+            let mut pdf = softmax_pdf_adaptive(&logits_vec, session.vocab_size, session.last_state_entropy);
+    
+    // RWKV7 infinite context optimization for decoding
+    let use_repriming = header.reprime_interval > 0 && header.context_window > 0;
+    let effective_context = if header.context_window == 0 { usize::MAX } else { header.context_window as usize };
+    
     for i in 0..header.token_count {
-        if session.index_pos >= effective_context && tokens_since_reprime >= header.reprime_interval as usize {
+        // Optional Meta-ICL virtual priming at the same intervals used by the encoder
+        if cli.meta_icl && i > 0 && ((i as usize) % cli.meta_icl_interval == 0) {
+            session.virtual_meta_icl_prime(&tokenizer, &out_tokens[..], cli.meta_icl_window, cli.meta_icl_max_new)?;
+            // logits_t remains the last state output; next symbol will be decoded below
+            logits_vec = logits_t.to_vec1::<f32>()?;
+            pdf = softmax_pdf_adaptive(&logits_vec, session.vocab_size, session.last_state_entropy);
+        }
+
+        // Only reprime if explicitly configured
+        if use_repriming && tokens_since_reprime >= header.reprime_interval as usize {
             let end = out_tokens.len();
-            let start = end.saturating_sub(effective_context);
+            let start = if effective_context == usize::MAX { 0 } else { end.saturating_sub(effective_context) };
             let history = &out_tokens[start..end];
             logits_t = session.reprime_with_history_and_get_last_logits_tensor(history)?;
             tokens_since_reprime = 0;
             logits_vec = logits_t.to_vec1::<f32>()?;
-            pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
+            pdf = softmax_pdf_adaptive(&logits_vec, session.vocab_size, session.last_state_entropy);
         }
         let sym = acd.decode_symbol(&pdf)? as u32;
         out_tokens.push(sym);
-        // Advance model with the decoded symbol
+        // Advance model with the decoded symbol (RWKV7 maintains infinite context automatically)
         logits_t = session.step_logits_tensor(sym)?;
         tokens_since_reprime += 1;
         logits_vec = logits_t.to_vec1::<f32>()?;
-        pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
-        if i % 1024 == 0 { bar.set_position(i); }
+        pdf = softmax_pdf_adaptive(&logits_vec, session.vocab_size, session.last_state_entropy);
+        if i % 256 == 0 { bar.set_position(i); }  // More frequent updates
     }
     bar.finish_and_clear();
 
-    // Convert tokens back to text (skip BOS)
-    let detok = tokenizer.decode(&out_tokens[1..], true)
-        .map_err(|e| anyhow::anyhow!("tokenizer.decode failed: {e}"))?;
-    fs::write(output, detok.as_bytes())?;
+    // Convert tokens back to raw bytes (skip BOS) for lossless roundtrip
+    let detok_bytes = tokenizer.decode_bytes(&out_tokens[1..]);
+    fs::write(output, &detok_bytes)?;
     Ok(())
 }
 
@@ -1095,11 +956,18 @@ fn softmax_pdf_floor(logits: &[f32], vocab_size: usize, p_floor: f64) -> Vec<f64
     pdf
 }
 
+// Enhanced softmax with adaptive flooring and better numerical stability
+fn softmax_pdf_adaptive(logits: &[f32], vocab_size: usize, state_entropy: Option<f32>) -> Vec<f64> {
+    // Use adaptive floor that accounts for vocab size and state entropy
+    let p_floor = adaptive_probability_floor(vocab_size, state_entropy);
+    softmax_pdf_floor(logits, vocab_size, p_floor)
+}
+
 // -------------------------------
-// Header I/O (binary v2)
+// Header I/O (binary v3)
 // -------------------------------
 #[derive(Debug, Clone, Copy)]
-struct HeaderBinV2 {
+struct HeaderBinV3 {
     bos_token_id: u32,
     token_count: u64,
     orig_len_bytes: u64,
@@ -1137,7 +1005,7 @@ fn read_var_u64<R: Read>(r: &mut R) -> Result<u64> {
     Ok(out)
 }
 
-fn write_header_v2<W: Write>(w: &mut W, h: &HeaderBinV2, model_file_repr: &[u8]) -> Result<()> {
+fn write_header_v3<W: Write>(w: &mut W, h: &HeaderBinV3, model_file_repr: &[u8]) -> Result<()> {
     w.write_u32::<LittleEndian>(MAGIC)?;
     w.write_u16::<LittleEndian>(VERSION)?;
     // fixed fields
@@ -1157,7 +1025,7 @@ fn write_header_v2<W: Write>(w: &mut W, h: &HeaderBinV2, model_file_repr: &[u8])
     Ok(())
 }
 
-fn read_header_v2<R: Read>(r: &mut R) -> Result<(HeaderBinV2, Vec<u8>)> {
+fn read_header_v3<R: Read>(r: &mut R) -> Result<(HeaderBinV3, Vec<u8>)> {
     let magic = r.read_u32::<LittleEndian>()?;
     if magic != MAGIC { bail!("bad magic") }
     let ver = r.read_u16::<LittleEndian>()?;
@@ -1178,7 +1046,7 @@ fn read_header_v2<R: Read>(r: &mut R) -> Result<(HeaderBinV2, Vec<u8>)> {
     let reprime_interval = r.read_u32::<LittleEndian>()?;
     let mut repr = vec![0u8; model_file_repr_len as usize];
     r.read_exact(&mut repr)?;
-    Ok((HeaderBinV2 {
+    Ok((HeaderBinV3 {
         bos_token_id,
         token_count,
         orig_len_bytes,
@@ -1197,7 +1065,7 @@ fn read_header_v2<R: Read>(r: &mut R) -> Result<(HeaderBinV2, Vec<u8>)> {
 // CLI entry points
 // -------------------------------
 fn self_test(cli: &Cli, input: &Path) -> Result<()> {
-    let tmp_out = input.with_extension("gptz");
+    let tmp_out = input.with_extension("rwkz");
     let tmp_dec = input.with_extension("roundtrip.txt");
     let t0 = Instant::now();
     encode_file(cli, input, &tmp_out)?;

@@ -1,16 +1,9 @@
 [package]
-name = "gptzip"
+name = "rwkvzip"
 version = "0.1.0"
 edition = "2021"
-description = "Model-based text compressor using Candle + HF Transformers (LLaMA-compatible) with a 64-bit arithmetic coder"
+description = "RWKV7-based text compressor with 64-bit arithmetic coder"
 license = "Apache-2.0 OR MIT"
-repository = "https://example.com/your-repo"
-
-[profile.release]
-lto = "fat"
-codegen-units = 1
-opt-level = 3
-panic = "abort"
 
 [dependencies]
 anyhow = "1.0"
@@ -24,8 +17,31 @@ serde_json = "1.0"
 thiserror = "1.0"
 tokenizers = "0.19"
 
-# Candle (GPU build: enable the cuda features if CUDA is available)
+candlerwkv7 = { path = ".." }
+
 candle-core = { version = "0.9.1", features = ["cuda"] }
 candle-nn = { version = "0.9.1", features = ["cuda"] }
 candle-transformers = { version = "0.9.1", features = ["cuda"] }
+
+[profile.release]
+# Maximize runtime performance
+opt-level = 3          # Highest optimization level
+lto = "fat"            # Whole-program LTO across crates
+codegen-units = 1      # Single CGU favors better inlining/optimization
+incremental = false    # Ensure fully optimized builds (no incremental)
+panic = "abort"        # Smaller, faster binaries (no unwinding)
+strip = "symbols"      # Remove symbols in release (smaller/faster startup)
+debug = 0              # No debug info
+overflow-checks = false
+debug-assertions = false
+
+# Make `cargo bench` behave like release
+[profile.bench]
+inherits = "release"
+
+# (Optional) Faster dev builds while still pretty snappy
+[profile.dev]
+opt-level = 1
+debug-assertions = true
+incremental = true
 
