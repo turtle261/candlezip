@@ -101,7 +101,7 @@ def create_agent(task_description: str, max_steps: int) -> Agent:
         allow_delegation=False,
         max_iter=max(10, max_steps + 3),
         reasoning_llm=llm2,
-        max_rpm=7,
+        max_rpm=5,
     )
 
 
