@@ -59,9 +59,9 @@ const AC_BASE: u32 = 2;
 const AC_PRECISION: u32 = 32;
 
 // Defaults (HF Hub)
-const DEFAULT_MODEL_REPO: &str = "HuggingFaceTB/SmolLM2-135M-instruct";
+const DEFAULT_MODEL_REPO: &str = "HuggingFaceTB/SmolLM2-135M";
 const DEFAULT_MODEL_FILE: &str = "auto"; // "auto" downloads model.safetensors or resolves shards via index.json
-const DEFAULT_TOKENIZER_REPO: &str = "HuggingFaceTB/SmolLM2-135M-instruct";
+const DEFAULT_TOKENIZER_REPO: &str = "HuggingFaceTB/SmolLM2-135M";
 const DEFAULT_TOKENIZER_FILE: &str = "tokenizer.json";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
