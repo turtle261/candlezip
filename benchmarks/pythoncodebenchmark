@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+import os, time, random, csv, re
+import requests
+
+WIKI_API = "https://en.wikipedia.org/w/api.php"
+USER_AGENT = "NCD-Plaintext-Fetcher/1.0 (contact: youremail@example.com)"
+
+# Broad science categories to source pages from
+SEED_CATEGORIES = [
+    "Physics", "Chemistry", "Biology", "Astronomy",
+    "Computer science", "Earth science", "Mathematics", "Engineering"
+]
+
+OUT_DIR = "wikipedia_plaintext"
+NUM_ARTICLES = 50
+MAX_PER_CATEGORY = 1200      # upper bound to collect per category (API allows pagination)
+REQUEST_DELAY = 0.2          # seconds between requests to be polite
+RANDOM_SEED = 42
+
+session = requests.Session()
+session.headers.update({"User-Agent": USER_AGENT})
+
+def api_get(params):
+    """Helper that wraps GET with basic retry & backoff."""
+    backoff = 0.5
+    for attempt in range(5):
+        try:
+            r = session.get(WIKI_API, params=params, timeout=30)
+            if r.status_code == 429:
+                # rate-limited, wait a bit more
+                time.sleep(backoff)
+                backoff *= 2
+                continue
+            r.raise_for_status()
+            return r.json()
+        except requests.RequestException:
+            time.sleep(backoff)
+            backoff *= 2
+    raise RuntimeError(f"API request failed after retries: {params}")
+
+def collect_pages_from_category(category, limit=MAX_PER_CATEGORY):
+    """
+    Return a set of page titles from a given Category:NAME.
+    Only namespace 0 (articles), only pages (not subcats/files).
+    """
+    titles = set()
+    ccontinue = None
+    while True:
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": f"Category:{category}",
+            "cmnamespace": 0,
+            "cmtype": "page",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        if ccontinue:
+            params["cmcontinue"] = ccontinue
+        data = api_get(params)
+        for item in data.get("query", {}).get("categorymembers", []):
+            titles.add(item["title"])
+            if len(titles) >= limit:
+                return titles
+        ccontinue = data.get("continue", {}).get("cmcontinue")
+        if not ccontinue:
+            return titles
+
+def sanitize_filename(title):
+    # Keep it filesystem-friendly
+    name = title.replace(" ", "_")
+    name = re.sub(r'[<>:"/\\|?*\x00-\x1F]', "_", name)
+    return name[:200]  # keep it from getting too long
+
+def fetch_plaintext(title):
+    """
+    Get plain-text extract of an article via the Extracts API.
+    explaintext removes markup; redirects=1 follows redirects.
+    exsectionformat=plain avoids extra section markup.
+    """
+    params = {
+        "action": "query",
+        "prop": "extracts",
+        "explaintext": "1",
+        "exsectionformat": "plain",
+        "redirects": "1",
+        "titles": title,
+        "format": "json"
+    }
+    data = api_get(params)
+    pages = data.get("query", {}).get("pages", {})
+    # pages is a dict keyed by pageid
+    for pageid, page in pages.items():
+        if "missing" in page:
+            return None
+        return page.get("extract", "") or ""
+    return None
+
+def main():
+    random.seed(RANDOM_SEED)
+    os.makedirs(OUT_DIR, exist_ok=True)
+
+    # 1) Gather a large pool of candidate article titles across categories
+    pool = set()
+    for cat in SEED_CATEGORIES:
+        print(f"[info] Collecting from Category:{cat} ...")
+        got = collect_pages_from_category(cat)
+        print(f"       -> {len(got)} titles")
+        pool.update(got)
+        time.sleep(REQUEST_DELAY)
+
+    print(f"[info] Total unique titles in pool: {len(pool)}")
+
+    if len(pool) < NUM_ARTICLES:
+        raise RuntimeError(f"Not enough articles gathered: {len(pool)} < {NUM_ARTICLES}")
+
+    # 2) Sample 50 titles
+    titles = random.sample(sorted(pool), NUM_ARTICLES)
+
+    # 3) Fetch plaintext and write files
+    manifest_rows = []
+    for i, title in enumerate(titles, 1):
+        print(f"[fetch {i:02d}/{NUM_ARTICLES}] {title}")
+        text = fetch_plaintext(title)
+        time.sleep(REQUEST_DELAY)
+        if not text or not text.strip():
+            print("   [warn] empty/missing; skipping")
+            continue
+        fname = sanitize_filename(title) + ".txt"
+        path = os.path.join(OUT_DIR, fname)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text.strip() + "\n")
+        manifest_rows.append({"title": title, "file": fname, "bytes": os.path.getsize(path)})
+
+    # 4) Write a simple manifest CSV
+    manifest_path = os.path.join(OUT_DIR, "manifest.csv")
+    with open(manifest_path, "w", newline="", encoding="utf-8") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=["title", "file", "bytes"])
+        writer.writeheader()
+        writer.writerows(manifest_rows)
+
+    print(f"[done] Saved {len(manifest_rows)} plaintext files to: {OUT_DIR}")
+    print(f"[done] Manifest: {manifest_path}")
+
+if __name__ == "__main__":
+    main()

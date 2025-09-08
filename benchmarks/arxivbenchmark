@@ -1,0 +1,243 @@
+# LLMZip: Lossless Text Compression using Large Language Models
+
+**Authors:** Chandra Shekhara Kaushik Valmeekam, Krishna Narayanan, Dileep Kalathil, Jean-Francois Chamberland, Srinivas Shakkottai  
+**Affiliation:** Department of Electrical and Computer Engineering, Texas A&M University  
+**Email:** {vcskaushik9,krn,dileep.kalathil,chmbrlnd,sshakkot}@tamu.edu  
+**arXiv:** 2306.04050v2 [cs.IT] 26 Jun 2023
+
+## Abstract
+
+We provide new estimates of an asymptotic upper bound on the entropy of English using the large language model LLaMA-7B as a predictor for the next token given a window of past tokens. This estimate is significantly smaller than currently available estimates in [1], [2]. A natural byproduct is an algorithm for lossless compression of English text which combines the prediction from the large language model with a lossless compression scheme. Preliminary results from limited experiments suggest that our scheme outperforms state-of-the-art text compression schemes such as BSC, ZPAQ, and paq8h.
+
+## I. INTRODUCTION
+
+There are close connections between learning, prediction, and compression. The success of ChatGPT has captured the fascination of general public and brought the connection between learning and prediction to the fore. The main advance brought about by large language models such as LLaMA and GPT-4 is that they excel at predicting the next word (token) in a paragraph based on knowing the past several words (tokens).
+
+The connection between prediction and compression was explored as early as 1951 by Shannon in order to estimate the entropy of the English language [3]. The idea that a good predictor for the ith value in a time series based on the past values can be effectively converted to a good compression algorithm has played a prominent role in information theory. Many algorithms for speech, image, and video compression exploit this idea either explicitly or implicitly. Within the context of lossless compression of English text, the idea of combining a language model with arithmetic coding has emerged as a very effective paradigm [4]. The performance of such a compression scheme depends substantially on the efficacy of the predictor and every time there is a major advance in the prediction capability, it behooves us to study its effect on the compression performance. Indeed, in 2018, the authors of [5] used recurrent neural networks (RNN) as the predictor and reported improved results for certain kinds of sources. Their scheme still did not outperform state-of-the-art algorithms such as BSC and ZPAQ for text compression.
+
+It is therefore natural at this time to study whether we can obtain better compression results and sharper estimates of the entropy of the English language using recent large language models such as LLaMA-7B [6]. This is the main goal of this paper. We show that when the LLaMA-7B large language model is used as the predictor, the asymptotic upper bound on the entropy is 0.709 bits/character when estimated using a 1MB section of the text8 dataset. This is smaller than earlier estimates provided in [1] and [2, Table 4]. The estimate of the upper bound increases to 0.85 bits/character for a 100 KB section of the text from [7], which is still lower than the estimates in [2]. When LLaMA-7B is combined with an Arithmetic coder for compression, we obtain a compression ratio of 0.7101 bits/character on a 1MB section of the text8 dataset and a compression ratio of 0.8426 bits/character on a 100KB section of a text from [7], which are significantly better than the compression ratio obtained using BSC, ZPAQ and pq8h on the full 100MB of the text8 dataset.
+
+## II. INTUITIVE EXPLANATION OF THE MAIN IDEA
+
+We will use the following example to describe the main idea, which is nearly identical to that proposed by Shannon in [3] for estimating the entropy of English. The main difference is in the use of tokens which represent groups of letters of variable length and in the use of a large language model instead of a human to predict the next token. Consider a part of the sentence that reads as
+
+My first attempt at writing a book
+
+Our goal is to convert this sentence into a sequence of bits with the least possible length such that the original sequence can be reconstructed from the sequence of bits. This sentence can first be split into a sequence of words (tokens)
+
+′My′, ′first′, ′attempt′, ′at′, ′writing′, ′a′, ′book′
+
+A language model with memory M (for example, say M = 4) predicts the next word in the sentence based on observing the past M words. Specifically, it produces a rank-ordered list of choices for the next word and their probabilities. As shown in Figure 1, at epoch 5, the model accepts the first 4 words as input and predicts that the next word in the sentence could be words such as ′reading′,′ writing′,′ driving′,′ cooking′ etc. The main idea is to compute the rank of the actual word in our sentence (′writing′) in this list and call it R5. We will assume that the ranks start at 0 i.e., the most likely word has rank 0, the second most likely word has rank 1, and so on. In this example, the rank for ′writing′ is R5 = 1.
+
+**Fig. 1.** Schematic showing the prediction at epoch 5 for a language model with memory 4.
+
+| Next word | Probability |
+|-----------|-------------|
+| reading  | 0.3        |
+| writing  | 0.2        |
+| cycling  | 0.1        |
+| driving  | 0.05       |
+| ...      | ...        |
+
+R5 = 1
+
+Then, we move forward by one word in the sentence, and at epoch 6, we try to predict the 6th word based on words 2 through 5 as shown in Figure 2. In this example, given words 2 through 5, the most likely 6th word would indeed be the same word in the sentence that we wish to encode, ′a′, and hence, the rank R6 would be 0.
+
+**Fig. 2.** Schematic showing the prediction at epoch 6 for a language model with memory 4.
+
+| Next word | Probability |
+|-----------|-------------|
+| a        | 0.7        |
+| an       | 0.2        |
+| the      | 0.05       |
+| ...      | ...        |
+
+R6 = 0
+
+If the language model is good, the word that we wish to encode would often appear at the top of the list and hence, the rank would be 0. Thus, if we look at the sequence of ranks, it is likely to have many 0s with decreasing probabilities for the rank being 1, 2, . . .. In this example, it is foreseeable that the ranks will be
+
+1, 0, 0, . . .
+
+A sequence with many ‘0’s is typically compressible since it has structured patterns. Thus, the key idea is to compress the ranks using a standard lossless compression algorithm such as zip, arithmetic coding, or Huffman coding which converts the ranks to bits. This is shown in Fig. 3.
+
+**Fig. 3.** Schematic showing the compression of the sequence of ranks to a bit sequence.
+
+When we wish to reconstruct the sequence, we first decompress and unzip the bits to get the ranks, use the same language model one epoch at a time to produce a rank ordered list of possibilities for the next word, and pick the word in the list at rank Ri during the ith epoch. We use that as input for determining the next word and so on. Note that this requires that the same LLM is used at both the encoder and the decoder.
+
+The idea of encoding ranks was discussed to build intuition, but better compression can be achieved by directly using the probabilities produced by the LLM along with arithmetic coding as discussed in Section III-B3.
+
+## III. COMPRESSION USING LLMS
+
+Let s denote a sentence from the English language composed of Nc letters, where each letter is assumed to be from the alphabet S. We assume that we have a dictionary X = [1, D] of D tokens. We first parse s into a sequence of NT tokens denoted by x = x1, x2, . . . , xi−1, xi, xi+1, . . . xNT , where xi ∈X. There is a one-to-one mapping between s and x and hence, compressing s is the same as compressing x. xi’s can be thought of as realizations of the random variable denoted by the upper case letter Xi.
+
+A language model with memory M is a predictor that operates as follows. At epoch i, it accepts tokens xi−M, xi−M+1, . . . , xi−1 and produces a probability mass function for the next token in the sequence conditioned on the past M tokens given by qi(xi) := Pr(Xi = xi|xi−1, xi−2, . . . , xi−M), ∀xi ∈X. The PMF vector qi := [qi(1), qi(2), . . . , qi(D)]T is sorted in descending order and let the sorted PMF vector be denoted by ˜qi. Let γi : X →X be a permutation on the integers from 1 to D such that ˜qi(γi(j)) = qi(j), ∀j ∈X.
+
+That is, γi(j) is the rank of the token j at epoch i. We define the rank of the input sequence at epoch i as the rank of the token xi at epoch i, ri := γi(xi). The sequence {ri}NT i=1 is compressed by a lossless compression algorithm (such as zlib) to produce Nb bits which are the final bit representation of the source. A schematic of this scheme is shown in Fig. 4. In general, the lossless compression algorithm may use the sequence of PMF vectors qi’s in addition to the sequence of ranks.
+
+The main metric of interest is the compression ratio ρ defined as
+
+ρ := Nb / Nc bits/character.
+
+**Fig. 4.** Schematic showing the prediction at epoch i.
+
+### A. Entropy bounds
+
+Let S ∈S∞ be a random process that represents language input. The nth character in the sequence is denoted by Sn, whereas the string of characters from the beginning to the nth character is expressed as Sn. The tokenizer parses the input string and maps it to a sequence of tokens X = X1, X2, . . . using a variable-length mapping. In this sequence, Xi is the ith token. The number of characters employed to generate Xi depends on the realization of the random process and, as such, we introduce random variable Bi to identify the number of characters contained in the ith token. Motivated by practical considerations, we only admit tokenizers for which Bi ≥1 and Bi is uniformly bounded, with Bi < B < ∞; these are characteristics of commonly used tokenizers. An immediate consequence of this framework is that, as the number of tokens grows unbounded NT →∞, the number of characters must also approach infinity Nc →∞. Formally, consider the tokenizer function T : SN →X N operating on infinite symbol sequences; that is, T (s) = x where s is an infinite sequence in S∞. For natural number, i ∈N, define mi : SN →N to be the (time) index during which the tokenizer working sequentially on an input sequence s outputs its ith token. Specifically, suppose s is given, then
+
+mi(s) = min n {length (T (sn)) ≥i} . (1)
+
+We note that, by construction, limn→∞ length (T (sn)) = ∞ and, as such, mi(·) is well-defined. It may be pertinent to stress that the tokenizer function applied to truncated sequences is not necessarily injective because multiple finite input series can map to the same output. This phenomenon is a consequence of the fact that, at any point in time, a tokenizer working sequentially may be waiting for an additional symbol before it can unambiguously select the next output token, i.e., there may be instances where T (sn) = T (sn+1). However, if we restrict the input series to input indices when a new token is produced, then the restricted mapping becomes injective. That is, suppose T (s) = x, then the only (finite) series of input symbols in the restricted set for which T (yn) = xi is smi(s). Given a fixed sequence s, we can express the number of characters contained in a token as
+
+bi = mi(s) − mi−1(s)
+
+with initial condition m−1 = 0. Consequently, the number of characters embedded in the first NT tokens for a random input becomes Nc = �NT i=1 Bi.
+
+Having established these properties, we turn to the relation between H(S) and H(X). We make the assumption that {Sk}∞ k=1, {Bi}∞ i=1, and {Xi}∞ i=1 are stationary and ergodic processes. We know from the Shannon-McMillan-Breiman Theorem [8] that
+
+−1/n log2 pSn(S1, . . . , Sn) = −1/n log2 pSn(Sn) → H(S) almost surely. (2)
+
+Let ΩS be the collection of ω ∈Ω for which this limit holds. In an analogous manner, the Shannon-McMillan-Breiman theorem implies
+
+−1/i log2 pXi(X1, . . . , Xi) = −1/i log2 pXi(Xi) → H(X) almost surely. (3)
+
+Define ΩX as the collection of ω ∈Ω for which this limit holds. Finally, by construction, we have
+
+lim i→∞ mi(S)/i = E [B] almost surely. (4)
+
+Set ΩB to be the set of ω ∈Ω for which this limit holds. For any ω ∈ΩS ∩ ΩX ∩ ΩB, we deduce that
+
+H(S) = lim k→∞ −1/k log2 pSk(Sk(ω))
+
+= lim i→∞ −1/li log2 pSli(Sli(ω))
+
+= lim i→∞ −1/li log2 Pr (Xi = T (Sli(ω)))
+
+= −1/E[B] lim i→∞ 1/i log2 Pr (Xi = xi) = H(X)/E[B] .
+
+The first equality follows from (2). The second equality is a consequence of the fact that {li = mi(S(ω))|i ∈N} is an infinite subset of the natural numbers. Since a subsequence of a convergent sequence must converge to the same limit, we immediately gather that this alternate form approaches H(S). The third equality is a consequence of the equivalence between the following two events, {ω ∈Ω|Xi(ω) = xi} = {ω ∈Ω|T (Smi(S(ω))) = xi}. This is characteristic of the tokenization process, and it is a consequence of the correspondence described above. The last step holds because we are considering an ω ∈ΩB. The sets ΩS, ΩX, and ΩB each have probability one; this implies that their intersection also has probability one, Thus, we must conclude that
+
+H(S) = H(X)/E[B] almost surely.
+
+As a corollary to this result, any upper bound on H(X) produces an upper bound on H(S). This is the property we wish to exploit.
+
+Then, from the results of [1], we can see that
+
+Pr ( H(X) ≤ lim NT →∞ −1/NT �NT i=1 log2 qi(Xi) ) = 1, (5)
+
+where qi(·) is the output PMF from the language model. Therefore, an asymptotic upper bound on the entropy rate H(S) is given by
+
+H(S) ≤ limNT →∞ −1/NT �NT i=1 log2 qi(Xi) / E[B] . (6)
+
+We refer to the expression in the right hand side of (6) as the asymptotic upper bound on H(S) and denote it by Hub. The numerator in (6) represents the average number of bits required to represent the tokens XNT and the denominator in (6) is the average number of charcaters per token. Hence, the unit for H(S) is bits/character. In [1], Cover and King provide 1.3 bits/character as an estimate of the asymptotic upper bound on H(S). They also provide an extensive list of references and discussion of the literature on estimating the entropy of English prior to 1976. Very recently, in [2, Table 4], the performance of several language models have evaluated on the text8 dataset using a metric called bits per character (bpc). We believe bpc is the same as the asymptotic upper bound in this paper.
+
+### B. Encoding schemes
+
+We consider three schemes for the lossless compression block in Fig. 3.
+
+1) **Compressing the ranks using zlib:** The first scheme uses the zlib compression algorithm to encode the sequence of ranks. We refer to this scheme as LLaMA+zlib and denote the compression ratio of this scheme by ρLLaMA+zlib.
+
+2) **Token-by-Token Compression:** The second scheme uses a token-by-token lossless compression scheme which uses a time-varying codebook to encode the token xi at epoch i by using a prefix-free code assuming qi to be the true distribution of the tokens. A natural choice for a prefix-free code is a Huffman code. Instead, for simplicity, we use a prefix-free code where the codeword for the token xi is of length li = ⌈log2 1/qi(xi)⌉. A prefix-free code with this length for xi is guaranteed to exist since this choice of lengths satisfies the Kraft inequality [8]. The compression ratio for this scheme, denoted by ρLLaMA+TbyT, is given by
+
+ρLLaMA+TbyT = �NT i=1 ⌈log2 1/qi(xi)⌉ / �NT i=1 bi .
+
+3) **Arithmetic Coding:** The above two schemes are intuitive but their performance can be improved. A very effective way to combine the output of the LLM with a lossless compression scheme is by using arithmetic coding [4], [9]. Arithmetic coding is well suited to accept time-varying probabilities and we use qi(xi) as the probability of token xi at time in the arithmetic coding scheme. We refer to the compression ratio of this scheme as ρLLM+AC. It is known that arithmetic coding is nearly optimal as a compression scheme [10, Page 115]. Hence, the compression ratio for this scheme is expected to be
+
+ρLLM+AC ≈ �NT i=1 log2 1/qi(xi) / �NT i=1 bi . (7)
+
+Clearly, ρLLaMA+zlib, ρLLaMA+TbyT, and ρLLM+AC also provide upper bounds on H(S). Hub, ρLLaMA+zlib, ρLLaMA+TbyT, and ρLLM+AC are estimated using a finite number of tokens and the statistical properties of such an estimate should be kept in mind when interpreting the results, especially since the tokens are from a very large alphabet and language model has large memory.
+
+## IV. RESULTS
+
+We used LLaMA-7B [6] as the large language model and SentencePiece tokenizer [11]. The tokenizer produces a dictionary of size 32000. Since the language model is trained on this tokenizer, it is imperative that this tokenizer be used in conjunction with the LLM. It should be noted that the tokenizer and the model are trained on a large corpus of text which includes uppercase letters, special characters etc. This is in contrast to many studies on estimating the entropy of English, where the input alphabet is restricted to lowercase letters such as in [1], [3], [5]. This makes it difficult to perform an entirely fair comparison between these models. By using a pretrained LLM on an input consisting only of lowercase letters, we may be unfair to the LLM. Nevertheless, we used the text8 dataset available from http://mattmahoney.net/dc/text8.zip to benchmark the performance of LLaMA-7B with compression against other state of the art results for text compression. In [5], it is mentioned that the ZPAQ algorithm obtains the best compression ratio for the text8 dataset with a compression ratio of 1.4 bits/character. In [12], the paq8h algorithm is shown to provide a compression ratio of 1.2 bits/character. To the best of our knowledge, this appears to be best performance reported. Therefore, we used these two algorithms as baselines. We did not independently run the ZPAQ or paq8h algorithms and we are quoting results from the existing literature.
+
+The performance of LLaMA-7B is shown in Table I for 10 different batches each with 100,000 tokens. The average performance over these 1M tokens is also shown in the last row in the Table. It can be seen that using LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character. This is substantially better than the state-of-the-art results mentioned in [5] or [12] and is very close to our computed upper bound. The performance with the LLaMA+zlib algorithm and LLaMA+TbyT compression are also better than that of the known state-of-the-art results. Table I also shows the upper bound in (6). It should be noted that the upper bound on the entropy is lower than that computed by Shannon in [3], Cover and King in [1] and more recent estimates based on neural networks in [2].
+
+The dependence of the compression performance on the memory of the LLM (M) is shown in Table II. As expected, the compression performance improves with increasing M. We also observed that the inference time scaled approximately linearly with the input memory length, i.e., batches with a memory of 511 tokens ran about 16 times slower than batches with a memory of 31 tokens.
+
+It is well known that the estimate of compression ratio can show substantial variance depending on the input text and hence, the results should be interpreted with caution. The empirical mean and standard deviation of the entropy bounds and compression ratios computed using 10 batches of 100,000 tokens are shown in Table III. We were also not able to run LLaMA-7B on the entire 100MB of the text8 dataset. So, the comparison of LLaMA-7B with that of the state-of-the-art corresponds to estimates obtained from different input sizes.
+
+It appears that the LLaMA-7B model was trained on a corpus that included articles from Wikipedia. Since the text8 dataset is derived from Wikipedia, it is likely that our results for the text8 dataset are optimistic.
+
+Therefore, we also tested the performance of LLaMA-7B on a recently released (May 25, 2023) book [7] under Project Gutenberg. We extracted text that corresponds to 100,000 tokens. We applied the same text pre-processing as used in the text8 dataset to clean the text from the book. The resulting text data contained only lowercase letters and space as in the text8 dataset. Table IV shows the compression performance of the LLM on the book. It can be seen that the compression ratios and the entropy upper bound are slightly higher compared to the performance on the text8 dataset; nevertheless, the asymptotic upper bound on the entropy is lower than that of currently known models given in [2, Table 4]). Similarly, the compression ratio of LLaMA-7B-based compressors are better than those of known state-of-the-art results for the text8 dataset. The compression ratio for LLaMA with arithmetic coding is only 0.8426 bits/character and is very close to the estimated upper bound on H(S).
+
+To provide some insight into the comparative performance of LLaMA based compressors vis-a-vis standard text compressors, we also ran the zlib algorithm directly on the input text. The resulting compression ratio was 2.8 bits/character (shown in the last column). It is clear that the performance of LLaMA based compressors is substantially better than this. The zlib algorithm may not be optimized for compressing small text samples and hence, the compression ratio for the zlib algorithm and the LLaMA+zlib will likely improve on longer texts.
+
+### TABLE I  
+RESULTS FOR 1MB OF TEXT FROM TEXT8 DATASET
+
+| Batch No. | Nc     | NT      | Hub (bpc) | ρLLaMA+zlib (bpc) | ρLLaMA+TbyT (bpc) | ρLLaMA+AC (bpc) | ZPAQ (bpc) | pq8h (bpc) |
+|-----------|--------|---------|-----------|-------------------|-------------------|-----------------|------------|------------|
+| 1        | 466,650 | 100,000 | 0.6882   | 1.0513           | 0.8215           | 0.689          |            |            |
+| 2        | 461,477 | 100,000 | 0.6893   | 1.0558           | 0.8242           | 0.6901         |            |            |
+| 3        | 454,599 | 100,000 | 0.699    | 1.0681           | 0.8357           | 0.6999         |            |            |
+| 4        | 462,755 | 100,000 | 0.6748   | 1.0346           | 0.8093           | 0.6757         |            |            |
+| 5        | 453,847 | 100,000 | 0.7481   | 1.1265           | 0.8831           | 0.749          |            |            |
+| 6        | 458,252 | 100,000 | 0.7218   | 1.0957           | 0.8567           | 0.7227         |            |            |
+| 7        | 451,036 | 100,000 | 0.6959   | 1.0729           | 0.8353           | 0.6968         |            |            |
+| 8        | 447,953 | 100,000 | 0.7092   | 1.0896           | 0.8489           | 0.7101         |            |            |
+| 9        | 462,665 | 100,000 | 0.7394   | 1.1126           | 0.8713           | 0.7402         |            |            |
+| 10       | 449,621 | 100,000 | 0.7269   | 1.1046           | 0.8643           | 0.7277         |            |            |
+| Total    | 9,137,710 | 2,000,000 | 0.7093 | 1.0812           | 0.845            | 0.7101         | 1.4       | 1.2       |
+
+*1 This result is taken from [5] and it corresponds to the full 100MB dataset text8*  
+*2 This result is taken from [12] and it corresponds to the full 100MB dataset text8*
+
+### TABLE II  
+COMPRESSION PERFORMANCE OF THE LLM ON THE TEXT8 DATASET, AS A FUNCTION OF ITS MEMORY (M)
+
+| M   | Nc       | Nt       | Hub (bpc) | ρLLaMA+zlib (bpc) | ρLLaMA+TbyT (bpc) | ρLLaMA+AC (bpc) |
+|-----|----------|----------|-----------|-------------------|-------------------|-----------------|
+| 31  | 4,568,855 | 1,000,000 | 0.9139  | 1.3159           | 1.0425           | 0.9145         |
+| 127 | 4,568,855 | 1,000,000 | 0.7511  | 1.1303           | 0.8847           | 0.752          |
+| 255 | 4,568,855 | 1,000,000 | 0.7242  | 1.0985           | 0.859            | 0.725          |
+| 511 | 4,568,855 | 1,000,000 | 0.7093  | 1.0812           | 0.845            | 0.7101         |
+
+### TABLE III  
+MEAN AND STANDARD DEVIATION OF THE ENTROPY BOUNDS MEASURED OVER 10 BATCHES OF 100,000 TOKENS
+
+| M   | Hub (bpc)         | ρLLaMA+zlib (bpc) | ρLLaMA+TbyT (bpc) | ρLLaMA+AC (bpc)  |
+|-----|-------------------|-------------------|-------------------|------------------|
+| 31  | 0.9139 ± 0.0263  | 1.3159 ± 0.0329  | 1.0425 ± 0.0262  | 0.9145 ± 0.0263 |
+| 127 | 0.7511 ± 0.0233  | 1.1303 ± 0.0292  | 0.8847 ± 0.0231  | 0.752 ± 0.0233  |
+| 255 | 0.7242 ± 0.0234  | 1.0985 ± 0.0289  | 0.859 ± 0.0232   | 0.725 ± 0.0234  |
+| 511 | 0.7093 ± 0.0228  | 1.0812 ± 0.028   | 0.845 ± 0.0226   | 0.7101 ± 0.0228 |
+
+### TABLE IV  
+COMPRESSION PERFORMANCE OF THE LLM ON A RECENTLY PUBLISHED BOOK IN PROJECT GUTENBERG [7], AS A FUNCTION OF ITS MEMORY (M)
+
+| M   | Nc      | Nt       | Hub (bpc) | ρLLaMA+zlib (bpc) | ρLLaMA+TbyT (bpc) | ρLLaMA+AC (bpc) | Standalone Zlib (bpc) |
+|-----|---------|----------|-----------|-------------------|-------------------|-----------------|------------------------|
+| 31  | 508,463 | 115,000 | 1.0919   | 1.5316           | 1.2152           | 1.0924         | 2.80                  |
+| 127 | 508,463 | 115,000 | 0.8973   | 1.3128           | 1.0235           | 0.8982         | 2.80                  |
+| 255 | 508,463 | 115,000 | 0.8618   | 1.2684           | 0.9899           | 0.8627         | 2.80                  |
+| 511 | 508,463 | 115,000 | 0.8417   | 1.2465           | 0.9711           | 0.8426         | 2.80                  |
+
+## V. ACKNOWLEDGEMENT
+
+We would like to thank Andreas Kirsch for an email discussion about arithmetic coding that motivated us to add our results on arithmetic coding in a timely manner.
+
+## REFERENCES
+
+[1] Thomas Cover and Roger King, “A convergent gambling estimate of the entropy of english,” IEEE Transactions on Information Theory, vol. 24, no. 4, pp. 413–421, 1978.  
+
+[2] Shahar Lutati, Itamar Zimerman, and Lior Wolf, “Focus your attention (with adaptive IIR filters),” 2023.  
+
+[3] Claude E Shannon, “Prediction and entropy of printed english,” Bell system technical journal, vol. 30, no. 1, pp. 50–64, 1951.  
+
+[4] John Cleary and Ian Witten, “Data compression using adaptive coding and partial string matching,” IEEE transactions on Communications, vol. 32, no. 4, pp. 396–402, 1984.  
+
+[5] Mohit Goyal, Kedar Tatwawadi, Shubham Chandak, and Idoia Ochoa, “Deepzip: Lossless data compression using recurrent neural networks,” arXiv preprint arXiv:1811.08162, 2018.  
+
+[6] Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timothée Lacroix, Baptiste Rozière, Naman Goyal, Eric Hambro, Faisal Azhar, Aurelien Rodriguez, Armand Joulin, Edouard Grave, and Guillaume Lample, “Llama: Open and efficient foundation language models,” 2023.  
+
+[7] J. Frank Dobie, Legends of Texas, United States, Texas Folk-Lore Society, 1924; Project Gutenberg, May 25, 2023, 2023, https://www.gutenberg.org/ebooks/70859.  
+
+[8] Thomas M Cover and Joy A Thomas, Elements of Information Theory, Wiley, New York, 1999.  
+
+[9] Timothy Bell, Ian H Witten, and John G Cleary, “Modeling for text compression,” ACM Computing Surveys (CSUR), vol. 21, no. 4, pp. 557–591, 1989.  
+
+[10] David JC MacKay, Information theory, inference and learning algorithms, Cambridge university press, 2003.  
+
+[11] Taku Kudo and John Richardson, “Sentencepiece: A simple and language independent subword tokenizer and detokenizer for neural text processing,” CoRR, vol. abs/1808.06226, 2018.  
+
+[12] “text8 results,” http://mattmahoney.net/dc/textdata.html.

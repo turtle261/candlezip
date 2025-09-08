@@ -1,0 +1,1596 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\_internal\_generate_schema.py:628: UserWarning: <built-in function callable> is not a Python type (it may be an instance of an object), Pydantic will allow any object with no validation since we cannot even enforce that the input is an instance of the given type. To get rid of this error wrap the type with `pydantic.SkipValidation`.
+  warn(
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from docker-mcp.yaml
+  - Reading config from config.yaml
+- Configuration read in 23.5557ms
+- Watching registry at C:\Users\Noah\.docker\mcp\registry.yaml
+- Watching config at C:\Users\Noah\.docker\mcp\config.yaml
+- Those servers are enabled: arxiv-mcp-server, duckduckgo, wikipedia-mcp
+- Using images:
+  - mcp/arxiv-mcp-server@sha256:6dc6bba6dfed97f4ad6eb8d23a5c98ef5b7fa6184937d54b2d675801cd9dd29e
+  - mcp/duckduckgo@sha256:68eb20db6109f5c312a695fc5ec3386ad15d93ffb765a0b4eb1baf4328dec14f
+  - mcp/wikipedia-mcp@sha256:e90e3f6e3bb795f10d3d8d8ac1523f6d46d4f2ab5ac3b3a4720e1be879466472
+> Images pulled in 73.5675ms
+- Listing MCP tools...
+  - Running mcp/wikipedia-mcp with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=wikipedia-mcp -l docker-mcp-transport=stdio]
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers:ro]
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  > duckduckgo: (2 tools)
+  > wikipedia-mcp: (10 tools) (9 resourceTemplates)
+  > arxiv-mcp-server: (4 tools) (1 prompts)
+> 16 tools listed in 3.3586704s
+- Watching for configuration updates...
+> Initialized in 3.4563234s
+> Start stdio server
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 82519296-c7f5-44c4-bb02-f776b41e2d7b                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 6eb87424-a385-4c65-9402-a17dbad711f5
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔄 Tool Usage Started
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  1. **Understand the Document Prefix:** I will thoroughly read the          │
+│  provided document prefix to identify the main topics, existing results,    │
+│  and explicit mentions of future content, such as tables and section        │
+│  headers. I will note that the document discusses compression schemes       │
+│  (ρLLaMA+zlib, ρLLaMA+TbyT, ρLLM+AC), benchmarks using LLaMA-7B on the      │
+│  text8 dataset, comparisons with ZPAQ and paq8h, and mentions of Table I    │
+│  (fully provided), Table II (partially provided header and first column),   │
+│  Table III (mentioned as containing empirical mean and standard deviation   │
+│  of entropy bounds and compression ratios), and Table IV (mentioned as      │
+│  showing compression performance on a Project Gutenberg book). The prefix   │
+│  also indicates that the document is in section "IV. RESULTS", implying     │
+│  subsequent sections like "V. DISCUSSION", "VI. CONCLUSION", and            │
+│  "REFERENCES".                                                              │
+│                                                                             │
+│  2. **Attempt to Locate Full Document:** To ensure I only include content   │
+│  supported by the tools and avoid hallucination, my primary strategy is to  │
+│  find the full document.                                                    │
+│      *   I will use the `search_papers` tool with a highly specific query   │
+│  derived from the document prefix to maximize the chance of finding the     │
+│  exact paper. A suitable query would be: `query='LLaMA-7B with Arithmetic   │
+│  Coding compression results in a compression ratio of 0.7101                │
+│  bits/character'`.                                                          │
+│      *   If a paper is found, I will extract its `paper_id`.                │
+│      *   If the initial search fails, I will attempt a slightly broader     │
+│  query: `query='LLaMA-7B compression arithmetic coding text8'`.             │
+│      *   If no relevant paper is found after these attempts, I will         │
+│  conclude that I am "NOT READY" as I cannot fulfill the "supported by       │
+│  tools" constraint for retrieving *future content of this specific          │
+│  document*.                                                                 │
+│                                                                             │
+│  3. **Extract Future Content (if document found):** Assuming the full       │
+│  document is successfully located in step 2:                                │
+│      *   I will use the `get_sections` tool with the obtained `paper_id`    │
+│  to retrieve a list of all sections in the document.                        │
+│      *   I will identify sections that logically follow "IV. RESULTS",      │
+│  such as "V. DISCUSSION", "VI. CONCLUSION", "REFERENCES", and potentially   │
+│  "APPENDIX".                                                                │
+│      *   For each of these identified sections, I will use the              │
+│  `summarize_article_section` tool (or `extract_key_facts` if                │
+│  `summarize_article_section` is not suitable for the content) with the      │
+│  `paper_id` and the `section_name` to obtain a concise summary of its       │
+│  content.                                                                   │
+│      *   Specifically, I will look for textual descriptions or summaries    │
+│  of the data that would be presented in Table II, Table III, and Table IV   │
+│  within the relevant sections (e.g., "RESULTS" or "DISCUSSION"). Since the  │
+│  tools do not directly extract tables, I will rely on the textual           │
+│  summaries to describe their content, including facts, equations,           │
+│  definitions, datasets, and references.                                     │
+│                                                                             │
+│  4. **Synthesize Concise Synopsis:** I will compile all the retrieved       │
+│  information into a concise textual synopsis. This synopsis will focus on   │
+│  the likely future content, including:                                      │
+│      *   The full content or detailed description of Table II (compression  │
+│  performance as a function of LLM memory M on text8).                       │
+│      *   The full content or detailed description of Table III (empirical   │
+│  mean and standard deviation of entropy bounds and compression ratios).     │
+│      *   The full content or detailed description of Table IV (compression  │
+│  performance on the Project Gutenberg book dataset).                        │
+│      *   Key facts, discussions, and conclusions from subsequent sections   │
+│  (e.g., "V. DISCUSSION", "VI. CONCLUSION").                                 │
+│      *   The complete list of references cited in the document.             │
+│      *   Any new definitions, equations, or datasets introduced in the      │
+│  later parts of the document.                                               │
+│      *   I will ensure the synopsis is highly relevant to the document      │
+│  prefix and strictly adheres to the "no hallucination" and "supported by    │
+│  tools" constraints.                                                        │
+│                                                                             │
+│  5. **Approach Challenges:**                                                │
+│      *   **Document Not Found:** If the full document cannot be located     │
+│  using `search_papers`, I will explicitly state "NOT READY" and explain     │
+│  that the task cannot be completed as per the "supported by tools"          │
+│  constraint.                                                                │
+│      *   **Table Extraction:** As direct table extraction is not            │
+│  available, I will rely on the `summarize_article_section` tool to provide  │
+│  textual descriptions of the tables' content, focusing on the key findings  │
+│  and data points.                                                           │
+│      *   **Conciseness:** I will carefully condense the extracted           │
+│  information to produce a synopsis that is concise and suitable for         │
+│  conditioning a language model compressor, avoiding redundancy.             │
+│                                                                             │
+│  **Expected Outcome:** A concise textual synopsis of the likely future      │
+│  content of the document, including detailed descriptions of the expected   │
+│  content of Table II, Table III, and Table IV, summaries of subsequent      │
+│  sections (Discussion, Conclusion), and the full list of references, all    │
+│  directly supported by information retrieved using the `search_papers`,     │
+│  `get_sections`, and `summarize_article_section` tools. This outcome        │
+│  directly aligns with the primary goal of completing the task accurately    │
+│  and efficiently.                                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Task:[00m [92mYou act as a deterministic research agent. Given the observed prefix of a document, use available MCP tools to retrieve information that is likely to appear later in the same document. Prefer authoritative sources. Produce a concise textual synopsis of the likely future content (facts, equations, definitions, datasets, references), suitable for conditioning a language model compressor. Maximize relevance to the document. Do not hallucinate; only include content supported by the tools.
+
+Document prefix (UTF-8 text):
+above two schemes are intuitive but their performance can be improved. A very effective way to combine the output of the LLM with a lossless compression scheme is by using arithmetic coding [4], [9]. Arithmetic coding is well suited to accept time-varying probabilities and we use qi(xi) as the probability of token xi at time in the arithmetic coding scheme. We refer to the compression ratio of this scheme as ρLLM+AC. It is known that arithmetic coding is nearly optimal as a compression scheme [10, Page 115]. Hence, the compression ratio for this scheme is expected to be
+
+ρLLM+AC ≈ �NT i=1 log2 1/qi(xi) / �NT i=1 bi . (7)
+
+Clearly, ρLLaMA+zlib, ρLLaMA+TbyT, and ρLLM+AC also provide upper bounds on H(S). Hub, ρLLaMA+zlib, ρLLaMA+TbyT, and ρLLM+AC are estimated using a finite number of tokens and the statistical properties of such an estimate should be kept in mind when interpreting the results, especially since the tokens are from a very large alphabet and language model has large memory.
+
+## IV. RESULTS
+
+We used LLaMA-7B [6] as the large language model and SentencePiece tokenizer [11]. The tokenizer produces a dictionary of size 32000. Since the language model is trained on this tokenizer, it is imperative that this tokenizer be used in conjunction with the LLM. It should be noted that the tokenizer and the model are trained on a large corpus of text which includes uppercase letters, special characters etc. This is in contrast to many studies on estimating the entropy of English, where the input alphabet is restricted to lowercase letters such as in [1], [3], [5]. This makes it difficult to perform an entirely fair comparison between these models. By using a pretrained LLM on an input consisting only of lowercase letters, we may be unfair to the LLM. Nevertheless, we used the text8 dataset available from http://mattmahoney.net/dc/text8.zip to benchmark the performance of LLaMA-7B with compression against other state of the art results for text compression. In [5], it is mentioned that the ZPAQ algorithm obtains the best compression ratio for the text8 dataset with a compression ratio of 1.4 bits/character. In [12], the paq8h algorithm is shown to provide a compression ratio of 1.2 bits/character. To the best of our knowledge, this appears to be best performance reported. Therefore, we used these two algorithms as baselines. We did not independently run the ZPAQ or paq8h algorithms and we are quoting results from the existing literature.
+
+The performance of LLaMA-7B is shown in Table I for 10 different batches each with 100,000 tokens. The average performance over these 1M tokens is also shown in the last row in the Table. It can be seen that using LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character. This is substantially better than the state-of-the-art results mentioned in [5] or [12] and is very close to our computed upper bound. The performance with the LLaMA+zlib algorithm and LLaMA+TbyT compression are also better than that of the known state-of-the-art results. Table I also shows the upper bound in (6). It should be noted that the upper bound on the entropy is lower than that computed by Shannon in [3], Cover and King in [1] and more recent estimates based on neural networks in [2].
+
+The dependence of the compression performance on the memory of the LLM (M) is shown in Table II. As expected, the compression performance improves with increasing M. We also observed that the inference time scaled approximately linearly with the input memory length, i.e., batches with a memory of 511 tokens ran about 16 times slower than batches with a memory of 31 tokens.
+
+It is well known that the estimate of compression ratio can show substantial variance depending on the input text and hence, the results should be interpreted with caution. The empirical mean and standard deviation of the entropy bounds and compression ratios computed using 10 batches of 100,000 tokens are shown in Table III. We were also not able to run LLaMA-7B on the entire 100MB of the text8 dataset. So, the comparison of LLaMA-7B with that of the state-of-the-art corresponds to estimates obtained from different input sizes.
+
+It appears that the LLaMA-7B model was trained on a corpus that included articles from Wikipedia. Since the text8 dataset is derived from Wikipedia, it is likely that our results for the text8 dataset are optimistic.
+
+Therefore, we also tested the performance of LLaMA-7B on a recently released (May 25, 2023) book [7] under Project Gutenberg. We extracted text that corresponds to 100,000 tokens. We applied the same text pre-processing as used in the text8 dataset to clean the text from the book. The resulting text data contained only lowercase letters and space as in the text8 dataset. Table IV shows the compression performance of the LLM on the book. It can be seen that the compression ratios and the entropy upper bound are slightly higher compared to the performance on the text8 dataset; nevertheless, the asymptotic upper bound on the entropy is lower than that of currently known models given in [2, Table 4]). Similarly, the compression ratio of LLaMA-7B-based compressors are better than those of known state-of-the-art results for the text8 dataset. The compression ratio for LLaMA with arithmetic coding is only 0.8426 bits/character and is very close to the estimated upper bound on H(S).
+
+To provide some insight into the comparative performance of LLaMA based compressors vis-a-vis standard text compressors, we also ran the zlib algorithm directly on the input text. The resulting compression ratio was 2.8 bits/character (shown in the last column). It is clear that the performance of LLaMA based compressors is substantially better than this. The zlib algorithm may not be optimized for compressing small text samples and hence, the compression ratio for the zlib algorithm and the LLaMA+zlib will likely improve on longer texts.
+
+### TABLE I  
+RESULTS FOR 1MB OF TEXT FROM TEXT8 DATASET
+
+| Batch No. | Nc     | NT      | Hub (bpc) | ρLLaMA+zlib (bpc) | ρLLaMA+TbyT (bpc) | ρLLaMA+AC (bpc) | ZPAQ (bpc) | pq8h (bpc) |
+|-----------|--------|---------|-----------|-------------------|-------------------|-----------------|------------|------------|
+| 1        | 466,650 | 100,000 | 0.6882   | 1.0513           | 0.8215           | 0.689          |            |            |
+| 2        | 461,477 | 100,000 | 0.6893   | 1.0558           | 0.8242           | 0.6901         |            |            |
+| 3        | 454,599 | 100,000 | 0.699    | 1.0681           | 0.8357           | 0.6999         |            |            |
+| 4        | 462,755 | 100,000 | 0.6748   | 1.0346           | 0.8093           | 0.6757         |            |            |
+| 5        | 453,847 | 100,000 | 0.7481   | 1.1265           | 0.8831           | 0.749          |            |            |
+| 6        | 458,252 | 100,000 | 0.7218   | 1.0957           | 0.8567           | 0.7227         |            |            |
+| 7        | 451,036 | 100,000 | 0.6959   | 1.0729           | 0.8353           | 0.6968         |            |            |
+| 8        | 447,953 | 100,000 | 0.7092   | 1.0896           | 0.8489           | 0.7101         |            |            |
+| 9        | 462,665 | 100,000 | 0.7394   | 1.1126           | 0.8713           | 0.7402         |            |            |
+| 10       | 449,621 | 100,000 | 0.7269   | 1.1046           | 0.8643           | 0.7277         |            |            |
+| Total    | 9,137,710 | 2,000,000 | 0.7093 | 1.0812           | 0.845            | 0.7101         | 1.4       | 1.2       |
+
+*1 This result is taken from [5] and it corresponds to the full 100MB dataset text8*  
+*2 This result is taken from [12] and it corresponds to the full 100MB dataset text8*
+
+### TABLE II  
+COMPRESSION PERFORMANCE OF THE LLM ON THE TEXT8 DATASET, AS A FUNCTION OF ITS MEMORY (M)
+
+| M
+
+Output: A concise synopsis (plain text).
+
+Reasoning Plan:
+1. **Understand the Document Prefix:** I will thoroughly read the provided document prefix to identify the main topics, existing results, and explicit mentions of future content, such as tables and section headers. I will note that the document discusses compression schemes (ρLLaMA+zlib, ρLLaMA+TbyT, ρLLM+AC), benchmarks using LLaMA-7B on the text8 dataset, comparisons with ZPAQ and paq8h, and mentions of Table I (fully provided), Table II (partially provided header and first column), Table III (mentioned as containing empirical mean and standard deviation of entropy bounds and compression ratios), and Table IV (mentioned as showing compression performance on a Project Gutenberg book). The prefix also indicates that the document is in section "IV. RESULTS", implying subsequent sections like "V. DISCUSSION", "VI. CONCLUSION", and "REFERENCES".
+
+2. **Attempt to Locate Full Document:** To ensure I only include content supported by the tools and avoid hallucination, my primary strategy is to find the full document.
+    *   I will use the `search_papers` tool with a highly specific query derived from the document prefix to maximize the chance of finding the exact paper. A suitable query would be: `query='LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character'`.
+    *   If a paper is found, I will extract its `paper_id`.
+    *   If the initial search fails, I will attempt a slightly broader query: `query='LLaMA-7B compression arithmetic coding text8'`.
+    *   If no relevant paper is found after these attempts, I will conclude that I am "NOT READY" as I cannot fulfill the "supported by tools" constraint for retrieving *future content of this specific document*.
+
+3. **Extract Future Content (if document found):** Assuming the full document is successfully located in step 2:
+    *   I will use the `get_sections` tool with the obtained `paper_id` to retrieve a list of all sections in the document.
+    *   I will identify sections that logically follow "IV. RESULTS", such as "V. DISCUSSION", "VI. CONCLUSION", "REFERENCES", and potentially "APPENDIX".
+    *   For each of these identified sections, I will use the `summarize_article_section` tool (or `extract_key_facts` if `summarize_article_section` is not suitable for the content) with the `paper_id` and the `section_name` to obtain a concise summary of its content.
+    *   Specifically, I will look for textual descriptions or summaries of the data that would be presented in Table II, Table III, and Table IV within the relevant sections (e.g., "RESULTS" or "DISCUSSION"). Since the tools do not directly extract tables, I will rely on the textual summaries to describe their content, including facts, equations, definitions, datasets, and references.
+
+4. **Synthesize Concise Synopsis:** I will compile all the retrieved information into a concise textual synopsis. This synopsis will focus on the likely future content, including:
+    *   The full content or detailed description of Table II (compression performance as a function of LLM memory M on text8).
+    *   The full content or detailed description of Table III (empirical mean and standard deviation of entropy bounds and compression ratios).
+    *   The full content or detailed description of Table IV (compression performance on the Project Gutenberg book dataset).
+    *   Key facts, discussions, and conclusions from subsequent sections (e.g., "V. DISCUSSION", "VI. CONCLUSION").
+    *   The complete list of references cited in the document.
+    *   Any new definitions, equations, or datasets introduced in the later parts of the document.
+    *   I will ensure the synopsis is highly relevant to the document prefix and strictly adheres to the "no hallucination" and "supported by tools" constraints.
+
+5. **Approach Challenges:**
+    *   **Document Not Found:** If the full document cannot be located using `search_papers`, I will explicitly state "NOT READY" and explain that the task cannot be completed as per the "supported by tools" constraint.
+    *   **Table Extraction:** As direct table extraction is not available, I will rely on the `summarize_article_section` tool to provide textual descriptions of the tables' content, focusing on the key findings and data points.
+    *   **Conciseness:** I will carefully condense the extracted information to produce a synopsis that is concise and suitable for conditioning a language model compressor, avoiding redundancy.
+
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"max_results":1,"query":"LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character"}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.4702131s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"max_results":5,"query":"LLaMA-7B compression arithmetic coding text8","sort_by":"date"}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.3980035s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+**Expected Outcome:** A concise textual synopsis of the likely future content of the document, including detailed descriptions of the expected content of Table II, Table III, and Table IV, summaries of subsequent sections (Discussion, Conclusion), and the full list of references, all directly supported by information retrieved using the `search_papers`, `get_sections`, and `summarize_article_section` tools. This outcome directly aligns with the primary goal of completing the task accurately and efficiently.[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mAction: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character\", \"max_results\": 1}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 1,
+  "papers": [
+    {
+      "id": "1109.0216v1",
+      "title": "Evaluation of Huffman and Arithmetic Algorithms for Multimedia Compression Standards",
+      "authors": [
+        "Asadollah Shahbahrami",
+        "Ramin Bahrampour",
+        "Mobin Sabbaghi Rostami",
+        "Mostafa Ayoubi Mobarhan"
+      ],
+      "abstract": "Compression is a technique to reduce the quantity of data without excessively\nreducing the quality of the multimedia data. The transition and storing of\ncompressed multimedia data is much faster and more efficient than original\nuncompressed multimedia data. There are various techniques and standards for\nmultimedia data compression, especially for image compression such as the JPEG\nand JPEG2000 standards. These standards consist of different functions such as\ncolor space conversion and entropy coding. Arithmetic and Huffman coding are\nnormally used in the entropy coding phase. In this paper we try to answer the\nfollowing question. Which entropy coding, arithmetic or Huffman, is more\nsuitable compared to other from the compression ratio, performance, and\nimplementation points of view? We have implemented and tested Huffman and\narithmetic algorithms. Our implemented results show that compression ratio of\narithmetic coding is better than Huffman coding, while the performance of the\nHuffman coding is higher than Arithmetic coding. In addition, implementation of\nHuffman coding is much easier than the Arithmetic coding.",
+      "categories": [
+        "cs.IT",
+        "cs.MM",
+        "math.IT",
+        "68Uxx",
+        "H.2"
+      ],
+      "published": "2011-08-31T15:34:23+00:00",
+      "url": "http://arxiv.org/pdf/1109.0216v1",
+      "resource_uri": "arxiv://1109.0216v1"
+    }
+  ]
+}[00m
+> Stop watching for updates
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The initial search for the exact phrase did not yield the correct paper. The paper found is from 2011 and discusses Huffman and Arithmetic Algorithms for Multimedia Compression Standards, which is not the document I'm working with, as the document prefix clearly mentions LLaMA-7B and a publication date of May 25, 2023 for a book. I need to try a broader search query to find the correct paper. I will use a query that includes "LLaMA-7B compression arithmetic coding text8" as this is a combination of key terms from the document prefix.[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"LLaMA-7B compression arithmetic coding text8\", \"max_results\": 5, \"sort_by\": \"date\"}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 5,
+  "papers": [
+    {
+      "id": "2509.05297v1",
+      "title": "FlowSeek: Optical Flow Made Easier with Depth Foundation Models and Motion Bases",
+      "authors": [
+        "Matteo Poggi",
+        "Fabio Tosi"
+      ],
+      "abstract": "We present FlowSeek, a novel framework for optical flow requiring minimal\nhardware resources for training. FlowSeek marries the latest advances on the\ndesign space of optical flow networks with cutting-edge single-image depth\nfoundation models and classical low-dimensional motion parametrization,\nimplementing a compact, yet accurate architecture. FlowSeek is trained on a\nsingle consumer-grade GPU, a hardware budget about 8x lower compared to most\nrecent methods, and still achieves superior cross-dataset generalization on\nSintel Final and KITTI, with a relative improvement of 10 and 15% over the\nprevious state-of-the-art SEA-RAFT, as well as on Spring and LayeredFlow\ndatasets.",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2025-09-05T17:59:59+00:00",
+      "url": "http://arxiv.org/pdf/2509.05297v1",
+      "resource_uri": "arxiv://2509.05297v1"
+    },
+    {
+      "id": "2509.05296v1",
+      "title": "WinT3R: Window-Based Streaming Reconstruction with Camera Token Pool",
+      "authors": [
+        "Zizun Li",
+        "Jianjun Zhou",
+        "Yifan Wang",
+        "Haoyu Guo",
+        "Wenzheng Chang",
+        "Yang Zhou",
+        "Haoyi Zhu",
+        "Junyi Chen",
+        "Chunhua Shen",
+        "Tong He"
+      ],
+      "abstract": "We present WinT3R, a feed-forward reconstruction model capable of online\nprediction of precise camera poses and high-quality point maps. Previous\nmethods suffer from a trade-off between reconstruction quality and real-time\nperformance. To address this, we first introduce a sliding window mechanism\nthat ensures sufficient information exchange among frames within the window,\nthereby improving the quality of geometric predictions without large\ncomputation. In addition, we leverage a compact representation of cameras and\nmaintain a global camera token pool, which enhances the reliability of camera\npose estimation without sacrificing efficiency. These designs enable WinT3R to\nachieve state-of-the-art performance in terms of online reconstruction quality,\ncamera pose estimation, and reconstruction speed, as validated by extensive\nexperiments on diverse datasets. Code and model are publicly available at\nhttps://github.com/LiZizun/WinT3R.",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2025-09-05T17:59:47+00:00",
+      "url": "http://arxiv.org/pdf/2509.05296v1",
+      "resource_uri": "arxiv://2509.05296v1"
+    },
+    {
+      "id": "2509.05293v1",
+      "title": "Non-Termination Proving: 100 Million LoC and Beyond",
+      "authors": [
+        "Julien Vanegue",
+        "Jules Villard",
+        "Peter O'Hearn",
+        "Azalea Raad"
+      ],
+      "abstract": "We report on our tool, Pulse Infinite, that uses proof techniques to show\nnon-termination (divergence) in large programs. Pulse Infinite works\ncompositionally and under-approximately: the former supports scale, and the\nlatter ensures soundness for proving divergence. Prior work focused on small\nbenchmarks in the tens or hundreds of lines of code (LoC), and scale limits\ntheir practicality: a single company may have tens of millions, or even\nhundreds of millions of LoC or more. We report on applying Pulse Infinite to\nover a hundred million lines of open-source and proprietary software written in\nC, C++, and Hack, identifying over 30 previously unknown issues, establishing a\nnew state of the art for detecting divergence in real-world codebases.",
+      "categories": [
+        "cs.PL",
+        "cs.CL",
+        "cs.SE",
+        "D.3; F.3"
+      ],
+      "published": "2025-09-05T17:58:45+00:00",
+      "url": "http://arxiv.org/pdf/2509.05293v1",
+      "resource_uri": "arxiv://2509.05293v1"
+    },
+    {
+      "id": "2509.05288v1",
+      "title": "Learning to accelerate distributed ADMM using graph neural networks",
+      "authors": [
+        "Henri Doerks",
+        "Paul H\u00e4usner",
+        "Daniel Hern\u00e1ndez Escobar",
+        "Jens Sj\u00f6lund"
+      ],
+      "abstract": "Distributed optimization is fundamental in large-scale machine learning and\ncontrol applications. Among existing methods, the Alternating Direction Method\nof Multipliers (ADMM) has gained popularity due to its strong convergence\nguarantees and suitability for decentralized computation. However, ADMM often\nsuffers from slow convergence and sensitivity to hyperparameter choices. In\nthis work, we show that distributed ADMM iterations can be naturally\nrepresented within the message-passing framework of graph neural networks\n(GNNs). Building on this connection, we propose to learn adaptive step sizes\nand communication weights by a graph neural network that predicts the\nhyperparameters based on the iterates. By unrolling ADMM for a fixed number of\niterations, we train the network parameters end-to-end to minimize the final\niterates error for a given problem class, while preserving the algorithm's\nconvergence properties. Numerical experiments demonstrate that our learned\nvariant consistently improves convergence speed and solution quality compared\nto standard ADMM. The code is available at\nhttps://github.com/paulhausner/learning-distributed-admm.",
+      "categories": [
+        "cs.LG",
+        "math.OC"
+      ],
+      "published": "2025-09-05T17:55:22+00:00",
+      "url": "http://arxiv.org/pdf/2509.05288v1",
+      "resource_uri": "arxiv://2509.05288v1"
+    },
+    {
+      "id": "2509.05282v1",
+      "title": "Elucidating the Design Space of Decay in Linear Attention",
+      "authors": [
+        "Zhen Qin",
+        "Xuyang Shen",
+        "Yiran Zhong"
+      ],
+      "abstract": "This paper presents a comprehensive investigation into the decay mechanisms\ninherent in linear complexity sequence models. We systematically delineate the\ndesign space of decay mechanisms across four pivotal dimensions:\nparameterization strategy, which refers to the computational methodology for\ndecay; parameter sharing, which involves the utilization of supplementary\nparameters for decay computation; decay granularity, comparing scalar versus\nvector-based decay; and compatibility with relative positional encoding\nmethods, such as Rotary Position Embedding (RoPE). Through an extensive series\nof experiments conducted on diverse language modeling tasks, we uncovered\nseveral critical insights. Firstly, the design of the parameterization strategy\nfor decay requires meticulous consideration. Our findings indicate that\neffective configurations are typically confined to a specific range of\nparameters. Secondly, parameter sharing cannot be used arbitrarily, as it may\ncause decay values to be too large or too small, thereby significantly\nimpacting performance. Thirdly, under identical parameterization strategies,\nscalar decay generally underperforms compared to its vector-based counterpart.\nHowever, in certain scenarios with alternative parameterization strategies,\nscalar decay may unexpectedly surpass vector decay in efficacy. Lastly, our\nanalysis reveals that RoPE, a commonly employed relative positional encoding\nmethod, typically fails to provide tangible benefits to the majority of linear\nattention mechanisms.",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2025-09-05T17:48:26+00:00",
+      "url": "http://arxiv.org/pdf/2509.05282v1",
+      "resource_uri": "arxiv://2509.05282v1"
+    }
+  ]
+}[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Final Answer:[00m [92m
+NOT READY. The specific document could not be found using the `search_papers` tool with the provided information. Therefore, I cannot retrieve its full content or subsequent sections to provide a synopsis of its likely future content, as per the constraint to only include content supported by the tools.[00m
+
+
+🚀 Crew: crew
+├── 📋 Task: 6eb87424-a385-4c65-9402-a17dbad711f5
+│   Assigned to: AI Assistant
+│   Status: ✅ Completed
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used search_papers (1)
+│   └── 🔧 Used search_papers (2)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔄 Tool Usage Started
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: 6eb87424-a385-4c65-9402-a17dbad711f5                                 │
+│  Agent: AI Assistant                                                        │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 82519296-c7f5-44c4-bb02-f776b41e2d7b                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "NOT READY. The specific document could not be found using the `search_papers` tool with the provided information. Therefore, I cannot retrieve its full content or subsequent sections to provide a synopsis of its likely future content, as per the constraint to only include content supported by the tools.", "duration_ms": 37079}
+NOT READY. The specific document could not be found using the `search_papers` tool with the provided information. Therefore, I cannot retrieve its full content or subsequent sections to provide a synopsis of its likely future content, as per the constraint to only include content supported by the tools.
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\_internal\_generate_schema.py:628: UserWarning: <built-in function callable> is not a Python type (it may be an instance of an object), Pydantic will allow any object with no validation since we cannot even enforce that the input is an instance of the given type. To get rid of this error wrap the type with `pydantic.SkipValidation`.
+  warn(
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from docker-mcp.yaml
+  - Reading config from config.yaml
+- Configuration read in 22.0857ms
+- Watching registry at C:\Users\Noah\.docker\mcp\registry.yaml
+- Watching config at C:\Users\Noah\.docker\mcp\config.yaml
+- Those servers are enabled: arxiv-mcp-server, duckduckgo, wikipedia-mcp
+- Using images:
+  - mcp/arxiv-mcp-server@sha256:6dc6bba6dfed97f4ad6eb8d23a5c98ef5b7fa6184937d54b2d675801cd9dd29e
+  - mcp/duckduckgo@sha256:68eb20db6109f5c312a695fc5ec3386ad15d93ffb765a0b4eb1baf4328dec14f
+  - mcp/wikipedia-mcp@sha256:e90e3f6e3bb795f10d3d8d8ac1523f6d46d4f2ab5ac3b3a4720e1be879466472
+> Images pulled in 62.8284ms
+- Listing MCP tools...
+  - Running mcp/wikipedia-mcp with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=wikipedia-mcp -l docker-mcp-transport=stdio]
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers:ro]
+  > duckduckgo: (2 tools)
+  > wikipedia-mcp: (10 tools) (9 resourceTemplates)
+  > arxiv-mcp-server: (4 tools) (1 prompts)
+> 16 tools listed in 2.5321151s
+- Watching for configuration updates...
+> Initialized in 2.6181072s
+> Start stdio server
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 51fc716b-af9b-481b-9bd1-02d1bb7d410f                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: d60273a0-e039-4fd1-b8ec-3ed3000e7439
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔄 Tool Usage Started
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  1. **Understand the Document Prefix:** I will thoroughly read the          │
+│  provided document prefix to identify the main topics, existing results,    │
+│  and explicit mentions of future content, such as tables and section        │
+│  headers. I will note that the document discusses compression schemes       │
+│  (ρLLaMA+zlib, ρLLaMA+TbyT, ρLLM+AC), benchmarks using LLaMA-7B on the      │
+│  text8 dataset, comparisons with ZPAQ and paq8h, and mentions of Table I    │
+│  (fully provided), Table II (partially provided header and first column),   │
+│  Table III (mentioned as containing empirical mean and standard deviation   │
+│  of entropy bounds and compression ratios), and Table IV (mentioned as      │
+│  showing compression performance on a Project Gutenberg book). The prefix   │
+│  also indicates that the document is in section "IV. RESULTS", implying     │
+│  subsequent sections like "V. DISCUSSION", "VI. CONCLUSION", and            │
+│  "REFERENCES".                                                              │
+│                                                                             │
+│  2. **Attempt to Locate Full Document:** To ensure I only include content   │
+│  supported by the tools and avoid hallucination, my primary strategy is to  │
+│  find the full document.                                                    │
+│      *   I will use the `search_papers` tool with a highly specific query   │
+│  derived from the document prefix to maximize the chance of finding the     │
+│  exact paper. A suitable query would be: `query='LLaMA-7B with Arithmetic   │
+│  Coding compression results in a compression ratio of 0.7101                │
+│  bits/character'`.                                                          │
+│      *   If a paper is found, I will extract its `paper_id`.                │
+│      *   If the initial search fails, I will attempt a slightly broader     │
+│  query: `query='LLaMA-7B compression arithmetic coding text8'`.             │
+│      *   If no relevant paper is found after these attempts, I will         │
+│  conclude that I am "NOT READY" as I cannot fulfill the "supported by       │
+│  tools" constraint for retrieving *future content of this specific          │
+│  document*.                                                                 │
+│                                                                             │
+│  3. **Extract Future Content (if document found):** Assuming the full       │
+│  document is successfully located in step 2:                                │
+│      *   I will use the `get_sections` tool with the obtained `paper_id`    │
+│  to retrieve a list of all sections in the document.                        │
+│      *   I will identify sections that logically follow "IV. RESULTS",      │
+│  such as "V. DISCUSSION", "VI. CONCLUSION", "REFERENCES", and potentially   │
+│  "APPENDIX".                                                                │
+│      *   For each of these identified sections, I will use the              │
+│  `summarize_article_section` tool (or `extract_key_facts` if                │
+│  `summarize_article_section` is not suitable for the content) with the      │
+│  `paper_id` and the `section_name` to obtain a concise summary of its       │
+│  content.                                                                   │
+│      *   Specifically, I will look for textual descriptions or summaries    │
+│  of the data that would be presented in Table II, Table III, and Table IV   │
+│  within the relevant sections (e.g., "RESULTS" or "DISCUSSION"). Since the  │
+│  tools do not directly extract tables, I will rely on the textual           │
+│  summaries to describe their content, including facts, equations,           │
+│  definitions, datasets, and references.                                     │
+│                                                                             │
+│  4. **Synthesize Concise Synopsis:** I will compile all the retrieved       │
+│  information into a concise textual synopsis. This synopsis will focus on   │
+│  the likely future content, including:                                      │
+│      *   The full content or detailed description of Table II (compression  │
+│  performance as a function of LLM memory M on text8).                       │
+│      *   The full content or detailed description of Table III (empirical   │
+│  mean and standard deviation of entropy bounds and compression ratios).     │
+│      *   The full content or detailed description of Table IV (compression  │
+│  performance on the Project Gutenberg book dataset).                        │
+│      *   Key facts, discussions, and conclusions from subsequent sections   │
+│  (e.g., "V. DISCUSSION", "VI. CONCLUSION").                                 │
+│      *   The complete list of references cited in the document.             │
+│      *   Any new definitions, equations, or datasets introduced in the      │
+│  later parts of the document.                                               │
+│      *   I will ensure the synopsis is highly relevant to the document      │
+│  prefix and strictly adheres to the "no hallucination" and "supported by    │
+│  tools" constraints.                                                        │
+│                                                                             │
+│  5. **Approach Challenges:**                                                │
+│      *   **Document Not Found:** If the full document cannot be located     │
+│  using `search_papers`, I will explicitly state "NOT READY" and explain     │
+│  that the task cannot be completed as per the "supported by tools"          │
+│  constraint.                                                                │
+│      *   **Table Extraction:** As direct table extraction is not            │
+│  available, I will rely on the `summarize_article_section` tool to provide  │
+│  textual descriptions of the tables' content, focusing on the key findings  │
+│  and data points.                                                           │
+│      *   **Conciseness:** I will carefully condense the extracted           │
+│  information to produce a synopsis that is concise and suitable for         │
+│  conditioning a language model compressor, avoiding redundancy.             │
+│                                                                             │
+│  **Expected Outcome:** A concise textual synopsis of the likely future      │
+│  content of the document, including detailed descriptions of the expected   │
+│  content of Table II, Table III, and Table IV, summaries of subsequent      │
+│  sections (Discussion, Conclusion), and the full list of references, all    │
+│  directly supported by information retrieved using the `search_papers`,     │
+│  `get_sections`, and `summarize_article_section` tools. This outcome        │
+│  directly aligns with the primary goal of completing the task accurately    │
+│  and efficiently.                                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Task:[00m [92mYou act as a deterministic research agent. Given the observed prefix of a document, use available MCP tools to retrieve information that is likely to appear later in the same document. Prefer authoritative sources. Produce a concise textual synopsis of the likely future content (facts, equations, definitions, datasets, references), suitable for conditioning a language model compressor. Maximize relevance to the document. Do not hallucinate; only include content supported by the tools.
+
+Document prefix (UTF-8 text):
+above two schemes are intuitive but their performance can be improved. A very effective way to combine the output of the LLM with a lossless compression scheme is by using arithmetic coding [4], [9]. Arithmetic coding is well suited to accept time-varying probabilities and we use qi(xi) as the probability of token xi at time in the arithmetic coding scheme. We refer to the compression ratio of this scheme as ρLLM+AC. It is known that arithmetic coding is nearly optimal as a compression scheme [10, Page 115]. Hence, the compression ratio for this scheme is expected to be
+
+ρLLM+AC ≈ �NT i=1 log2 1/qi(xi) / �NT i=1 bi . (7)
+
+Clearly, ρLLaMA+zlib, ρLLaMA+TbyT, and ρLLM+AC also provide upper bounds on H(S). Hub, ρLLaMA+zlib, ρLLaMA+TbyT, and ρLLM+AC are estimated using a finite number of tokens and the statistical properties of such an estimate should be kept in mind when interpreting the results, especially since the tokens are from a very large alphabet and language model has large memory.
+
+## IV. RESULTS
+
+We used LLaMA-7B [6] as the large language model and SentencePiece tokenizer [11]. The tokenizer produces a dictionary of size 32000. Since the language model is trained on this tokenizer, it is imperative that this tokenizer be used in conjunction with the LLM. It should be noted that the tokenizer and the model are trained on a large corpus of text which includes uppercase letters, special characters etc. This is in contrast to many studies on estimating the entropy of English, where the input alphabet is restricted to lowercase letters such as in [1], [3], [5]. This makes it difficult to perform an entirely fair comparison between these models. By using a pretrained LLM on an input consisting only of lowercase letters, we may be unfair to the LLM. Nevertheless, we used the text8 dataset available from http://mattmahoney.net/dc/text8.zip to benchmark the performance of LLaMA-7B with compression against other state of the art results for text compression. In [5], it is mentioned that the ZPAQ algorithm obtains the best compression ratio for the text8 dataset with a compression ratio of 1.4 bits/character. In [12], the paq8h algorithm is shown to provide a compression ratio of 1.2 bits/character. To the best of our knowledge, this appears to be best performance reported. Therefore, we used these two algorithms as baselines. We did not independently run the ZPAQ or paq8h algorithms and we are quoting results from the existing literature.
+
+The performance of LLaMA-7B is shown in Table I for 10 different batches each with 100,000 tokens. The average performance over these 1M tokens is also shown in the last row in the Table. It can be seen that using LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character. This is substantially better than the state-of-the-art results mentioned in [5] or [12] and is very close to our computed upper bound. The performance with the LLaMA+zlib algorithm and LLaMA+TbyT compression are also better than that of the known state-of-the-art results. Table I also shows the upper bound in (6). It should be noted that the upper bound on the entropy is lower than that computed by Shannon in [3], Cover and King in [1] and more recent estimates based on neural networks in [2].
+
+The dependence of the compression performance on the memory of the LLM (M) is shown in Table II. As expected, the compression performance improves with increasing M. We also observed that the inference time scaled approximately linearly with the input memory length, i.e., batches with a memory of 511 tokens ran about 16 times slower than batches with a memory of 31 tokens.
+
+It is well known that the estimate of compression ratio can show substantial variance depending on the input text and hence, the results should be interpreted with caution. The empirical mean and standard deviation of the entropy bounds and compression ratios computed using 10 batches of 100,000 tokens are shown in Table III. We were also not able to run LLaMA-7B on the entire 100MB of the text8 dataset. So, the comparison of LLaMA-7B with that of the state-of-the-art corresponds to estimates obtained from different input sizes.
+
+It appears that the LLaMA-7B model was trained on a corpus that included articles from Wikipedia. Since the text8 dataset is derived from Wikipedia, it is likely that our results for the text8 dataset are optimistic.
+
+Therefore, we also tested the performance of LLaMA-7B on a recently released (May 25, 2023) book [7] under Project Gutenberg. We extracted text that corresponds to 100,000 tokens. We applied the same text pre-processing as used in the text8 dataset to clean the text from the book. The resulting text data contained only lowercase letters and space as in the text8 dataset. Table IV shows the compression performance of the LLM on the book. It can be seen that the compression ratios and the entropy upper bound are slightly higher compared to the performance on the text8 dataset; nevertheless, the asymptotic upper bound on the entropy is lower than that of currently known models given in [2, Table 4]). Similarly, the compression ratio of LLaMA-7B-based compressors are better than those of known state-of-the-art results for the text8 dataset. The compression ratio for LLaMA with arithmetic coding is only 0.8426 bits/character and is very close to the estimated upper bound on H(S).
+
+To provide some insight into the comparative performance of LLaMA based compressors vis-a-vis standard text compressors, we also ran the zlib algorithm directly on the input text. The resulting compression ratio was 2.8 bits/character (shown in the last column). It is clear that the performance of LLaMA based compressors is substantially better than this. The zlib algorithm may not be optimized for compressing small text samples and hence, the compression ratio for the zlib algorithm and the LLaMA+zlib will likely improve on longer texts.
+
+### TABLE I  
+RESULTS FOR 1MB OF TEXT FROM TEXT8 DATASET
+
+| Batch No. | Nc     | NT      | Hub (bpc) | ρLLaMA+zlib (bpc) | ρLLaMA+TbyT (bpc) | ρLLaMA+AC (bpc) | ZPAQ (bpc) | pq8h (bpc) |
+|-----------|--------|---------|-----------|-------------------|-------------------|-----------------|------------|------------|
+| 1        | 466,650 | 100,000 | 0.6882   | 1.0513           | 0.8215           | 0.689          |            |            |
+| 2        | 461,477 | 100,000 | 0.6893   | 1.0558           | 0.8242           | 0.6901         |            |            |
+| 3        | 454,599 | 100,000 | 0.699    | 1.0681           | 0.8357           | 0.6999         |            |            |
+| 4        | 462,755 | 100,000 | 0.6748   | 1.0346           | 0.8093           | 0.6757         |            |            |
+| 5        | 453,847 | 100,000 | 0.7481   | 1.1265           | 0.8831           | 0.749          |            |            |
+| 6        | 458,252 | 100,000 | 0.7218   | 1.0957           | 0.8567           | 0.7227         |            |            |
+| 7        | 451,036 | 100,000 | 0.6959   | 1.0729           | 0.8353           | 0.6968         |            |            |
+| 8        | 447,953 | 100,000 | 0.7092   | 1.0896           | 0.8489           | 0.7101         |            |            |
+| 9        | 462,665 | 100,000 | 0.7394   | 1.1126           | 0.8713           | 0.7402         |            |            |
+| 10       | 449,621 | 100,000 | 0.7269   | 1.1046           | 0.8643           | 0.7277         |            |            |
+| Total    | 9,137,710 | 2,000,000 | 0.7093 | 1.0812           | 0.845            | 0.7101         | 1.4       | 1.2       |
+
+*1 This result is taken from [5] and it corresponds to the full 100MB dataset text8*  
+*2 This result is taken from [12] and it corresponds to the full 100MB dataset text8*
+
+### TABLE II  
+COMPRESSION PERFORMANCE OF THE LLM ON THE TEXT8 DATASET, AS A FUNCTION OF ITS MEMORY (M)
+
+| M
+
+Output: A concise synopsis (plain text).
+
+Reasoning Plan:
+1. **Understand the Document Prefix:** I will thoroughly read the provided document prefix to identify the main topics, existing results, and explicit mentions of future content, such as tables and section headers. I will note that the document discusses compression schemes (ρLLaMA+zlib, ρLLaMA+TbyT, ρLLM+AC), benchmarks using LLaMA-7B on the text8 dataset, comparisons with ZPAQ and paq8h, and mentions of Table I (fully provided), Table II (partially provided header and first column), Table III (mentioned as containing empirical mean and standard deviation of entropy bounds and compression ratios), and Table IV (mentioned as showing compression performance on a Project Gutenberg book). The prefix also indicates that the document is in section "IV. RESULTS", implying subsequent sections like "V. DISCUSSION", "VI. CONCLUSION", and "REFERENCES".
+
+2. **Attempt to Locate Full Document:** To ensure I only include content supported by the tools and avoid hallucination, my primary strategy is to find the full document.
+    *   I will use the `search_papers` tool with a highly specific query derived from the document prefix to maximize the chance of finding the exact paper. A suitable query would be: `query='LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character'`.
+    *   If a paper is found, I will extract its `paper_id`.
+    *   If the initial search fails, I will attempt a slightly broader query: `query='LLaMA-7B compression arithmetic coding text8'`.
+    *   If no relevant paper is found after these attempts, I will conclude that I am "NOT READY" as I cannot fulfill the "supported by tools" constraint for retrieving *future content of this specific document*.
+
+3. **Extract Future Content (if document found):** Assuming the full document is successfully located in step 2:
+    *   I will use the `get_sections` tool with the obtained `paper_id` to retrieve a list of all sections in the document.
+    *   I will identify sections that logically follow "IV. RESULTS", such as "V. DISCUSSION", "VI. CONCLUSION", "REFERENCES", and potentially "APPENDIX".
+    *   For each of these identified sections, I will use the `summarize_article_section` tool (or `extract_key_facts` if `summarize_article_section` is not suitable for the content) with the `paper_id` and the `section_name` to obtain a concise summary of its content.
+    *   Specifically, I will look for textual descriptions or summaries of the data that would be presented in Table II, Table III, and Table IV within the relevant sections (e.g., "RESULTS" or "DISCUSSION"). Since the tools do not directly extract tables, I will rely on the textual summaries to describe their content, including facts, equations, definitions, datasets, and references.
+
+4. **Synthesize Concise Synopsis:** I will compile all the retrieved information into a concise textual synopsis. This synopsis will focus on the likely future content, including:
+    *   The full content or detailed description of Table II (compression performance as a function of LLM memory M on text8).
+    *   The full content or detailed description of Table III (empirical mean and standard deviation of entropy bounds and compression ratios).
+    *   The full content or detailed description of Table IV (compression performance on the Project Gutenberg book dataset).
+    *   Key facts, discussions, and conclusions from subsequent sections (e.g., "V. DISCUSSION", "VI. CONCLUSION").
+    *   The complete list of references cited in the document.
+    *   Any new definitions, equations, or datasets introduced in the later parts of the document.
+    *   I will ensure the synopsis is highly relevant to the document prefix and strictly adheres to the "no hallucination" and "supported by tools" constraints.
+
+5. **Approach Challenges:**
+    *   **Document Not Found:** If the full document cannot be located using `search_papers`, I will explicitly state "NOT READY" and explain that the task cannot be completed as per the "supported by tools" constraint.
+    *   **Table Extraction:** As direct table extraction is not available, I will rely on the `summarize_article_section` tool to provide textual descriptions of the tables' content, focusing on the key findings and data points.
+    *   **Conciseness:** I will carefully condense the extracted information to produce a synopsis that is concise and suitable for conditioning a language model compressor, avoiding redundancy.
+
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"categories":["cs.AI","cs.LG","cs.CL"],"max_results":5,"query":"LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character"}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 3.389943s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+**Expected Outcome:** A concise textual synopsis of the likely future content of the document, including detailed descriptions of the expected content of Table II, Table III, and Table IV, summaries of subsequent sections (Discussion, Conclusion), and the full list of references, all directly supported by information retrieved using the `search_papers`, `get_sections`, and `summarize_article_section` tools. This outcome directly aligns with the primary goal of completing the task accurately and efficiently.[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mAction: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character\", \"max_results\": 5, \"categories\": [\"cs.AI\", \"cs.LG\", \"cs.CL\"]}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 5,
+  "papers": [
+    {
+      "id": "2409.17141v1",
+      "title": "FineZip : Pushing the Limits of Large Language Models for Practical Lossless Text Compression",
+      "authors": [
+        "Fazal Mittu",
+        "Yihuan Bu",
+        "Akshat Gupta",
+        "Ashok Devireddy",
+        "Alp Eren Ozdarendeli",
+        "Anant Singh",
+        "Gopala Anumanchipalli"
+      ],
+      "abstract": "While the language modeling objective has been shown to be deeply connected\nwith compression, it is surprising that modern LLMs are not employed in\npractical text compression systems. In this paper, we provide an in-depth\nanalysis of neural network and transformer-based compression techniques to\nanswer this question. We compare traditional text compression systems with\nneural network and LLM-based text compression methods. Although LLM-based\nsystems significantly outperform conventional compression methods, they are\nhighly impractical. Specifically, LLMZip, a recent text compression system\nusing Llama3-8B requires 9.5 days to compress just 10 MB of text, although with\nhuge improvements in compression ratios. To overcome this, we present FineZip -\na novel LLM-based text compression system that combines ideas of online\nmemorization and dynamic context to reduce the compression time immensely.\nFineZip can compress the above corpus in approximately 4 hours compared to 9.5\ndays, a 54 times improvement over LLMZip and comparable performance. FineZip\noutperforms traditional algorithmic compression methods with a large margin,\nimproving compression ratios by approximately 50\\%. With this work, we take the\nfirst step towards making lossless text compression with LLMs a reality. While\nFineZip presents a significant step in that direction, LLMs are still not a\nviable solution for large-scale text compression. We hope our work paves the\nway for future research and innovation to solve this problem.",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2024-09-25T17:58:35+00:00",
+      "url": "http://arxiv.org/pdf/2409.17141v1",
+      "resource_uri": "arxiv://2409.17141v1"
+    },
+    {
+      "id": "2410.23918v3",
+      "title": "BitStack: Any-Size Compression of Large Language Models in Variable Memory Environments",
+      "authors": [
+        "Xinghao Wang",
+        "Pengyu Wang",
+        "Bo Wang",
+        "Dong Zhang",
+        "Yunhua Zhou",
+        "Xipeng Qiu"
+      ],
+      "abstract": "Large language models (LLMs) have revolutionized numerous applications, yet\ntheir deployment remains challenged by memory constraints on local devices.\nWhile scaling laws have enhanced LLM capabilities, the primary bottleneck has\nshifted from \\textit{capability} to \\textit{availability}, emphasizing the need\nfor efficient memory management. Traditional compression methods, such as\nquantization, often require predefined compression ratios and separate\ncompression processes for each setting, complicating deployment in variable\nmemory environments. In this paper, we introduce \\textbf{BitStack}, a novel,\ntraining-free weight compression approach that enables megabyte-level\ntrade-offs between memory usage and model performance. By leveraging weight\ndecomposition, BitStack can dynamically adjust the model size with minimal\ntransmission between running memory and storage devices. Our approach\niteratively decomposes weight matrices while considering the significance of\neach parameter, resulting in an approximately 1-bit per parameter residual\nblock in each decomposition iteration. These blocks are sorted and stacked in\nstorage as basic transmission units, with different quantities loaded based on\ncurrent memory availability. Extensive experiments across a wide range of tasks\ndemonstrate that, despite offering fine-grained size control, BitStack\nconsistently matches or surpasses strong quantization baselines, particularly\nat extreme compression ratios. To the best of our knowledge, this is the first\ndecomposition-based method that effectively bridges the gap to practical\ncompression techniques like quantization. Code is available at\nhttps://github.com/xinghaow99/BitStack.",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2024-10-31T13:26:11+00:00",
+      "url": "http://arxiv.org/pdf/2410.23918v3",
+      "resource_uri": "arxiv://2410.23918v3"
+    },
+    {
+      "id": "2504.04704v2",
+      "title": "LagKV: Lag-Relative Information of the KV Cache Tells Which Tokens Are Important",
+      "authors": [
+        "Manlai Liang",
+        "JiaMing Zhang",
+        "Xiong Li",
+        "Jinlong Li"
+      ],
+      "abstract": "The increasing size of the Key-Value (KV) cache during the Large Language\nModels long-context inference is the main obstacle for its balance between the\ndeployment cost and task accuracy. To reduce the KV cache size in such\nscenarios, most previous efforts leveraged on the attention weight to evict\nnon-critical cache tokens. But there is a trade-off in those methods, they\nusually require major modification of the inference infrastructure and\nsignificant computation overhead. Based on the fact that the Large Language\nmodels are autoregressive models, we propose LagKV, a KV compression strategy\nonly relying on straight forward comparison among KV themselves. It is a\ntotally attention free method which offers easy integration to the main stream\ninference platform and comparable performance comparing to other complicated KV\ncompression methods. Results on RULER benchmark show that, our approach\noutperforms SnapKV and StreamingLLM in different compression ratios. Especially\nin the 64-digit passkey retrieval task, our method outperforms the attention\nweight based method $H_2O$ over $50\\%$ with same compression ratios. Our code\nis available at https://github.com/AI-Lab-China-Merchants-Bank/LagKV.",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL",
+        "cs.CV"
+      ],
+      "published": "2025-04-07T03:22:15+00:00",
+      "url": "http://arxiv.org/pdf/2504.04704v2",
+      "resource_uri": "arxiv://2504.04704v2"
+    },
+    {
+      "id": "2505.07289v1",
+      "title": "Semantic Retention and Extreme Compression in LLMs: Can We Have Both?",
+      "authors": [
+        "Stanislas Laborde",
+        "Martin Cousseau",
+        "Antoun Yaacoub",
+        "Lionel Prevost"
+      ],
+      "abstract": "The exponential growth in Large Language Model (LLM) deployment has\nintensified the need for efficient model compression techniques to reduce\ncomputational and memory costs. While pruning and quantization have shown\npromise, their combined potential remains largely unexplored. In this paper, we\nexamine joint compression and how strategically combining pruning and\nquantization could yield superior performance-to-compression ratios compared to\nsingle-method approaches. Recognizing the challenges in accurately assessing\nLLM performance, we address key limitations of previous evaluation frameworks\nand introduce the Semantic Retention Compression Rate (SrCr), a novel metric\nthat quantifies the trade-off between model compression and semantic\npreservation, facilitating the optimization of pruning-quantization\nconfigurations. Experiments demonstrate that our recommended combination\nachieves, on average, a 20% performance increase compared to an equivalent\nquantization-only model at the same theoretical compression rate.",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG",
+        "68P30 (Primary) 68T07, 68T50 (Secondary)",
+        "I.2.6; I.5.1; I.2.7"
+      ],
+      "published": "2025-05-12T07:23:19+00:00",
+      "url": "http://arxiv.org/pdf/2505.07289v1",
+      "resource_uri": "arxiv://2505.07289v1"
+    },
+    {
+      "id": "2403.05527v4",
+      "title": "GEAR: An Efficient KV Cache Compression Recipe for Near-Lossless Generative Inference of LLM",
+      "authors": [
+        "Hao Kang",
+        "Qingru Zhang",
+        "Souvik Kundu",
+        "Geonhwa Jeong",
+        "Zaoxing Liu",
+        "Tushar Krishna",
+        "Tuo Zhao"
+      ],
+      "abstract": "Key-value (KV) caching has become the de-facto to accelerate generation speed\nfor large language models (LLMs) inference. However, the growing cache demand\nwith increasing sequence length has transformed LLM inference to be a memory\nbound problem, significantly constraining the system throughput. Existing\nmethods rely on dropping unimportant tokens or quantizing all entries\nuniformly. Such methods, however, often incur high approximation errors to\nrepresent the compressed matrices. The autoregressive decoding process further\ncompounds the error of each step, resulting in critical deviation in model\ngeneration and deterioration of performance. To tackle this challenge, we\npropose GEAR, an efficient KV cache compression framework that achieves\nnear-lossless high-ratio compression. GEAR first applies quantization to\nmajority of entries of similar magnitudes to ultra-low precision. It then\nemploys a low rank matrix to approximate the quantization error, and a sparse\nmatrix to remedy individual errors from outlier entries. By adeptly integrating\nthree techniques, GEAR is able to fully exploit their synergistic potentials.\nOur experiments demonstrate that compared to alternatives, GEAR achieves\nnear-lossless 4-bit KV cache compression with up to 2.38x throughput\nimprovement, while reducing peak-memory size up to 2.29x. Our code is publicly\navailable at https://github.com/HaoKang-Timmy/GEAR.",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2024-03-08T18:48:30+00:00",
+      "url": "http://arxiv.org/pdf/2403.05527v4",
+      "resource_uri": "arxiv://2403.05527v4"
+    }
+  ]
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"categories":["cs.AI","cs.LG","cs.CL"],"max_results":10,"query":"LLaMA-7B arithmetic coding text8 compression entropy estimation"}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.273703s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+}[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The initial search query was too specific and did not return the exact paper. The papers found are related to LLM compression but do not seem to be the source document. I need to broaden the search to find the specific paper that contains the provided text. I will try a more general query focusing on "LLaMA-7B", "arithmetic coding", and "text compression" or "entropy estimation". I will also look for papers that mention the text8 dataset and the specific compression ratios.
+Let's try a slightly broader query, focusing on the key elements mentioned in the text: "LLaMA-7B", "arithmetic coding", "text8 dataset", and "compression ratio". I will also include "entropy estimation" as it's a core theme.Action: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"LLaMA-7B arithmetic coding text8 compression entropy estimation\", \"max_results\": 10, \"categories\": [\"cs.AI\", \"cs.LG\", \"cs.CL\"]}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 10,
+  "papers": [
+    {
+      "id": "2305.16958v2",
+      "title": "MixCE: Training Autoregressive Language Models by Mixing Forward and Reverse Cross-Entropies",
+      "authors": [
+        "Shiyue Zhang",
+        "Shijie Wu",
+        "Ozan Irsoy",
+        "Steven Lu",
+        "Mohit Bansal",
+        "Mark Dredze",
+        "David Rosenberg"
+      ],
+      "abstract": "Autoregressive language models are trained by minimizing the cross-entropy of\nthe model distribution Q relative to the data distribution P -- that is,\nminimizing the forward cross-entropy, which is equivalent to maximum likelihood\nestimation (MLE). We have observed that models trained in this way may\n\"over-generalize\", in the sense that they produce non-human-like text.\nMoreover, we believe that reverse cross-entropy, i.e., the cross-entropy of P\nrelative to Q, is a better reflection of how a human would evaluate text\ngenerated by a model. Hence, we propose learning with MixCE, an objective that\nmixes the forward and reverse cross-entropies. We evaluate models trained with\nthis objective on synthetic data settings (where P is known) and real data, and\nshow that the resulting models yield better generated text without complex\ndecoding strategies. Our code and models are publicly available at\nhttps://github.com/bloomberg/mixce-acl2023",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2023-05-26T14:14:51+00:00",
+      "url": "http://arxiv.org/pdf/2305.16958v2",
+      "resource_uri": "arxiv://2305.16958v2"
+    },
+    {
+      "id": "2406.06576v4",
+      "title": "OccamLLM: Fast and Exact Language Model Arithmetic in a Single Step",
+      "authors": [
+        "Owen Dugan",
+        "Donato Manuel Jimenez Beneto",
+        "Charlotte Loh",
+        "Zhuo Chen",
+        "Rumen Dangovski",
+        "Marin Solja\u010di\u0107"
+      ],
+      "abstract": "Despite significant advancements in text generation and reasoning, Large\nLanguage Models (LLMs) still face challenges in accurately performing complex\narithmetic operations. Language model systems often enable LLMs to generate\ncode for arithmetic operations to achieve accurate calculations. However, this\napproach compromises speed and security, and fine-tuning risks the language\nmodel losing prior capabilities. We propose a framework that enables exact\narithmetic in a single autoregressive step, providing faster, more secure, and\nmore interpretable LLM systems with arithmetic capabilities. We use the hidden\nstates of a LLM to control a symbolic architecture that performs arithmetic.\nOur implementation using Llama 3 with OccamNet as a symbolic model (OccamLlama)\nachieves 100\\% accuracy on single arithmetic operations\n($+,-,\\times,\\div,\\sin{},\\cos{},\\log{},\\exp{},\\sqrt{}$), outperforming GPT 4o\nwith and without a code interpreter. Furthermore, OccamLlama outperforms GPT 4o\nwith and without a code interpreter on average across a range of mathematical\nproblem solving benchmarks, demonstrating that OccamLLMs can excel in\narithmetic tasks, even surpassing much larger models. We will make our code\npublic shortly.",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2024-06-04T04:17:40+00:00",
+      "url": "http://arxiv.org/pdf/2406.06576v4",
+      "resource_uri": "arxiv://2406.06576v4"
+    },
+    {
+      "id": "2410.18194v2",
+      "title": "ZIP-FIT: Embedding-Free Data Selection via Compression-Based Alignment",
+      "authors": [
+        "Elyas Obbad",
+        "Iddah Mlauzi",
+        "Brando Miranda",
+        "Rylan Schaeffer",
+        "Kamal Obbad",
+        "Suhana Bedi",
+        "Sanmi Koyejo"
+      ],
+      "abstract": "Data selection is crucial for optimizing language model (LM) performance on\nspecific tasks, yet most existing methods fail to effectively consider the\ntarget task distribution.\n  Current approaches either ignore task-specific requirements entirely or rely\non approximations that fail to capture the nuanced patterns needed for tasks\nlike Autoformalization or code generation.\n  Methods that do consider the target distribution often rely on simplistic,\nsometimes noisy, representations, like hashed n-gram features, which can lead\nto collisions and introduce noise.\n  We introduce ZIP-FIT, a data selection framework that uses gzip compression\nto directly measure alignment between potential training data and the target\ntask distribution.\n  In extensive evaluations on Autoformalization and Python code generation,\nZIP-FIT significantly outperforms leading baselines like DSIR and D4.\n  Models trained on ZIP-FIT-selected data achieve their lowest cross-entropy\nloss up to 85.1\\% faster than baselines, demonstrating that better task\nalignment leads to more efficient learning.\n  In addition, ZIP-FIT performs selection up to 65.8\\% faster than DSIR and two\norders of magnitude faster than D4.\n  Notably, ZIP-FIT shows that smaller, well-aligned datasets often outperform\nlarger but less targeted ones, demonstrating that a small amount of higher\nquality data is superior to a large amount of lower quality data.\n  Our results imply that task-aware data selection is crucial for efficient\ndomain adaptation, and that compression offers a principled way to measure task\nalignment.\n  By showing that targeted data selection can dramatically improve\ntask-specific performance, our work provides new insights into the relationship\nbetween data quality, task alignment, and model learning efficiency.",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2024-10-23T18:01:06+00:00",
+      "url": "http://arxiv.org/pdf/2410.18194v2",
+      "resource_uri": "arxiv://2410.18194v2"
+    },
+    {
+      "id": "2412.19820v1",
+      "title": "GaLore$+$: Boosting Low-Rank Adaptation for LLMs with Cross-Head Projection",
+      "authors": [
+        "Xutao Liao",
+        "Shaohui Li",
+        "Yuhui Xu",
+        "Zhi Li",
+        "Yu Liu",
+        "You He"
+      ],
+      "abstract": "Recent low-rank training methods, such as GaLore, have significantly reduced\nthe memory required to optimize large language models (LLMs). However, these\nmethods often suffer from time-consuming low-rank projection estimations. In\nparticular, the singular value decomposition (SVD) in GaLore can consume more\nthan 80\\% of the total training time. To address this issue, we propose\nGaLore$+$, which uses cross-head low-rank projection to reduce the substantial\ntime consumption in estimating low-rank projections for multi-head attention.\nIn addition, we employ randomized subspace iteration to achieve fast SVD. To\nfurther enhance performance, we propose sparsely coded residuals to reduce the\nerrors caused by low-rank approximation on the first- and second-order moments\nof the optimizers and weight updates. We evaluate GaLore$+$ on arithmetic\nreasoning and natural language generation datasets. Our experiments demonstrate\nthat GaLore$+$ delivers superior performance while achieving approximately\n$4\\times$ fine-tuning speed compared to vanilla GaLore.",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2024-12-15T12:28:13+00:00",
+      "url": "http://arxiv.org/pdf/2412.19820v1",
+      "resource_uri": "arxiv://2412.19820v1"
+    },
+    {
+      "id": "2502.17535v1",
+      "title": "The Lottery LLM Hypothesis, Rethinking What Abilities Should LLM Compression Preserve?",
+      "authors": [
+        "Zhenheng Tang",
+        "Xiang Liu",
+        "Qian Wang",
+        "Peijie Dong",
+        "Bingsheng He",
+        "Xiaowen Chu",
+        "Bo Li"
+      ],
+      "abstract": "Motivated by reducing the computational and storage costs of LLMs, model\ncompression and KV cache compression have attracted much attention from\nresearchers. However, current methods predominantly emphasize maintaining the\nperformance of compressed LLMs, as measured by perplexity or simple accuracy on\ntasks of common sense knowledge QA and basic arithmetic reasoning. In this\nblog, we present a brief review of recent advancements in LLMs related to\nretrieval-augmented generation, multi-step reasoning, external tools, and\ncomputational expressivity, all of which substantially enhance LLM performance.\nThen, we propose a lottery LLM hypothesis suggesting that for a given LLM and\ntask, there exists a smaller lottery LLM capable of producing the same\nperformance as the original LLM with the assistance of multi-step reasoning and\nexternal tools. Based on the review of current progress in LLMs, we discuss and\nsummarize the essential capabilities that the lottery LLM and KV cache\ncompression must possess, which are currently overlooked in existing methods.",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL",
+        "cs.FL"
+      ],
+      "published": "2025-02-24T15:39:35+00:00",
+      "url": "http://arxiv.org/pdf/2502.17535v1",
+      "resource_uri": "arxiv://2502.17535v1"
+    },
+    {
+      "id": "2102.13019v3",
+      "title": "Investigating the Limitations of Transformers with Simple Arithmetic Tasks",
+      "authors": [
+        "Rodrigo Nogueira",
+        "Zhiying Jiang",
+        "Jimmy Lin"
+      ],
+      "abstract": "The ability to perform arithmetic tasks is a remarkable trait of human\nintelligence and might form a critical component of more complex reasoning\ntasks. In this work, we investigate if the surface form of a number has any\ninfluence on how sequence-to-sequence language models learn simple arithmetic\ntasks such as addition and subtraction across a wide range of values. We find\nthat how a number is represented in its surface form has a strong influence on\nthe model's accuracy. In particular, the model fails to learn addition of\nfive-digit numbers when using subwords (e.g., \"32\"), and it struggles to learn\nwith character-level representations (e.g., \"3 2\"). By introducing position\ntokens (e.g., \"3 10e1 2\"), the model learns to accurately add and subtract\nnumbers up to 60 digits. We conclude that modern pretrained language models can\neasily learn arithmetic from very few examples, as long as we use the proper\nsurface representation. This result bolsters evidence that subword tokenizers\nand positional encodings are components in current transformer designs that\nmight need improvement. Moreover, we show that regardless of the number of\nparameters and training examples, models cannot learn addition rules that are\nindependent of the length of the numbers seen during training. Code to\nreproduce our experiments is available at\nhttps://github.com/castorini/transformers-arithmetic",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2021-02-25T17:22:53+00:00",
+      "url": "http://arxiv.org/pdf/2102.13019v3",
+      "resource_uri": "arxiv://2102.13019v3"
+    },
+    {
+      "id": "2403.15426v2",
+      "title": "CodingTeachLLM: Empowering LLM's Coding Ability via AST Prior Knowledge",
+      "authors": [
+        "Zhangquan Chen",
+        "Chunjiang Liu",
+        "Haobin Duan"
+      ],
+      "abstract": "In this paper, we introduce CodingTeachLLM, a large language model (LLM)\ndesigned for coding teaching. Specially, we aim to enhance the coding ability\nof LLM and lead it to better teaching mode in education context. Thus, we\npropose an end-to-end prior-based three-phases supervised fine-tuned model,\nwhich is proved more competitive than traditional fine-tuning method. More\nspecifically, our model realizes the structural disassembly and incremental\nguided output of educational knowledge. To this end, we robustify data\nclassification of three types via a sampler and overlap estimation neural\nnetwork, and inject the preprocessing datasets into pre-trained model in three\nbatches for LORA fine-tuning. Then, we design a prior module couples system\nprompt, vector databases, and abstract syntax tree task segmentation. Finally,\nthe compression method and regularization constraint are applied to the\nprior-based fine-tuned model, followed by text filter at the output end to\nobtain incremental guided results. Our model represents the first research\neffort to truly embody the tutor role with the features of abundant educational\nknowledge, step-by-step incremental guided outputs and non-disclosure of\nanswers. Extensive experiments report that our model also achieves\nstate-of-the-art in code abilities compared to open-source models, reaching an\nimpressive 75.10% on the HumanEval (@pass 1) benchmark. Additionally, our model\nmaintains strong conversational capabilities, with the 13B quantized version\nachieving scores of 56.34, 50.60, and 45.27 respectively on the MMLU, C-Eval,\nand AGIEval (5 shot) dialogue evaluation benchmarks.",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL",
+        "I.2.7"
+      ],
+      "published": "2024-03-13T05:38:39+00:00",
+      "url": "http://arxiv.org/pdf/2403.15426v2",
+      "resource_uri": "arxiv://2403.15426v2"
+    },
+    {
+      "id": "2411.02083v3",
+      "title": "Regress, Don't Guess -- A Regression-like Loss on Number Tokens for Language Models",
+      "authors": [
+        "Jonas Zausinger",
+        "Lars Pennig",
+        "Anamarija Kozina",
+        "Sean Sdahl",
+        "Julian Sikora",
+        "Adrian Dendorfer",
+        "Timofey Kuznetsov",
+        "Mohamad Hagog",
+        "Nina Wiedemann",
+        "Kacper Chlodny",
+        "Vincent Limbach",
+        "Anna Ketteler",
+        "Thorben Prein",
+        "Vishwa Mohan Singh",
+        "Michael Morris Danziger",
+        "Jannis Born"
+      ],
+      "abstract": "While language models have exceptional capabilities at text generation, they\nlack a natural inductive bias for emitting numbers and thus struggle in tasks\ninvolving quantitative reasoning, especially arithmetic. One fundamental\nlimitation is the nature of the cross-entropy (CE) loss, which assumes a\nnominal scale and thus cannot convey proximity between generated number tokens.\nIn response, we here present a regression-like loss that operates purely on\ntoken level. Our proposed Number Token Loss (NTL) comes in two flavors and\nminimizes either the $L_p$ norm or the Wasserstein distance between the\nnumerical values of the real and predicted number tokens. NTL can easily be\nadded to any language model and extend the CE objective during training without\nruntime overhead. We evaluate the proposed scheme on various mathematical\ndatasets and find that it consistently improves performance in math-related\ntasks. In a direct comparison on a regression task, we find that NTL can match\nthe performance of a regression head, despite operating on token level.\nFinally, we scale NTL up to 3B parameter models and observe improved\nperformance, demonstrating its potential for seamless integration into LLMs. We\nhope to inspire LLM developers to improve their pretraining objectives and\ndistribute NTL as a minimalistic and lightweight PyPI package $ntloss$:\nhttps://github.com/ai4sd/number-token-loss. Development code for full paper\nreproduction is available separately.",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.CE",
+        "cs.LG"
+      ],
+      "published": "2024-11-04T13:43:24+00:00",
+      "url": "http://arxiv.org/pdf/2411.02083v3",
+      "resource_uri": "arxiv://2411.02083v3"
+    },
+    {
+      "id": "2402.10787v2",
+      "title": "Squat: Quant Small Language Models on the Edge",
+      "authors": [
+        "Xuan Shen",
+        "Peiyan Dong",
+        "Zhenglun Kong",
+        "Yifan Gong",
+        "Changdi Yang",
+        "Zhaoyang Han",
+        "Yanyue Xie",
+        "Lei Lu",
+        "Cheng Lyu",
+        "Chao Wu",
+        "Yanzhi Wang",
+        "Pu Zhao"
+      ],
+      "abstract": "A growing trend has emerged in designing high-quality Small Language Models\n(SLMs) with a few million parameters. This trend is driven by the increasing\nconcerns over cloud costs, privacy, and latency. Considering that full\nparameter training is feasible for SLMs on mobile devices, Quantization-Aware\nTraining (QAT) is employed to improve efficiency by reducing computational\noverhead and memory footprint. However, previous QAT works adopt fine-grained\nquantization methods to compress models with billions of parameters on GPUs,\nincompatible with current commodity hardware, such as mobile and edge devices,\nwhich relies on Single Instruction Multiple Data (SIMD) instructions. Thus, the\ngeneralization of these methods to SLMs on mobile devices is limited. In this\npaper, we propose Squat method, an effective QAT framework with deployable\nquantization for SLMs on mobile devices. Specifically, we propose\nentropy-guided and distribution-aligned distillation to mitigate the distortion\nof attention information from quantization. Besides, we employ sub-8-bit token\nadaptive quantization, assigning varying bit widths to different tokens based\non their importance. Furthermore, we develop a SIMD-based Multi-Kernel\nMixed-Precision (MKMP) multiplier to support sub-8-bit mixed-precision MAC on\nmobile devices. Our extensive experiments verify the substantial improvements\nof our method compared to other QAT methods across various datasets.\nFurthermore, we achieve an on-device speedup of up to 2.37x compared with its\nFP16 counterparts, signaling a great advancement. Code:\nhttps://github.com/shawnricecake/squant",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2024-02-16T16:10:38+00:00",
+      "url": "http://arxiv.org/pdf/2402.10787v2",
+      "resource_uri": "arxiv://2402.10787v2"
+    },
+    {
+      "id": "2305.15017v2",
+      "title": "Calc-X and Calcformers: Empowering Arithmetical Chain-of-Thought through Interaction with Symbolic Systems",
+      "authors": [
+        "Marek Kadl\u010d\u00edk",
+        "Michal \u0160tef\u00e1nik",
+        "Ond\u0159ej Sotol\u00e1\u0159",
+        "Vlastimil Martinek"
+      ],
+      "abstract": "Despite outstanding performance in many tasks, language models are\nnotoriously inclined to make factual errors in tasks requiring arithmetic\ncomputation. We address this deficiency by creating Calc-X, a collection of\ndatasets that demonstrates the appropriate use of a calculator in reasoning\nchains. Calc-X is suitable for teaching language models to offload computations\nto a symbolic system. We survey and unify several existing chain-of-thought\ndatasets into a proposed format, resulting in a standard collection of over\n300,000 samples requiring arithmetic reasoning. Finally, we use the new Calc-X\ncollection to train open-source calculator-using models we call Calcformers and\nshow that these models approximately double the accuracy of generating correct\nresults compared to vanilla language model baselines. We make all Calc-X\ndatasets, source code and Calcformers models publicly available.",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2023-05-24T10:58:20+00:00",
+      "url": "http://arxiv.org/pdf/2305.15017v2",
+      "resource_uri": "arxiv://2305.15017v2"
+    }
+  ]
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"categories":["cs.AI","cs.LG","cs.CL"],"date_from":"2023-01-01","max_results":5,"query":"\"LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character\""}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.4684295s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+}[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The previous search queries did not yield the exact paper. The provided text is very specific, mentioning "LLaMA-7B", "Arithmetic Coding", "text8 dataset", specific compression ratios (0.7101 bpc), and references like [1], [2], [3], [5], [6], [7], [9], [10], [11], [12]. The fact that it mentions "LLaMA-7B [6]" and "SentencePiece tokenizer [11]" suggests these are specific references within the paper.
+I will try a very targeted search using a unique phrase from the text that is less likely to appear in other papers, combined with the authors if I can find them. Since I don't have the authors yet, I'll use a very specific phrase and the arXiv category.
+The phrase "LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character" is quite unique. I will try to search for this exact phrase. If that doesn't work, I will try to find the paper by searching for the title of reference [6] (LLaMA-7B) or [11] (SentencePiece tokenizer) and then looking for papers that cite them and also discuss compression.
+Let's try searching for the exact phrase again, but this time I will also include the date_from parameter to narrow down the search to recent papers, as LLaMA-7B is a relatively recent model. The paper mentions "recently released (May 25, 2023) book [7]", so the paper itself must be from 2023 or later.
+I will use the most specific phrase from the document prefix: "LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character". I will also add a date filter to narrow down the results to papers published after 2023-01-01, as LLaMA-7B was released in 2023.Action: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"\\\"LLaMA-7B with Arithmetic Coding compression results in a compression ratio of 0.7101 bits/character\\\"\", \"date_from\": \"2023-01-01\", \"max_results\": 5, \"categories\": [\"cs.AI\", \"cs.LG\", \"cs.CL\"]}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 0,
+  "papers": []
+}
+
+
+You ONLY have access to the following tools, and should NEVER make up tools that are not listed here:
+
+Tool Name: download_paper
+Tool Arguments: {'properties': {'check_status': {'anyOf': [], 'default': False, 'description': 'Set to true to only check the status of an ongoing or completed conversion without starting a new download. Use this to monitor long-running conversions or verify if a paper is already available.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to download (e.g., '2301.07041', '1706.03762', 'cs.AI/0301001'). This can be found in search results or arXiv URLs. The paper must exist on arXiv.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Download and convert an arXiv paper to readable markdown format for analysis and reading. This tool fetches the PDF from arXiv, converts it to markdown using advanced text extraction, and stores it locally for immediate access. Use this tool when you need to read, analyze, or work with the full text content of a specific paper. The conversion process extracts text, preserves formatting, and handles mathematical equations. Returns the full paper content directly upon successful completion.
+Tool Name: extract_key_facts
+Tool Arguments: {'properties': {'count': {'anyOf': [], 'default': 5, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Count'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}, 'topic_within_article': {'anyOf': [], 'default': '', 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Topic Within Article'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Extract key facts from a Wikipedia article, optionally focused on a topic.
+Tool Name: fetch_content
+Tool Arguments: {'properties': {'url': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Url', 'type': 'string'}}, 'required': ['url'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Fetch and parse content from a webpage URL.
+
+    Args:
+        url: The webpage URL to fetch content from
+        ctx: MCP context for logging
+    
+Tool Name: get_article
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the full content of a Wikipedia article.
+Tool Name: get_coordinates
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the coordinates of a Wikipedia article.
+Tool Name: get_links
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the links contained within a Wikipedia article.
+Tool Name: get_related_topics
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get topics related to a Wikipedia article based on links and categories.
+Tool Name: get_sections
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the sections of a Wikipedia article.
+Tool Name: get_summary
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article.
+Tool Name: list_papers
+Tool Arguments: {'properties': {}, 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: List all previously downloaded and converted papers that are available in local storage for immediate reading and analysis. This tool shows you what papers you already have access to without needing to download them again. Each paper in the list includes metadata like title, authors, abstract, and direct links. Use this tool to see your paper library, check if a specific paper is already downloaded, or browse previously acquired research papers before downloading new ones.
+Tool Name: read_paper
+Tool Arguments: {'properties': {'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to read (e.g., '2301.07041', '1706.03762'). This must be a paper that has been previously downloaded and converted to markdown format. Use list_papers to see available papers.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Read the full text content of a previously downloaded and converted research paper in clean markdown format. This tool retrieves the complete paper content including abstract, introduction, methodology, results, conclusions, and references. The content is formatted for easy reading and analysis, with preserved mathematical equations and structured sections. Use this tool when you need to access the full text of a paper for detailed study, quotation, analysis, or research. The paper must have been previously downloaded using the download_paper tool.
+Tool Name: search
+Tool Arguments: {'properties': {'max_results': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Results'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Search DuckDuckGo and return formatted results.
+
+    Args:
+        query: The search query string
+        max_results: Maximum number of results to return (default: 10)
+        ctx: MCP context for logging
+    
+Tool Name: search_papers
+Tool Arguments: {'properties': {'categories': {'anyOf': [], 'default': None, 'description': "Strongly recommended: arXiv categories to focus search (e.g., ['cs.AI', 'cs.MA'] for agent research, ['cs.LG'] for ML, ['cs.CL'] for NLP, ['cs.CV'] for vision). Greatly improves relevance.", 'enum': None, 'items': {'type': 'string'}, 'properties': {}, 'title': ''}, 'date_from': {'anyOf': [], 'default': None, 'description': "Start date for papers (YYYY-MM-DD format). Use to find recent work, e.g., '2023-01-01' for last 2 years.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'date_to': {'anyOf': [], 'default': None, 'description': "End date for papers (YYYY-MM-DD format). Use with date_from to find historical work, e.g., '2020-12-31' for older research.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'max_results': {'anyOf': [], 'default': None, 'description': 'Maximum number of results to return (default: 10, max: 50). Use 15-20 for comprehensive searches.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'query': {'anyOf': [], 'description': 'Search query using quoted phrases for exact matches (e.g., \'"machine learning" OR "deep learning"\') or specific technical terms. Avoid overly broad or generic terms.', 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}, 'sort_by': {'anyOf': [], 'default': None, 'description': "Sort results by 'relevance' (most relevant first, default) or 'date' (newest first). Use 'relevance' for focused searches, 'date' for recent developments.", 'enum': ['relevance', 'date'], 'items': None, 'properties': {}, 'title': ''}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search for papers on arXiv with advanced filtering and query optimization.
+
+QUERY CONSTRUCTION GUIDELINES:
+- Use QUOTED PHRASES for exact matches: "multi-agent systems", "neural networks", "machine learning"
+- Combine related concepts with OR: "AI agents" OR "software agents" OR "intelligent agents"  
+- Use field-specific searches for precision:
+  - ti:"exact title phrase" - search in titles only
+  - au:"author name" - search by author
+  - abs:"keyword" - search in abstracts only
+- Use ANDNOT to exclude unwanted results: "machine learning" ANDNOT "survey"
+- For best results, use 2-4 core concepts rather than long keyword lists
+
+ADVANCED SEARCH PATTERNS:
+- Field + phrase: ti:"transformer architecture" for papers with exact title phrase
+- Multiple fields: au:"Smith" AND ti:"quantum" for author Smith's quantum papers  
+- Exclusions: "deep learning" ANDNOT ("survey" OR "review") to exclude survey papers
+- Broad + narrow: "artificial intelligence" AND (robotics OR "computer vision")
+
+CATEGORY FILTERING (highly recommended for relevance):
+- cs.AI: Artificial Intelligence
+- cs.MA: Multi-Agent Systems  
+- cs.LG: Machine Learning
+- cs.CL: Computation and Language (NLP)
+- cs.CV: Computer Vision
+- cs.RO: Robotics
+- cs.HC: Human-Computer Interaction
+- cs.CR: Cryptography and Security
+- cs.DB: Databases
+
+EXAMPLES OF EFFECTIVE QUERIES:
+- ti:"reinforcement learning" with categories: ["cs.LG", "cs.AI"] - for RL papers by title
+- au:"Hinton" AND "deep learning" with categories: ["cs.LG"] - for Hinton's deep learning work
+- "multi-agent" ANDNOT "survey" with categories: ["cs.MA"] - exclude survey papers
+- abs:"transformer" AND ti:"attention" with categories: ["cs.CL"] - attention papers with transformer abstracts
+
+DATE FILTERING: Use YYYY-MM-DD format for historical research:
+- date_to: "2015-12-31" - for foundational/classic work (pre-2016)
+- date_from: "2020-01-01" - for recent developments (post-2020)
+- Both together for specific time periods
+
+RESULT QUALITY: Results sorted by RELEVANCE (most relevant papers first), not just newest papers.
+This ensures you get the most pertinent results regardless of publication date.
+
+TIPS FOR FOUNDATIONAL RESEARCH:
+- Use date_to: "2010-12-31" to find classic papers on BDI, SOAR, ACT-R
+- Combine with field searches: ti:"BDI" AND abs:"belief desire intention"  
+- Try author searches: au:"Rao" AND "BDI" for Anand Rao's foundational BDI work
+Tool Name: search_wikipedia
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search Wikipedia for articles matching a query.
+Tool Name: summarize_article_for_query
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 250, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['query', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article tailored to a specific query.
+Tool Name: summarize_article_section
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 150, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'section_title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Section Title', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['section_title', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a specific section of a Wikipedia article.
+
+IMPORTANT: Use the following format in your response:
+
+```
+Thought: you should always think about what to do
+Action: the action to take, only one name of [download_paper, extract_key_facts, fetch_content, get_article, get_coordinates, get_links, get_related_topics, get_sections, get_summary, list_papers, read_paper, search, search_papers, search_wikipedia, summarize_article_for_query, summarize_article_section], just the name, exactly as it's written.
+Action Input: the input to the action, just a simple JSON object, enclosed in curly braces, using " to wrap keys and values.
+Observation: the result of the action
+```
+
+Once all necessary information is gathered, return the following format:
+
+```
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search with arguments: {"max_results":10,"query":"LLaMA-7B paper"}
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  > Calling tool search took: 1.375909s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search with arguments: {"max_results":10,"query":"SentencePiece tokenizer paper"}
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  > Calling tool search took: 1.4816806s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"categories":["cs.CL","cs.LG","cs.AI"],"date_from":"2023-01-01","max_results":10,"query":"LLaMA-7B \"arithmetic coding\" text8 compression","sort_by":"date"}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.3757232s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+```[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The previous attempts to find the paper using very specific phrases from the document prefix have failed. This suggests that the exact phrasing might not be in the abstract or title, or the paper is not indexed in arXiv in a way that makes it discoverable with such specific queries.
+I need to try a different approach. The document prefix mentions several references by number, e.g., "[6]" for LLaMA-7B, "[11]" for SentencePiece tokenizer, "[5]" for ZPAQ, and "[12]" for paq8h. I can try to find the full titles of these referenced papers using a general web search, and then use those titles or authors to search for the main document.
+Let's start by searching for the paper associated with "[6] LLaMA-7B" to get its full title and authors. This is a well-known model, so a general search should yield results.[00m
+[95m## Using tool:[00m [92msearch[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"LLaMA-7B paper\"}"[00m
+[95m## Tool Output:[00m [92m
+No results were found for your search query. This could be due to DuckDuckGo's bot detection or the query returned no matches. Please try rephrasing your search or try again in a few minutes.[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The `search` tool (DuckDuckGo) failed to return results for "LLaMA-7B paper", which is unexpected given its prominence. This might be a temporary issue with the tool or a specific query limitation.
+I will try a slightly different search query for LLaMA-7B, perhaps including "arXiv" to narrow it down to academic papers, or searching for the original LLaMA paper which would include LLaMA-7B.
+Alternatively, I can try to find the paper for "SentencePiece tokenizer [11]" or "ZPAQ [5]" or "paq8h [12]". Let's try "SentencePiece tokenizer paper" first, as it's also a distinct component mentioned.[00m
+[95m## Using tool:[00m [92msearch[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"SentencePiece tokenizer paper\"}"[00m
+[95m## Tool Output:[00m [92m
+No results were found for your search query. This could be due to DuckDuckGo's bot detection or the query returned no matches. Please try rephrasing your search or try again in a few minutes.[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The `search` tool is consistently failing to return results, which is preventing me from finding the full document. This is a critical blocker. Given that the tool description mentions "DuckDuckGo's bot detection or the query returned no matches", it's possible there's an issue with the `search` tool itself or how it's being called.
+Since I cannot use the `search` tool effectively, I need to reconsider my strategy for finding the paper. I cannot directly search for the paper on arXiv without a more precise query or an arXiv ID. The document prefix itself is the only source of information I have.
+I will try one more time with `search_papers` using a combination of keywords that are highly likely to be in the abstract or title, but less specific than the exact compression ratio. I will combine "LLaMA-7B", "arithmetic coding", "text8", and "compression". I will also try to sort by date to see if a recent paper matches.[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"LLaMA-7B \\\"arithmetic coding\\\" text8 compression\", \"sort_by\": \"date\", \"max_results\": 10, \"date_from\": \"2023-01-01\", \"categories\": [\"cs.CL\", \"cs.LG\", \"cs.AI\"]}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 10,
+  "papers": [
+    {
+      "id": "2509.05296v1",
+      "title": "WinT3R: Window-Based Streaming Reconstruction with Camera Token Pool",
+      "authors": [
+        "Zizun Li",
+        "Jianjun Zhou",
+        "Yifan Wang",
+        "Haoyu Guo",
+        "Wenzheng Chang",
+        "Yang Zhou",
+        "Haoyi Zhu",
+        "Junyi Chen",
+        "Chunhua Shen",
+        "Tong He"
+      ],
+      "abstract": "We present WinT3R, a feed-forward reconstruction model capable of online\nprediction of precise camera poses and high-quality point maps. Previous\nmethods suffer from a trade-off between reconstruction quality and real-time\nperformance. To address this, we first introduce a sliding window mechanism\nthat ensures sufficient information exchange among frames within the window,\nthereby improving the quality of geometric predictions without large\ncomputation. In addition, we leverage a compact representation of cameras and\nmaintain a global camera token pool, which enhances the reliability of camera\npose estimation without sacrificing efficiency. These designs enable WinT3R to\nachieve state-of-the-art performance in terms of online reconstruction quality,\ncamera pose estimation, and reconstruction speed, as validated by extensive\nexperiments on diverse datasets. Code and model are publicly available at\nhttps://github.com/LiZizun/WinT3R.",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2025-09-05T17:59:47+00:00",
+      "url": "http://arxiv.org/pdf/2509.05296v1",
+      "resource_uri": "arxiv://2509.05296v1"
+    },
+    {
+      "id": "2509.05293v1",
+      "title": "Non-Termination Proving: 100 Million LoC and Beyond",
+      "authors": [
+        "Julien Vanegue",
+        "Jules Villard",
+        "Peter O'Hearn",
+        "Azalea Raad"
+      ],
+      "abstract": "We report on our tool, Pulse Infinite, that uses proof techniques to show\nnon-termination (divergence) in large programs. Pulse Infinite works\ncompositionally and under-approximately: the former supports scale, and the\nlatter ensures soundness for proving divergence. Prior work focused on small\nbenchmarks in the tens or hundreds of lines of code (LoC), and scale limits\ntheir practicality: a single company may have tens of millions, or even\nhundreds of millions of LoC or more. We report on applying Pulse Infinite to\nover a hundred million lines of open-source and proprietary software written in\nC, C++, and Hack, identifying over 30 previously unknown issues, establishing a\nnew state of the art for detecting divergence in real-world codebases.",
+      "categories": [
+        "cs.PL",
+        "cs.CL",
+        "cs.SE",
+        "D.3; F.3"
+      ],
+      "published": "2025-09-05T17:58:45+00:00",
+      "url": "http://arxiv.org/pdf/2509.05293v1",
+      "resource_uri": "arxiv://2509.05293v1"
+    },
+    {
+      "id": "2509.05292v1",
+      "title": "Deep Reinforcement Learning for Ranking Utility Tuning in the Ad Recommender System at Pinterest",
+      "authors": [
+        "Xiao Yang",
+        "Mehdi Ben Ayed",
+        "Longyu Zhao",
+        "Fan Zhou",
+        "Yuchen Shen",
+        "Abe Engle",
+        "Jinfeng Zhuang",
+        "Ling Leng",
+        "Jiajing Xu",
+        "Charles Rosenberg",
+        "Prathibha Deshikachar"
+      ],
+      "abstract": "The ranking utility function in an ad recommender system, which linearly\ncombines predictions of various business goals, plays a central role in\nbalancing values across the platform, advertisers, and users. Traditional\nmanual tuning, while offering simplicity and interpretability, often yields\nsuboptimal results due to its unprincipled tuning objectives, the vast amount\nof parameter combinations, and its lack of personalization and adaptability to\nseasonality. In this work, we propose a general Deep Reinforcement Learning\nframework for Personalized Utility Tuning (DRL-PUT) to address the challenges\nof multi-objective optimization within ad recommender systems. Our key\ncontributions include: 1) Formulating the problem as a reinforcement learning\ntask: given the state of an ad request, we predict the optimal hyperparameters\nto maximize a pre-defined reward. 2) Developing an approach to directly learn\nan optimal policy model using online serving logs, avoiding the need to\nestimate a value function, which is inherently challenging due to the high\nvariance and unbalanced distribution of immediate rewards. We evaluated DRL-PUT\nthrough an online A/B experiment in Pinterest's ad recommender system. Compared\nto the baseline manual utility tuning approach, DRL-PUT improved the\nclick-through rate by 9.7% and the long click-through rate by 7.7% on the\ntreated segment. We conducted a detailed ablation study on the impact of\ndifferent reward definitions and analyzed the personalization aspect of the\nlearned policy model.",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2025-09-05T17:57:45+00:00",
+      "url": "http://arxiv.org/pdf/2509.05292v1",
+      "resource_uri": "arxiv://2509.05292v1"
+    },
+    {
+      "id": "2509.05291v1",
+      "title": "Crosscoding Through Time: Tracking Emergence & Consolidation Of Linguistic Representations Throughout LLM Pretraining",
+      "authors": [
+        "Deniz Bayazit",
+        "Aaron Mueller",
+        "Antoine Bosselut"
+      ],
+      "abstract": "Large language models (LLMs) learn non-trivial abstractions during\npretraining, like detecting irregular plural noun subjects. However, it is not\nwell understood when and how specific linguistic abilities emerge as\ntraditional evaluation methods such as benchmarking fail to reveal how models\nacquire concepts and capabilities. To bridge this gap and better understand\nmodel training at the concept level, we use sparse crosscoders to discover and\nalign features across model checkpoints. Using this approach, we track the\nevolution of linguistic features during pretraining. We train crosscoders\nbetween open-sourced checkpoint triplets with significant performance and\nrepresentation shifts, and introduce a novel metric, Relative Indirect Effects\n(RelIE), to trace training stages at which individual features become causally\nimportant for task performance. We show that crosscoders can detect feature\nemergence, maintenance, and discontinuation during pretraining. Our approach is\narchitecture-agnostic and scalable, offering a promising path toward more\ninterpretable and fine-grained analysis of representation learning throughout\npretraining.",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2025-09-05T17:56:24+00:00",
+      "url": "http://arxiv.org/pdf/2509.05291v1",
+      "resource_uri": "arxiv://2509.05291v1"
+    },
+    {
+      "id": "2509.05289v1",
+      "title": "Beyond Linearity and Time-homogeneity: Relational Hyper Event Models with Time-Varying Non-Linear Effects",
+      "authors": [
+        "Martina Boschi",
+        "J\u00fcrgen Lerner",
+        "Ernst C. Wit"
+      ],
+      "abstract": "Recent technological advances have made it easier to collect large and\ncomplex networks of time-stamped relational events connecting two or more\nentities. Relational hyper-event models (RHEMs) aim to explain the dynamics of\nthese events by modeling the event rate as a function of statistics based on\npast history and external information.\n  However, despite the complexity of the data, most current RHEM approaches\nstill rely on a linearity assumption to model this relationship. In this work,\nwe address this limitation by introducing a more flexible model that allows the\neffects of statistics to vary non-linearly and over time. While time-varying\nand non-linear effects have been used in relational event modeling, we take\nthis further by modeling joint time-varying and non-linear effects using tensor\nproduct smooths.\n  We validate our methodology on both synthetic and empirical data. In\nparticular, we use RHEMs to study how patterns of scientific collaboration and\nimpact evolve over time. Our approach provides deeper insights into the dynamic\nfactors driving relational hyper-events, allowing us to evaluate potential\nnon-monotonic patterns that cannot be identified using linear models.",
+      "categories": [
+        "stat.ME",
+        "cs.LG",
+        "stat.AP"
+      ],
+      "published": "2025-09-05T17:55:29+00:00",
+      "url": "http://arxiv.org/pdf/2509.05289v1",
+      "resource_uri": "arxiv://2509.05289v1"
+    },
+    {
+      "id": "2509.05288v1",
+      "title": "Learning to accelerate distributed ADMM using graph neural networks",
+      "authors": [
+        "Henri Doerks",
+        "Paul H\u00e4usner",
+        "Daniel Hern\u00e1ndez Escobar",
+        "Jens Sj\u00f6lund"
+      ],
+      "abstract": "Distributed optimization is fundamental in large-scale machine learning and\ncontrol applications. Among existing methods, the Alternating Direction Method\nof Multipliers (ADMM) has gained popularity due to its strong convergence\nguarantees and suitability for decentralized computation. However, ADMM often\nsuffers from slow convergence and sensitivity to hyperparameter choices. In\nthis work, we show that distributed ADMM iterations can be naturally\nrepresented within the message-passing framework of graph neural networks\n(GNNs). Building on this connection, we propose to learn adaptive step sizes\nand communication weights by a graph neural network that predicts the\nhyperparameters based on the iterates. By unrolling ADMM for a fixed number of\niterations, we train the network parameters end-to-end to minimize the final\niterates error for a given problem class, while preserving the algorithm's\nconvergence properties. Numerical experiments demonstrate that our learned\nvariant consistently improves convergence speed and solution quality compared\nto standard ADMM. The code is available at\nhttps://github.com/paulhausner/learning-distributed-admm.",
+      "categories": [
+        "cs.LG",
+        "math.OC"
+      ],
+      "published": "2025-09-05T17:55:22+00:00",
+      "url": "http://arxiv.org/pdf/2509.05288v1",
+      "resource_uri": "arxiv://2509.05288v1"
+    },
+    {
+      "id": "2509.05282v1",
+      "title": "Elucidating the Design Space of Decay in Linear Attention",
+      "authors": [
+        "Zhen Qin",
+        "Xuyang Shen",
+        "Yiran Zhong"
+      ],
+      "abstract": "This paper presents a comprehensive investigation into the decay mechanisms\ninherent in linear complexity sequence models. We systematically delineate the\ndesign space of decay mechanisms across four pivotal dimensions:\nparameterization strategy, which refers to the computational methodology for\ndecay; parameter sharing, which involves the utilization of supplementary\nparameters for decay computation; decay granularity, comparing scalar versus\nvector-based decay; and compatibility with relative positional encoding\nmethods, such as Rotary Position Embedding (RoPE). Through an extensive series\nof experiments conducted on diverse language modeling tasks, we uncovered\nseveral critical insights. Firstly, the design of the parameterization strategy\nfor decay requires meticulous consideration. Our findings indicate that\neffective configurations are typically confined to a specific range of\nparameters. Secondly, parameter sharing cannot be used arbitrarily, as it may\ncause decay values to be too large or too small, thereby significantly\nimpacting performance. Thirdly, under identical parameterization strategies,\nscalar decay generally underperforms compared to its vector-based counterpart.\nHowever, in certain scenarios with alternative parameterization strategies,\nscalar decay may unexpectedly surpass vector decay in efficacy. Lastly, our\nanalysis reveals that RoPE, a commonly employed relative positional encoding\nmethod, typically fails to provide tangible benefits to the majority of linear\nattention mechanisms.",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2025-09-05T17:48:26+00:00",
+      "url": "http://arxiv.org/pdf/2509.05282v1",
+      "resource_uri": "arxiv://2509.05282v1"
+    },
+    {
+      "id": "2509.05281v1",
+      "title": "Dual-Branch Convolutional Framework for Spatial and Frequency-Based Image Forgery Detection",
+      "authors": [
+        "Naman Tyagi"
+      ],
+      "abstract": "With a very rapid increase in deepfakes and digital image forgeries, ensuring\nthe authenticity of images is becoming increasingly challenging. This report\nintroduces a forgery detection framework that combines spatial and\nfrequency-based features for detecting forgeries. We propose a dual branch\nconvolution neural network that operates on features extracted from spatial and\nfrequency domains. Features from both branches are fused and compared within a\nSiamese network, yielding 64 dimensional embeddings for classification. When\nbenchmarked on CASIA 2.0 dataset, our method achieves an accuracy of 77.9%,\noutperforming traditional statistical methods. Despite its relatively weaker\nperformance compared to larger, more complex forgery detection pipelines, our\napproach balances computational complexity and detection reliability, making it\nready for practical deployment. It provides a strong methodology for forensic\nscrutiny of digital images. In a broader sense, it advances the state of the\nart in visual forensics, addressing an urgent requirement in media\nverification, law enforcement and digital content reliability.",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2025-09-05T17:41:57+00:00",
+      "url": "http://arxiv.org/pdf/2509.05281v1",
+      "resource_uri": "arxiv://2509.05281v1"
+    },
+    {
+      "id": "2509.05276v1",
+      "title": "SpikingBrain Technical Report: Spiking Brain-inspired Large Models",
+      "authors": [
+        "Yuqi Pan",
+        "Yupeng Feng",
+        "Jinghao Zhuang",
+        "Siyu Ding",
+        "Zehao Liu",
+        "Bohan Sun",
+        "Yuhong Chou",
+        "Han Xu",
+        "Xuerui Qiu",
+        "Anlin Deng",
+        "Anjie Hu",
+        "Peng Zhou",
+        "Man Yao",
+        "Jibin Wu",
+        "Jian Yang",
+        "Guoliang Sun",
+        "Bo Xu",
+        "Guoqi Li"
+      ],
+      "abstract": "Mainstream Transformer-based large language models face major efficiency\nbottlenecks: training computation scales quadratically with sequence length,\nand inference memory grows linearly, limiting long-context processing. Building\nlarge models on non-NVIDIA platforms also poses challenges for stable and\nefficient training. To address this, we introduce SpikingBrain, a family of\nbrain-inspired models designed for efficient long-context training and\ninference. SpikingBrain leverages the MetaX GPU cluster and focuses on three\naspects: (1) Model Architecture: linear and hybrid-linear attention\narchitectures with adaptive spiking neurons; (2) Algorithmic Optimizations: an\nefficient, conversion-based training pipeline and a dedicated spike coding\nframework; (3) System Engineering: customized training frameworks, operator\nlibraries, and parallelism strategies tailored to MetaX hardware.\n  Using these techniques, we develop two models: SpikingBrain-7B, a linear LLM,\nand SpikingBrain-76B, a hybrid-linear MoE LLM. These models demonstrate the\nfeasibility of large-scale LLM development on non-NVIDIA platforms.\nSpikingBrain achieves performance comparable to open-source Transformer\nbaselines while using only about 150B tokens for continual pre-training. Our\nmodels significantly improve long-sequence training efficiency and deliver\ninference with (partially) constant memory and event-driven spiking behavior.\nFor example, SpikingBrain-7B attains over 100x speedup in Time to First Token\nfor 4M-token sequences. Training remains stable for weeks on hundreds of MetaX\nC550 GPUs, with the 7B model reaching a Model FLOPs Utilization of 23.4\npercent. The proposed spiking scheme achieves 69.15 percent sparsity, enabling\nlow-power operation. Overall, this work demonstrates the potential of\nbrain-inspired mechanisms to drive the next generation of efficient and\nscalable large model design.",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2025-09-05T17:34:00+00:00",
+      "url": "http://arxiv.org/pdf/2509.05276v1",
+      "resource_uri": "arxiv://2509.05276v1"
+    },
+    {
+      "id": "2509.05273v1",
+      "title": "Greener Deep Reinforcement Learning: Analysis of Energy and Carbon Efficiency Across Atari Benchmarks",
+      "authors": [
+        "Jason Gardner",
+        "Ayan Dutta",
+        "Swapnoneel Roy",
+        "O. Patrick Kreidl",
+        "Ladislau Boloni"
+      ],
+      "abstract": "The growing computational demands of deep reinforcement learning (DRL) have\nraised concerns about the environmental and economic costs of training\nlarge-scale models. While algorithmic efficiency in terms of learning\nperformance has been extensively studied, the energy requirements, greenhouse\ngas emissions, and monetary costs of DRL algorithms remain largely unexplored.\nIn this work, we present a systematic benchmarking study of the energy\nconsumption of seven state-of-the-art DRL algorithms, namely DQN, TRPO, A2C,\nARS, PPO, RecurrentPPO, and QR-DQN, implemented using Stable Baselines. Each\nalgorithm was trained for one million steps each on ten Atari 2600 games, and\npower consumption was measured in real-time to estimate total energy usage,\nCO2-Equivalent emissions, and electricity cost based on the U.S. national\naverage electricity price. Our results reveal substantial variation in energy\nefficiency and training cost across algorithms, with some achieving comparable\nperformance while consuming up to 24% less energy (ARS vs. DQN), emitting\nnearly 68% less CO2, and incurring almost 68% lower monetary cost (QR-DQN vs.\nRecurrentPPO) than less efficient counterparts. We further analyze the\ntrade-offs between learning performance, training time, energy use, and\nfinancial cost, highlighting cases where algorithmic choices can mitigate\nenvironmental and economic impact without sacrificing learning performance.\nThis study provides actionable insights for developing energy-aware and\ncost-efficient DRL practices and establishes a foundation for incorporating\nsustainability considerations into future algorithmic design and evaluation.",
+      "categories": [
+        "cs.LG",
+        "cs.PF"
+      ],
+      "published": "2025-09-05T17:29:51+00:00",
+      "url": "http://arxiv.org/pdf/2509.05273v1",
+      "resource_uri": "arxiv://2509.05273v1"
+    }
+  ]
+}
+
+
+You ONLY have access to the following tools, and should NEVER make up tools that are not listed here:
+
+Tool Name: download_paper
+Tool Arguments: {'properties': {'check_status': {'anyOf': [], 'default': False, 'description': 'Set to true to only check the status of an ongoing or completed conversion without starting a new download. Use this to monitor long-running conversions or verify if a paper is already available.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to download (e.g., '2301.07041', '1706.03762', 'cs.AI/0301001'). This can be found in search results or arXiv URLs. The paper must exist on arXiv.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Download and convert an arXiv paper to readable markdown format for analysis and reading. This tool fetches the PDF from arXiv, converts it to markdown using advanced text extraction, and stores it locally for immediate access. Use this tool when you need to read, analyze, or work with the full text content of a specific paper. The conversion process extracts text, preserves formatting, and handles mathematical equations. Returns the full paper content directly upon successful completion.
+Tool Name: extract_key_facts
+Tool Arguments: {'properties': {'count': {'anyOf': [], 'default': 5, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Count'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}, 'topic_within_article': {'anyOf': [], 'default': '', 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Topic Within Article'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Extract key facts from a Wikipedia article, optionally focused on a topic.
+Tool Name: fetch_content
+Tool Arguments: {'properties': {'url': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Url', 'type': 'string'}}, 'required': ['url'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Fetch and parse content from a webpage URL.
+
+    Args:
+        url: The webpage URL to fetch content from
+        ctx: MCP context for logging
+    
+Tool Name: get_article
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the full content of a Wikipedia article.
+Tool Name: get_coordinates
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the coordinates of a Wikipedia article.
+Tool Name: get_links
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the links contained within a Wikipedia article.
+Tool Name: get_related_topics
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get topics related to a Wikipedia article based on links and categories.
+Tool Name: get_sections
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the sections of a Wikipedia article.
+Tool Name: get_summary
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article.
+Tool Name: list_papers
+Tool Arguments: {'properties': {}, 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: List all previously downloaded and converted papers that are available in local storage for immediate reading and analysis. This tool shows you what papers you already have access to without needing to download them again. Each paper in the list includes metadata like title, authors, abstract, and direct links. Use this tool to see your paper library, check if a specific paper is already downloaded, or browse previously acquired research papers before downloading new ones.
+Tool Name: read_paper
+Tool Arguments: {'properties': {'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to read (e.g., '2301.07041', '1706.03762'). This must be a paper that has been previously downloaded and converted to markdown format. Use list_papers to see available papers.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Read the full text content of a previously downloaded and converted research paper in clean markdown format. This tool retrieves the complete paper content including abstract, introduction, methodology, results, conclusions, and references. The content is formatted for easy reading and analysis, with preserved mathematical equations and structured sections. Use this tool when you need to access the full text of a paper for detailed study, quotation, analysis, or research. The paper must have been previously downloaded using the download_paper tool.
+Tool Name: search
+Tool Arguments: {'properties': {'max_results': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Results'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Search DuckDuckGo and return formatted results.
+
+    Args:
+        query: The search query string
+        max_results: Maximum number of results to return (default: 10)
+        ctx: MCP context for logging
+    
+Tool Name: search_papers
+Tool Arguments: {'properties': {'categories': {'anyOf': [], 'default': None, 'description': "Strongly recommended: arXiv categories to focus search (e.g., ['cs.AI', 'cs.MA'] for agent research, ['cs.LG'] for ML, ['cs.CL'] for NLP, ['cs.CV'] for vision). Greatly improves relevance.", 'enum': None, 'items': {'type': 'string'}, 'properties': {}, 'title': ''}, 'date_from': {'anyOf': [], 'default': None, 'description': "Start date for papers (YYYY-MM-DD format). Use to find recent work, e.g., '2023-01-01' for last 2 years.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'date_to': {'anyOf': [], 'default': None, 'description': "End date for papers (YYYY-MM-DD format). Use with date_from to find historical work, e.g., '2020-12-31' for older research.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'max_results': {'anyOf': [], 'default': None, 'description': 'Maximum number of results to return (default: 10, max: 50). Use 15-20 for comprehensive searches.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'query': {'anyOf': [], 'description': 'Search query using quoted phrases for exact matches (e.g., \'"machine learning" OR "deep learning"\') or specific technical terms. Avoid overly broad or generic terms.', 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}, 'sort_by': {'anyOf': [], 'default': None, 'description': "Sort results by 'relevance' (most relevant first, default) or 'date' (newest first). Use 'relevance' for focused searches, 'date' for recent developments.", 'enum': ['relevance', 'date'], 'items': None, 'properties': {}, 'title': ''}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search for papers on arXiv with advanced filtering and query optimization.
+
+QUERY CONSTRUCTION GUIDELINES:
+- Use QUOTED PHRASES for exact matches: "multi-agent systems", "neural networks", "machine learning"
+- Combine related concepts with OR: "AI agents" OR "software agents" OR "intelligent agents"  
+- Use field-specific searches for precision:
+  - ti:"exact title phrase" - search in titles only
+  - au:"author name" - search by author
+  - abs:"keyword" - search in abstracts only
+- Use ANDNOT to exclude unwanted results: "machine learning" ANDNOT "survey"
+- For best results, use 2-4 core concepts rather than long keyword lists
+
+ADVANCED SEARCH PATTERNS:
+- Field + phrase: ti:"transformer architecture" for papers with exact title phrase
+- Multiple fields: au:"Smith" AND ti:"quantum" for author Smith's quantum papers  
+- Exclusions: "deep learning" ANDNOT ("survey" OR "review") to exclude survey papers
+- Broad + narrow: "artificial intelligence" AND (robotics OR "computer vision")
+
+CATEGORY FILTERING (highly recommended for relevance):
+- cs.AI: Artificial Intelligence
+- cs.MA: Multi-Agent Systems  
+- cs.LG: Machine Learning
+- cs.CL: Computation and Language (NLP)
+- cs.CV: Computer Vision
+- cs.RO: Robotics
+- cs.HC: Human-Computer Interaction
+- cs.CR: Cryptography and Security
+- cs.DB: Databases
+
+EXAMPLES OF EFFECTIVE QUERIES:
+- ti:"reinforcement learning" with categories: ["cs.LG", "cs.AI"] - for RL papers by title
+- au:"Hinton" AND "deep learning" with categories: ["cs.LG"] - for Hinton's deep learning work
+- "multi-agent" ANDNOT "survey" with categories: ["cs.MA"] - exclude survey papers
+- abs:"transformer" AND ti:"attention" with categories: ["cs.CL"] - attention papers with transformer abstracts
+
+DATE FILTERING: Use YYYY-MM-DD format for historical research:
+- date_to: "2015-12-31" - for foundational/classic work (pre-2016)
+- date_from: "2020-01-01" - for recent developments (post-2020)
+- Both together for specific time periods
+
+RESULT QUALITY: Results sorted by RELEVANCE (most relevant papers first), not just newest papers.
+This ensures you get the most pertinent results regardless of publication date.
+
+TIPS FOR FOUNDATIONAL RESEARCH:
+- Use date_to: "2010-12-31" to find classic papers on BDI, SOAR, ACT-R
+- Combine with field searches: ti:"BDI" AND abs:"belief desire intention"  
+- Try author searches: au:"Rao" AND "BDI" for Anand Rao's foundational BDI work
+Tool Name: search_wikipedia
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search Wikipedia for articles matching a query.
+Tool Name: summarize_article_for_query
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 250, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['query', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article tailored to a specific query.
+Tool Name: summarize_article_section
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 150, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'section_title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Section Title', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['section_title', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a specific section of a Wikipedia article.
+
+IMPORTANT: Use the following format in your response:
+
+```
+Thought: you should always think about what to do
+Action: the action to take, only one name of [download_paper, extract_key_facts, fetch_content, get_article, get_coordinates, get_links, get_related_topics, get_sections, get_summary, list_papers, read_paper, search, search_papers, search_wikipedia, summarize_article_for_query, summarize_article_section], just the name, exactly as it's written.
+Action Input: the input to the action, just a simple JSON object, enclosed in curly braces, using " to wrap keys and values.
+Observation: the result of the action
+```
+
+Once all necessary information is gathered, return the following format:
+
+```
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+```[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Final Answer:[00m [92m
+NOT READY. I am unable to locate the full document using the available tools (`search_papers` and `search`). Without access to the full document, I cannot retrieve information that is likely to appear later in it, as per the instruction to "only include content supported by the tools" and "Do not hallucinate".[00m
+
+
+🚀 Crew: crew
+├── 📋 Task: d60273a0-e039-4fd1-b8ec-3ed3000e7439
+│   Assigned to: AI Assistant
+│   Status: ✅ Completed
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used search_papers (1)
+│   ├── 🔧 Used search_papers (2)
+│   ├── 🔧 Used search_papers (3)
+│   ├── 🔧 Used search (1)
+│   ├── 🔧 Used search (2)
+│   └── 🔧 Used search_papers (4)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔄 Tool Usage Started
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: d60273a0-e039-4fd1-b8ec-3ed3000e7439                                 │
+│  Agent: AI Assistant                                                        │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 51fc716b-af9b-481b-9bd1-02d1bb7d410f                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "NOT READY. I am unable to locate the full document using the available tools (`search_papers` and `search`). Without access to the full document, I cannot retrieve information that is likely to appear later in it, as per the instruction to \"only include content supported by the tools\" and \"Do not hallucinate\".", "duration_ms": 58913}
+NOT READY. I am unable to locate the full document using the available tools (`search_papers` and `search`). Without access to the full document, I cannot retrieve information that is likely to appear later in it, as per the instruction to "only include content supported by the tools" and "Do not hallucinate".

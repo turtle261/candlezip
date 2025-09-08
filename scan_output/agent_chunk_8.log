@@ -1,0 +1,1941 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\_internal\_generate_schema.py:628: UserWarning: <built-in function callable> is not a Python type (it may be an instance of an object), Pydantic will allow any object with no validation since we cannot even enforce that the input is an instance of the given type. To get rid of this error wrap the type with `pydantic.SkipValidation`.
+  warn(
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from docker-mcp.yaml
+  - Reading config from config.yaml
+- Configuration read in 23.8275ms
+- Watching registry at C:\Users\Noah\.docker\mcp\registry.yaml
+- Watching config at C:\Users\Noah\.docker\mcp\config.yaml
+- Those servers are enabled: arxiv-mcp-server, duckduckgo, wikipedia-mcp
+- Using images:
+  - mcp/arxiv-mcp-server@sha256:6dc6bba6dfed97f4ad6eb8d23a5c98ef5b7fa6184937d54b2d675801cd9dd29e
+  - mcp/duckduckgo@sha256:68eb20db6109f5c312a695fc5ec3386ad15d93ffb765a0b4eb1baf4328dec14f
+  - mcp/wikipedia-mcp@sha256:e90e3f6e3bb795f10d3d8d8ac1523f6d46d4f2ab5ac3b3a4720e1be879466472
+> Images pulled in 68.6912ms
+- Listing MCP tools...
+  - Running mcp/wikipedia-mcp with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=wikipedia-mcp -l docker-mcp-transport=stdio]
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers:ro]
+  > duckduckgo: (2 tools)
+  > wikipedia-mcp: (10 tools) (9 resourceTemplates)
+  > arxiv-mcp-server: (4 tools) (1 prompts)
+> 16 tools listed in 2.4982063s
+- Watching for configuration updates...
+> Initialized in 2.5912928s
+> Start stdio server
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: b3337f2d-3c60-4579-a09c-42ed9d1d18cd                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 07bc0b73-c8d9-4c5d-bbf8-21022f559f73
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔄 Tool Usage Started
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  1. **Analyze the document prefix:** Identify key concepts, section         │
+│  headings, and explicit references to future content such as "Section       │
+│  III-B3", "Fig. 3", "In [1]", and "In [2, Table 4]". Also note the start    │
+│  of "### B. Encoding schemes" and its subsections.                          │
+│  2. **Identify explicit future references and infer content:**              │
+│      *   **Section III-B3:** The prefix explicitly states "arithmetic       │
+│  coding as discussed in Section III-B3". The synopsis will include details  │
+│  on arithmetic coding.                                                      │
+│      *   **Fig. 3:** The prefix mentions "lossless compression block in     │
+│  Fig. 3" in the context of encoding schemes. The synopsis will describe     │
+│  Fig. 3 as a schematic illustrating the lossless compression block.         │
+│      *   **In [1]:** The prefix refers to "Cover and King" and their        │
+│  estimate of "1.3 bits/character as an estimate of the asymptotic upper     │
+│  bound on H(S)", along with an "extensive list of references and            │
+│  discussion of the literature on estimating the entropy of English prior    │
+│  to 1976".                                                                  │
+│      *   **In [2, Table 4]:** The prefix refers to "performance of several  │
+│  language models have evaluated on the text8 dataset using a metric called  │
+│  bits per character (bpc)". The synopsis will include details from this     │
+│  table.                                                                     │
+│      *   **Encoding schemes (Section III-B):**                              │
+│          *   **1) Compressing the ranks using zlib:** This scheme is named  │
+│  "LLaMA+zlib" with compression ratio "ρLLaMA+zlib".                         │
+│          *   **2) Token-by-Token Compression:** This scheme "uses a         │
+│  time-varying codebook to encode". Further details are expected.            │
+│  3. **Formulate search queries and use tools to retrieve external           │
+│  information:**                                                             │
+│      *   **For [1] (Cover and King):** Use `search_papers` with the query   │
+│  "Cover and King entropy of English 1.3 bits/character". Once the paper is  │
+│  identified, use `get_summary` or `extract_key_facts` to confirm and        │
+│  retrieve the specific details mentioned in the prefix.                     │
+│      *   **For [2] (text8 dataset, bpc metric):** Use `search_papers` with  │
+│  the query "language models performance text8 dataset bits per character".  │
+│  Once the paper is identified, use `get_summary` or `extract_key_facts` to  │
+│  find information about Table 4 and the bpc metric.                         │
+│  4. **Synthesize synopsis:** Combine all the gathered information           │
+│  (inferred and retrieved) into a concise textual synopsis, ensuring         │
+│  maximum relevance to the document and avoiding hallucination. The          │
+│  synopsis will cover the likely future content, including facts,            │
+│  equations, definitions, datasets, and references.                          │
+│                                                                             │
+│  **Strategic use of tools:**                                                │
+│  *   `search_papers`: To locate the external papers referenced by [1] and   │
+│  [2].                                                                       │
+│  *   `get_summary` or `extract_key_facts`: To efficiently extract the       │
+│  specific information from the identified papers [1] and [2] as mentioned   │
+│  in the document prefix. I will prioritize `extract_key_facts` if the       │
+│  information is very specific, otherwise `get_summary` for a broader        │
+│  overview. If neither provides sufficient detail, `read_paper` would be a   │
+│  fallback, but given the specific mentions, `extract_key_facts` or          │
+│  `get_summary` should suffice.                                              │
+│  *   Inference: For internal document references (Section III-B3, Fig. 3,   │
+│  and further details on encoding schemes), I will rely on the explicit      │
+│  mentions and context provided in the document prefix, as there are no      │
+│  tools to directly access future sections of the current document.          │
+│                                                                             │
+│  **Expected outcome:** A concise textual synopsis detailing:                │
+│  *   The mechanism of arithmetic coding (Section III-B3).                   │
+│  *   The schematic of the lossless compression block (Fig. 3).              │
+│  *   Further details on the "Token-by-Token Compression" scheme, including  │
+│  the use of a time-varying codebook.                                        │
+│  *   Information from [1] by Cover and King, specifically their 1.3         │
+│  bits/character estimate for H(S) and their review of literature on         │
+│  English entropy.                                                           │
+│  *   Information from [2, Table 4] regarding the performance of language    │
+│  models on the text8 dataset using the bits per character (bpc) metric.     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Task:[00m [92mYou act as a deterministic research agent. Given the observed prefix of a document, use available MCP tools to retrieve information that is likely to appear later in the same document. Prefer authoritative sources. Produce a concise textual synopsis of the likely future content (facts, equations, definitions, datasets, references), suitable for conditioning a language model compressor. Maximize relevance to the document. Do not hallucinate; only include content supported by the tools.
+
+Document prefix (UTF-8 text):
+intuition, but better compression can be achieved by directly using the probabilities produced by the LLM along with arithmetic coding as discussed in Section III-B3.
+
+## III. COMPRESSION USING LLMS
+
+Let s denote a sentence from the English language composed of Nc letters, where each letter is assumed to be from the alphabet S. We assume that we have a dictionary X = [1, D] of D tokens. We first parse s into a sequence of NT tokens denoted by x = x1, x2, . . . , xi−1, xi, xi+1, . . . xNT , where xi ∈X. There is a one-to-one mapping between s and x and hence, compressing s is the same as compressing x. xi’s can be thought of as realizations of the random variable denoted by the upper case letter Xi.
+
+A language model with memory M is a predictor that operates as follows. At epoch i, it accepts tokens xi−M, xi−M+1, . . . , xi−1 and produces a probability mass function for the next token in the sequence conditioned on the past M tokens given by qi(xi) := Pr(Xi = xi|xi−1, xi−2, . . . , xi−M), ∀xi ∈X. The PMF vector qi := [qi(1), qi(2), . . . , qi(D)]T is sorted in descending order and let the sorted PMF vector be denoted by ˜qi. Let γi : X →X be a permutation on the integers from 1 to D such that ˜qi(γi(j)) = qi(j), ∀j ∈X.
+
+That is, γi(j) is the rank of the token j at epoch i. We define the rank of the input sequence at epoch i as the rank of the token xi at epoch i, ri := γi(xi). The sequence {ri}NT i=1 is compressed by a lossless compression algorithm (such as zlib) to produce Nb bits which are the final bit representation of the source. A schematic of this scheme is shown in Fig. 4. In general, the lossless compression algorithm may use the sequence of PMF vectors qi’s in addition to the sequence of ranks.
+
+The main metric of interest is the compression ratio ρ defined as
+
+ρ := Nb / Nc bits/character.
+
+**Fig. 4.** Schematic showing the prediction at epoch i.
+
+### A. Entropy bounds
+
+Let S ∈S∞ be a random process that represents language input. The nth character in the sequence is denoted by Sn, whereas the string of characters from the beginning to the nth character is expressed as Sn. The tokenizer parses the input string and maps it to a sequence of tokens X = X1, X2, . . . using a variable-length mapping. In this sequence, Xi is the ith token. The number of characters employed to generate Xi depends on the realization of the random process and, as such, we introduce random variable Bi to identify the number of characters contained in the ith token. Motivated by practical considerations, we only admit tokenizers for which Bi ≥1 and Bi is uniformly bounded, with Bi < B < ∞; these are characteristics of commonly used tokenizers. An immediate consequence of this framework is that, as the number of tokens grows unbounded NT →∞, the number of characters must also approach infinity Nc →∞. Formally, consider the tokenizer function T : SN →X N operating on infinite symbol sequences; that is, T (s) = x where s is an infinite sequence in S∞. For natural number, i ∈N, define mi : SN →N to be the (time) index during which the tokenizer working sequentially on an input sequence s outputs its ith token. Specifically, suppose s is given, then
+
+mi(s) = min n {length (T (sn)) ≥i} . (1)
+
+We note that, by construction, limn→∞ length (T (sn)) = ∞ and, as such, mi(·) is well-defined. It may be pertinent to stress that the tokenizer function applied to truncated sequences is not necessarily injective because multiple finite input series can map to the same output. This phenomenon is a consequence of the fact that, at any point in time, a tokenizer working sequentially may be waiting for an additional symbol before it can unambiguously select the next output token, i.e., there may be instances where T (sn) = T (sn+1). However, if we restrict the input series to input indices when a new token is produced, then the restricted mapping becomes injective. That is, suppose T (s) = x, then the only (finite) series of input symbols in the restricted set for which T (yn) = xi is smi(s). Given a fixed sequence s, we can express the number of characters contained in a token as
+
+bi = mi(s) − mi−1(s)
+
+with initial condition m−1 = 0. Consequently, the number of characters embedded in the first NT tokens for a random input becomes Nc = �NT i=1 Bi.
+
+Having established these properties, we turn to the relation between H(S) and H(X). We make the assumption that {Sk}∞ k=1, {Bi}∞ i=1, and {Xi}∞ i=1 are stationary and ergodic processes. We know from the Shannon-McMillan-Breiman Theorem [8] that
+
+−1/n log2 pSn(S1, . . . , Sn) = −1/n log2 pSn(Sn) → H(S) almost surely. (2)
+
+Let ΩS be the collection of ω ∈Ω for which this limit holds. In an analogous manner, the Shannon-McMillan-Breiman theorem implies
+
+−1/i log2 pXi(X1, . . . , Xi) = −1/i log2 pXi(Xi) → H(X) almost surely. (3)
+
+Define ΩX as the collection of ω ∈Ω for which this limit holds. Finally, by construction, we have
+
+lim i→∞ mi(S)/i = E [B] almost surely. (4)
+
+Set ΩB to be the set of ω ∈Ω for which this limit holds. For any ω ∈ΩS ∩ ΩX ∩ ΩB, we deduce that
+
+H(S) = lim k→∞ −1/k log2 pSk(Sk(ω))
+
+= lim i→∞ −1/li log2 pSli(Sli(ω))
+
+= lim i→∞ −1/li log2 Pr (Xi = T (Sli(ω)))
+
+= −1/E[B] lim i→∞ 1/i log2 Pr (Xi = xi) = H(X)/E[B] .
+
+The first equality follows from (2). The second equality is a consequence of the fact that {li = mi(S(ω))|i ∈N} is an infinite subset of the natural numbers. Since a subsequence of a convergent sequence must converge to the same limit, we immediately gather that this alternate form approaches H(S). The third equality is a consequence of the equivalence between the following two events, {ω ∈Ω|Xi(ω) = xi} = {ω ∈Ω|T (Smi(S(ω))) = xi}. This is characteristic of the tokenization process, and it is a consequence of the correspondence described above. The last step holds because we are considering an ω ∈ΩB. The sets ΩS, ΩX, and ΩB each have probability one; this implies that their intersection also has probability one, Thus, we must conclude that
+
+H(S) = H(X)/E[B] almost surely.
+
+As a corollary to this result, any upper bound on H(X) produces an upper bound on H(S). This is the property we wish to exploit.
+
+Then, from the results of [1], we can see that
+
+Pr ( H(X) ≤ lim NT →∞ −1/NT �NT i=1 log2 qi(Xi) ) = 1, (5)
+
+where qi(·) is the output PMF from the language model. Therefore, an asymptotic upper bound on the entropy rate H(S) is given by
+
+H(S) ≤ limNT →∞ −1/NT �NT i=1 log2 qi(Xi) / E[B] . (6)
+
+We refer to the expression in the right hand side of (6) as the asymptotic upper bound on H(S) and denote it by Hub. The numerator in (6) represents the average number of bits required to represent the tokens XNT and the denominator in (6) is the average number of charcaters per token. Hence, the unit for H(S) is bits/character. In [1], Cover and King provide 1.3 bits/character as an estimate of the asymptotic upper bound on H(S). They also provide an extensive list of references and discussion of the literature on estimating the entropy of English prior to 1976. Very recently, in [2, Table 4], the performance of several language models have evaluated on the text8 dataset using a metric called bits per character (bpc). We believe bpc is the same as the asymptotic upper bound in this paper.
+
+### B. Encoding schemes
+
+We consider three schemes for the lossless compression block in Fig. 3.
+
+1) **Compressing the ranks using zlib:** The first scheme uses the zlib compression algorithm to encode the sequence of ranks. We refer to this scheme as LLaMA+zlib and denote the compression ratio of this scheme by ρLLaMA+zlib.
+
+2) **Token-by-Token Compression:** The second scheme uses a token-by-token lossless compression scheme which uses a time-varying codebook to encode
+
+Output: A concise synopsis (plain text).
+
+Reasoning Plan:
+1. **Analyze the document prefix:** Identify key concepts, section headings, and explicit references to future content such as "Section III-B3", "Fig. 3", "In [1]", and "In [2, Table 4]". Also note the start of "### B. Encoding schemes" and its subsections.
+2. **Identify explicit future references and infer content:**
+    *   **Section III-B3:** The prefix explicitly states "arithmetic coding as discussed in Section III-B3". The synopsis will include details on arithmetic coding.
+    *   **Fig. 3:** The prefix mentions "lossless compression block in Fig. 3" in the context of encoding schemes. The synopsis will describe Fig. 3 as a schematic illustrating the lossless compression block.
+    *   **In [1]:** The prefix refers to "Cover and King" and their estimate of "1.3 bits/character as an estimate of the asymptotic upper bound on H(S)", along with an "extensive list of references and discussion of the literature on estimating the entropy of English prior to 1976".
+    *   **In [2, Table 4]:** The prefix refers to "performance of several language models have evaluated on the text8 dataset using a metric called bits per character (bpc)". The synopsis will include details from this table.
+    *   **Encoding schemes (Section III-B):**
+        *   **1) Compressing the ranks using zlib:** This scheme is named "LLaMA+zlib" with compression ratio "ρLLaMA+zlib".
+        *   **2) Token-by-Token Compression:** This scheme "uses a time-varying codebook to encode". Further details are expected.
+3. **Formulate search queries and use tools to retrieve external information:**
+    *   **For [1] (Cover and King):** Use `search_papers` with the query "Cover and King entropy of English 1.3 bits/character". Once the paper is identified, use `get_summary` or `extract_key_facts` to confirm and retrieve the specific details mentioned in the prefix.
+    *   **For [2] (text8 dataset, bpc metric):** Use `search_papers` with the query "language models performance text8 dataset bits per character". Once the paper is identified, use `get_summary` or `extract_key_facts` to find information about Table 4 and the bpc metric.
+4. **Synthesize synopsis:** Combine all the gathered information (inferred and retrieved) into a concise textual synopsis, ensuring maximum relevance to the document and avoiding hallucination. The synopsis will cover the likely future content, including facts, equations, definitions, datasets, and references.
+
+**Strategic use of tools:**
+*   `search_papers`: To locate the external papers referenced by [1] and [2].
+*   `get_summary` or `extract_key_facts`: To efficiently extract the specific information from the identified papers [1] and [2] as mentioned in the document prefix. I will prioritize `extract_key_facts` if the information is very specific, otherwise `get_summary` for a broader overview. If neither provides sufficient detail, `read_paper` would be a fallback, but given the specific mentions, `extract_key_facts` or `get_summary` should suffice.
+*   Inference: For internal document references (Section III-B3, Fig. 3, and further details on encoding schemes), I will rely on the explicit mentions and context provided in the document prefix, as there are no tools to directly access future sections of the current document.
+
+**Expected outcome:** A concise textual synopsis detailing:
+*   The mechanism of arithmetic coding (Section III-B3).
+*   The schematic of the lossless compression block (Fig. 3).
+*   Further details on the "Token-by-Token Compression" scheme, including the use of a time-varying codebook.
+*   Information from [1] by Cover and King, specifically their 1.3 bits/character estimate for H(S) and their review of literature on English entropy.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"max_results":5,"query":"\"Cover and King\" \"entropy of English\" \"1.3 bits/character\""}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 1.9088461s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search with arguments: {"max_results":5,"query":"Cover King entropy English"}
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  > Calling tool search took: 2.4627787s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool fetch_content with arguments: {"url":"https://ieeexplore.ieee.org/document/1055912"}
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  > Calling tool fetch_content took: 1.6426129s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+*   Information from [2, Table 4] regarding the performance of language models on the text8 dataset using the bits per character (bpc) metric.[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mAction: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"\\\"Cover and King\\\" \\\"entropy of English\\\" \\\"1.3 bits/character\\\"\", \"max_results\": 5}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 4,
+  "papers": [
+    {
+      "id": "0911.2284v2",
+      "title": "A New Look at the Classical Entropy of Written English",
+      "authors": [
+        "Fabio G. Guerrero"
+      ],
+      "abstract": "A simple method for finding the entropy and redundancy of a reasonable long\nsample of English text by direct computer processing and from first principles\naccording to Shannon theory is presented. As an example, results on the entropy\nof the English language have been obtained based on a total of 20.3 million\ncharacters of written English, considering symbols from one to five hundred\ncharacters in length. Besides a more realistic value of the entropy of English,\na new perspective on some classic entropy-related concepts is presented. This\nmethod can also be extended to other Latin languages. Some implications for\npractical applications such as plagiarism-detection software, and the minimum\nnumber of words that should be used in social Internet network messaging, are\ndiscussed.",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2009-11-12T01:48:12+00:00",
+      "url": "http://arxiv.org/pdf/0911.2284v2",
+      "resource_uri": "arxiv://0911.2284v2"
+    },
+    {
+      "id": "1805.08929v1",
+      "title": "Determining the Number of Samples Required to Estimate Entropy in Natural Sequences",
+      "authors": [
+        "Andrew D. Back",
+        "Daniel Angus",
+        "Janet Wiles"
+      ],
+      "abstract": "Calculating the Shannon entropy for symbolic sequences has been widely\nconsidered in many fields. For descriptive statistical problems such as\nestimating the N-gram entropy of English language text, a common approach is to\nuse as much data as possible to obtain progressively more accurate estimates.\nHowever in some instances, only short sequences may be available. This gives\nrise to the question of how many samples are needed to compute entropy. In this\npaper, we examine this problem and propose a method for estimating the number\nof samples required to compute Shannon entropy for a set of ranked symbolic\nnatural events. The result is developed using a modified Zipf-Mandelbrot law\nand the Dvoretzky-Kiefer-Wolfowitz inequality, and we propose an algorithm\nwhich yields an estimate for the minimum number of samples required to obtain\nan estimate of entropy with a given confidence level and degree of accuracy.",
+      "categories": [
+        "cs.IT",
+        "math.IT",
+        "math.ST",
+        "physics.data-an",
+        "stat.TH"
+      ],
+      "published": "2018-05-23T01:44:29+00:00",
+      "url": "http://arxiv.org/pdf/1805.08929v1",
+      "resource_uri": "arxiv://1805.08929v1"
+    },
+    {
+      "id": "2107.12848v5",
+      "title": "The Rising Entropy of English in the Attention Economy",
+      "authors": [
+        "Charlie Pilgrim",
+        "Weisi Guo",
+        "Thomas T. Hills"
+      ],
+      "abstract": "We present evidence that the word entropy of American English has been rising\nsteadily since around 1900, contrary to predictions from existing\nsociolinguistic theories. We also find differences in word entropy between\nmedia categories, with short-form media such as news and magazines having\nhigher entropy than long-form media, and social media feeds having higher\nentropy still. To explain these results we develop an ecological model of the\nattention economy that combines ideas from Zipf's law and information foraging.\nIn this model, media consumers maximize information utility rate taking into\naccount the costs of information search, while media producers adapt to\ntechnologies that reduce search costs, driving them to generate higher entropy\ncontent in increasingly shorter formats.",
+      "categories": [
+        "econ.GN",
+        "q-fin.EC"
+      ],
+      "published": "2021-07-27T14:31:50+00:00",
+      "url": "http://arxiv.org/pdf/2107.12848v5",
+      "resource_uri": "arxiv://2107.12848v5"
+    },
+    {
+      "id": "2306.04050v2",
+      "title": "LLMZip: Lossless Text Compression using Large Language Models",
+      "authors": [
+        "Chandra Shekhara Kaushik Valmeekam",
+        "Krishna Narayanan",
+        "Dileep Kalathil",
+        "Jean-Francois Chamberland",
+        "Srinivas Shakkottai"
+      ],
+      "abstract": "We provide new estimates of an asymptotic upper bound on the entropy of\nEnglish using the large language model LLaMA-7B as a predictor for the next\ntoken given a window of past tokens. This estimate is significantly smaller\nthan currently available estimates in \\cite{cover1978convergent},\n\\cite{lutati2023focus}. A natural byproduct is an algorithm for lossless\ncompression of English text which combines the prediction from the large\nlanguage model with a lossless compression scheme. Preliminary results from\nlimited experiments suggest that our scheme outperforms state-of-the-art text\ncompression schemes such as BSC, ZPAQ, and paq8h.",
+      "categories": [
+        "cs.IT",
+        "cs.CL",
+        "cs.LG",
+        "math.IT"
+      ],
+      "published": "2023-06-06T22:42:00+00:00",
+      "url": "http://arxiv.org/pdf/2306.04050v2",
+      "resource_uri": "arxiv://2306.04050v2"
+    }
+  ]
+}[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The search results did not directly return the "Cover and King" paper with the exact title or a clear abstract mentioning "1.3 bits/character" as a direct estimate from their work. However, the last paper, "LLMZip: Lossless Text Compression using Large Language Models" (2306.04050v2), explicitly references `\cite{cover1978convergent}` and states that its estimate is "significantly smaller than currently available estimates in \cite{cover1978convergent}". This strongly suggests that `cover1978convergent` is the paper [1] being referred to. I will try to find the full reference for `cover1978convergent` and then search for that specific paper.
+Let's try a more general search for "Cover King entropy English" to see if I can find the exact paper.[00m
+[95m## Using tool:[00m [92msearch[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"Cover King entropy English\", \"max_results\": 5}"[00m
+[95m## Tool Output:[00m [92m
+Found 5 search results:
+
+1. A convergent gambling estimate of the entropy of English
+   URL: https://ieeexplore.ieee.org/document/1055912
+   Summary: In his original paper on the subject, Shannon found upper and lower bounds for theentropyof printedEnglishbased on the number of trials required for a subject to guess subsequent symbols in a given text. The guessing approach precludes asymptotic consistency of either the upper or lower bounds except for degenerate ergodic processes. Shannon's technique of guessing the next symbol is ...
+
+2. [CK+78] A Convergent Gambling Estimate of the Entropy of English
+   URL: https://www.cs.umb.edu/~pruet/bib2html/entry-cover78convergent.html
+   Summary: cover78convergent (Article) Author (s)CoverT. andKingR. Title « A Convergent Gambling Estimate of theEntropyofEnglish» Journal IEEE Transactions on Information Theory Volume 24 Number 4 Page (s) 413--421 Year 1978 BibTeX code
+
+3. PDFIEEE TRANSACTIONS ON INFORMATION THEORY, VOL. NO. JULY A Convergent ...
+   URL: https://isl.stanford.edu/~cover/papers/transIT/0413cove.pdf
+   Summary: II. SHANNON'S ESTIMATE A different estimation technique can be found in New- man and Gerstman [16]. This paper has been quoted Shannon [l] found an upper bound to theentropyof printedEnglishand a lower bound to the Nth order n psychology literature, but the theory does not include a proof of the consistency of itsentropyestimate.
+
+4. PDFElements of Information Theory. by Thomas M. Cover; Joy A. Thomas
+   URL: https://pages.stern.nyu.edu/~dbackus/BCZ/entropy/Kieffer_CoverThomas_review_SIAM_94.pdf
+   Summary: Chapter6, entitled Gambling and Data Com- pression, gives an account of theCover-Kinggambling estimate of theentropyof theEnglishlanguage.
+
+5. A Convergent Gambling Estimate of the Entropy of English | BibSonomy
+   URL: https://www.bibsonomy.org/bibtex/2f3f355029c18800fbd00cfd6ccb5261d/nlp?lang=en
+   Summary: A Convergent Gambling Estimate of theEntropyofEnglishT.Cover, and R.King. IEEE Transactions on Information Theory 24 (4): 413--421 (1978
+[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92m)
+Thought: The search results confirm that the paper [1] is likely "A Convergent Gambling Estimate of the Entropy of English" by T. Cover and R. King, published in IEEE Transactions on Information Theory, 1978. The document prefix mentions "1.3 bits/character as an estimate of the asymptotic upper bound on H(S)" and "an extensive list of references and discussion of the literature on estimating the entropy of English prior to 1976." I will try to get a summary of this paper to confirm these details.[00m
+[95m## Using tool:[00m [92mfetch_content[00m
+[95m## Tool Input:[00m [92m
+"{\"url\": \"https://ieeexplore.ieee.org/document/1055912\"}"[00m
+[95m## Tool Output:[00m [92m
+A convergent gambling estimate of the entropy of English | IEEE Journals & Magazine | IEEE Xplore IEEE Account Change Username/Password Update Address Purchase Details Payment Options Order History View Purchased Documents Profile Information Communications Preferences Profession and Education Technical Interests Need Help? US & Canada: +1 800 678 4333 Worldwide: +1 732 981 0060 Contact & Support About IEEE Xplore Contact Us Help Accessibility Terms of Use Nondiscrimination Policy Sitemap Privacy & Opting Out of Cookies A not-for-profit organization, IEEE is the world's largest technical professional organization dedicated to advancing technology for the benefit of humanity.© Copyright 2025 IEEE - All rights reserved. Use of this web site signifies your agreement to the terms and conditions.
+
+
+You ONLY have access to the following tools, and should NEVER make up tools that are not listed here:
+
+Tool Name: download_paper
+Tool Arguments: {'properties': {'check_status': {'anyOf': [], 'default': False, 'description': 'Set to true to only check the status of an ongoing or completed conversion without starting a new download. Use this to monitor long-running conversions or verify if a paper is already available.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to download (e.g., '2301.07041', '1706.03762', 'cs.AI/0301001'). This can be found in search results or arXiv URLs. The paper must exist on arXiv.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Download and convert an arXiv paper to readable markdown format for analysis and reading. This tool fetches the PDF from arXiv, converts it to markdown using advanced text extraction, and stores it locally for immediate access. Use this tool when you need to read, analyze, or work with the full text content of a specific paper. The conversion process extracts text, preserves formatting, and handles mathematical equations. Returns the full paper content directly upon successful completion.
+Tool Name: extract_key_facts
+Tool Arguments: {'properties': {'count': {'anyOf': [], 'default': 5, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Count'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}, 'topic_within_article': {'anyOf': [], 'default': '', 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Topic Within Article'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Extract key facts from a Wikipedia article, optionally focused on a topic.
+Tool Name: fetch_content
+Tool Arguments: {'properties': {'url': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Url', 'type': 'string'}}, 'required': ['url'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Fetch and parse content from a webpage URL.
+
+    Args:
+        url: The webpage URL to fetch content from
+        ctx: MCP context for logging
+    
+Tool Name: get_article
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the full content of a Wikipedia article.
+Tool Name: get_coordinates
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the coordinates of a Wikipedia article.
+Tool Name: get_links
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the links contained within a Wikipedia article.
+Tool Name: get_related_topics
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get topics related to a Wikipedia article based on links and categories.
+Tool Name: get_sections
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the sections of a Wikipedia article.
+Tool Name: get_summary
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article.
+Tool Name: list_papers
+Tool Arguments: {'properties': {}, 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: List all previously downloaded and converted papers that are available in local storage for immediate reading and analysis. This tool shows you what papers you already have access to without needing to download them again. Each paper in the list includes metadata like title, authors, abstract, and direct links. Use this tool to see your paper library, check if a specific paper is already downloaded, or browse previously acquired research papers before downloading new ones.
+Tool Name: read_paper
+Tool Arguments: {'properties': {'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to read (e.g., '2301.07041', '1706.03762'). This must be a paper that has been previously downloaded and converted to markdown format. Use list_papers to see available papers.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Read the full text content of a previously downloaded and converted research paper in clean markdown format. This tool retrieves the complete paper content including abstract, introduction, methodology, results, conclusions, and references. The content is formatted for easy reading and analysis, with preserved mathematical equations and structured sections. Use this tool when you need to access the full text of a paper for detailed study, quotation, analysis, or research. The paper must have been previously downloaded using the download_paper tool.
+Tool Name: search
+Tool Arguments: {'properties': {'max_results': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Results'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Search DuckDuckGo and return formatted results.
+
+    Args:
+        query: The search query string
+        max_results: Maximum number of results to return (default: 10)
+        ctx: MCP context for logging
+    
+Tool Name: search_papers
+Tool Arguments: {'properties': {'categories': {'anyOf': [], 'default': None, 'description': "Strongly recommended: arXiv categories to focus search (e.g., ['cs.AI', 'cs.MA'] for agent research, ['cs.LG'] for ML, ['cs.CL'] for NLP, ['cs.CV'] for vision). Greatly improves relevance.", 'enum': None, 'items': {'type': 'string'}, 'properties': {}, 'title': ''}, 'date_from': {'anyOf': [], 'default': None, 'description': "Start date for papers (YYYY-MM-DD format). Use to find recent work, e.g., '2023-01-01' for last 2 years.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'date_to': {'anyOf': [], 'default': None, 'description': "End date for papers (YYYY-MM-DD format). Use with date_from to find historical work, e.g., '2020-12-31' for older research.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'max_results': {'anyOf': [], 'default': None, 'description': 'Maximum number of results to return (default: 10, max: 50). Use 15-20 for comprehensive searches.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'query': {'anyOf': [], 'description': 'Search query using quoted phrases for exact matches (e.g., \'"machine learning" OR "deep learning"\') or specific technical terms. Avoid overly broad or generic terms.', 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}, 'sort_by': {'anyOf': [], 'default': None, 'description': "Sort results by 'relevance' (most relevant first, default) or 'date' (newest first). Use 'relevance' for focused searches, 'date' for recent developments.", 'enum': ['relevance', 'date'], 'items': None, 'properties': {}, 'title': ''}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search for papers on arXiv with advanced filtering and query optimization.
+
+QUERY CONSTRUCTION GUIDELINES:
+- Use QUOTED PHRASES for exact matches: "multi-agent systems", "neural networks", "machine learning"
+- Combine related concepts with OR: "AI agents" OR "software agents" OR "intelligent agents"  
+- Use field-specific searches for precision:
+  - ti:"exact title phrase" - search in titles only
+  - au:"author name" - search by author
+  - abs:"keyword" - search in abstracts only
+- Use ANDNOT to exclude unwanted results: "machine learning" ANDNOT "survey"
+- For best results, use 2-4 core concepts rather than long keyword lists
+
+ADVANCED SEARCH PATTERNS:
+- Field + phrase: ti:"transformer architecture" for papers with exact title phrase
+- Multiple fields: au:"Smith" AND ti:"quantum" for author Smith's quantum papers  
+- Exclusions: "deep learning" ANDNOT ("survey" OR "review") to exclude survey papers
+- Broad + narrow: "artificial intelligence" AND (robotics OR "computer vision")
+
+CATEGORY FILTERING (highly recommended for relevance):
+- cs.AI: Artificial Intelligence
+- cs.MA: Multi-Agent Systems  
+- cs.LG: Machine Learning
+- cs.CL: Computation and Language (NLP)
+- cs.CV: Computer Vision
+- cs.RO: Robotics
+- cs.HC: Human-Computer Interaction
+- cs.CR: Cryptography and Security
+- cs.DB: Databases
+
+EXAMPLES OF EFFECTIVE QUERIES:
+- ti:"reinforcement learning" with categories: ["cs.LG", "cs.AI"] - for RL papers by title
+- au:"Hinton" AND "deep learning" with categories: ["cs.LG"] - for Hinton's deep learning work
+- "multi-agent" ANDNOT "survey" with categories: ["cs.MA"] - exclude survey papers
+- abs:"transformer" AND ti:"attention" with categories: ["cs.CL"] - attention papers with transformer abstracts
+
+DATE FILTERING: Use YYYY-MM-DD format for historical research:
+- date_to: "2015-12-31" - for foundational/classic work (pre-2016)
+- date_from: "2020-01-01" - for recent developments (post-2020)
+- Both together for specific time periods
+
+RESULT QUALITY: Results sorted by RELEVANCE (most relevant papers first), not just newest papers.
+This ensures you get the most pertinent results regardless of publication date.
+
+TIPS FOR FOUNDATIONAL RESEARCH:
+- Use date_to: "2010-12-31" to find classic papers on BDI, SOAR, ACT-R
+- Combine with field searches: ti:"BDI" AND abs:"belief desire intention"  
+- Try author searches: au:"Rao" AND "BDI" for Anand Rao's foundational BDI work
+Tool Name: search_wikipedia
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search Wikipedia for articles matching a query.
+Tool Name: summarize_article_for_query
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 250, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['query', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article tailored to a specific query.
+Tool Name: summarize_article_section
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 150, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'section_title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Section Title', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['section_title', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a specific section of a Wikipedia article.
+
+IMPORTANT: Use the following format in your response:
+
+```
+Thought: you should always think about what to do
+Action: the action to take, only one name of [download_paper, extract_key_facts, fetch_content, get_article, get_coordinates, get_links, get_related_topics, get_sections, get_summary, list_papers, read_paper, search, search_papers, search_wikipedia, summarize_article_for_query, summarize_article_section], just the name, exactly as it's written.
+Action Input: the input to the action, just a simple JSON object, enclosed in curly braces, using " to wrap keys and values.
+Observation: the result of the action
+```
+
+Once all necessary information is gathered, return the following format:
+
+```
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+```[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Final Answer:[00m [92m
+
+[00m
+
+
+🚀 Crew: crew
+├── 📋 Task: 07bc0b73-c8d9-4c5d-bbf8-21022f559f73
+│   Assigned to: AI Assistant
+│   Status: ✅ Completed
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used search_papers (1)
+│   ├── 🔧 Used search (1)
+│   └── 🔧 Used fetch_content (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔄 Tool Usage Started
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: 07bc0b73-c8d9-4c5d-bbf8-21022f559f73                                 │
+│  Agent: AI Assistant                                                        │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: b3337f2d-3c60-4579-a09c-42ed9d1d18cd                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "\n", "duration_ms": 48928}
+
+
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\_internal\_generate_schema.py:628: UserWarning: <built-in function callable> is not a Python type (it may be an instance of an object), Pydantic will allow any object with no validation since we cannot even enforce that the input is an instance of the given type. To get rid of this error wrap the type with `pydantic.SkipValidation`.
+  warn(
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from docker-mcp.yaml
+  - Reading config from config.yaml
+- Configuration read in 19.4298ms
+- Watching registry at C:\Users\Noah\.docker\mcp\registry.yaml
+- Watching config at C:\Users\Noah\.docker\mcp\config.yaml
+- Those servers are enabled: arxiv-mcp-server, duckduckgo, wikipedia-mcp
+- Using images:
+  - mcp/arxiv-mcp-server@sha256:6dc6bba6dfed97f4ad6eb8d23a5c98ef5b7fa6184937d54b2d675801cd9dd29e
+  - mcp/duckduckgo@sha256:68eb20db6109f5c312a695fc5ec3386ad15d93ffb765a0b4eb1baf4328dec14f
+  - mcp/wikipedia-mcp@sha256:e90e3f6e3bb795f10d3d8d8ac1523f6d46d4f2ab5ac3b3a4720e1be879466472
+> Images pulled in 71.01ms
+- Listing MCP tools...
+  - Running mcp/wikipedia-mcp with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=wikipedia-mcp -l docker-mcp-transport=stdio]
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers:ro]
+  > duckduckgo: (2 tools)
+  > wikipedia-mcp: (10 tools) (9 resourceTemplates)
+  > arxiv-mcp-server: (4 tools) (1 prompts)
+> 16 tools listed in 2.2932755s
+- Watching for configuration updates...
+> Initialized in 2.3847216s
+> Start stdio server
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: f983caed-4ee8-4578-a153-d66d709d60d7                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: b82fb5ce-6b0b-4799-9b53-1d61cc45b919
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔄 Tool Usage Started
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  1. **Analyze the document prefix:** Identify key concepts, section         │
+│  headings, and explicit references to future content such as "Section       │
+│  III-B3", "Fig. 3", "In [1]", and "In [2, Table 4]". Also note the start    │
+│  of "### B. Encoding schemes" and its subsections.                          │
+│  2. **Identify explicit future references and infer content:**              │
+│      *   **Section III-B3:** The prefix explicitly states "arithmetic       │
+│  coding as discussed in Section III-B3". The synopsis will include details  │
+│  on arithmetic coding.                                                      │
+│      *   **Fig. 3:** The prefix mentions "lossless compression block in     │
+│  Fig. 3" in the context of encoding schemes. The synopsis will describe     │
+│  Fig. 3 as a schematic illustrating the lossless compression block.         │
+│      *   **In [1]:** The prefix refers to "Cover and King" and their        │
+│  estimate of "1.3 bits/character as an estimate of the asymptotic upper     │
+│  bound on H(S)", along with an "extensive list of references and            │
+│  discussion of the literature on estimating the entropy of English prior    │
+│  to 1976".                                                                  │
+│      *   **In [2, Table 4]:** The prefix refers to "performance of several  │
+│  language models have evaluated on the text8 dataset using a metric called  │
+│  bits per character (bpc)". The synopsis will include details from this     │
+│  table.                                                                     │
+│      *   **Encoding schemes (Section III-B):**                              │
+│          *   **1) Compressing the ranks using zlib:** This scheme is named  │
+│  "LLaMA+zlib" with compression ratio "ρLLaMA+zlib".                         │
+│          *   **2) Token-by-Token Compression:** This scheme "uses a         │
+│  time-varying codebook to encode". Further details are expected.            │
+│  3. **Formulate search queries and use tools to retrieve external           │
+│  information:**                                                             │
+│      *   **For [1] (Cover and King):** Use `search_papers` with the query   │
+│  "Cover and King entropy of English 1.3 bits/character". Once the paper is  │
+│  identified, use `get_summary` or `extract_key_facts` to confirm and        │
+│  retrieve the specific details mentioned in the prefix.                     │
+│      *   **For [2] (text8 dataset, bpc metric):** Use `search_papers` with  │
+│  the query "language models performance text8 dataset bits per character".  │
+│  Once the paper is identified, use `get_summary` or `extract_key_facts` to  │
+│  find information about Table 4 and the bpc metric.                         │
+│  4. **Synthesize synopsis:** Combine all the gathered information           │
+│  (inferred and retrieved) into a concise textual synopsis, ensuring         │
+│  maximum relevance to the document and avoiding hallucination. The          │
+│  synopsis will cover the likely future content, including facts,            │
+│  equations, definitions, datasets, and references.                          │
+│                                                                             │
+│  **Strategic use of tools:**                                                │
+│  *   `search_papers`: To locate the external papers referenced by [1] and   │
+│  [2].                                                                       │
+│  *   `get_summary` or `extract_key_facts`: To efficiently extract the       │
+│  specific information from the identified papers [1] and [2] as mentioned   │
+│  in the document prefix. I will prioritize `extract_key_facts` if the       │
+│  information is very specific, otherwise `get_summary` for a broader        │
+│  overview. If neither provides sufficient detail, `read_paper` would be a   │
+│  fallback, but given the specific mentions, `extract_key_facts` or          │
+│  `get_summary` should suffice.                                              │
+│  *   Inference: For internal document references (Section III-B3, Fig. 3,   │
+│  and further details on encoding schemes), I will rely on the explicit      │
+│  mentions and context provided in the document prefix, as there are no      │
+│  tools to directly access future sections of the current document.          │
+│                                                                             │
+│  **Expected outcome:** A concise textual synopsis detailing:                │
+│  *   The mechanism of arithmetic coding (Section III-B3).                   │
+│  *   The schematic of the lossless compression block (Fig. 3).              │
+│  *   Further details on the "Token-by-Token Compression" scheme, including  │
+│  the use of a time-varying codebook.                                        │
+│  *   Information from [1] by Cover and King, specifically their 1.3         │
+│  bits/character estimate for H(S) and their review of literature on         │
+│  English entropy.                                                           │
+│  *   Information from [2, Table 4] regarding the performance of language    │
+│  models on the text8 dataset using the bits per character (bpc) metric.     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Task:[00m [92mYou act as a deterministic research agent. Given the observed prefix of a document, use available MCP tools to retrieve information that is likely to appear later in the same document. Prefer authoritative sources. Produce a concise textual synopsis of the likely future content (facts, equations, definitions, datasets, references), suitable for conditioning a language model compressor. Maximize relevance to the document. Do not hallucinate; only include content supported by the tools.
+
+Document prefix (UTF-8 text):
+intuition, but better compression can be achieved by directly using the probabilities produced by the LLM along with arithmetic coding as discussed in Section III-B3.
+
+## III. COMPRESSION USING LLMS
+
+Let s denote a sentence from the English language composed of Nc letters, where each letter is assumed to be from the alphabet S. We assume that we have a dictionary X = [1, D] of D tokens. We first parse s into a sequence of NT tokens denoted by x = x1, x2, . . . , xi−1, xi, xi+1, . . . xNT , where xi ∈X. There is a one-to-one mapping between s and x and hence, compressing s is the same as compressing x. xi’s can be thought of as realizations of the random variable denoted by the upper case letter Xi.
+
+A language model with memory M is a predictor that operates as follows. At epoch i, it accepts tokens xi−M, xi−M+1, . . . , xi−1 and produces a probability mass function for the next token in the sequence conditioned on the past M tokens given by qi(xi) := Pr(Xi = xi|xi−1, xi−2, . . . , xi−M), ∀xi ∈X. The PMF vector qi := [qi(1), qi(2), . . . , qi(D)]T is sorted in descending order and let the sorted PMF vector be denoted by ˜qi. Let γi : X →X be a permutation on the integers from 1 to D such that ˜qi(γi(j)) = qi(j), ∀j ∈X.
+
+That is, γi(j) is the rank of the token j at epoch i. We define the rank of the input sequence at epoch i as the rank of the token xi at epoch i, ri := γi(xi). The sequence {ri}NT i=1 is compressed by a lossless compression algorithm (such as zlib) to produce Nb bits which are the final bit representation of the source. A schematic of this scheme is shown in Fig. 4. In general, the lossless compression algorithm may use the sequence of PMF vectors qi’s in addition to the sequence of ranks.
+
+The main metric of interest is the compression ratio ρ defined as
+
+ρ := Nb / Nc bits/character.
+
+**Fig. 4.** Schematic showing the prediction at epoch i.
+
+### A. Entropy bounds
+
+Let S ∈S∞ be a random process that represents language input. The nth character in the sequence is denoted by Sn, whereas the string of characters from the beginning to the nth character is expressed as Sn. The tokenizer parses the input string and maps it to a sequence of tokens X = X1, X2, . . . using a variable-length mapping. In this sequence, Xi is the ith token. The number of characters employed to generate Xi depends on the realization of the random process and, as such, we introduce random variable Bi to identify the number of characters contained in the ith token. Motivated by practical considerations, we only admit tokenizers for which Bi ≥1 and Bi is uniformly bounded, with Bi < B < ∞; these are characteristics of commonly used tokenizers. An immediate consequence of this framework is that, as the number of tokens grows unbounded NT →∞, the number of characters must also approach infinity Nc →∞. Formally, consider the tokenizer function T : SN →X N operating on infinite symbol sequences; that is, T (s) = x where s is an infinite sequence in S∞. For natural number, i ∈N, define mi : SN →N to be the (time) index during which the tokenizer working sequentially on an input sequence s outputs its ith token. Specifically, suppose s is given, then
+
+mi(s) = min n {length (T (sn)) ≥i} . (1)
+
+We note that, by construction, limn→∞ length (T (sn)) = ∞ and, as such, mi(·) is well-defined. It may be pertinent to stress that the tokenizer function applied to truncated sequences is not necessarily injective because multiple finite input series can map to the same output. This phenomenon is a consequence of the fact that, at any point in time, a tokenizer working sequentially may be waiting for an additional symbol before it can unambiguously select the next output token, i.e., there may be instances where T (sn) = T (sn+1). However, if we restrict the input series to input indices when a new token is produced, then the restricted mapping becomes injective. That is, suppose T (s) = x, then the only (finite) series of input symbols in the restricted set for which T (yn) = xi is smi(s). Given a fixed sequence s, we can express the number of characters contained in a token as
+
+bi = mi(s) − mi−1(s)
+
+with initial condition m−1 = 0. Consequently, the number of characters embedded in the first NT tokens for a random input becomes Nc = �NT i=1 Bi.
+
+Having established these properties, we turn to the relation between H(S) and H(X). We make the assumption that {Sk}∞ k=1, {Bi}∞ i=1, and {Xi}∞ i=1 are stationary and ergodic processes. We know from the Shannon-McMillan-Breiman Theorem [8] that
+
+−1/n log2 pSn(S1, . . . , Sn) = −1/n log2 pSn(Sn) → H(S) almost surely. (2)
+
+Let ΩS be the collection of ω ∈Ω for which this limit holds. In an analogous manner, the Shannon-McMillan-Breiman theorem implies
+
+−1/i log2 pXi(X1, . . . , Xi) = −1/i log2 pXi(Xi) → H(X) almost surely. (3)
+
+Define ΩX as the collection of ω ∈Ω for which this limit holds. Finally, by construction, we have
+
+lim i→∞ mi(S)/i = E [B] almost surely. (4)
+
+Set ΩB to be the set of ω ∈Ω for which this limit holds. For any ω ∈ΩS ∩ ΩX ∩ ΩB, we deduce that
+
+H(S) = lim k→∞ −1/k log2 pSk(Sk(ω))
+
+= lim i→∞ −1/li log2 pSli(Sli(ω))
+
+= lim i→∞ −1/li log2 Pr (Xi = T (Sli(ω)))
+
+= −1/E[B] lim i→∞ 1/i log2 Pr (Xi = xi) = H(X)/E[B] .
+
+The first equality follows from (2). The second equality is a consequence of the fact that {li = mi(S(ω))|i ∈N} is an infinite subset of the natural numbers. Since a subsequence of a convergent sequence must converge to the same limit, we immediately gather that this alternate form approaches H(S). The third equality is a consequence of the equivalence between the following two events, {ω ∈Ω|Xi(ω) = xi} = {ω ∈Ω|T (Smi(S(ω))) = xi}. This is characteristic of the tokenization process, and it is a consequence of the correspondence described above. The last step holds because we are considering an ω ∈ΩB. The sets ΩS, ΩX, and ΩB each have probability one; this implies that their intersection also has probability one, Thus, we must conclude that
+
+H(S) = H(X)/E[B] almost surely.
+
+As a corollary to this result, any upper bound on H(X) produces an upper bound on H(S). This is the property we wish to exploit.
+
+Then, from the results of [1], we can see that
+
+Pr ( H(X) ≤ lim NT →∞ −1/NT �NT i=1 log2 qi(Xi) ) = 1, (5)
+
+where qi(·) is the output PMF from the language model. Therefore, an asymptotic upper bound on the entropy rate H(S) is given by
+
+H(S) ≤ limNT →∞ −1/NT �NT i=1 log2 qi(Xi) / E[B] . (6)
+
+We refer to the expression in the right hand side of (6) as the asymptotic upper bound on H(S) and denote it by Hub. The numerator in (6) represents the average number of bits required to represent the tokens XNT and the denominator in (6) is the average number of charcaters per token. Hence, the unit for H(S) is bits/character. In [1], Cover and King provide 1.3 bits/character as an estimate of the asymptotic upper bound on H(S). They also provide an extensive list of references and discussion of the literature on estimating the entropy of English prior to 1976. Very recently, in [2, Table 4], the performance of several language models have evaluated on the text8 dataset using a metric called bits per character (bpc). We believe bpc is the same as the asymptotic upper bound in this paper.
+
+### B. Encoding schemes
+
+We consider three schemes for the lossless compression block in Fig. 3.
+
+1) **Compressing the ranks using zlib:** The first scheme uses the zlib compression algorithm to encode the sequence of ranks. We refer to this scheme as LLaMA+zlib and denote the compression ratio of this scheme by ρLLaMA+zlib.
+
+2) **Token-by-Token Compression:** The second scheme uses a token-by-token lossless compression scheme which uses a time-varying codebook to encode
+
+Output: A concise synopsis (plain text).
+
+Reasoning Plan:
+1. **Analyze the document prefix:** Identify key concepts, section headings, and explicit references to future content such as "Section III-B3", "Fig. 3", "In [1]", and "In [2, Table 4]". Also note the start of "### B. Encoding schemes" and its subsections.
+2. **Identify explicit future references and infer content:**
+    *   **Section III-B3:** The prefix explicitly states "arithmetic coding as discussed in Section III-B3". The synopsis will include details on arithmetic coding.
+    *   **Fig. 3:** The prefix mentions "lossless compression block in Fig. 3" in the context of encoding schemes. The synopsis will describe Fig. 3 as a schematic illustrating the lossless compression block.
+    *   **In [1]:** The prefix refers to "Cover and King" and their estimate of "1.3 bits/character as an estimate of the asymptotic upper bound on H(S)", along with an "extensive list of references and discussion of the literature on estimating the entropy of English prior to 1976".
+    *   **In [2, Table 4]:** The prefix refers to "performance of several language models have evaluated on the text8 dataset using a metric called bits per character (bpc)". The synopsis will include details from this table.
+    *   **Encoding schemes (Section III-B):**
+        *   **1) Compressing the ranks using zlib:** This scheme is named "LLaMA+zlib" with compression ratio "ρLLaMA+zlib".
+        *   **2) Token-by-Token Compression:** This scheme "uses a time-varying codebook to encode". Further details are expected.
+3. **Formulate search queries and use tools to retrieve external information:**
+    *   **For [1] (Cover and King):** Use `search_papers` with the query "Cover and King entropy of English 1.3 bits/character". Once the paper is identified, use `get_summary` or `extract_key_facts` to confirm and retrieve the specific details mentioned in the prefix.
+    *   **For [2] (text8 dataset, bpc metric):** Use `search_papers` with the query "language models performance text8 dataset bits per character". Once the paper is identified, use `get_summary` or `extract_key_facts` to find information about Table 4 and the bpc metric.
+4. **Synthesize synopsis:** Combine all the gathered information (inferred and retrieved) into a concise textual synopsis, ensuring maximum relevance to the document and avoiding hallucination. The synopsis will cover the likely future content, including facts, equations, definitions, datasets, and references.
+
+**Strategic use of tools:**
+*   `search_papers`: To locate the external papers referenced by [1] and [2].
+*   `get_summary` or `extract_key_facts`: To efficiently extract the specific information from the identified papers [1] and [2] as mentioned in the document prefix. I will prioritize `extract_key_facts` if the information is very specific, otherwise `get_summary` for a broader overview. If neither provides sufficient detail, `read_paper` would be a fallback, but given the specific mentions, `extract_key_facts` or `get_summary` should suffice.
+*   Inference: For internal document references (Section III-B3, Fig. 3, and further details on encoding schemes), I will rely on the explicit mentions and context provided in the document prefix, as there are no tools to directly access future sections of the current document.
+
+**Expected outcome:** A concise textual synopsis detailing:
+*   The mechanism of arithmetic coding (Section III-B3).
+*   The schematic of the lossless compression block (Fig. 3).
+*   Further details on the "Token-by-Token Compression" scheme, including the use of a time-varying codebook.
+*   Information from [1] by Cover and King, specifically their 1.3 bits/character estimate for H(S) and their review of literature on English entropy.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"max_results":5,"query":"\"Cover and King\" \"entropy of English\" \"1.3 bits/character\""}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 1.7912251s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search with arguments: {"max_results":5,"query":"Cover King entropy English"}
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  > Calling tool search took: 1.3918902s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"categories":["cs.IT","math.IT"],"max_results":1,"query":"ti:\"A convergent gambling estimate of the entropy of English\" au:\"Cover\" au:\"King\""}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.2906333s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+*   Information from [2, Table 4] regarding the performance of language models on the text8 dataset using the bits per character (bpc) metric.[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mAction: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"\\\"Cover and King\\\" \\\"entropy of English\\\" \\\"1.3 bits/character\\\"\", \"max_results\": 5}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 4,
+  "papers": [
+    {
+      "id": "0911.2284v2",
+      "title": "A New Look at the Classical Entropy of Written English",
+      "authors": [
+        "Fabio G. Guerrero"
+      ],
+      "abstract": "A simple method for finding the entropy and redundancy of a reasonable long\nsample of English text by direct computer processing and from first principles\naccording to Shannon theory is presented. As an example, results on the entropy\nof the English language have been obtained based on a total of 20.3 million\ncharacters of written English, considering symbols from one to five hundred\ncharacters in length. Besides a more realistic value of the entropy of English,\na new perspective on some classic entropy-related concepts is presented. This\nmethod can also be extended to other Latin languages. Some implications for\npractical applications such as plagiarism-detection software, and the minimum\nnumber of words that should be used in social Internet network messaging, are\ndiscussed.",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2009-11-12T01:48:12+00:00",
+      "url": "http://arxiv.org/pdf/0911.2284v2",
+      "resource_uri": "arxiv://0911.2284v2"
+    },
+    {
+      "id": "1805.08929v1",
+      "title": "Determining the Number of Samples Required to Estimate Entropy in Natural Sequences",
+      "authors": [
+        "Andrew D. Back",
+        "Daniel Angus",
+        "Janet Wiles"
+      ],
+      "abstract": "Calculating the Shannon entropy for symbolic sequences has been widely\nconsidered in many fields. For descriptive statistical problems such as\nestimating the N-gram entropy of English language text, a common approach is to\nuse as much data as possible to obtain progressively more accurate estimates.\nHowever in some instances, only short sequences may be available. This gives\nrise to the question of how many samples are needed to compute entropy. In this\npaper, we examine this problem and propose a method for estimating the number\nof samples required to compute Shannon entropy for a set of ranked symbolic\nnatural events. The result is developed using a modified Zipf-Mandelbrot law\nand the Dvoretzky-Kiefer-Wolfowitz inequality, and we propose an algorithm\nwhich yields an estimate for the minimum number of samples required to obtain\nan estimate of entropy with a given confidence level and degree of accuracy.",
+      "categories": [
+        "cs.IT",
+        "math.IT",
+        "math.ST",
+        "physics.data-an",
+        "stat.TH"
+      ],
+      "published": "2018-05-23T01:44:29+00:00",
+      "url": "http://arxiv.org/pdf/1805.08929v1",
+      "resource_uri": "arxiv://1805.08929v1"
+    },
+    {
+      "id": "2107.12848v5",
+      "title": "The Rising Entropy of English in the Attention Economy",
+      "authors": [
+        "Charlie Pilgrim",
+        "Weisi Guo",
+        "Thomas T. Hills"
+      ],
+      "abstract": "We present evidence that the word entropy of American English has been rising\nsteadily since around 1900, contrary to predictions from existing\nsociolinguistic theories. We also find differences in word entropy between\nmedia categories, with short-form media such as news and magazines having\nhigher entropy than long-form media, and social media feeds having higher\nentropy still. To explain these results we develop an ecological model of the\nattention economy that combines ideas from Zipf's law and information foraging.\nIn this model, media consumers maximize information utility rate taking into\naccount the costs of information search, while media producers adapt to\ntechnologies that reduce search costs, driving them to generate higher entropy\ncontent in increasingly shorter formats.",
+      "categories": [
+        "econ.GN",
+        "q-fin.EC"
+      ],
+      "published": "2021-07-27T14:31:50+00:00",
+      "url": "http://arxiv.org/pdf/2107.12848v5",
+      "resource_uri": "arxiv://2107.12848v5"
+    },
+    {
+      "id": "2306.04050v2",
+      "title": "LLMZip: Lossless Text Compression using Large Language Models",
+      "authors": [
+        "Chandra Shekhara Kaushik Valmeekam",
+        "Krishna Narayanan",
+        "Dileep Kalathil",
+        "Jean-Francois Chamberland",
+        "Srinivas Shakkottai"
+      ],
+      "abstract": "We provide new estimates of an asymptotic upper bound on the entropy of\nEnglish using the large language model LLaMA-7B as a predictor for the next\ntoken given a window of past tokens. This estimate is significantly smaller\nthan currently available estimates in \\cite{cover1978convergent},\n\\cite{lutati2023focus}. A natural byproduct is an algorithm for lossless\ncompression of English text which combines the prediction from the large\nlanguage model with a lossless compression scheme. Preliminary results from\nlimited experiments suggest that our scheme outperforms state-of-the-art text\ncompression schemes such as BSC, ZPAQ, and paq8h.",
+      "categories": [
+        "cs.IT",
+        "cs.CL",
+        "cs.LG",
+        "math.IT"
+      ],
+      "published": "2023-06-06T22:42:00+00:00",
+      "url": "http://arxiv.org/pdf/2306.04050v2",
+      "resource_uri": "arxiv://2306.04050v2"
+    }
+  ]
+}[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The search results did not directly return the "Cover and King" paper with the exact title or a clear abstract mentioning "1.3 bits/character" as a direct estimate from their work. However, the last paper, "LLMZip: Lossless Text Compression using Large Language Models" (2306.04050v2), explicitly references `\cite{cover1978convergent}` and states that its estimate is "significantly smaller than currently available estimates in \cite{cover1978convergent}". This strongly suggests that `cover1978convergent` is the paper [1] being referred to. I will try to find the full reference for `cover1978convergent` and then search for that specific paper.
+Let's try a more general search for "Cover King entropy English" to see if I can find the exact paper.[00m
+[95m## Using tool:[00m [92msearch[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"Cover King entropy English\", \"max_results\": 5}"[00m
+[95m## Tool Output:[00m [92m
+No results were found for your search query. This could be due to DuckDuckGo's bot detection or the query returned no matches. Please try rephrasing your search or try again in a few minutes.[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The direct search for "Cover King entropy English" did not yield results. Given that the document prefix mentions "Cover and King provide 1.3 bits/character as an estimate of the asymptotic upper bound on H(S). They also provide an extensive list of references and discussion of the literature on estimating the entropy of English prior to 1976," and the `LLMZip` paper (2306.04050v2) references `cover1978convergent`, it's highly likely that the paper is "Cover, T. M., & King, R. C. (1978). A convergent gambling estimate of the entropy of English. IEEE Transactions on Information Theory, 24(4), 413-421."
+I will now search for this specific paper on arXiv using its title and authors to confirm and get its abstract if available, or use `search_papers` with a more precise query.[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"ti:\\\"A convergent gambling estimate of the entropy of English\\\" au:\\\"Cover\\\" au:\\\"King\\\"\", \"categories\": [\"cs.IT\", \"math.IT\"], \"max_results\": 1}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 1,
+  "papers": [
+    {
+      "id": "cs/0508050v1",
+      "title": "Duality between channel capacity and rate distortion with two-sided state information",
+      "authors": [
+        "T. M. Cover",
+        "M. Chiang"
+      ],
+      "abstract": "We show that the duality between channel capacity and data compression is\nretained when state information is available to the sender, to the receiver, to\nboth, or to neither. We present a unified theory for eight special cases of\nchannel capacity and rate distortion with state information, which also extends\nexisting results to arbitrary pairs of independent and identically distributed\n(i.i.d.) correlated state information available at the sender and at the\nreceiver, respectively. In particular, the resulting general formula for\nchannel capacity assumes the same form as the generalized Wyner Ziv rate\ndistortion function.",
+      "categories": [
+        "cs.IT",
+        "math.IT"
+      ],
+      "published": "2005-08-09T03:01:18+00:00",
+      "url": "http://arxiv.org/pdf/cs/0508050v1",
+      "resource_uri": "arxiv://cs/0508050v1"
+    }
+  ]
+}
+
+
+You ONLY have access to the following tools, and should NEVER make up tools that are not listed here:
+
+Tool Name: download_paper
+Tool Arguments: {'properties': {'check_status': {'anyOf': [], 'default': False, 'description': 'Set to true to only check the status of an ongoing or completed conversion without starting a new download. Use this to monitor long-running conversions or verify if a paper is already available.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to download (e.g., '2301.07041', '1706.03762', 'cs.AI/0301001'). This can be found in search results or arXiv URLs. The paper must exist on arXiv.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Download and convert an arXiv paper to readable markdown format for analysis and reading. This tool fetches the PDF from arXiv, converts it to markdown using advanced text extraction, and stores it locally for immediate access. Use this tool when you need to read, analyze, or work with the full text content of a specific paper. The conversion process extracts text, preserves formatting, and handles mathematical equations. Returns the full paper content directly upon successful completion.
+Tool Name: extract_key_facts
+Tool Arguments: {'properties': {'count': {'anyOf': [], 'default': 5, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Count'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}, 'topic_within_article': {'anyOf': [], 'default': '', 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Topic Within Article'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Extract key facts from a Wikipedia article, optionally focused on a topic.
+Tool Name: fetch_content
+Tool Arguments: {'properties': {'url': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Url', 'type': 'string'}}, 'required': ['url'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Fetch and parse content from a webpage URL.
+
+    Args:
+        url: The webpage URL to fetch content from
+        ctx: MCP context for logging
+    
+Tool Name: get_article
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the full content of a Wikipedia article.
+Tool Name: get_coordinates
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the coordinates of a Wikipedia article.
+Tool Name: get_links
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the links contained within a Wikipedia article.
+Tool Name: get_related_topics
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get topics related to a Wikipedia article based on links and categories.
+Tool Name: get_sections
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the sections of a Wikipedia article.
+Tool Name: get_summary
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article.
+Tool Name: list_papers
+Tool Arguments: {'properties': {}, 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: List all previously downloaded and converted papers that are available in local storage for immediate reading and analysis. This tool shows you what papers you already have access to without needing to download them again. Each paper in the list includes metadata like title, authors, abstract, and direct links. Use this tool to see your paper library, check if a specific paper is already downloaded, or browse previously acquired research papers before downloading new ones.
+Tool Name: read_paper
+Tool Arguments: {'properties': {'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to read (e.g., '2301.07041', '1706.03762'). This must be a paper that has been previously downloaded and converted to markdown format. Use list_papers to see available papers.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Read the full text content of a previously downloaded and converted research paper in clean markdown format. This tool retrieves the complete paper content including abstract, introduction, methodology, results, conclusions, and references. The content is formatted for easy reading and analysis, with preserved mathematical equations and structured sections. Use this tool when you need to access the full text of a paper for detailed study, quotation, analysis, or research. The paper must have been previously downloaded using the download_paper tool.
+Tool Name: search
+Tool Arguments: {'properties': {'max_results': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Results'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Search DuckDuckGo and return formatted results.
+
+    Args:
+        query: The search query string
+        max_results: Maximum number of results to return (default: 10)
+        ctx: MCP context for logging
+    
+Tool Name: search_papers
+Tool Arguments: {'properties': {'categories': {'anyOf': [], 'default': None, 'description': "Strongly recommended: arXiv categories to focus search (e.g., ['cs.AI', 'cs.MA'] for agent research, ['cs.LG'] for ML, ['cs.CL'] for NLP, ['cs.CV'] for vision). Greatly improves relevance.", 'enum': None, 'items': {'type': 'string'}, 'properties': {}, 'title': ''}, 'date_from': {'anyOf': [], 'default': None, 'description': "Start date for papers (YYYY-MM-DD format). Use to find recent work, e.g., '2023-01-01' for last 2 years.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'date_to': {'anyOf': [], 'default': None, 'description': "End date for papers (YYYY-MM-DD format). Use with date_from to find historical work, e.g., '2020-12-31' for older research.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'max_results': {'anyOf': [], 'default': None, 'description': 'Maximum number of results to return (default: 10, max: 50). Use 15-20 for comprehensive searches.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'query': {'anyOf': [], 'description': 'Search query using quoted phrases for exact matches (e.g., \'"machine learning" OR "deep learning"\') or specific technical terms. Avoid overly broad or generic terms.', 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}, 'sort_by': {'anyOf': [], 'default': None, 'description': "Sort results by 'relevance' (most relevant first, default) or 'date' (newest first). Use 'relevance' for focused searches, 'date' for recent developments.", 'enum': ['relevance', 'date'], 'items': None, 'properties': {}, 'title': ''}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search for papers on arXiv with advanced filtering and query optimization.
+
+QUERY CONSTRUCTION GUIDELINES:
+- Use QUOTED PHRASES for exact matches: "multi-agent systems", "neural networks", "machine learning"
+- Combine related concepts with OR: "AI agents" OR "software agents" OR "intelligent agents"  
+- Use field-specific searches for precision:
+  - ti:"exact title phrase" - search in titles only
+  - au:"author name" - search by author
+  - abs:"keyword" - search in abstracts only
+- Use ANDNOT to exclude unwanted results: "machine learning" ANDNOT "survey"
+- For best results, use 2-4 core concepts rather than long keyword lists
+
+ADVANCED SEARCH PATTERNS:
+- Field + phrase: ti:"transformer architecture" for papers with exact title phrase
+- Multiple fields: au:"Smith" AND ti:"quantum" for author Smith's quantum papers  
+- Exclusions: "deep learning" ANDNOT ("survey" OR "review") to exclude survey papers
+- Broad + narrow: "artificial intelligence" AND (robotics OR "computer vision")
+
+CATEGORY FILTERING (highly recommended for relevance):
+- cs.AI: Artificial Intelligence
+- cs.MA: Multi-Agent Systems  
+- cs.LG: Machine Learning
+- cs.CL: Computation and Language (NLP)
+- cs.CV: Computer Vision
+- cs.RO: Robotics
+- cs.HC: Human-Computer Interaction
+- cs.CR: Cryptography and Security
+- cs.DB: Databases
+
+EXAMPLES OF EFFECTIVE QUERIES:
+- ti:"reinforcement learning" with categories: ["cs.LG", "cs.AI"] - for RL papers by title
+- au:"Hinton" AND "deep learning" with categories: ["cs.LG"] - for Hinton's deep learning work
+- "multi-agent" ANDNOT "survey" with categories: ["cs.MA"] - exclude survey papers
+- abs:"transformer" AND ti:"attention" with categories: ["cs.CL"] - attention papers with transformer abstracts
+
+DATE FILTERING: Use YYYY-MM-DD format for historical research:
+- date_to: "2015-12-31" - for foundational/classic work (pre-2016)
+- date_from: "2020-01-01" - for recent developments (post-2020)
+- Both together for specific time periods
+
+RESULT QUALITY: Results sorted by RELEVANCE (most relevant papers first), not just newest papers.
+This ensures you get the most pertinent results regardless of publication date.
+
+TIPS FOR FOUNDATIONAL RESEARCH:
+- Use date_to: "2010-12-31" to find classic papers on BDI, SOAR, ACT-R
+- Combine with field searches: ti:"BDI" AND abs:"belief desire intention"  
+- Try author searches: au:"Rao" AND "BDI" for Anand Rao's foundational BDI work
+Tool Name: search_wikipedia
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search Wikipedia for articles matching a query.
+Tool Name: summarize_article_for_query
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 250, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['query', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article tailored to a specific query.
+Tool Name: summarize_article_section
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 150, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'section_title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Section Title', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['section_title', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a specific section of a Wikipedia article.
+
+IMPORTANT: Use the following format in your response:
+
+```
+Thought: you should always think about what to do
+Action: the action to take, only one name of [download_paper, extract_key_facts, fetch_content, get_article, get_coordinates, get_links, get_related_topics, get_sections, get_summary, list_papers, read_paper, search, search_papers, search_wikipedia, summarize_article_for_query, summarize_article_section], just the name, exactly as it's written.
+Action Input: the input to the action, just a simple JSON object, enclosed in curly braces, using " to wrap keys and values.
+Observation: the result of the action
+```
+
+Once all necessary information is gathered, return the following format:
+
+```
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+```[00m
+🚀 Crew: crew
+├── 📋 Task: b82fb5ce-6b0b-4799-9b53-1d61cc45b919
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used search_papers (1)
+│   ├── 🔧 Used search (1)
+│   ├── 🔧 Used search_papers (2)
+│   └── ❌ LLM Failed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔄 Tool Usage Started
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────────── LLM Error ─────────────────────────────────┐
+│                                                                             │
+│  ❌ LLM Call Failed                                                         │
+│  Error: list index out of range                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\_internal\_generate_schema.py:628: UserWarning: <built-in function callable> is not a Python type (it may be an instance of an object), Pydantic will allow any object with no validation since we cannot even enforce that the input is an instance of the given type. To get rid of this error wrap the type with `pydantic.SkipValidation`.
+  warn(
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from docker-mcp.yaml
+  - Reading config from config.yaml
+- Configuration read in 17.6381ms
+- Watching registry at C:\Users\Noah\.docker\mcp\registry.yaml
+- Watching config at C:\Users\Noah\.docker\mcp\config.yaml
+- Those servers are enabled: arxiv-mcp-server, duckduckgo, wikipedia-mcp
+- Using images:
+  - mcp/arxiv-mcp-server@sha256:6dc6bba6dfed97f4ad6eb8d23a5c98ef5b7fa6184937d54b2d675801cd9dd29e
+  - mcp/duckduckgo@sha256:68eb20db6109f5c312a695fc5ec3386ad15d93ffb765a0b4eb1baf4328dec14f
+  - mcp/wikipedia-mcp@sha256:e90e3f6e3bb795f10d3d8d8ac1523f6d46d4f2ab5ac3b3a4720e1be879466472
+> Images pulled in 64.5761ms
+- Listing MCP tools...
+  - Running mcp/wikipedia-mcp with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=wikipedia-mcp -l docker-mcp-transport=stdio]
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers:ro]
+  > duckduckgo: (2 tools)
+  > wikipedia-mcp: (10 tools) (9 resourceTemplates)
+  > arxiv-mcp-server: (4 tools) (1 prompts)
+> 16 tools listed in 2.7168091s
+- Watching for configuration updates...
+> Initialized in 2.7990233s
+> Start stdio server
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 9601cdc5-cb7b-439b-8997-d6b805d8da95                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 9a528e9a-0313-4fa3-ad5e-3d94d7ab9ef3
+    Status: Executing Task...
+2025-09-08 12:57:49,727 - 29616 - reasoning_handler.py-reasoning_handler:276 - WARNING: Error during function calling: list index out of range. Falling back to text parsing.
+    ├── 🧠 Reasoning...
+    └── ❌ LLM Failed┌───────────────────────────────── LLM Error ─────────────────────────────────┐
+│                                                                             │
+│  ❌ LLM Call Failed                                                         │
+│  Error: list index out of range                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 9a528e9a-0313-4fa3-ad5e-3d94d7ab9ef3
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    └── ❌ LLM Failed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  ## Strategic Plan for Document Content Retrieval                           │
+│                                                                             │
+│  **1. Understanding the Task:**                                             │
+│                                                                             │
+│  As an AI Assistant, my role is to act as a deterministic research agent.   │
+│  Given a document prefix, I need to predict and retrieve information        │
+│  likely to appear later in the same document. This information should be    │
+│  concise, factual, and suitable for conditioning a language model           │
+│  compressor. I must prioritize authoritative sources, avoid hallucination,  │
+│  and only include content directly supported by the available MCP tools.    │
+│  The core focus is on identifying and summarizing the content of upcoming   │
+│  sections, particularly specific encoding schemes and referenced            │
+│  literature.                                                                │
+│                                                                             │
+│  **2. Key Steps to Complete the Task:**                                     │
+│                                                                             │
+│  1.  **Analyze the Document Prefix:** Thoroughly read the provided text to  │
+│  identify the current topic, structure, explicit mentions of future         │
+│  sections (e.g., "Section III-B3"), and specific references (e.g., [1],     │
+│  [2], [8]).                                                                 │
+│  2.  **Identify the Source Document (Primary Goal):** Attempt to locate     │
+│  the full research paper from which the prefix was extracted. This is the   │
+│  most direct and authoritative way to retrieve the exact future content.    │
+│  3.  **Extract Specific Section Content:** If the paper is found, navigate  │
+│  to and extract the content of the explicitly mentioned upcoming sections   │
+│  (e.g., III-B2, III-B3).                                                    │
+│  4.  **Retrieve Full Reference Details:** Obtain the complete               │
+│  bibliographic information for all cited references ([1], [2], [8]).        │
+│  5.  **Synthesize Synopsis:** Compile all retrieved information into a      │
+│  concise textual synopsis, focusing on facts, equations, definitions,       │
+│  datasets, and references, ensuring it directly addresses the likely        │
+│  future content of the document.                                            │
+│                                                                             │
+│  **3. Approach to Challenges:**                                             │
+│                                                                             │
+│  *   **Difficulty in Identifying the Paper:** If a direct search for the    │
+│  paper using specific phrases from the prefix fails, I will broaden my      │
+│  search queries, focusing on unique combinations of concepts (e.g., "LLM    │
+│  compression arithmetic coding," "H(S) = H(X)/E[B]"), authors (Cover and    │
+│  King), and datasets (text8).                                               │
+│  *   **Incomplete Paper Access:** If I can find the paper but cannot fully  │
+│  read its content through the tools (e.g., only abstract or specific        │
+│  sections are accessible), I will resort to targeted searches for the       │
+│  specific concepts mentioned (e.g., "token-by-token compression             │
+│  time-varying codebook," "arithmetic coding with LLM probabilities") and    │
+│  for the full reference details.                                            │
+│  *   **Ensuring Relevance and Conciseness:** I will filter retrieved        │
+│  information strictly to what is directly implied by the prefix as "likely  │
+│  to appear later in the same document." I will avoid general background     │
+│  information unless it's explicitly part of an upcoming definition or       │
+│  explanation within the document's scope.                                   │
+│                                                                             │
+│  **4. Strategic Use of Available Tools:**                                   │
+│                                                                             │
+│  *   **`search_papers(query=...)`**: This will be my primary tool for Step  │
+│  2 (identifying the source document) and Step 3 (if the paper isn't fully   │
+│  accessible, then searching for specific concepts or references). I will    │
+│  craft highly specific queries using unique phrases and references from     │
+│  the prefix.                                                                │
+│      *   *Initial Query:* `search_papers(query="compression using LLMs      │
+│  arithmetic coding entropy bounds H(S) = H(X)/E[B] Cover King 1.3           │
+│  bits/character text8 bpc")`                                                │
+│      *   *Fallback Queries (if needed):*                                    │
+│  `search_papers(query="token-by-token compression time-varying codebook     │
+│  language model")`, `search_papers(query="arithmetic coding language model  │
+│  compression probabilities")`, `search_papers(query="Cover and King         │
+│  entropy estimate English 1976")`, `search_papers(query="language model     │
+│  performance text8 bpc")`.                                                  │
+│  *   **`download_paper(paper_id=...)`**: If `search_papers` successfully    │
+│  identifies a specific paper, I will use this to attempt to download it.    │
+│  *   **`read_paper(paper_id=...)`**: After downloading, this tool will be   │
+│  crucial for directly extracting the content of sections III-B2, III-B3,    │
+│  and the full "References" section.                                         │
+│  *   **`get_sections(paper_id=...)`**: If `read_paper` provides structured  │
+│  access, this will help me quickly locate the relevant sections.            │
+│  *   **`summarize_article_section(paper_id=..., section_title=...)`**: If   │
+│  direct extraction is too verbose, this could help distill the content of   │
+│  specific sections, though I will prioritize direct quotes or factual       │
+│  summaries to avoid interpretation.                                         │
+│  *   **`search_wikipedia(query=...)`**: This will be a fallback for         │
+│  general definitions (e.g., "Shannon-McMillan-Breiman Theorem") if the      │
+│  paper's own explanation isn't found or is insufficient, or to quickly      │
+│  verify basic concepts.                                                     │
+│                                                                             │
+│  **5. Expected Outcome and Alignment with Goal:**                           │
+│                                                                             │
+│  The expected outcome is a concise, factual textual synopsis. It will       │
+│  include:                                                                   │
+│  *   A detailed description of the "Token-by-Token Compression" scheme      │
+│  (III-B2), elaborating on its use of a time-varying codebook.               │
+│  *   A detailed explanation of "Arithmetic Coding" (III-B3), specifically   │
+│  how it is applied in conjunction with LLM-produced probabilities for       │
+│  compression.                                                               │
+│  *   The full bibliographic citations for references [1] (Cover and King),  │
+│  [2] (the paper evaluating LLMs on text8 with bpc), and [8] (the source     │
+│  for the Shannon-McMillan-Breiman Theorem).                                 │
+│  *   Any other directly implied future content, such as further             │
+│  experimental details or comparisons, if revealed by the full paper         │
+│  structure.                                                                 │
+│                                                                             │
+│  This outcome directly aligns with the primary goal of completing the task  │
+│  accurately and efficiently by leveraging available tools to retrieve       │
+│  information likely to appear later in the document, presented in a format  │
+│  suitable for conditioning a language model compressor.                     │
+│                                                                             │
+│  READY: I am ready to execute the task.                                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Task:[00m [92mYou act as a deterministic research agent. Given the observed prefix of a document, use available MCP tools to retrieve information that is likely to appear later in the same document. Prefer authoritative sources. Produce a concise textual synopsis of the likely future content (facts, equations, definitions, datasets, references), suitable for conditioning a language model compressor. Maximize relevance to the document. Do not hallucinate; only include content supported by the tools.
+
+Document prefix (UTF-8 text):
+intuition, but better compression can be achieved by directly using the probabilities produced by the LLM along with arithmetic coding as discussed in Section III-B3.
+
+## III. COMPRESSION USING LLMS
+
+Let s denote a sentence from the English language composed of Nc letters, where each letter is assumed to be from the alphabet S. We assume that we have a dictionary X = [1, D] of D tokens. We first parse s into a sequence of NT tokens denoted by x = x1, x2, . . . , xi−1, xi, xi+1, . . . xNT , where xi ∈X. There is a one-to-one mapping between s and x and hence, compressing s is the same as compressing x. xi’s can be thought of as realizations of the random variable denoted by the upper case letter Xi.
+
+A language model with memory M is a predictor that operates as follows. At epoch i, it accepts tokens xi−M, xi−M+1, . . . , xi−1 and produces a probability mass function for the next token in the sequence conditioned on the past M tokens given by qi(xi) := Pr(Xi = xi|xi−1, xi−2, . . . , xi−M), ∀xi ∈X. The PMF vector qi := [qi(1), qi(2), . . . , qi(D)]T is sorted in descending order and let the sorted PMF vector be denoted by ˜qi. Let γi : X →X be a permutation on the integers from 1 to D such that ˜qi(γi(j)) = qi(j), ∀j ∈X.
+
+That is, γi(j) is the rank of the token j at epoch i. We define the rank of the input sequence at epoch i as the rank of the token xi at epoch i, ri := γi(xi). The sequence {ri}NT i=1 is compressed by a lossless compression algorithm (such as zlib) to produce Nb bits which are the final bit representation of the source. A schematic of this scheme is shown in Fig. 4. In general, the lossless compression algorithm may use the sequence of PMF vectors qi’s in addition to the sequence of ranks.
+
+The main metric of interest is the compression ratio ρ defined as
+
+ρ := Nb / Nc bits/character.
+
+**Fig. 4.** Schematic showing the prediction at epoch i.
+
+### A. Entropy bounds
+
+Let S ∈S∞ be a random process that represents language input. The nth character in the sequence is denoted by Sn, whereas the string of characters from the beginning to the nth character is expressed as Sn. The tokenizer parses the input string and maps it to a sequence of tokens X = X1, X2, . . . using a variable-length mapping. In this sequence, Xi is the ith token. The number of characters employed to generate Xi depends on the realization of the random process and, as such, we introduce random variable Bi to identify the number of characters contained in the ith token. Motivated by practical considerations, we only admit tokenizers for which Bi ≥1 and Bi is uniformly bounded, with Bi < B < ∞; these are characteristics of commonly used tokenizers. An immediate consequence of this framework is that, as the number of tokens grows unbounded NT →∞, the number of characters must also approach infinity Nc →∞. Formally, consider the tokenizer function T : SN →X N operating on infinite symbol sequences; that is, T (s) = x where s is an infinite sequence in S∞. For natural number, i ∈N, define mi : SN →N to be the (time) index during which the tokenizer working sequentially on an input sequence s outputs its ith token. Specifically, suppose s is given, then
+
+mi(s) = min n {length (T (sn)) ≥i} . (1)
+
+We note that, by construction, limn→∞ length (T (sn)) = ∞ and, as such, mi(·) is well-defined. It may be pertinent to stress that the tokenizer function applied to truncated sequences is not necessarily injective because multiple finite input series can map to the same output. This phenomenon is a consequence of the fact that, at any point in time, a tokenizer working sequentially may be waiting for an additional symbol before it can unambiguously select the next output token, i.e., there may be instances where T (sn) = T (sn+1). However, if we restrict the input series to input indices when a new token is produced, then the restricted mapping becomes injective. That is, suppose T (s) = x, then the only (finite) series of input symbols in the restricted set for which T (yn) = xi is smi(s). Given a fixed sequence s, we can express the number of characters contained in a token as
+
+bi = mi(s) − mi−1(s)
+
+with initial condition m−1 = 0. Consequently, the number of characters embedded in the first NT tokens for a random input becomes Nc = �NT i=1 Bi.
+
+Having established these properties, we turn to the relation between H(S) and H(X). We make the assumption that {Sk}∞ k=1, {Bi}∞ i=1, and {Xi}∞ i=1 are stationary and ergodic processes. We know from the Shannon-McMillan-Breiman Theorem [8] that
+
+−1/n log2 pSn(S1, . . . , Sn) = −1/n log2 pSn(Sn) → H(S) almost surely. (2)
+
+Let ΩS be the collection of ω ∈Ω for which this limit holds. In an analogous manner, the Shannon-McMillan-Breiman theorem implies
+
+−1/i log2 pXi(X1, . . . , Xi) = −1/i log2 pXi(Xi) → H(X) almost surely. (3)
+
+Define ΩX as the collection of ω ∈Ω for which this limit holds. Finally, by construction, we have
+
+lim i→∞ mi(S)/i = E [B] almost surely. (4)
+
+Set ΩB to be the set of ω ∈Ω for which this limit holds. For any ω ∈ΩS ∩ ΩX ∩ ΩB, we deduce that
+
+H(S) = lim k→∞ −1/k log2 pSk(Sk(ω))
+
+= lim i→∞ −1/li log2 pSli(Sli(ω))
+
+= lim i→∞ −1/li log2 Pr (Xi = T (Sli(ω)))
+
+= −1/E[B] lim i→∞ 1/i log2 Pr (Xi = xi) = H(X)/E[B] .
+
+The first equality follows from (2). The second equality is a consequence of the fact that {li = mi(S(ω))|i ∈N} is an infinite subset of the natural numbers. Since a subsequence of a convergent sequence must converge to the same limit, we immediately gather that this alternate form approaches H(S). The third equality is a consequence of the equivalence between the following two events, {ω ∈Ω|Xi(ω) = xi} = {ω ∈Ω|T (Smi(S(ω))) = xi}. This is characteristic of the tokenization process, and it is a consequence of the correspondence described above. The last step holds because we are considering an ω ∈ΩB. The sets ΩS, ΩX, and ΩB each have probability one; this implies that their intersection also has probability one, Thus, we must conclude that
+
+H(S) = H(X)/E[B] almost surely.
+
+As a corollary to this result, any upper bound on H(X) produces an upper bound on H(S). This is the property we wish to exploit.
+
+Then, from the results of [1], we can see that
+
+Pr ( H(X) ≤ lim NT →∞ −1/NT �NT i=1 log2 qi(Xi) ) = 1, (5)
+
+where qi(·) is the output PMF from the language model. Therefore, an asymptotic upper bound on the entropy rate H(S) is given by
+
+H(S) ≤ limNT →∞ −1/NT �NT i=1 log2 qi(Xi) / E[B] . (6)
+
+We refer to the expression in the right hand side of (6) as the asymptotic upper bound on H(S) and denote it by Hub. The numerator in (6) represents the average number of bits required to represent the tokens XNT and the denominator in (6) is the average number of charcaters per token. Hence, the unit for H(S) is bits/character. In [1], Cover and King provide 1.3 bits/character as an estimate of the asymptotic upper bound on H(S). They also provide an extensive list of references and discussion of the literature on estimating the entropy of English prior to 1976. Very recently, in [2, Table 4], the performance of several language models have evaluated on the text8 dataset using a metric called bits per character (bpc). We believe bpc is the same as the asymptotic upper bound in this paper.
+
+### B. Encoding schemes
+
+We consider three schemes for the lossless compression block in Fig. 3.
+
+1) **Compressing the ranks using zlib:** The first scheme uses the zlib compression algorithm to encode the sequence of ranks. We refer to this scheme as LLaMA+zlib and denote the compression ratio of this scheme by ρLLaMA+zlib.
+
+2) **Token-by-Token Compression:** The second scheme uses a token-by-token lossless compression scheme which uses a time-varying codebook to encode
+
+Output: A concise synopsis (plain text).
+
+Reasoning Plan:
+## Strategic Plan for Document Content Retrieval
+
+**1. Understanding the Task:**
+
+As an AI Assistant, my role is to act as a deterministic research agent. Given a document prefix, I need to predict and retrieve information likely to appear later in the same document. This information should be concise, factual, and suitable for conditioning a language model compressor. I must prioritize authoritative sources, avoid hallucination, and only include content directly supported by the available MCP tools. The core focus is on identifying and summarizing the content of upcoming sections, particularly specific encoding schemes and referenced literature.
+
+**2. Key Steps to Complete the Task:**
+
+1.  **Analyze the Document Prefix:** Thoroughly read the provided text to identify the current topic, structure, explicit mentions of future sections (e.g., "Section III-B3"), and specific references (e.g., [1], [2], [8]).
+2.  **Identify the Source Document (Primary Goal):** Attempt to locate the full research paper from which the prefix was extracted. This is the most direct and authoritative way to retrieve the exact future content.
+3.  **Extract Specific Section Content:** If the paper is found, navigate to and extract the content of the explicitly mentioned upcoming sections (e.g., III-B2, III-B3).
+4.  **Retrieve Full Reference Details:** Obtain the complete bibliographic information for all cited references ([1], [2], [8]).
+5.  **Synthesize Synopsis:** Compile all retrieved information into a concise textual synopsis, focusing on facts, equations, definitions, datasets, and references, ensuring it directly addresses the likely future content of the document.
+
+**3. Approach to Challenges:**
+
+*   **Difficulty in Identifying the Paper:** If a direct search for the paper using specific phrases from the prefix fails, I will broaden my search queries, focusing on unique combinations of concepts (e.g., "LLM compression arithmetic coding," "H(S) = H(X)/E[B]"), authors (Cover and King), and datasets (text8).
+*   **Incomplete Paper Access:** If I can find the paper but cannot fully read its content through the tools (e.g., only abstract or specific sections are accessible), I will resort to targeted searches for the specific concepts mentioned (e.g., "token-by-token compression time-varying codebook," "arithmetic coding with LLM probabilities") and for the full reference details.
+*   **Ensuring Relevance and Conciseness:** I will filter retrieved information strictly to what is directly implied by the prefix as "likely to appear later in the same document." I will avoid general background information unless it's explicitly part of an upcoming definition or explanation within the document's scope.
+
+**4. Strategic Use of Available Tools:**
+
+*   **`search_papers(query=...)`**: This will be my primary tool for Step 2 (identifying the source document) and Step 3 (if the paper isn't fully accessible, then searching for specific concepts or references). I will craft highly specific queries using unique phrases and references from the prefix.
+    *   *Initial Query:* `search_papers(query="compression using LLMs arithmetic coding entropy bounds H(S) = H(X)/E[B] Cover King 1.3 bits/character text8 bpc")`
+    *   *Fallback Queries (if needed):* `search_papers(query="token-by-token compression time-varying codebook language model")`, `search_papers(query="arithmetic coding language model compression probabilities")`, `search_papers(query="Cover and King entropy estimate English 1976")`, `search_papers(query="language model performance text8 bpc")`.
+*   **`download_paper(paper_id=...)`**: If `search_papers` successfully identifies a specific paper, I will use this to attempt to download it.
+*   **`read_paper(paper_id=...)`**: After downloading, this tool will be crucial for directly extracting the content of sections III-B2, III-B3, and the full "References" section.
+*   **`get_sections(paper_id=...)`**: If `read_paper` provides structured access, this will help me quickly locate the relevant sections.
+*   **`summarize_article_section(paper_id=..., section_title=...)`**: If direct extraction is too verbose, this could help distill the content of specific sections, though I will prioritize direct quotes or factual summaries to avoid interpretation.
+*   **`search_wikipedia(query=...)`**: This will be a fallback for general definitions (e.g., "Shannon-McMillan-Breiman Theorem") if the paper's own explanation isn't found or is insufficient, or to quickly verify basic concepts.
+
+**5. Expected Outcome and Alignment with Goal:**
+
+The expected outcome is a concise, factual textual synopsis. It will include:
+*   A detailed description of the "Token-by-Token Compression" scheme (III-B2), elaborating on its use of a time-varying codebook.
+*   A detailed explanation of "Arithmetic Coding" (III-B3), specifically how it is applied in conjunction with LLM-produced probabilities for compression.
+*   The full bibliographic citations for references [1] (Cover and King), [2] (the paper evaluating LLMs on text8 with bpc), and [8] (the source for the Shannon-McMillan-Breiman Theorem).
+*   Any other directly implied future content, such as further experimental details or comparisons, if revealed by the full paper structure.
+
+This outcome directly aligns with the primary goal of completing the task accurately and efficiently by leveraging available tools to retrieve information likely to appear later in the document, presented in a format suitable for conditioning a language model compressor.
+
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"max_results":5,"query":"\"compression using LLMs\" \"arithmetic coding\" \"entropy bounds\" \"H(S) = H(X)/E[B]\" \"Cover and King\" \"text8 dataset\" \"bits per character\""}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.7870628s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"max_results":1,"query":"\"H(S) = H(X)/E[B]\" \"Cover and King\" \"text8\" \"compression using LLMs\""}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.0608122s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search with arguments: {"max_results":10,"query":"Cover and King entropy estimate English 1.3 bits/character"}
+  - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio]
+  > Calling tool search took: 1.4140304s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+READY: I am ready to execute the task.[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mAction: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"\\\"compression using LLMs\\\" \\\"arithmetic coding\\\" \\\"entropy bounds\\\" \\\"H(S) = H(X)/E[B]\\\" \\\"Cover and King\\\" \\\"text8 dataset\\\" \\\"bits per character\\\"\", \"max_results\": 5}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 5,
+  "papers": [
+    {
+      "id": "1804.02800v2",
+      "title": "Universal and Succinct Source Coding of Deep Neural Networks",
+      "authors": [
+        "Sourya Basu",
+        "Lav R. Varshney"
+      ],
+      "abstract": "Deep neural networks have shown incredible performance for inference tasks in\na variety of domains. Unfortunately, most current deep networks are enormous\ncloud-based structures that require significant storage space, which limits\nscaling of deep learning as a service (DLaaS) and use for on-device\nintelligence. This paper is concerned with finding universal lossless\ncompressed representations of deep feedforward networks with synaptic weights\ndrawn from discrete sets, and directly performing inference without full\ndecompression. The basic insight that allows less rate than naive approaches is\nrecognizing that the bipartite graph layers of feedforward networks have a kind\nof permutation invariance to the labeling of nodes, in terms of inferential\noperation. We provide efficient algorithms to dissipate this irrelevant\nuncertainty and then use arithmetic coding to nearly achieve the entropy bound\nin a universal manner. We also provide experimental results of our approach on\nseveral standard datasets.",
+      "categories": [
+        "cs.IT",
+        "cs.LG",
+        "math.IT"
+      ],
+      "published": "2018-04-09T03:01:41+00:00",
+      "url": "http://arxiv.org/pdf/1804.02800v2",
+      "resource_uri": "arxiv://1804.02800v2"
+    },
+    {
+      "id": "1906.01037v2",
+      "title": "Better Character Language Modeling Through Morphology",
+      "authors": [
+        "Terra Blevins",
+        "Luke Zettlemoyer"
+      ],
+      "abstract": "We incorporate morphological supervision into character language models\n(CLMs) via multitasking and show that this addition improves bits-per-character\n(BPC) performance across 24 languages, even when the morphology data and\nlanguage modeling data are disjoint. Analyzing the CLMs shows that inflected\nwords benefit more from explicitly modeling morphology than uninflected words,\nand that morphological supervision improves performance even as the amount of\nlanguage modeling data grows. We then transfer morphological supervision across\nlanguages to improve language modeling performance in the low-resource setting.",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2019-06-03T19:30:51+00:00",
+      "url": "http://arxiv.org/pdf/1906.01037v2",
+      "resource_uri": "arxiv://1906.01037v2"
+    },
+    {
+      "id": "2201.09680v1",
+      "title": "Relational Memory Augmented Language Models",
+      "authors": [
+        "Qi Liu",
+        "Dani Yogatama",
+        "Phil Blunsom"
+      ],
+      "abstract": "We present a memory-augmented approach to condition an autoregressive\nlanguage model on a knowledge graph. We represent the graph as a collection of\nrelation triples and retrieve relevant relations for a given context to improve\ntext generation. Experiments on WikiText-103, WMT19, and enwik8 English\ndatasets demonstrate that our approach produces a better language model in\nterms of perplexity and bits per character. We also show that relational memory\nimproves coherence, is complementary to token-based memory, and enables causal\ninterventions. Our model provides a simple yet effective way to combine an\nautoregressive language model with a knowledge graph for a more coherent and\nlogical generation.",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2022-01-24T13:25:41+00:00",
+      "url": "http://arxiv.org/pdf/2201.09680v1",
+      "resource_uri": "arxiv://2201.09680v1"
+    },
+    {
+      "id": "1912.01982v1",
+      "title": "Neural Academic Paper Generation",
+      "authors": [
+        "Samet Demir",
+        "Uras Mutlu",
+        "\u00d6zgur \u00d6zdemir"
+      ],
+      "abstract": "In this work, we tackle the problem of structured text generation,\nspecifically academic paper generation in $\\LaTeX{}$, inspired by the\nsurprisingly good results of basic character-level language models. Our\nmotivation is using more recent and advanced methods of language modeling on a\nmore complex dataset of $\\LaTeX{}$ source files to generate realistic academic\npapers. Our first contribution is preparing a dataset with $\\LaTeX{}$ source\nfiles on recent open-source computer vision papers. Our second contribution is\nexperimenting with recent methods of language modeling and text generation such\nas Transformer and Transformer-XL to generate consistent $\\LaTeX{}$ code. We\nreport cross-entropy and bits-per-character (BPC) results of the trained\nmodels, and we also discuss interesting points on some examples of the\ngenerated $\\LaTeX{}$ code.",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2019-12-02T18:45:23+00:00",
+      "url": "http://arxiv.org/pdf/1912.01982v1",
+      "resource_uri": "arxiv://1912.01982v1"
+    },
+    {
+      "id": "2411.12728v1",
+      "title": "Information Theory of Meaningful Communication",
+      "authors": [
+        "Doron Sivan",
+        "Misha Tsodyks"
+      ],
+      "abstract": "In Shannon's seminal paper, entropy of printed English, treated as a\nstationary stochastic process, was estimated to be roughly 1 bit per character.\nHowever, considered as a means of communication, language differs considerably\nfrom its printed form: (i) the units of information are not characters or even\nwords but clauses, i.e. shortest meaningful parts of speech; and (ii) what is\ntransmitted is principally the meaning of what is being said or written, while\nthe precise phrasing that was used to communicate the meaning is typically\nignored. In this study, we show that one can leverage recently developed large\nlanguage models to quantify information communicated in meaningful narratives\nin terms of bits of meaning per clause.",
+      "categories": [
+        "cs.CL",
+        "cs.IT",
+        "math.IT"
+      ],
+      "published": "2024-11-19T18:51:23+00:00",
+      "url": "http://arxiv.org/pdf/2411.12728v1",
+      "resource_uri": "arxiv://2411.12728v1"
+    }
+  ]
+}[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The initial search did not directly identify the paper. The provided prefix mentions "Section III-B3" and "Fig. 4", which are internal document references, making it hard to search for the exact paper without a title or authors. However, the text explicitly mentions "Cover and King" and their estimate of "1.3 bits/character" for the asymptotic upper bound on H(S) from [1], and also references [2] for "performance of several language models... on the text8 dataset using a metric called bits per character (bpc)". It also mentions the Shannon-McMillan-Breiman Theorem and reference [8].
+Given the detailed mathematical derivations and the specific references, it's highly likely this is a research paper. I need to find the paper that contains these specific elements. I will try to search for the specific phrase "H(S) = H(X)/E[B]" which is a unique equation, along with the authors Cover and King, and the text8 dataset. This combination should be specific enough to find the paper.
+If I can't find the exact paper, I will try to find the references [1], [2], and [8] individually to gather information about them, and then search for the specific compression schemes mentioned (Token-by-Token Compression, Arithmetic Coding).
+Let's try a more targeted search for the equation and the authors.Action: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"\\\"H(S) = H(X)/E[B]\\\" \\\"Cover and King\\\" \\\"text8\\\" \\\"compression using LLMs\\\"\", \"max_results\": 1}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 1,
+  "papers": [
+    {
+      "id": "1706.05744v2",
+      "title": "Learning Hierarchical Information Flow with Recurrent Neural Modules",
+      "authors": [
+        "Danijar Hafner",
+        "Alex Irpan",
+        "James Davidson",
+        "Nicolas Heess"
+      ],
+      "abstract": "We propose ThalNet, a deep learning model inspired by neocortical\ncommunication via the thalamus. Our model consists of recurrent neural modules\nthat send features through a routing center, endowing the modules with the\nflexibility to share features over multiple time steps. We show that our model\nlearns to route information hierarchically, processing input data by a chain of\nmodules. We observe common architectures, such as feed forward neural networks\nand skip connections, emerging as special cases of our architecture, while\nnovel connectivity patterns are learned for the text8 compression task. Our\nmodel outperforms standard recurrent neural networks on several sequential\nbenchmarks.",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2017-06-18T23:20:12+00:00",
+      "url": "http://arxiv.org/pdf/1706.05744v2",
+      "resource_uri": "arxiv://1706.05744v2"
+    }
+  ]
+}[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The previous search did not yield the correct paper. The paper found ("Learning Hierarchical Information Flow with Recurrent Neural Modules") mentions "text8 compression task" but does not seem to be the paper I'm looking for, as it doesn't mention "Cover and King" or the specific entropy equation.
+The document prefix is very specific about "Section III-B3" discussing "arithmetic coding" and "probabilities produced by the LLM". It also mentions "Section III. COMPRESSION USING LLMS" as the main section. The "Entropy bounds" section (III-A) is already provided. The next sections are likely III-B (Encoding schemes), III-B1 (Compressing the ranks using zlib), III-B2 (Token-by-Token Compression), and III-B3 (Arithmetic Coding).
+I need to find the paper that contains these specific section titles and content. Since direct search for the paper is proving difficult without a title or author, I will try to find the references mentioned, especially [1] and [2], as they are directly cited for specific facts within the provided text. Knowing the full title of [1] and [2] might help me find the main paper or at least the content related to those references.
+Let's try to find reference [1] first, which is attributed to "Cover and King" and discusses "1.3 bits/character as an estimate of the asymptotic upper bound on H(S)". This is a very specific piece of information. I will search for "Cover and King entropy estimate English 1.3 bits/character".Action: search[00m
+[95m## Using tool:[00m [92msearch[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"Cover and King entropy estimate English 1.3 bits/character\"}"[00m
+[95m## Tool Output:[00m [92m
+No results were found for your search query. This could be due to DuckDuckGo's bot detection or the query returned no matches. Please try rephrasing your search or try again in a few minutes.
+
+
+You ONLY have access to the following tools, and should NEVER make up tools that are not listed here:
+
+Tool Name: download_paper
+Tool Arguments: {'properties': {'check_status': {'anyOf': [], 'default': False, 'description': 'Set to true to only check the status of an ongoing or completed conversion without starting a new download. Use this to monitor long-running conversions or verify if a paper is already available.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to download (e.g., '2301.07041', '1706.03762', 'cs.AI/0301001'). This can be found in search results or arXiv URLs. The paper must exist on arXiv.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Download and convert an arXiv paper to readable markdown format for analysis and reading. This tool fetches the PDF from arXiv, converts it to markdown using advanced text extraction, and stores it locally for immediate access. Use this tool when you need to read, analyze, or work with the full text content of a specific paper. The conversion process extracts text, preserves formatting, and handles mathematical equations. Returns the full paper content directly upon successful completion.
+Tool Name: extract_key_facts
+Tool Arguments: {'properties': {'count': {'anyOf': [], 'default': 5, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Count'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}, 'topic_within_article': {'anyOf': [], 'default': '', 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Topic Within Article'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Extract key facts from a Wikipedia article, optionally focused on a topic.
+Tool Name: fetch_content
+Tool Arguments: {'properties': {'url': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Url', 'type': 'string'}}, 'required': ['url'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Fetch and parse content from a webpage URL.
+
+    Args:
+        url: The webpage URL to fetch content from
+        ctx: MCP context for logging
+    
+Tool Name: get_article
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the full content of a Wikipedia article.
+Tool Name: get_coordinates
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the coordinates of a Wikipedia article.
+Tool Name: get_links
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the links contained within a Wikipedia article.
+Tool Name: get_related_topics
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get topics related to a Wikipedia article based on links and categories.
+Tool Name: get_sections
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the sections of a Wikipedia article.
+Tool Name: get_summary
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article.
+Tool Name: list_papers
+Tool Arguments: {'properties': {}, 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: List all previously downloaded and converted papers that are available in local storage for immediate reading and analysis. This tool shows you what papers you already have access to without needing to download them again. Each paper in the list includes metadata like title, authors, abstract, and direct links. Use this tool to see your paper library, check if a specific paper is already downloaded, or browse previously acquired research papers before downloading new ones.
+Tool Name: read_paper
+Tool Arguments: {'properties': {'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to read (e.g., '2301.07041', '1706.03762'). This must be a paper that has been previously downloaded and converted to markdown format. Use list_papers to see available papers.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Read the full text content of a previously downloaded and converted research paper in clean markdown format. This tool retrieves the complete paper content including abstract, introduction, methodology, results, conclusions, and references. The content is formatted for easy reading and analysis, with preserved mathematical equations and structured sections. Use this tool when you need to access the full text of a paper for detailed study, quotation, analysis, or research. The paper must have been previously downloaded using the download_paper tool.
+Tool Name: search
+Tool Arguments: {'properties': {'max_results': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Results'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Search DuckDuckGo and return formatted results.
+
+    Args:
+        query: The search query string
+        max_results: Maximum number of results to return (default: 10)
+        ctx: MCP context for logging
+    
+Tool Name: search_papers
+Tool Arguments: {'properties': {'categories': {'anyOf': [], 'default': None, 'description': "Strongly recommended: arXiv categories to focus search (e.g., ['cs.AI', 'cs.MA'] for agent research, ['cs.LG'] for ML, ['cs.CL'] for NLP, ['cs.CV'] for vision). Greatly improves relevance.", 'enum': None, 'items': {'type': 'string'}, 'properties': {}, 'title': ''}, 'date_from': {'anyOf': [], 'default': None, 'description': "Start date for papers (YYYY-MM-DD format). Use to find recent work, e.g., '2023-01-01' for last 2 years.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'date_to': {'anyOf': [], 'default': None, 'description': "End date for papers (YYYY-MM-DD format). Use with date_from to find historical work, e.g., '2020-12-31' for older research.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'max_results': {'anyOf': [], 'default': None, 'description': 'Maximum number of results to return (default: 10, max: 50). Use 15-20 for comprehensive searches.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'query': {'anyOf': [], 'description': 'Search query using quoted phrases for exact matches (e.g., \'"machine learning" OR "deep learning"\') or specific technical terms. Avoid overly broad or generic terms.', 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}, 'sort_by': {'anyOf': [], 'default': None, 'description': "Sort results by 'relevance' (most relevant first, default) or 'date' (newest first). Use 'relevance' for focused searches, 'date' for recent developments.", 'enum': ['relevance', 'date'], 'items': None, 'properties': {}, 'title': ''}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search for papers on arXiv with advanced filtering and query optimization.
+
+QUERY CONSTRUCTION GUIDELINES:
+- Use QUOTED PHRASES for exact matches: "multi-agent systems", "neural networks", "machine learning"
+- Combine related concepts with OR: "AI agents" OR "software agents" OR "intelligent agents"  
+- Use field-specific searches for precision:
+  - ti:"exact title phrase" - search in titles only
+  - au:"author name" - search by author
+  - abs:"keyword" - search in abstracts only
+- Use ANDNOT to exclude unwanted results: "machine learning" ANDNOT "survey"
+- For best results, use 2-4 core concepts rather than long keyword lists
+
+ADVANCED SEARCH PATTERNS:
+- Field + phrase: ti:"transformer architecture" for papers with exact title phrase
+- Multiple fields: au:"Smith" AND ti:"quantum" for author Smith's quantum papers  
+- Exclusions: "deep learning" ANDNOT ("survey" OR "review") to exclude survey papers
+- Broad + narrow: "artificial intelligence" AND (robotics OR "computer vision")
+
+CATEGORY FILTERING (highly recommended for relevance):
+- cs.AI: Artificial Intelligence
+- cs.MA: Multi-Agent Systems  
+- cs.LG: Machine Learning
+- cs.CL: Computation and Language (NLP)
+- cs.CV: Computer Vision
+- cs.RO: Robotics
+- cs.HC: Human-Computer Interaction
+- cs.CR: Cryptography and Security
+- cs.DB: Databases
+
+EXAMPLES OF EFFECTIVE QUERIES:
+- ti:"reinforcement learning" with categories: ["cs.LG", "cs.AI"] - for RL papers by title
+- au:"Hinton" AND "deep learning" with categories: ["cs.LG"] - for Hinton's deep learning work
+- "multi-agent" ANDNOT "survey" with categories: ["cs.MA"] - exclude survey papers
+- abs:"transformer" AND ti:"attention" with categories: ["cs.CL"] - attention papers with transformer abstracts
+
+DATE FILTERING: Use YYYY-MM-DD format for historical research:
+- date_to: "2015-12-31" - for foundational/classic work (pre-2016)
+- date_from: "2020-01-01" - for recent developments (post-2020)
+- Both together for specific time periods
+
+RESULT QUALITY: Results sorted by RELEVANCE (most relevant papers first), not just newest papers.
+This ensures you get the most pertinent results regardless of publication date.
+
+TIPS FOR FOUNDATIONAL RESEARCH:
+- Use date_to: "2010-12-31" to find classic papers on BDI, SOAR, ACT-R
+- Combine with field searches: ti:"BDI" AND abs:"belief desire intention"  
+- Try author searches: au:"Rao" AND "BDI" for Anand Rao's foundational BDI work
+Tool Name: search_wikipedia
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search Wikipedia for articles matching a query.
+Tool Name: summarize_article_for_query
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 250, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['query', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article tailored to a specific query.
+Tool Name: summarize_article_section
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 150, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'section_title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Section Title', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['section_title', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a specific section of a Wikipedia article.
+
+IMPORTANT: Use the following format in your response:
+
+```
+Thought: you should always think about what to do
+Action: the action to take, only one name of [download_paper, extract_key_facts, fetch_content, get_article, get_coordinates, get_links, get_related_topics, get_sections, get_summary, list_papers, read_paper, search, search_papers, search_wikipedia, summarize_article_for_query, summarize_article_section], just the name, exactly as it's written.
+Action Input: the input to the action, just a simple JSON object, enclosed in curly braces, using " to wrap keys and values.
+Observation: the result of the action
+```
+
+Once all necessary information is gathered, return the following format:
+
+```
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"date_to":"1976-12-31","max_results":5,"query":"au:\"Cover\" AND au:\"King\" \"entropy of English\""}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 1.9724246s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"max_results":3,"query":"\"Token-by-Token Compression\" \"time-varying codebook\" language model"}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.3257132s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Calling tool search_papers with arguments: {"max_results":3,"query":"\"arithmetic coding\" \"probabilities produced by LLM\" compression"}
+  - Running mcp/arxiv-mcp-server with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=arxiv-mcp-server -l docker-mcp-transport=stdio -e ARXIV_STORAGE_PATH -v C:\Users\Noah\Documents\game:/app/papers]
+  > Calling tool search_papers took: 2.6256448s
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+```[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"au:\\\"Cover\\\" AND au:\\\"King\\\" \\\"entropy of English\\\"\", \"date_to\": \"1976-12-31\", \"max_results\": 5}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 0,
+  "papers": []
+}[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: My previous attempts to find the paper directly or by searching for reference [1] (Cover and King) have not been successful. The `search` tool (DuckDuckGo) also failed to find "Cover and King entropy estimate English 1.3 bits/character". This suggests that the exact phrasing might be too specific or the paper is not easily discoverable through these general search methods.
+However, the document prefix is very detailed about the structure and content. It explicitly mentions:
+*   "Section III-B3" for arithmetic coding.
+*   "Section III. COMPRESSION USING LLMS" as the main section.
+*   "Fig. 4. Schematic showing the prediction at epoch i."
+*   "III-B. Encoding schemes"
+*   "III-B1) Compressing the ranks using zlib: LLaMA+zlib"
+*   "III-B2) Token-by-Token Compression: uses a time-varying codebook"
+*   "Reference [1]: Cover and King, 1.3 bits/character estimate"
+*   "Reference [2]: performance of several language models... on the text8 dataset using a metric called bits per character (bpc)"
+*   "Reference [8]: Shannon-McMillan-Breiman Theorem"
+Given that I cannot find the paper directly, I will try to find the *content* of the missing sections by searching for the specific phrases and concepts mentioned. I will focus on:
+1.  "Token-by-Token Compression" and "time-varying codebook" (for III-B2).
+2.  "Arithmetic coding" and "probabilities produced by the LLM" (for III-B3).
+3.  The full details of references [1], [2], and [8].
+Let's start by searching for the specific compression schemes. I will use `search_papers` first, as it's more likely to yield academic papers. If that fails, I'll use `search` (DuckDuckGo).
+First, for "Token-by-Token Compression" with "time-varying codebook".Action: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"\\\"Token-by-Token Compression\\\" \\\"time-varying codebook\\\" language model\", \"max_results\": 3}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 3,
+  "papers": [
+    {
+      "id": "2408.10441v1",
+      "title": "Goldfish: Monolingual Language Models for 350 Languages",
+      "authors": [
+        "Tyler A. Chang",
+        "Catherine Arnett",
+        "Zhuowen Tu",
+        "Benjamin K. Bergen"
+      ],
+      "abstract": "For many low-resource languages, the only available language models are large\nmultilingual models trained on many languages simultaneously. However, using\nFLORES perplexity as a metric, we find that these models perform worse than\nbigrams for many languages (e.g. 24% of languages in XGLM 4.5B; 43% in BLOOM\n7.1B). To facilitate research that focuses on low-resource languages, we\npre-train and release Goldfish, a suite of monolingual autoregressive\nTransformer language models up to 125M parameters for 350 languages. The\nGoldfish reach lower FLORES perplexities than BLOOM, XGLM, and MaLA-500 on 98\nof 204 FLORES languages, despite each Goldfish model being over 10x smaller.\nHowever, the Goldfish significantly underperform larger multilingual models on\nreasoning benchmarks, suggesting that for low-resource languages,\nmultilinguality primarily improves general reasoning abilities rather than\nbasic text generation. We release models trained on 5MB (350 languages), 10MB\n(288 languages), 100MB (166 languages), and 1GB (83 languages) of text data\nwhere available. The Goldfish models are available as baselines, fine-tuning\nsources, or augmentations to existing models in low-resource NLP research, and\nthey are further useful for crosslinguistic studies requiring maximally\ncomparable models across languages.",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2024-08-19T22:31:21+00:00",
+      "url": "http://arxiv.org/pdf/2408.10441v1",
+      "resource_uri": "arxiv://2408.10441v1"
+    },
+    {
+      "id": "2310.18862v1",
+      "title": "Counterfactually Probing Language Identity in Multilingual Models",
+      "authors": [
+        "Anirudh Srinivasan",
+        "Venkata S Govindarajan",
+        "Kyle Mahowald"
+      ],
+      "abstract": "Techniques in causal analysis of language models illuminate how linguistic\ninformation is organized in LLMs. We use one such technique, AlterRep, a method\nof counterfactual probing, to explore the internal structure of multilingual\nmodels (mBERT and XLM-R). We train a linear classifier on a binary language\nidentity task, to classify tokens between Language X and Language Y. Applying a\ncounterfactual probing procedure, we use the classifier weights to project the\nembeddings into the null space and push the resulting embeddings either in the\ndirection of Language X or Language Y. Then we evaluate on a masked language\nmodeling task. We find that, given a template in Language X, pushing towards\nLanguage Y systematically increases the probability of Language Y words, above\nand beyond a third-party control language. But it does not specifically push\nthe model towards translation-equivalent words in Language Y. Pushing towards\nLanguage X (the same direction as the template) has a minimal effect, but\nsomewhat degrades these models. Overall, we take these results as further\nevidence of the rich structure of massive multilingual language models, which\ninclude both a language-specific and language-general component. And we show\nthat counterfactual probing can be fruitfully applied to multilingual models.",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2023-10-29T01:21:36+00:00",
+      "url": "http://arxiv.org/pdf/2310.18862v1",
+      "resource_uri": "arxiv://2310.18862v1"
+    },
+    {
+      "id": "1107.4687v2",
+      "title": "Fence - An Efficient Parser with Ambiguity Support for Model-Driven Language Specification",
+      "authors": [
+        "Luis Quesada",
+        "Fernando Berzal",
+        "Francisco J. Cortijo"
+      ],
+      "abstract": "Model-based language specification has applications in the implementation of\nlanguage processors, the design of domain-specific languages, model-driven\nsoftware development, data integration, text mining, natural language\nprocessing, and corpus-based induction of models. Model-based language\nspecification decouples language design from language processing and, unlike\ntraditional grammar-driven approaches, which constrain language designers to\nspecific kinds of grammars, it needs general parser generators able to deal\nwith ambiguities. In this paper, we propose Fence, an efficient bottom-up\nparsing algorithm with lexical and syntactic ambiguity support that enables the\nuse of model-based language specification in practice.",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2011-07-23T12:56:02+00:00",
+      "url": "http://arxiv.org/pdf/1107.4687v2",
+      "resource_uri": "arxiv://1107.4687v2"
+    }
+  ]
+}[00m
+
+
+[1m[95m# Agent:[00m [1m[92mAI Assistant[00m
+[95m## Thought:[00m [92mThought: The search for "Token-by-Token Compression" and "time-varying codebook" did not yield the specific paper or direct content for section III-B2. The results are not relevant to the compression scheme described in the prefix.
+Next, I will search for "Arithmetic coding" and "probabilities produced by the LLM" or "LLM arithmetic coding compression". This is for Section III-B3.Action: search_papers[00m
+[95m## Using tool:[00m [92msearch_papers[00m
+[95m## Tool Input:[00m [92m
+"{\"query\": \"\\\"arithmetic coding\\\" \\\"probabilities produced by LLM\\\" compression\", \"max_results\": 3}"[00m
+[95m## Tool Output:[00m [92m
+{
+  "total_results": 3,
+  "papers": [
+    {
+      "id": "2508.08840v1",
+      "title": "Optimized Arithmetic Coding for Efficient Data Compression in the Resource-Constrained Internet of Things(IoT)",
+      "authors": [
+        "Vatsala Upadhyay",
+        "J. Kokila",
+        "Abhishek Vaish"
+      ],
+      "abstract": "The Internet of Things (IoT) generates vast amounts of heterogeneous data,\nranging from sensor readings to log alerts and images, that pose challenges to\nstorage and data transmission in resource-constrained environments. In this\ncontext, lossless data compression techniques, like Arithmetic Coding, offer an\neffective solution owing to their high compression ratio. However, the standard\nArithmetic Coding technique is computationally intensive, leading to high\nmemory and processing overhead. This paper proposes an optimized version of\nArithmetic coding for the IoT environment that incorporates three improvements\nusing Iterative and Iteration Optimizations for minimizing redundant\ncomputations and achieving faster convergence; Principal Component\nAnalysis(PCA) for dimensionality reduction and identifying key features; and\nlastly, Cardinality reduction for grouping similar probabilities to improve the\ncompression efficiency. The proposed method was evaluated on a dataset of\nimages and demonstrated significant reductions in the time to compress, CPU\nutilization, and memory consumption, and preserves data integrity as seen\nthrough the low RMSE values. The optimized version of the Arithmetic Coding\nalgorithm achieves an impressive compression ratio of 814:1 and 101 ms to\ncompress a single image. This makes the optimized algorithm suitable for\nreal-time applications and resource-constrained environments for efficient data\ntransmission and storage.",
+      "categories": [
+        "cs.IT",
+        "math.IT"
+      ],
+      "published": "2025-08-12T10:59:11+00:00",
+      "url": "http://arxiv.org/pdf/2508.08840v1",
+      "resource_uri": "arxiv://2508.08840v1"
+    },
+    {
+      "id": "2302.00819v1",
+      "title": "Introduction to Arithmetic Coding -- Theory and Practice",
+      "authors": [
+        "Amir Said"
+      ],
+      "abstract": "This introduction to arithmetic coding is divided in two parts. The first\nexplains how and why arithmetic coding works. We start presenting it in very\ngeneral terms, so that its simplicity is not lost under layers of\nimplementation details. Next, we show some of its basic properties, which are\nlater used in the computational techniques required for a practical\nimplementation. In the second part, we cover the practical implementation\naspects, including arithmetic operations with low precision, the subdivision of\ncoding and modeling, and the realization of adaptive encoders. We also analyze\nthe arithmetic coding computational complexity, and techniques to reduce it.",
+      "categories": [
+        "cs.IT",
+        "cs.MM",
+        "math.IT"
+      ],
+      "published": "2023-02-02T01:51:35+00:00",
+      "url": "http://arxiv.org/pdf/2302.00819v1",
+      "resource_uri": "arxiv://2302.00819v1"
+    },
+    {
+      "id": "0704.0834v1",
+      "title": "P-adic arithmetic coding",
+      "authors": [
+        "Anatoly Rodionov",
+        "Sergey Volkov"
+      ],
+      "abstract": "A new incremental algorithm for data compression is presented. For a sequence\nof input symbols algorithm incrementally constructs a p-adic integer number as\nan output. Decoding process starts with less significant part of a p-adic\ninteger and incrementally reconstructs a sequence of input symbols. Algorithm\nis based on certain features of p-adic numbers and p-adic norm. p-adic coding\nalgorithm may be considered as of generalization a popular compression\ntechnique - arithmetic coding algorithms. It is shown that for p = 2 the\nalgorithm works as integer variant of arithmetic coding; for a special class of\nmodels it gives exactly the same codes as Huffman's algorithm, for another\nspecial model and a specific alphabet it gives Golomb-Rice codes.",
+      "categories": [
+        "cs.DS",
+        "H.1.1"
+      ],
+      "published": "2007-04-06T02:30:42+00:00",
+      "url": "http://arxiv.org/pdf/0704.0834v1",
+      "resource_uri": "arxiv://0704.0834v1"
+    }
+  ]
+}
+
+
+You ONLY have access to the following tools, and should NEVER make up tools that are not listed here:
+
+Tool Name: download_paper
+Tool Arguments: {'properties': {'check_status': {'anyOf': [], 'default': False, 'description': 'Set to true to only check the status of an ongoing or completed conversion without starting a new download. Use this to monitor long-running conversions or verify if a paper is already available.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to download (e.g., '2301.07041', '1706.03762', 'cs.AI/0301001'). This can be found in search results or arXiv URLs. The paper must exist on arXiv.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Download and convert an arXiv paper to readable markdown format for analysis and reading. This tool fetches the PDF from arXiv, converts it to markdown using advanced text extraction, and stores it locally for immediate access. Use this tool when you need to read, analyze, or work with the full text content of a specific paper. The conversion process extracts text, preserves formatting, and handles mathematical equations. Returns the full paper content directly upon successful completion.
+Tool Name: extract_key_facts
+Tool Arguments: {'properties': {'count': {'anyOf': [], 'default': 5, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Count'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}, 'topic_within_article': {'anyOf': [], 'default': '', 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Topic Within Article'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Extract key facts from a Wikipedia article, optionally focused on a topic.
+Tool Name: fetch_content
+Tool Arguments: {'properties': {'url': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Url', 'type': 'string'}}, 'required': ['url'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Fetch and parse content from a webpage URL.
+
+    Args:
+        url: The webpage URL to fetch content from
+        ctx: MCP context for logging
+    
+Tool Name: get_article
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the full content of a Wikipedia article.
+Tool Name: get_coordinates
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the coordinates of a Wikipedia article.
+Tool Name: get_links
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the links contained within a Wikipedia article.
+Tool Name: get_related_topics
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get topics related to a Wikipedia article based on links and categories.
+Tool Name: get_sections
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get the sections of a Wikipedia article.
+Tool Name: get_summary
+Tool Arguments: {'properties': {'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article.
+Tool Name: list_papers
+Tool Arguments: {'properties': {}, 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: List all previously downloaded and converted papers that are available in local storage for immediate reading and analysis. This tool shows you what papers you already have access to without needing to download them again. Each paper in the list includes metadata like title, authors, abstract, and direct links. Use this tool to see your paper library, check if a specific paper is already downloaded, or browse previously acquired research papers before downloading new ones.
+Tool Name: read_paper
+Tool Arguments: {'properties': {'paper_id': {'anyOf': [], 'description': "The arXiv identifier of the paper to read (e.g., '2301.07041', '1706.03762'). This must be a paper that has been previously downloaded and converted to markdown format. Use list_papers to see available papers.", 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}}, 'required': ['paper_id'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Read the full text content of a previously downloaded and converted research paper in clean markdown format. This tool retrieves the complete paper content including abstract, introduction, methodology, results, conclusions, and references. The content is formatted for easy reading and analysis, with preserved mathematical equations and structured sections. Use this tool when you need to access the full text of a paper for detailed study, quotation, analysis, or research. The paper must have been previously downloaded using the download_paper tool.
+Tool Name: search
+Tool Arguments: {'properties': {'max_results': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Results'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: 
+    Search DuckDuckGo and return formatted results.
+
+    Args:
+        query: The search query string
+        max_results: Maximum number of results to return (default: 10)
+        ctx: MCP context for logging
+    
+Tool Name: search_papers
+Tool Arguments: {'properties': {'categories': {'anyOf': [], 'default': None, 'description': "Strongly recommended: arXiv categories to focus search (e.g., ['cs.AI', 'cs.MA'] for agent research, ['cs.LG'] for ML, ['cs.CL'] for NLP, ['cs.CV'] for vision). Greatly improves relevance.", 'enum': None, 'items': {'type': 'string'}, 'properties': {}, 'title': ''}, 'date_from': {'anyOf': [], 'default': None, 'description': "Start date for papers (YYYY-MM-DD format). Use to find recent work, e.g., '2023-01-01' for last 2 years.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'date_to': {'anyOf': [], 'default': None, 'description': "End date for papers (YYYY-MM-DD format). Use with date_from to find historical work, e.g., '2020-12-31' for older research.", 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'max_results': {'anyOf': [], 'default': None, 'description': 'Maximum number of results to return (default: 10, max: 50). Use 15-20 for comprehensive searches.', 'enum': None, 'items': None, 'properties': {}, 'title': ''}, 'query': {'anyOf': [], 'description': 'Search query using quoted phrases for exact matches (e.g., \'"machine learning" OR "deep learning"\') or specific technical terms. Avoid overly broad or generic terms.', 'enum': None, 'items': None, 'properties': {}, 'title': '', 'type': 'string'}, 'sort_by': {'anyOf': [], 'default': None, 'description': "Sort results by 'relevance' (most relevant first, default) or 'date' (newest first). Use 'relevance' for focused searches, 'date' for recent developments.", 'enum': ['relevance', 'date'], 'items': None, 'properties': {}, 'title': ''}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search for papers on arXiv with advanced filtering and query optimization.
+
+QUERY CONSTRUCTION GUIDELINES:
+- Use QUOTED PHRASES for exact matches: "multi-agent systems", "neural networks", "machine learning"
+- Combine related concepts with OR: "AI agents" OR "software agents" OR "intelligent agents"  
+- Use field-specific searches for precision:
+  - ti:"exact title phrase" - search in titles only
+  - au:"author name" - search by author
+  - abs:"keyword" - search in abstracts only
+- Use ANDNOT to exclude unwanted results: "machine learning" ANDNOT "survey"
+- For best results, use 2-4 core concepts rather than long keyword lists
+
+ADVANCED SEARCH PATTERNS:
+- Field + phrase: ti:"transformer architecture" for papers with exact title phrase
+- Multiple fields: au:"Smith" AND ti:"quantum" for author Smith's quantum papers  
+- Exclusions: "deep learning" ANDNOT ("survey" OR "review") to exclude survey papers
+- Broad + narrow: "artificial intelligence" AND (robotics OR "computer vision")
+
+CATEGORY FILTERING (highly recommended for relevance):
+- cs.AI: Artificial Intelligence
+- cs.MA: Multi-Agent Systems  
+- cs.LG: Machine Learning
+- cs.CL: Computation and Language (NLP)
+- cs.CV: Computer Vision
+- cs.RO: Robotics
+- cs.HC: Human-Computer Interaction
+- cs.CR: Cryptography and Security
+- cs.DB: Databases
+
+EXAMPLES OF EFFECTIVE QUERIES:
+- ti:"reinforcement learning" with categories: ["cs.LG", "cs.AI"] - for RL papers by title
+- au:"Hinton" AND "deep learning" with categories: ["cs.LG"] - for Hinton's deep learning work
+- "multi-agent" ANDNOT "survey" with categories: ["cs.MA"] - exclude survey papers
+- abs:"transformer" AND ti:"attention" with categories: ["cs.CL"] - attention papers with transformer abstracts
+
+DATE FILTERING: Use YYYY-MM-DD format for historical research:
+- date_to: "2015-12-31" - for foundational/classic work (pre-2016)
+- date_from: "2020-01-01" - for recent developments (post-2020)
+- Both together for specific time periods
+
+RESULT QUALITY: Results sorted by RELEVANCE (most relevant papers first), not just newest papers.
+This ensures you get the most pertinent results regardless of publication date.
+
+TIPS FOR FOUNDATIONAL RESEARCH:
+- Use date_to: "2010-12-31" to find classic papers on BDI, SOAR, ACT-R
+- Combine with field searches: ti:"BDI" AND abs:"belief desire intention"  
+- Try author searches: au:"Rao" AND "BDI" for Anand Rao's foundational BDI work
+Tool Name: search_wikipedia
+Tool Arguments: {'properties': {'limit': {'anyOf': [], 'default': 10, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Limit'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}}, 'required': ['query'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Search Wikipedia for articles matching a query.
+Tool Name: summarize_article_for_query
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 250, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'query': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Query', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['query', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a Wikipedia article tailored to a specific query.
+Tool Name: summarize_article_section
+Tool Arguments: {'properties': {'max_length': {'anyOf': [], 'default': 150, 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Max Length'}, 'section_title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Section Title', 'type': 'string'}, 'title': {'anyOf': [], 'description': '', 'enum': None, 'items': None, 'properties': {}, 'title': 'Title', 'type': 'string'}}, 'required': ['section_title', 'title'], 'title': 'DynamicModel', 'type': 'object'}
+Tool Description: Get a summary of a specific section of a Wikipedia article.
+
+IMPORTANT: Use the following format in your response:
+
+```
+Thought: you should always think about what to do
+Action: the action to take, only one name of [download_paper, extract_key_facts, fetch_content, get_article, get_coordinates, get_links, get_related_topics, get_sections, get_summary, list_papers, read_paper, search, search_papers, search_wikipedia, summarize_article_for_query, summarize_article_section], just the name, exactly as it's written.
+Action Input: the input to the action, just a simple JSON object, enclosed in curly braces, using " to wrap keys and values.
+Observation: the result of the action
+```
+
+Once all necessary information is gathered, return the following format:
+
+```
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+```[00m
