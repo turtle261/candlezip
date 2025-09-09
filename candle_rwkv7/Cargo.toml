@@ -1,0 +1,38 @@
+[package]
+name = "candlerwkv7"
+version = "0.1.0"
+edition = "2021"
+license = "MIT or Apache-2.0"
+authors = ["Noah Cashin <noahc959@icloud.com>"]
+description = "RWKV7 'Goose' implementation in Candle"
+
+[lib]
+name = "candlerwkv7"
+path = "src/lib.rs"
+
+[dependencies]
+candle = {version = "0.9.1", package="candle-core", default-features = false, features = ["cuda"] }
+candle-nn = { version = "0.9.1", default-features = false, features = ["cuda"] }
+candle-transformers = { version = "0.9.1", default-features = false, features = ["cuda"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+hf-hub = { version = "0.3", features = ["tokio"] }
+ureq = { version = "2.9", features = ["json", "tls"] }
+# For the conversion utility
+half = "2.0"
+memmap2 = "0.9"
+repugnant-pickle = { version = "0.0.1", features = ["torch"] }
+bytemuck = "1.0"
+
+[features]
+default = ["candle/cuda", "candle-nn/cuda", "candle-transformers/cuda"]
+mkl = ["candle/mkl", "candle-nn/mkl", "candle-transformers/mkl"]
+metal = ["candle/metal", "candle-nn/metal", "candle-transformers/metal"]
+
+[dev-dependencies]
+tracing-chrome = { version = "0.7" }
+tracing-subscriber = { version = "0.3" }
+
+
