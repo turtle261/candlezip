@@ -1,5 +1,5 @@
 use std::fs::{self, File};
-use std::io::{BufReader, BufWriter, Read, Write};
+use std::io::{BufReader, BufWriter, Read, Write, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 use std::process::{Command, Stdio};
@@ -19,7 +19,7 @@ use candle_core::{Device, Tensor, DType, IndexOp};
 mod models;
 use models::{LanguageModelSession, SmolLmSession, Rwkv7Session};
 
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Clone)]
 #[command(name="candezip", about="Unified model-based compressor with optional scan mode")]
 struct Cli {
     /// Backend: smollm or rwkv7
@@ -66,7 +66,7 @@ struct Cli {
     scan_chunk_size: Option<usize>,
     #[arg(long, default_value_t = 7)]
     scan_max_steps: usize,
-    #[arg(long, default_value_t = 128)]
+    #[arg(long, default_value_t = 512)]
     scan_max_hint_tokens: usize,
     #[arg(long, value_hint = ValueHint::FilePath, default_value = "agent/mcp_config.json")]
     scan_mcp_config: PathBuf,
@@ -78,18 +78,46 @@ struct Cli {
     scan_verbose: bool,
     #[arg(long, default_value_t = 512)]
     scan_lookahead: usize,
-    #[arg(long, default_value_t = 120)]
+    #[arg(long, default_value_t = 300)]
     scan_agent_timeout: u64,
+
+    /// Gate only if relative savings >= this percent (0-100)
+    #[arg(long, default_value_t = 0.0)]
+    scan_gate_threshold_pct: f64,
+
+    /// Gate only if absolute savings >= this many bits (set <=0 to disable)
+    #[arg(long, default_value_t = -1.0)]
+    scan_gate_threshold_abs_bits: f64,
+
+    /// Run per-server attribution and log tool_proof.csv
+    #[arg(long, default_value_t = false)]
+    scan_attribution: bool,
+
+    /// Enable Agentic Conditioning (deterministic agent priming at chunk boundaries)
+    #[arg(long, default_value_t = false)]
+    agent: bool,
+
+    /// Agent entry script to execute. Default uses CrewAI Python agent; pass deterministic_mock_agent_cli.py for fully deterministic runs.
+    #[arg(long, value_hint = ValueHint::FilePath, default_value = "agent/agent_v2.py")]
+    scan_agent_script: PathBuf,
 
     /// Allow decode even if model/tokenizer BLAKE3 do not match the container
     #[arg(long, default_value_t = false)]
     force_mismatch: bool,
 
+    /// For self-test: reuse cached agent outputs from previous encode run for deterministic decode verification
+    #[arg(long, default_value_t = false)]
+    reuse: bool,
+
     #[command(subcommand)]
     command: Commands,
+
+    /// Reuse gate decisions and agent outputs from a previous scan directory (for iterative testing)
+    #[arg(long, value_hint = ValueHint::DirPath)]
+    reuse_scan_dir: Option<PathBuf>,
 }
 
-#[derive(Subcommand, Debug)]
+#[derive(Subcommand, Debug, Clone)]
 enum Commands {
     Compress { input: PathBuf, output: PathBuf },
     Decompress { input: PathBuf, output: PathBuf },
@@ -112,10 +140,31 @@ fn main() -> Result<()> {
 fn self_test(cli: &Cli, input: &Path) -> Result<()> {
     let tmp_out = input.with_extension("canz");
     let tmp_dec = input.with_extension("roundtrip.txt");
+
+    // * Enable research-grade watchdog logging for self-test runs (deterministic, side-effect free)
+    let ts = Utc::now().format("%Y%m%d_%H%M%S");
+    let run_dir = Path::new("scan_output").join(format!(
+        "{}_selftest_{}_{}",
+        input
+            .file_stem()
+            .and_then(|s| s.to_str())
+            .unwrap_or("input"),
+        cli.backend.to_lowercase(),
+        ts
+    ));
+    fs::create_dir_all(&run_dir).ok();
+    std::env::set_var("CANDLEZIP_WATCHDOG", "1");
+    std::env::set_var("CANDLEZIP_WATCHDOG_DIR", &run_dir);
+
     let t0 = std::time::Instant::now();
     encode_file(cli, input, &tmp_out)?;
     let t1 = std::time::Instant::now();
-    decode_file(cli, &tmp_out, &tmp_dec)?;
+
+    // Decode with watchdog comparison against the encode trace
+    // Enable --reuse for deterministic decode during self-test
+    let mut decode_cli = cli.clone();
+    decode_cli.reuse = true;
+    let decode_res = decode_file(&decode_cli, &tmp_out, &tmp_dec);
     let t2 = std::time::Instant::now();
 
     let src = fs::read(input)?;
@@ -127,10 +176,30 @@ fn self_test(cli: &Cli, input: &Path) -> Result<()> {
     println!("Decompression : {:.2?}", t2 - t1);
     println!("Bits per byte : {:.3}", bits_per_byte);
 
-    if src == dec {
+    if decode_res.is_ok() && src == dec {
         println!("Roundtrip OK. Encoded: {} bytes, Decoded: {} bytes", enc.len(), dec.len());
         Ok(())
     } else {
+        eprintln!("[watchdog] Roundtrip mismatch detected. Collecting diagnostics...");
+        // Print tails of encode/decode watchdog streams and mismatch report if present
+        let enc_path = run_dir.join("watchdog_encode_steps.jsonl");
+        let dec_path = run_dir.join("watchdog_decode_steps.jsonl");
+        let mm_path = run_dir.join("watchdog_mismatch.json");
+        let tail = |p: &Path| -> Vec<String> {
+            if !p.exists() { return vec![format!("<missing: {}>", p.display())]; }
+            let Ok(text) = fs::read_to_string(p) else { return vec![format!("<unreadable: {}>", p.display())]; };
+            let mut lines: Vec<&str> = text.lines().collect();
+            let n = lines.len();
+            if n > 20 { lines = lines[n-20..].to_vec(); }
+            lines.into_iter().map(|s| s.to_string()).collect()
+        };
+        eprintln!("[watchdog] encode tail:");
+        for l in tail(&enc_path) { eprintln!("{}", l); }
+        eprintln!("[watchdog] decode tail:");
+        for l in tail(&dec_path) { eprintln!("{}", l); }
+        if mm_path.exists() {
+            if let Ok(mm) = fs::read_to_string(&mm_path) { eprintln!("[watchdog] mismatch: {}", mm); }
+        }
         bail!("roundtrip mismatch");
     }
 }
@@ -156,6 +225,27 @@ fn ac_p_min() -> f64 {
     let base = AC_BASE as f64;
     2.0 * base.powi(-(AC_PRECISION as i32 - 2))
 }
+
+// * Reserved flags bit layout (VERSION=2):
+// * bit 0: agent conditioning used (1=yes)
+// * bits 1..15: reserved (0)
+// * bits 16..31: agent chunk size (tokens), 16-bit unsigned
+const FLAG_AGENT_USED: u32 = 1 << 0;
+const FLAG_AGENT_MOCK: u32 = 1 << 1;
+const FLAG_AGENT_GATES: u32 = 1 << 2; // gating bits present after header
+fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, agent_chunk: usize) -> u32 {
+    let mut f = 0u32;
+    if agent_used { f |= FLAG_AGENT_USED; }
+    if agent_mock { f |= FLAG_AGENT_MOCK; }
+    if gates_present { f |= FLAG_AGENT_GATES; }
+    let chunk16 = (agent_chunk as u32) & 0xFFFF;
+    f |= chunk16 << 16;
+    f
+}
+fn flags_unpack_agent_used(flags: u32) -> bool { (flags & FLAG_AGENT_USED) != 0 }
+fn flags_unpack_agent_mock(flags: u32) -> bool { (flags & FLAG_AGENT_MOCK) != 0 }
+fn flags_unpack_agent_gates(flags: u32) -> bool { (flags & FLAG_AGENT_GATES) != 0 }
+fn flags_unpack_agent_chunk(flags: u32) -> usize { ((flags >> 16) & 0xFFFF) as usize }
 
 struct ArithmeticEncoder<W: std::io::Write> {
     b_to_pm1: u64,
@@ -250,7 +340,7 @@ impl<W: std::io::Write> ArithmeticEncoder<W> {
         Ok(())
     }
 
-    fn finish(mut self) -> anyhow::Result<()> {
+    fn finish(mut self) -> anyhow::Result<W> {
         self.carry_run += 1;
         if self.low < self.b_to_pm2 {
             self.put_bit(0)?;
@@ -261,10 +351,11 @@ impl<W: std::io::Write> ArithmeticEncoder<W> {
             let remaining = 8 - self.bit_count;
             for _ in 0..remaining { self.put_bit_internal(0)?; }
         }
-        Ok(())
+        Ok(self.out)
     }
 
     fn bytes_written(&self) -> u64 { self.bytes_out }
+    fn into_inner(self) -> W { self.out }
 }
 
 struct ArithmeticDecoder<'a> {
@@ -457,6 +548,57 @@ fn read_header_v2<R: std::io::Read>(r: &mut R) -> anyhow::Result<(HeaderBinV2, V
         model_file_repr_len,
         reprime_interval,
     }, repr))
+}
+
+// ----------------------------------
+// Agent gating metadata (binary)
+// ----------------------------------
+
+const AGTB_MAGIC: [u8; 4] = *b"AGTB"; // marker for gating bits section
+const AGT2_MAGIC: [u8; 4] = *b"AGT2"; // structured gating section (v2)
+
+#[derive(Clone, Copy, Debug, Default)]
+struct GateRecordV2 { gate: u8, candidate_id: u8, budget_id: u8 }
+
+fn write_agent_gates<W: std::io::Write>(w: &mut W, gates_bits: &[u8], nbits: u64) -> anyhow::Result<()> {
+    use std::io::Write as _;
+    w.write_all(&AGTB_MAGIC)?;
+    write_var_u64(w, nbits)?;
+    w.write_all(gates_bits)?;
+    Ok(())
+}
+
+fn write_agent_gates_v2<W: std::io::Write>(w: &mut W, records: &[GateRecordV2]) -> anyhow::Result<()> {
+    use std::io::Write as _;
+    w.write_all(&AGT2_MAGIC)?;
+    write_var_u64(w, records.len() as u64)?;
+    for rec in records {
+        let mut byte: u8 = 0;
+        byte |= (rec.gate & 1) << 0;
+        byte |= (rec.candidate_id & 0b11) << 1;
+        byte |= (rec.budget_id & 0b11) << 3;
+        w.write_all(&[byte])?;
+    }
+    Ok(())
+}
+
+fn read_agent_gates<R: std::io::Read>(r: &mut R) -> anyhow::Result<(Vec<u8>, u64)> {
+    use std::io::Read as _;
+    let mut magic = [0u8;4];
+    r.read_exact(&mut magic)?;
+    if magic != AGTB_MAGIC { anyhow::bail!("invalid gating magic"); }
+    let nbits = read_var_u64(r)?;
+    let nbytes = ((nbits + 7) / 8) as usize;
+    let mut bytes = vec![0u8; nbytes];
+    r.read_exact(&mut bytes)?;
+    Ok((bytes, nbits))
+}
+
+fn get_gate_bit(gates_bytes: &[u8], idx: usize) -> u8 {
+    let byte = idx / 8;
+    let bit = idx % 8;
+    if byte >= gates_bytes.len() { return 0; }
+    ((gates_bytes[byte] >> bit) & 1) as u8
 }
 
 
@@ -689,16 +831,357 @@ fn blake3_files_bin16(paths: &[PathBuf]) -> anyhow::Result<[u8; 16]> {
 }
 
 // ----------------------------------
+// Watchdog helpers (research-grade, deterministic)
+// ----------------------------------
+
+fn hex16(bytes: &[u8; 16]) -> String {
+    const HEX: &[u8; 16] = b"0123456789abcdef";
+    let mut out = [0u8; 32];
+    for (i, b) in bytes.iter().enumerate() {
+        out[2 * i] = HEX[(b >> 4) as usize];
+        out[2 * i + 1] = HEX[(b & 0x0F) as usize];
+    }
+    String::from_utf8_lossy(&out).into_owned()
+}
+
+fn blake3_f32_bin16(values: &[f32]) -> [u8; 16] {
+    let mut hasher = Hasher::new();
+    for v in values { hasher.update(&v.to_le_bytes()); }
+    let mut out = [0u8; 16];
+    out.copy_from_slice(hasher.finalize().as_bytes()[..16].as_ref());
+    out
+}
+
+fn blake3_f64_bin16(values: &[f64]) -> [u8; 16] {
+    let mut hasher = Hasher::new();
+    for v in values { hasher.update(&v.to_le_bytes()); }
+    let mut out = [0u8; 16];
+    out.copy_from_slice(hasher.finalize().as_bytes()[..16].as_ref());
+    out
+}
+
+fn watchdog_dir() -> Option<PathBuf> {
+    match std::env::var("CANDLEZIP_WATCHDOG") {
+        Ok(v) if v == "1" => std::env::var("CANDLEZIP_WATCHDOG_DIR").ok().map(PathBuf::from),
+        _ => None,
+    }
+}
+
+fn watchdog_write_jsonl(dir: &Path, file: &str, v: &serde_json::Value) {
+    let path = dir.join(file);
+    if let Ok(mut f) = File::options().create(true).append(true).open(&path) {
+        let _ = writeln!(f, "{}", v);
+    }
+}
+
+fn watchdog_try_write_json(dir: &Path, file: &str, v: &serde_json::Value) {
+    let path = dir.join(file);
+    // Best-effort write; overwrite allowed to keep last mismatch
+    if let Ok(mut f) = File::create(&path) {
+        let _ = writeln!(f, "{}", v);
+    }
+}
+
+#[derive(Clone, Debug)]
+struct EncodeStepRef {
+    sym: u32,
+    pdf_digest: Option<String>,
+}
+
+fn watchdog_load_encode_trace(dir: &Path) -> Vec<Option<EncodeStepRef>> {
+    let path = dir.join("watchdog_encode_steps.jsonl");
+    let Ok(text) = fs::read_to_string(&path) else { return Vec::new() };
+    let mut out: Vec<Option<EncodeStepRef>> = Vec::new();
+    for line in text.lines() {
+        if line.trim().is_empty() { continue; }
+        if let Ok(v) = serde_json::from_str::<serde_json::Value>(line) {
+            let phase = v.get("phase").and_then(|x| x.as_str()).unwrap_or("");
+            if phase == "encode_step" {
+                if let (Some(i), Some(sym)) = (v.get("i").and_then(|x| x.as_u64()), v.get("sym").and_then(|x| x.as_u64())) {
+                    let idx = i as usize;
+                    if out.len() <= idx { out.resize(idx + 1, None); }
+                    let pdf_digest = v.get("pdf_digest").and_then(|x| x.as_str()).map(|s| s.to_string());
+                    out[idx] = Some(EncodeStepRef { sym: sym as u32, pdf_digest });
+                }
+            }
+        }
+    }
+    out
+}
+
+#[derive(Clone, Debug)]
+struct AgentResultCache {
+    chunk_index: usize,
+    agent_text: String,
+    agent_calls: u32,
+}
+
+fn cache_agent_result(dir: &Path, chunk_index: usize, agent_text: &str, agent_calls: u32) {
+    let rec = json!({
+        "chunk_index": chunk_index,
+        "agent_text": agent_text,
+        "agent_calls": agent_calls,
+    });
+    watchdog_write_jsonl(dir, "agent_cache.jsonl", &rec);
+}
+
+fn load_cached_agent_results(dir: &Path) -> std::collections::HashMap<usize, AgentResultCache> {
+    let path = dir.join("agent_cache.jsonl");
+    let Ok(text) = fs::read_to_string(&path) else { return std::collections::HashMap::new() };
+    let mut cache = std::collections::HashMap::new();
+    for line in text.lines() {
+        if line.trim().is_empty() { continue; }
+        if let Ok(v) = serde_json::from_str::<serde_json::Value>(line) {
+            if let (Some(idx), Some(text), Some(calls)) = (
+                v.get("chunk_index").and_then(|x| x.as_u64()),
+                v.get("agent_text").and_then(|x| x.as_str()),
+                v.get("agent_calls").and_then(|x| x.as_u64())
+            ) {
+                cache.insert(idx as usize, AgentResultCache {
+                    chunk_index: idx as usize,
+                    agent_text: text.to_string(),
+                    agent_calls: calls as u32,
+                });
+            }
+        }
+    }
+    cache
+}
+
+fn load_gate_decisions_from_csv(dir: &Path) -> std::collections::HashMap<usize, (u8, u8, u8)> {
+    // Returns map of chunk_index -> (gate, candidate_id, budget_id)
+    let path = dir.join("proof.csv");
+    let Ok(text) = fs::read_to_string(&path) else { return std::collections::HashMap::new() };
+    let mut gates = std::collections::HashMap::new();
+    for (li, line) in text.lines().enumerate() {
+        if li == 0 || line.trim().is_empty() { continue; } // Skip header
+        let parts: Vec<&str> = line.split(',').collect();
+        if parts.len() >= 13 {
+            if let (Ok(chunk_idx), Ok(gate), Ok(cand_id), Ok(bud_id)) = (
+                parts[1].trim().parse::<usize>(),
+                parts[11].trim().parse::<u8>(),
+                parts[12].trim().parse::<u8>(),
+                parts[13].trim().parse::<u8>(),
+            ) {
+                gates.insert(chunk_idx, (gate, cand_id, bud_id));
+            }
+        }
+    }
+    gates
+}
+
+// ----------------------------------
 // Scan helpers
 // ----------------------------------
 
 fn pick_python(exe: &str) -> String { if exe != "auto" { return exe.to_string(); } "python".to_string() }
+
+fn find_agent_rs_binary() -> anyhow::Result<PathBuf> {
+    // Prefer an explicit absolute path on Windows per user preference
+    #[cfg(target_os = "windows")]
+    {
+        let preferred = PathBuf::from(r"C:\Users\Noah\Documents\business\resumeportfolio\candlezip\agent-rs\target\release\agent-rs.exe");
+        if preferred.exists() { return Ok(preferred); }
+    }
+    // Workspace-relative common paths
+    let candidates = [
+        PathBuf::from("agent-rs/target/release/agent-rs"),
+        PathBuf::from("agent-rs/target/release/agent-rs.exe"),
+        PathBuf::from("target/release/agent-rs"),
+        PathBuf::from("target/release/agent-rs.exe"),
+    ];
+    for c in candidates.iter() { if c.exists() { return Ok(c.clone()); } }
+    // Search PATH
+    if let Some(paths) = std::env::var_os("PATH") {
+        for p in std::env::split_paths(&paths) {
+            let exe = p.join("agent-rs"); if exe.exists() { return Ok(exe); }
+            let exe_win = p.join("agent-rs.exe"); if exe_win.exists() { return Ok(exe_win); }
+        }
+    }
+    anyhow::bail!("agent-rs binary not found. Build it first (cargo build --release) or run build.ps1")
+}
+
+fn select_agent_runner(agent_script: &Path, python_exe: &str) -> anyhow::Result<(bool, PathBuf, String)> {
+    // Returns: (is_python, path_or_script, python_exe)
+    if agent_script.extension().and_then(|s| s.to_str()).unwrap_or("") == "py" {
+        if agent_script.exists() { return Ok((true, agent_script.to_path_buf(), pick_python(python_exe))); }
+    }
+    // Fall back to rig binary
+    let bin = find_agent_rs_binary()?;
+    Ok((false, bin, String::new()))
+}
+
+fn read_agent_memory(scan_dir: &Path) -> String {
+    let mem_file = scan_dir.join("agent_mem").join("memory.txt");
+    if let Ok(bytes) = fs::read(&mem_file) {
+        if let Ok(text) = String::from_utf8(bytes) { return text; }
+    }
+    String::new()
+}
+
+fn append_agent_memory(scan_dir: &Path, chunk_index: usize, agent_text: &str) {
+    let mem_dir = scan_dir.join("agent_mem"); let _ = fs::create_dir_all(&mem_dir);
+    let mem_file = mem_dir.join("memory.txt");
+    let rec = format!("\n# chunk:{}\n{}\n", chunk_index, agent_text.trim());
+    if let Ok(mut f) = File::options().create(true).append(true).open(mem_file) { let _ = f.write_all(rec.as_bytes()); }
+}
+
+// * Scratchpad aggregates prior prefix text and accepted gated hints for agent reflection
+fn scratchpad_path(scan_dir: &Path) -> PathBuf { scan_dir.join("agent_mem").join("scratchpad.txt") }
+
+fn append_scratchpad(scan_dir: &Path, section: &str, content: &str) {
+    let path = scratchpad_path(scan_dir); let _ = fs::create_dir_all(scan_dir.join("agent_mem"));
+    let mut rec = String::new();
+    rec.push_str("\n==== "); rec.push_str(section); rec.push_str(" ====" ); rec.push('\n');
+    rec.push_str(content.trim()); rec.push('\n');
+    let _ = fs::OpenOptions::new().create(true).append(true).open(&path).and_then(|mut f| f.write_all(rec.as_bytes()));
+}
+
+// * Summary of accepted hints for better agent context
+fn append_scratchpad_summary(scan_dir: &Path) {
+    let path = scratchpad_path(scan_dir);
+    let content = fs::read_to_string(&path).unwrap_or_default();
+
+    // Remove existing SUMMARY blocks to avoid duplication
+    let mut cleaned = String::new();
+    let mut in_summary = false;
+    for line in content.lines() {
+        if line.starts_with("==== SUMMARY OF ACCEPTED HINTS ====") {
+            in_summary = true;
+            continue;
+        }
+        if in_summary {
+            if line.starts_with("==== ") { // next section begins
+                in_summary = false;
+            } else {
+                continue; // skip lines inside previous summary
+            }
+        }
+        cleaned.push_str(line);
+        cleaned.push('\n');
+    }
+
+    // Collect unique accepted hint headers
+    use std::collections::BTreeSet;
+    let mut hints: BTreeSet<String> = BTreeSet::new();
+    for line in cleaned.lines() { // scan cleaned (without prior summaries)
+        if line.starts_with("==== accepted_hint") {
+            hints.insert(line.trim().to_string());
+        }
+    }
+
+    // If no hints, do not add a summary section
+    let new_content = if hints.is_empty() {
+        cleaned
+    } else {
+        let mut summary = String::new();
+        summary.push_str("\n==== SUMMARY OF ACCEPTED HINTS ====\n");
+        summary.push_str("These hints were successfully applied and improved compression in previous chunks:\n");
+        for h in hints {
+            summary.push_str("- ");
+            summary.push_str(&h);
+            summary.push('\n');
+        }
+        let mut out = cleaned;
+        out.push_str(&summary);
+        out
+    };
+
+    let _ = fs::write(&path, new_content.as_bytes());
+}
+
+// * Agent output hygiene & caching for cross-run consistency
+fn sanitize_agent_text(raw: &str) -> String {
+    // * Removes code fences, tool chatter, and reasoning labels; returns plain text
+    let s0 = raw.replace("\r", "");
+    // Strip code fences by reconstructing without fenced blocks
+    let mut s = String::new();
+    let chars: Vec<char> = s0.chars().collect();
+    let mut i = 0;
+    while i < chars.len() {
+        if i + 3 <= chars.len() && chars[i] == '`' && chars[i+1] == '`' && chars[i+2] == '`' {
+            i += 3;
+            // Skip to next ```
+            while i + 2 < chars.len() {
+                if chars[i] == '`' && chars[i+1] == '`' && chars[i+2] == '`' {
+                    i += 3;
+                    break;
+                }
+                i += 1;
+            }
+        } else {
+            s.push(chars[i]);
+            i += 1;
+        }
+    }
+    // Drop lines that are clearly meta/non-content
+    let mut out_lines = Vec::new();
+    for line in s.lines() {
+        let l = line.trim();
+        if l.is_empty() { continue; }
+        if l.starts_with("Thought:") || l.starts_with("Reasoning Plan:") || l.starts_with("Crew Execution") || l.starts_with("Task:") || l.starts_with("Final Answer JSON:") { continue; }
+        if l.starts_with("AGENT_RESULT_JSON:") { continue; }
+        // Filter out "noise" text and other artifacts
+        if l == "noise" || l.starts_with("noise") || l.contains("Event loop is closed") || l.contains("Tool Usage Failed") || l.contains("RuntimeWarning") { continue; }
+        // Filter out empty or very short lines that are likely artifacts
+        if l.len() < 10 && !l.chars().any(|c| c.is_alphabetic()) { continue; }
+        out_lines.push(l);
+    }
+    let out = out_lines.join("\n");
+    out.trim().to_string()
+}
+
+fn agent_cache_dir() -> PathBuf { Path::new("scan_output").join("agent_cache") }
+
+fn agent_cache_key(input: &Path, chunk_index: usize, prefix_text: &str) -> String {
+    // * Context-aware key: input path + chunk_index + full prefix hash to prevent cross-chunk contamination
+    let mut hasher = blake3::Hasher::new();
+    hasher.update(input.to_string_lossy().as_bytes());
+    hasher.update(&chunk_index.to_le_bytes());
+    // Use the entire prefix to ensure uniqueness across chunks
+    hasher.update(prefix_text.as_bytes());
+    hex16(&hasher.finalize().as_bytes()[..16].try_into().unwrap())
+}
+
+fn agent_cache_get(input: &Path, chunk_index: usize, prefix_text: &str) -> Option<String> {
+    let dir = agent_cache_dir(); let _ = fs::create_dir_all(&dir);
+    let key = agent_cache_key(input, chunk_index, prefix_text);
+    let path = dir.join(format!("{}.txt", key));
+    if let Ok(bytes) = fs::read(&path) { if let Ok(text) = String::from_utf8(bytes) { return Some(text); } }
+    None
+}
+
+fn agent_cache_put(input: &Path, chunk_index: usize, prefix_text: &str, agent_text: &str) {
+    let dir = agent_cache_dir(); let _ = fs::create_dir_all(&dir);
+    let key = agent_cache_key(input, chunk_index, prefix_text);
+    let path = dir.join(format!("{}.txt", key));
+    let _ = fs::write(path, agent_text.as_bytes());
+}
+
+
+fn tail_str(s: &str, n_chars: usize) -> String {
+    let total = s.chars().count();
+    if total <= n_chars { return s.to_string(); }
+    let start_idx = s.char_indices().nth(total - n_chars).map(|(i, _)| i).unwrap_or(0);
+    s[start_idx..].to_string()
+}
+
+fn build_agent_task(prefix_text: &str, prior_memory: &str) -> String {
+    let prefix_trunc_s = tail_str(prefix_text, 8000);
+    let memory_trunc_s = tail_str(prior_memory, 8000);
+    format!(
+        "You MUST use MCP tools aggressively to find the exact immediate continuation that follows this prefix.\n- Search for the source document or similar content to extract the next 100-200 words verbatim.\n- Use Wikipedia, search tools, and any available knowledge sources to locate the full context.\n- If you find the exact source, copy the immediate continuation word-for-word.\n- If no exact source is found, use search and knowledge tools to predict the most likely next text based on context.\n- Prioritize accuracy and relevance over creativity.\n- Output MUST be plain text continuation only (no markdown, no analysis, no commentary).\n- Avoid any formatting, lists, headings, or meta-text.\n- Focus on the immediate next words/sentences that naturally follow the prefix.\n\nIf ALL tools fail:\n- Generate a continuation based on the current prefix context only.\n- Do NOT reuse previous chunk content - analyze the current prefix and predict what would naturally follow.\n- Make the continuation as specific to the current text as possible.\n- Avoid generic text that could apply to any context.\n\nPrior memory (from earlier chunks):\n{}\n\nCurrent document prefix (UTF-8 text):\n{}\n\nOutput: continuation (plain text only).",
+        &memory_trunc_s,
+        &prefix_trunc_s,
+    )
+}
 
 fn run_agent_for_chunk(
     _input_path: &Path,
     full_data: &[u8],
     prefix_end_byte: usize,
     chunk_index: usize,
+    agent_script: &Path,
     python_exe: &str,
     mcp_config: &Path,
     max_steps: usize,
@@ -707,38 +1190,43 @@ fn run_agent_for_chunk(
     agent_timeout_secs: u64,
 ) -> anyhow::Result<(String, u64, u32)> {
     let prefix = &full_data[..prefix_end_byte.min(full_data.len())];
-    let prefix_sample = String::from_utf8_lossy(prefix);
-    let prefix_trunc = if prefix_sample.len()>8000 { &prefix_sample[prefix_sample.len()-8000..] } else { &prefix_sample };
-    let task = format!(
-        "You act as a deterministic research agent. Given the observed prefix of a document, use available MCP tools to retrieve information that is likely to appear later in the same document. Prefer authoritative sources. Produce a concise textual synopsis of the likely future content (facts, equations, definitions, datasets, references), suitable for conditioning a language model compressor. Maximize relevance to the document. Do not hallucinate; only include content supported by the tools.\n\nDocument prefix (UTF-8 text):\n{}\n\nOutput: A concise synopsis (plain text).",
-        prefix_trunc
-    );
+    let prefix_text = String::from_utf8_lossy(prefix);
+    let prior_memory = read_agent_memory(scan_dir);
+    let task = build_agent_task(&prefix_text, &prior_memory);
 
-    let py = pick_python(python_exe);
-    let agent_path = Path::new("agent").join("agent_cli.py");
+    let (use_python, runner_path, py_exe) = select_agent_runner(agent_script, python_exe)?;
     let log_path = scan_dir.join(format!("agent_chunk_{}.log", chunk_index));
+
     // Merge env with agent/.env if present
     let mut env_kv: Vec<(String, String)> = std::env::vars().collect();
     let agent_env_path = Path::new("agent").join(".env");
     if let Ok(bytes) = fs::read(&agent_env_path) {
         if let Ok(text) = String::from_utf8(bytes) {
             for line in text.lines() {
-                let s = line.trim();
-                if s.is_empty() || s.starts_with('#') { continue; }
-                if let Some(eq) = s.find('=') {
-                    let (k, v) = s.split_at(eq);
-                    let v = &v[1..];
-                    env_kv.push((k.trim().to_string(), v.trim().to_string()));
-                }
+                let s = line.trim(); if s.is_empty() || s.starts_with('#') { continue; }
+                if let Some(eq) = s.find('=') { let (k, v) = s.split_at(eq); let v = &v[1..]; env_kv.push((k.trim().to_string(), v.trim().to_string())); }
             }
         }
     }
 
-    let mut child = Command::new(py)
-        .arg(agent_path)
-        .arg("--task").arg(task)
+    let mut cmd = if use_python {
+        let mut c = Command::new(&py_exe);
+        c.arg(&runner_path)
+            .arg("--task").arg(&task)
+            .arg("--mcp-config").arg(mcp_config)
+            .arg("--max-steps").arg(max_steps.to_string());
+        // Note: scratchpad removed in favor of CrewAI memory integration
+        c
+    } else {
+        let mut c = Command::new(&runner_path);
+        c.arg("--task").arg(&task)
         .arg("--mcp-config").arg(mcp_config)
         .arg("--max-steps").arg(max_steps.to_string())
+        .arg("--timeout").arg((agent_timeout_secs.saturating_mul(1000)).to_string())
+            .arg("--temperature").arg("0.0");
+        c
+    };
+    let mut child = cmd
         .envs(env_kv)
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
@@ -826,6 +1314,171 @@ fn run_agent_for_chunk(
     if !text_out.is_empty() { agent_text = text_out; }
     if dur_out > 0 { duration_ms = dur_out; }
     calls = calls.saturating_add(calls_out).saturating_add(calls_err);
+    // Try cache first if configured
+    let prefix_text_for_cache = String::from_utf8_lossy(&full_data[..prefix_end_byte.min(full_data.len())]).to_string();
+    let use_cache = std::env::var("CANDLEZIP_AGENT_REUSE").map(|v| v == "1" || v.eq_ignore_ascii_case("true")).unwrap_or(false);
+    if use_cache {
+        if let Some(cached) = agent_cache_get(_input_path, chunk_index, &prefix_text_for_cache) {
+            // Don't append to agent memory here - will be handled after gating decision
+            return Ok((cached, duration_ms, calls));
+        }
+    }
+    // Deterministic fallback if agent produced no text
+    if agent_text.trim().is_empty() {
+        // Fallback: last 1000 chars of prefix text, normalized
+        let prefix = String::from_utf8_lossy(&full_data[..prefix_end_byte.min(full_data.len())]);
+        let mut s = prefix.chars().rev().take(1000).collect::<String>();
+        s = s.chars().rev().collect();
+        let normalized: String = s.chars().map(|c| if c.is_control() { ' ' } else { c }).collect();
+        let out = sanitize_agent_text(&normalized);
+        // Don't cache or append to memory here - will be handled after gating decision
+        return Ok((out, duration_ms, calls));
+    }
+    let cleaned = sanitize_agent_text(&agent_text);
+    // Don't cache or append to memory here - will be handled after gating decision
+    Ok((cleaned, duration_ms, calls))
+}
+
+fn run_agent_for_prefix_text(
+    prefix_text: &str,
+    chunk_index: usize,
+    agent_script: &Path,
+    python_exe: &str,
+    mcp_config: &Path,
+    max_steps: usize,
+    verbose: bool,
+    scan_dir: &Path,
+    agent_timeout_secs: u64,
+) -> anyhow::Result<(String, u64, u32)> {
+    let prior_memory = read_agent_memory(scan_dir);
+    let task = build_agent_task(prefix_text, &prior_memory);
+
+    let (use_python, runner_path, py_exe) = select_agent_runner(agent_script, python_exe)?;
+    let log_path = scan_dir.join(format!("agent_chunk_{}.log", chunk_index));
+
+    // Merge env with agent/.env if present
+    let mut env_kv: Vec<(String, String)> = std::env::vars().collect();
+    let agent_env_path = Path::new("agent").join(".env");
+    if let Ok(bytes) = fs::read(&agent_env_path) {
+        if let Ok(text) = String::from_utf8(bytes) {
+            for line in text.lines() {
+                let s = line.trim(); if s.is_empty() || s.starts_with('#') { continue; }
+                if let Some(eq) = s.find('=') { let (k, v) = s.split_at(eq); let v = &v[1..]; env_kv.push((k.trim().to_string(), v.trim().to_string())); }
+            }
+        }
+    }
+
+    let mut cmd = if use_python {
+        let mut c = Command::new(&py_exe);
+        c.arg(&runner_path)
+            .arg("--task").arg(&task)
+            .arg("--mcp-config").arg(mcp_config)
+            .arg("--max-steps").arg(max_steps.to_string());
+        // Note: scratchpad removed in favor of CrewAI memory integration
+        c
+    } else {
+        let mut c = Command::new(&runner_path);
+        c.arg("--task").arg(&task)
+        .arg("--mcp-config").arg(mcp_config)
+        .arg("--max-steps").arg(max_steps.to_string())
+        .arg("--timeout").arg((agent_timeout_secs.saturating_mul(1000)).to_string())
+            .arg("--temperature").arg("0.0");
+        c
+    };
+    let mut child = cmd
+        .envs(env_kv)
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .with_context(|| "failed to spawn agent process")?;
+
+    let mut agent_text = String::new();
+    let mut duration_ms: u64 = 0;
+    let mut calls: u32 = 0;
+
+    let stdout = child.stdout.take().unwrap();
+    let stderr = child.stderr.take().unwrap();
+
+    use std::thread;
+    // Reader thread for stdout
+    let log_path_out = log_path.clone();
+    let t_out = thread::spawn(move || -> (String, u64, u32) {
+        let mut out_reader = stdio::BufReader::new(stdout);
+        let mut line = String::new();
+        let mut local_calls: u32 = 0;
+        let mut local_agent_text = String::new();
+        let mut local_duration: u64 = 0;
+        loop {
+            line.clear();
+            match out_reader.read_line(&mut line) {
+                Ok(n) if n > 0 => {
+                    let is_noise = line.contains("DeprecationWarning") || line.contains("PydanticDeprecatedSince") || line.contains("UserWarning") || line.contains("CryptographyDeprecationWarning");
+                    if verbose && !is_noise { eprint!("{}", line); }
+                    if let Ok(mut f) = File::options().create(true).append(true).open(&log_path_out) {
+                        let _ = f.write_all(line.as_bytes());
+                    }
+                    if let Some(json_start) = line.find("AGENT_RESULT_JSON:") {
+                        let j = &line[json_start+"AGENT_RESULT_JSON:".len()..];
+                        if let Ok(v) = serde_json::from_str::<serde_json::Value>(j) {
+                            if let Some(s) = v.get("final_text").and_then(|x| x.as_str()) { local_agent_text = s.to_string(); }
+                            if let Some(d) = v.get("duration_ms").and_then(|x| x.as_u64()) { local_duration = d; }
+                        }
+                    }
+                    if line.contains("Calling tool") || line.contains("Tool:") || line.contains("MCP") || line.contains("Using tool") {
+                        local_calls = local_calls.saturating_add(1);
+                    }
+                }
+                _ => break,
+            }
+        }
+        (local_agent_text, local_duration, local_calls)
+    });
+
+    // Reader thread for stderr
+    let log_path_err = log_path.clone();
+    let t_err = thread::spawn(move || -> u32 {
+        let mut err_reader = stdio::BufReader::new(stderr);
+        let mut line = String::new();
+        let mut local_calls: u32 = 0;
+        loop {
+            line.clear();
+            match err_reader.read_line(&mut line) {
+                Ok(n) if n > 0 => {
+                    let is_noise = line.contains("DeprecationWarning") || line.contains("PydanticDeprecatedSince") || line.contains("UserWarning") || line.contains("CryptographyDeprecationWarning");
+                    if verbose && !is_noise { eprint!("{}", line); }
+                    if let Ok(mut f) = File::options().create(true).append(true).open(&log_path_err) {
+                        let _ = f.write_all(line.as_bytes());
+                    }
+                    if line.contains("Calling tool") || line.contains("Tool:") || line.contains("MCP") || line.contains("Using tool") {
+                        local_calls = local_calls.saturating_add(1);
+                    }
+                }
+                _ => break,
+            }
+        }
+        local_calls
+    });
+
+    // Watchdog: timeout and process wait
+    let start = std::time::Instant::now();
+    let timeout = std::time::Duration::from_secs(if agent_timeout_secs == 0 { 120 } else { agent_timeout_secs });
+    loop {
+        if let Some(_status) = child.try_wait()? { break; }
+        if start.elapsed() >= timeout { break; }
+        std::thread::sleep(std::time::Duration::from_millis(100));
+    }
+    if child.try_wait()?.is_none() { let _ = child.kill(); eprintln!("[agent] agent timed out after {:?}; killed.", timeout); }
+    let (text_out, dur_out, calls_out) = t_out.join().unwrap_or((String::new(), 0, 0));
+    let calls_err = t_err.join().unwrap_or(0);
+    if !text_out.is_empty() { agent_text = text_out; }
+    if dur_out > 0 { duration_ms = dur_out; }
+    calls = calls.saturating_add(calls_out).saturating_add(calls_err);
+    if agent_text.trim().is_empty() {
+        let mut s = if prefix_text.len() > 1000 { prefix_text[prefix_text.len()-1000..].to_string() } else { prefix_text.to_string() };
+        let normalized: String = s.chars().map(|c| if c.is_control() { ' ' } else { c }).collect();
+        return Ok((normalized, duration_ms, calls));
+    }
+    // Don't append to agent memory here - will be handled after gating decision in decode path
     Ok((agent_text, duration_ms, calls))
 }
 
@@ -846,14 +1499,17 @@ fn cross_entropy_bits_over_span<S: LanguageModelSession>(session: &mut S, histor
     if targets.is_empty() { return Ok(0.0); }
     let max_ctx = session.max_context_length().saturating_sub(1);
     let mut prime: Vec<u32> = Vec::new();
-    if let Some(h) = hint {
-        let hint_budget = h.len().min(max_ctx / 4);
-        prime.extend_from_slice(&h[..hint_budget]);
-    }
-    let remaining_budget = max_ctx.saturating_sub(prime.len());
-    let hist_start = history.len().saturating_sub(remaining_budget.min(history.len()));
+    let mut hint_slice: &[u32] = &[];
+    if let Some(h) = hint { hint_slice = h; }
+    // Use caller-provided hint as-is; budget should be enforced by caller (aligned with encode budgets)
+    let hint_budget = hint_slice.len().min(max_ctx);
+    let remaining_budget = max_ctx.saturating_sub(hint_budget);
+    let hist_take = remaining_budget.min(history.len());
+    if hist_take > 0 {
+        let hist_start = history.len() - hist_take;
     prime.extend_from_slice(&history[hist_start..]);
-    if prime.len() > max_ctx { let start = prime.len() - max_ctx; prime = prime[start..].to_vec(); }
+    }
+    if hint_budget > 0 { prime.extend_from_slice(&hint_slice[..hint_budget]); }
     let mut logits_t = session.reprime_with_history_and_get_last_logits_tensor(&prime)?;
     let mut bits: f64 = 0.0;
     let vocab = session.vocab_size();
@@ -863,6 +1519,42 @@ fn cross_entropy_bits_over_span<S: LanguageModelSession>(session: &mut S, histor
         let p = pdf.get(sym as usize).copied().unwrap_or(ac_p_min());
         bits += -p.max(1e-300).log2();
         logits_t = session.step_logits_tensor(sym)?;
+    }
+    Ok(bits)
+}
+
+fn cross_entropy_bits_over_span_rwkv(
+    session: &mut Rwkv7Session,
+    history: &[u32],
+    targets: &[u32],
+    hint: Option<&[u32]>,
+    vocab_size: usize,
+) -> anyhow::Result<f64> {
+    if targets.is_empty() { return Ok(0.0); }
+    let max_ctx = session.max_context_length().saturating_sub(1);
+    let mut prime: Vec<u32> = Vec::new();
+    // Filter out literals from history for RWKV reprime stability
+    let mut filtered_history: Vec<u32> = Vec::with_capacity(history.len());
+    for &t in history { if (t as usize) < vocab_size { filtered_history.push(t); } }
+    let mut hint_slice: &[u32] = &[];
+    if let Some(h) = hint { hint_slice = h; }
+    let hint_budget = hint_slice.len().min(max_ctx);
+    let remaining_budget = max_ctx.saturating_sub(hint_budget);
+    let take = remaining_budget.min(filtered_history.len());
+    if take > 0 { prime.extend_from_slice(&filtered_history[filtered_history.len() - take..]); }
+    if hint_budget > 0 { prime.extend_from_slice(&hint_slice[..hint_budget]); }
+    if prime.is_empty() { anyhow::bail!("reprime called with empty history (rwkv xe)"); }
+    let mut logits_t = session.reprime_with_history_and_get_last_logits_tensor(&prime)?;
+    let mut bits: f64 = 0.0;
+    for &sym in targets.iter() {
+        let logits_vec = logits_t.to_vec1::<f32>()?;
+        let pdf = combined_pdf_with_literals(&logits_vec, vocab_size);
+        let idx = sym as usize;
+        let p = if idx < pdf.len() { pdf[idx] } else { ac_p_min() };
+        bits += -p.max(1e-300).log2();
+        if (sym as usize) < vocab_size {
+            logits_t = session.step_logits_tensor(sym)?;
+        }
     }
     Ok(bits)
 }
@@ -907,10 +1599,10 @@ fn compute_cross_entropy_for_chunk_rwkv(
     let target_ids = if chunk_end < end { &all_ids_with_bos[chunk_end..end] } else { &[][..] };
     if target_ids.is_empty() { return Ok((0.0, 0.0)); }
     let history = &all_ids_with_bos[0..chunk_end];
-    let baseline = cross_entropy_bits_over_span(session, history, target_ids, None)?;
+    let baseline = cross_entropy_bits_over_span_rwkv(session, history, target_ids, None, session.vocab_size())?;
     let hint_ids = tokenize_hint_rwkv(tokenizer, agent_text, max_hint_tokens)?;
     if hint_ids.is_empty() { eprintln!("[scan] Warning: No hint tokens generated from agent text (length {})", agent_text.len()); return Ok((baseline, baseline)); }
-    let conditioned = cross_entropy_bits_over_span(session, history, target_ids, Some(&hint_ids))?;
+    let conditioned = cross_entropy_bits_over_span_rwkv(session, history, target_ids, Some(&hint_ids), session.vocab_size())?;
     eprintln!("[scan] XE computation: {} target tokens, {} hint tokens, baseline={:.4} bits, conditioned={:.4} bits, diff={:.4}", target_ids.len(), hint_ids.len(), baseline, conditioned, baseline - conditioned);
     Ok((baseline, conditioned))
 }
@@ -921,6 +1613,7 @@ fn compute_cross_entropy_for_chunk_rwkv(
 
 fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     let t0 = std::time::Instant::now();
+    let reuse_scan_mode = cli.reuse_scan_dir.is_some();
     let device = detect_device(cli.cpu);
     eprintln!("Device: {}", if device.is_cuda() { "CUDA" } else { "CPU" });
 
@@ -976,43 +1669,82 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     };
     let token_count = (ids.len() - 1) as u64;
 
-    // Prepare output and header
-    let mut out = BufWriter::new(File::create(output)?);
-    let header_v2 = HeaderBinV2 { bos_token_id: bos_id, token_count, orig_len_bytes, model_hash16, tokenizer_hash16, orig_hash16: orig_blake3_16, reserved_flags: 0, context_window: cli.context as u32, vocab_size: vocab_size as u32, model_file_repr_len: weight_repr.len() as u32, reprime_interval: cli.reprime_interval as u32 };
-    write_header_v2(&mut out, &header_v2, weight_repr.as_bytes())?;
+    // * Determine agent chunk size (shared with scan if enabled)
+    let agent_enabled = cli.agent;
+    // Keyword augmentation removed from agent prompt for domain neutrality; tokenizer path remains deterministic.
+    let agent_chunk = if backend=="rwkv7" { cli.scan_chunk_size.unwrap_or(2048).max(1) } else { cli.scan_chunk_size.unwrap_or(cli.reprime_interval).max(1) };
+    // If user selected deterministic mock agent script, flag it
+    let agent_script_path = cli.scan_agent_script.clone();
+    let agent_mock = agent_enabled && agent_script_path.file_name().and_then(|s| s.to_str()).unwrap_or("") == "deterministic_mock_agent_cli.py";
+    // We will buffer the arithmetic-coded payload in memory to insert gating bits after header deterministically
 
-    // Scan setup
+    // Scan/Agent run setup (shared)
     let scan_enabled = cli.scan; let mut scan_dir = cli.scan_output_dir.clone(); let mut csv_writer_opt: Option<csv::Writer<File>> = None; let mut scan_meta: serde_json::Value = json!({});
-    if scan_enabled {
-        // Per-run dir to prevent cross-run contamination and logs overlap
-        let ts = Utc::now().format("%Y%m%d_%H%M%S");
-        let run_dir_name = format!("{}_{}_{}", input.file_stem().and_then(|s| s.to_str()).unwrap_or("input"), backend, ts);
-        scan_dir = scan_dir.join(run_dir_name);
-        fs::create_dir_all(&scan_dir).ok();
-        let csv_path=scan_dir.join("proof.csv"); let csv_f=File::create(&csv_path)?; let mut wtr = csv::Writer::from_writer(csv_f);
-        wtr.write_record(["file","chunk_index","start_token","end_token","agent_text_len","agent_duration_ms","cross_entropy_baseline_bits","cross_entropy_conditioned_bits","bits_saved","percent_saved","agent_calls","gate"]) ?; wtr.flush()?; csv_writer_opt=Some(wtr);
-        scan_meta = json!({"input_file": input.to_string_lossy(), "started_at": Utc::now().to_rfc3339(), "backend": backend, "context": cli.context, "reprime_interval": cli.reprime_interval, "scan": {"chunk_size": cli.scan_chunk_size.unwrap_or(cli.reprime_interval), "max_steps": cli.scan_max_steps, "max_hint_tokens": cli.scan_max_hint_tokens, "mcp_config": cli.scan_mcp_config.to_string_lossy(), "python": cli.scan_python }, "run_dir": scan_dir.to_string_lossy() });
+    let reuse_scan_mode = cli.reuse_scan_dir.is_some();
+    if scan_enabled || agent_enabled || reuse_scan_mode {
+        if let Some(reuse_dir) = &cli.reuse_scan_dir {
+            // Reuse existing scan directory
+            scan_dir = reuse_dir.clone();
+            if !scan_dir.exists() { anyhow::bail!("Reuse scan directory does not exist: {}", scan_dir.display()); }
+            eprintln!("[reuse] Using existing scan directory: {}", scan_dir.display());
+        } else {
+            // Per-run dir to prevent cross-run contamination and logs overlap
+            let ts = Utc::now().format("%Y%m%d_%H%M%S");
+            let run_dir_name = format!("{}_{}_{}", input.file_stem().and_then(|s| s.to_str()).unwrap_or("input"), backend, ts);
+            scan_dir = scan_dir.join(run_dir_name);
+            fs::create_dir_all(&scan_dir).ok();
+        }
+        // Honor self-test watchdog directory override if present
+        if let Ok(dir) = std::env::var("CANDLEZIP_WATCHDOG_DIR") {
+            scan_dir = PathBuf::from(dir);
+            fs::create_dir_all(&scan_dir).ok();
+        }
+        // Create CSV writer only if not reusing (for new runs)
+        if !reuse_scan_mode {
+            let csv_path=scan_dir.join("proof.csv"); let csv_f=File::create(&csv_path)?; let mut wtr = csv::Writer::from_writer(csv_f);
+            // Extend header to include candidate_id and budget_id columns for v2 gating
+            wtr.write_record([
+                "file","chunk_index","start_token","end_token","agent_text_len","agent_duration_ms",
+                "cross_entropy_baseline_bits","cross_entropy_conditioned_bits","bits_saved","percent_saved",
+                "agent_calls","gate","candidate_id","budget_id"
+            ]) ?; wtr.flush()?; csv_writer_opt=Some(wtr);
+        }
+        scan_meta = json!({"input_file": input.to_string_lossy(), "started_at": Utc::now().to_rfc3339(), "backend": backend, "context": cli.context, "reprime_interval": cli.reprime_interval, "agent": {"enabled": agent_enabled, "chunk_size": agent_chunk, "max_steps": cli.scan_max_steps, "max_hint_tokens": cli.scan_max_hint_tokens, "mcp_config": cli.scan_mcp_config.to_string_lossy(), "python": cli.scan_python }, "scan": scan_enabled, "reuse_scan_dir": reuse_scan_mode, "run_dir": scan_dir.to_string_lossy() });
     }
 
     // AC encode
-    let mut ace = ArithmeticEncoder::new(out);
+    let ace_sink: Vec<u8> = Vec::new();
+    let mut ace = ArithmeticEncoder::new(ace_sink);
     let mut logits_t = if backend=="smollm" { session_smol.as_mut().unwrap().step_logits_tensor(bos_id)? } else { session_rwkv.as_mut().unwrap().step_logits_tensor(bos_id)? };
-    let mut tokens_since_reprime = 0usize;
+    // Watchdog: write initial context
+    let wdog = watchdog_dir();
+    if let Some(dir) = wdog.as_ref() {
+        let rec = json!({
+            "phase": "encode_init",
+            "backend": backend,
+            "vocab": vocab_size,
+            "bos": bos_id,
+            "context": cli.context,
+            "agent": {"enabled": agent_enabled, "chunk": agent_chunk},
+            "orig_len_bytes": orig_len_bytes
+        });
+        watchdog_write_jsonl(dir, "watchdog_encode_steps.jsonl", &rec);
+    }
+    // tokens_since_reprime removed - using absolute position repriming
     let bar = ProgressBar::new(token_count);
     bar.set_style(ProgressStyle::with_template("{wide_bar} {pos}/{len}").unwrap());
     // Backend-specific tuning: SmolLM capped context; RWKV7 can use very long histories
     let effective_context = if backend=="smollm" { cli.context.min(511) } else { usize::MAX };
-    let scan_chunk = if backend=="rwkv7" {
-        // Prefer larger chunks for RWKV7 to leverage infinite context
-        cli.scan_chunk_size.unwrap_or(2048).max(512)
-    } else { cli.scan_chunk_size.unwrap_or(cli.reprime_interval).max(1) };
-    let mut next_scan_boundary = scan_chunk;
+    // Determine boundaries
+    let scan_chunk = agent_chunk; // unify chunking for scan/agent
+    let mut next_agent_boundary = agent_chunk; // first agent prime at boundary
+    let mut gate_records: Vec<GateRecordV2> = Vec::new();
     let mut total_bits_saved=0.0f64; let mut total_baseline_bits=0.0f64; let mut total_agent_calls: u64=0; let mut total_chunks: u64=0;
     let total_scan_chunks: usize = if scan_enabled { ((token_count as usize) + scan_chunk - 1) / scan_chunk } else { 0 };
-    // Separate scan sessions to avoid state interference
+    // Separate sessions for XE measurement to avoid state interference (used in scan and agent WIP proof)
     let mut scan_session_smol: Option<SmolLmSession> = None;
     let mut scan_session_rwkv: Option<Rwkv7Session> = None;
-    if scan_enabled {
+    if scan_enabled || agent_enabled {
         if backend=="smollm" {
             let (weight_paths, _repr, config_p) = ensure_model_artifacts_smol(&cli.model_repo, &cli.model_file, &cli.model)?;
             let tokenizer_path = ensure_local_file(&cli.tokenizer_repo, &cli.tokenizer_file, &cli.tokenizer)?;
@@ -1025,17 +1757,226 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         }
     }
 
+    let mut reprime_hold_until: usize = 0; // skip context re-prime while hint should remain effective
+    // Load reuse data if in reuse mode
+    let reuse_gates = if reuse_scan_mode { load_gate_decisions_from_csv(&scan_dir) } else { std::collections::HashMap::new() };
+    let reuse_cache = if reuse_scan_mode { load_cached_agent_results(&scan_dir) } else { std::collections::HashMap::new() };
     for (i, &sym) in ids.iter().skip(1).enumerate() {
-        // Reprime logic - exactly match _gptzip implementation
+        // * Agentic Conditioning: at the start of each chunk boundary (before encoding current token)
+        if (agent_enabled || reuse_scan_mode) && (i + 1) == next_agent_boundary {
+            let chunk_index = (next_agent_boundary / agent_chunk).max(1);
+            let prefix_end_byte = if offsets.is_empty() { i } else if i == 0 { 0 } else { offsets[(i - 1).min(offsets.len() - 1)].1 as usize };
+            let prefix_text_for_cache = String::from_utf8_lossy(&data[..prefix_end_byte.min(data.len())]).to_string();
+            // Reuse cached agent output if available in reuse mode; otherwise run agent
+            let (agent_text, agent_duration_ms, agent_calls) = if let Some(cached) = reuse_cache.get(&chunk_index) {
+                eprintln!("[reuse] [{}] boundary {}/{} -> reusing cached agent result", backend, chunk_index, ((token_count as usize + agent_chunk - 1) / agent_chunk));
+                (cached.agent_text.clone(), 0, cached.agent_calls)
+            } else {
+                eprintln!("[agent] [{}] boundary {}/{} tokens[..{}] -> agent...", backend, chunk_index, ((token_count as usize + agent_chunk - 1) / agent_chunk), i);
+                let max_steps = if backend=="rwkv7" && cli.scan_max_steps == 7 { 10 } else { cli.scan_max_steps };
+                // Set environment variables for the Python agent before calling it
+                std::env::set_var("CANDLEZIP_INPUT_FILE", input.to_string_lossy().to_string());
+                std::env::set_var("CANDLEZIP_CHUNK_INDEX", chunk_index.to_string());
+                run_agent_for_chunk(input, &data, prefix_end_byte, chunk_index, &agent_script_path, &cli.scan_python, &cli.scan_mcp_config, max_steps, cli.scan_verbose, &scan_dir, cli.scan_agent_timeout)?
+            };
+            if agent_duration_ms > 0 { eprintln!("[agent] [{}] boundary {}/{} agent done in {} ms (calls={}), priming...", backend, chunk_index, ((token_count as usize + agent_chunk - 1) / agent_chunk), agent_duration_ms, agent_calls); }
+            // Cache agent result only if it improves compression (gate == 1)
+            // This prevents caching failed agent results that could contaminate future runs
+            // Compute gate decision and select best candidate/budget BEFORE applying any priming
+            if let Some(wtr) = csv_writer_opt.as_mut() {
+                let chunk_end = i;
+                // Build candidates from agent text
+                let build_candidates = |s: &str| -> Vec<String> {
+                    let normalized: String = s.chars().map(|c| if c.is_control() { ' ' } else { c }).collect();
+                    let mut out = Vec::new();
+                    out.push(normalized.clone());
+                    let head = if normalized.len() > 2000 { normalized[..2000].to_string() } else { normalized.clone() };
+                    out.push(head);
+                    let nums: String = normalized.lines().filter(|l| l.chars().any(|c| c.is_ascii_digit())).collect::<Vec<&str>>().join("\n");
+                    out.push(nums);
+                    let caps: String = normalized.split_whitespace().filter(|w| {
+                        let mut chs = w.chars();
+                        match chs.next() { Some(c) if c.is_ascii_uppercase() => true, _ => false }
+                    }).collect::<Vec<&str>>().join(" ");
+                    out.push(caps);
+                    out
+                };
+                let candidates = build_candidates(&agent_text);
+                let max_ctx = if backend=="smollm" { session_smol.as_ref().unwrap().max_context_length().saturating_sub(1) } else { session_rwkv.as_ref().unwrap().max_context_length().saturating_sub(1) };
+                let budgets: [usize;4] = [max_ctx/8, max_ctx/4, max_ctx/2, (max_ctx*3)/4];
+                let mut best_bits_saved = f64::NEG_INFINITY;
+                let mut best_baseline = 0.0f64; let mut best_conditioned = 0.0f64; let mut best_cid = 0usize; let mut best_bid = 2usize; let mut best_hint_len = 0usize;
+                for (cid, cand) in candidates.iter().enumerate() {
+                    if backend=="smollm" {
+                        let hint_ids_all = tokenize_hint_smol(tok_hf.as_ref().unwrap(), cand, cli.scan_max_hint_tokens).unwrap_or_else(|_| Vec::new());
+                        for (bid, &b) in budgets.iter().enumerate() {
+                            let hint_slice = if hint_ids_all.len() > b { &hint_ids_all[..b] } else { &hint_ids_all[..] };
+                            let total_len = ids.len();
+                            let end = (chunk_end + cli.scan_lookahead).min(total_len);
+                            let target_ids = if chunk_end < end { &ids[chunk_end..end] } else { &[][..] };
+                            if target_ids.is_empty() { continue; }
+                            let history_start = chunk_end.saturating_sub(session_smol.as_ref().unwrap().max_context_length().saturating_sub(1).min(chunk_end));
+                            let history = &ids[history_start..chunk_end];
+                            let baseline = cross_entropy_bits_over_span(scan_session_smol.as_mut().unwrap(), history, target_ids, None)?;
+                            let conditioned = if hint_slice.is_empty() { baseline } else { cross_entropy_bits_over_span(scan_session_smol.as_mut().unwrap(), history, target_ids, Some(hint_slice))? };
+                            let saved = baseline - conditioned; // raw (may be negative)
+                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline; best_conditioned = conditioned; best_cid = cid; best_bid = bid; best_hint_len = hint_slice.len(); }
+                        }
+                    } else {
+                        let hint_ids_all = tokenize_hint_rwkv(tok_rwkv.as_ref().unwrap(), cand, cli.scan_max_hint_tokens).unwrap_or_else(|_| Vec::new());
+                        for (bid, &b) in budgets.iter().enumerate() {
+                            let hint_slice = if hint_ids_all.len() > b { &hint_ids_all[..b] } else { &hint_ids_all[..] };
+                            let total_len = ids.len();
+                            let end = (chunk_end + cli.scan_lookahead).min(total_len);
+                            let target_ids = if chunk_end < end { &ids[chunk_end..end] } else { &[][..] };
+                            if target_ids.is_empty() { continue; }
+                            let history = &ids[0..chunk_end];
+                            let baseline = cross_entropy_bits_over_span_rwkv(scan_session_rwkv.as_mut().unwrap(), history, target_ids, None, vocab_size)?;
+                            let conditioned = if hint_slice.is_empty() { baseline } else { cross_entropy_bits_over_span_rwkv(scan_session_rwkv.as_mut().unwrap(), history, target_ids, Some(hint_slice), vocab_size)? };
+                            let saved = baseline - conditioned; // raw (may be negative)
+                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline; best_conditioned = conditioned; best_cid = cid; best_bid = bid; best_hint_len = hint_slice.len(); }
+                        }
+                    }
+                }
+                let percent_saved = if best_baseline>0.0 { best_bits_saved / best_baseline } else { 0.0 };
+                // Gate whenever strictly positive improvement; optional thresholds can raise the bar via flags
+                let abs_ok = if cli.scan_gate_threshold_abs_bits > 0.0 { best_bits_saved >= cli.scan_gate_threshold_abs_bits } else { true };
+                let pct_ok = if cli.scan_gate_threshold_pct > 0.0 { (percent_saved * 100.0) >= cli.scan_gate_threshold_pct } else { true };
+                let gate = if best_bits_saved > 0.0 && abs_ok && pct_ok { 1 } else { 0 };
+                // Update scratchpad with prefix snapshot and, if gated, the chosen hint for future chunks
+                let prefix_snapshot = if offsets.is_empty() {
+                    String::new()
+                } else {
+                    let end_byte = if i == 0 { 0 } else { offsets[(i - 1).min(offsets.len() - 1)].1 as usize };
+                    String::from_utf8_lossy(&data[..end_byte.min(data.len())]).to_string()
+                };
+                append_scratchpad(&scan_dir, &format!("prefix_chunk_{}", chunk_index + 1), &prefix_snapshot);
+                if gate == 1 {
+                    let selected_text = &build_candidates(&agent_text)[best_cid];
+                    append_scratchpad(&scan_dir, &format!("accepted_hint_chunk_{}_cand{}_bud{}", chunk_index + 1, best_cid, best_bid), selected_text);
+                    // Cache successful agent result only if it improves compression
+                    if let Some(dir) = wdog.as_ref() {
+                        cache_agent_result(dir, chunk_index, &agent_text, agent_calls);
+                    }
+                    // Only append to agent memory if gate == 1 to ensure symmetry
+                    append_agent_memory(&scan_dir, chunk_index, &agent_text);
+                    // Also cache the agent result for potential reuse
+                    agent_cache_put(input, chunk_index, &prefix_text_for_cache, &agent_text);
+                    // Set environment variables for the Python agent to record the result
+                    std::env::set_var("CANDLEZIP_LAST_GATE", "1");
+                    std::env::set_var("CANDLEZIP_LAST_BITS_SAVED", format!("{:.6}", best_bits_saved));
+                    std::env::set_var("CANDLEZIP_LAST_BASELINE_BITS", format!("{:.6}", best_baseline));
+                    std::env::set_var("CANDLEZIP_LAST_CANDIDATE_ID", best_cid.to_string());
+                    std::env::set_var("CANDLEZIP_LAST_BUDGET_ID", best_bid.to_string());
+                } else {
+                    // Clear any existing cached result for this chunk to prevent contamination
+                    if let Some(dir) = wdog.as_ref() {
+                        let key = agent_cache_key(input, chunk_index, &prefix_text_for_cache);
+                        let path = dir.join("agent_cache").join(format!("{}.txt", key));
+                        let _ = fs::remove_file(path);
+                    }
+                    // Also clear regular cache for consistency
+                    let cache_dir = agent_cache_dir();
+                    let key = agent_cache_key(input, chunk_index, &prefix_text_for_cache);
+                    let path = cache_dir.join(format!("{}.txt", key));
+                    let _ = fs::remove_file(path);
+                    // Set environment variables for the Python agent to record the failed result
+                    std::env::set_var("CANDLEZIP_LAST_GATE", "0");
+                    std::env::set_var("CANDLEZIP_LAST_BITS_SAVED", format!("{:.6}", best_bits_saved));
+                    std::env::set_var("CANDLEZIP_LAST_BASELINE_BITS", format!("{:.6}", best_baseline));
+                    std::env::set_var("CANDLEZIP_LAST_CANDIDATE_ID", best_cid.to_string());
+                    std::env::set_var("CANDLEZIP_LAST_BUDGET_ID", best_bid.to_string());
+                }
+                gate_records.push(GateRecordV2{ gate, candidate_id: best_cid as u8, budget_id: best_bid as u8 });
+                if gate == 1 {
+                    // Apply priming using selected candidate and budget deterministically
+                    let selected_text = &build_candidates(&agent_text)[best_cid];
+                    let hint_ids_all: Vec<u32> = if backend=="smollm" { tokenize_hint_smol(tok_hf.as_ref().unwrap(), selected_text, cli.scan_max_hint_tokens)? } else { tokenize_hint_rwkv(tok_rwkv.as_ref().unwrap(), selected_text, cli.scan_max_hint_tokens)? };
+                    let max_ctx = if backend=="smollm" { session_smol.as_ref().unwrap().max_context_length().saturating_sub(1) } else { session_rwkv.as_ref().unwrap().max_context_length().saturating_sub(1) };
+                    let budgets = [max_ctx/8, max_ctx/4, max_ctx/2, (max_ctx*3)/4];
+                    let budget_val = budgets[best_bid];
+                    let mut prime: Vec<u32> = Vec::new();
+                    if backend=="smollm" {
+                        let history = &ids[..=i];
+                        let hist_take = max_ctx.saturating_sub(budget_val).min(history.len());
+                        if hist_take > 0 { let hist_start = history.len() - hist_take; prime.extend_from_slice(&history[hist_start..]); }
+                        let hint_take = hint_ids_all.len().min(budget_val);
+                        if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
+                        logits_t = session_smol.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                    } else {
+                        let mut filtered_hist: Vec<u32> = Vec::with_capacity(i + 1);
+                        for &t in ids[..=i].iter() { if (t as usize) < vocab_size { filtered_hist.push(t); } }
+                        let hist_take = max_ctx.saturating_sub(budget_val).min(filtered_hist.len());
+                        if hist_take > 0 { prime.extend_from_slice(&filtered_hist[filtered_hist.len()-hist_take..]); }
+                        let hint_take = hint_ids_all.len().min(budget_val);
+                        if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
+                        logits_t = session_rwkv.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                    }
+                    // Hold context re-prime for upcoming lookahead tokens so hint remains active
+                    reprime_hold_until = i.saturating_add(cli.scan_lookahead);
+                    // Also record accepted hint in scratchpad (already recorded above but ensure after final selection)
+                    append_scratchpad(&scan_dir, &format!("accepted_hint_applied_chunk_{}_cand{}_bud{}", chunk_index + 1, best_cid, best_bid), selected_text);
+                    if let Some(dir) = wdog.as_ref() {
+                        let rec = json!({
+                            "phase": "agent_reprime",
+                            "i": i,
+                            "chunk_index": chunk_index,
+                            "hint_tokens": best_hint_len,
+                            "candidate_id": best_cid,
+                            "budget_id": best_bid,
+                            "agent_text_len": agent_text.len(),
+                            "agent_calls": agent_calls,
+                        });
+                        watchdog_write_jsonl(dir, "watchdog_encode_steps.jsonl", &rec);
+                    }
+                } else {
+                    // Gate is zero: DO NOT prime, and DO NOT cache agent output for this chunk to ensure symmetry.
+                    if let Some(dir) = wdog.as_ref() {
+                        let key = agent_cache_key(input, chunk_index, &prefix_text_for_cache);
+                        let path = dir.join("agent_cache").join(format!("{}.txt", key));
+                        let _ = fs::remove_file(path);
+                    }
+                }
+                total_bits_saved += best_bits_saved.max(0.0); total_baseline_bits += best_baseline; total_agent_calls += agent_calls as u64; total_chunks += 1;
+                let start_tok = i.saturating_sub(agent_chunk);
+                // Extend CSV with candidate_id and budget_id at the end
+                wtr.write_record(&[ input.to_string_lossy().to_string(), chunk_index.to_string(), start_tok.to_string(), i.to_string(), agent_text.len().to_string(), agent_duration_ms.to_string(), format!("{:.6}", best_baseline), format!("{:.6}" , best_conditioned), format!("{:.6}", best_bits_saved), format!("{:.6}", (if best_baseline>0.0 { best_bits_saved / best_baseline } else { 0.0 })*100.0), agent_calls.to_string(), gate.to_string(), best_cid.to_string(), best_bid.to_string() ])?; wtr.flush()?;
+                if let Some(dir) = wdog.as_ref() {
+                    let hint_token_count: usize = best_hint_len;
+                    let rec = json!({
+                        "phase":"xe_snapshot",
+                        "i": i,
+                        "chunk_index": chunk_index,
+                        "baseline_bits": best_baseline,
+                        "conditioned_bits": best_conditioned,
+                        "bits_saved": best_bits_saved,
+                        "hint_tokens": hint_token_count,
+                        "candidate_id": best_cid,
+                        "budget_id": best_bid,
+                    });
+                    watchdog_write_jsonl(dir, "watchdog_encode_steps.jsonl", &rec);
+                }
+            }
+            next_agent_boundary += agent_chunk;
+        }
+        // Do not append a human-readable summary into the scratchpad during encode.
+        // Keeping the scratchpad minimal (prefix snapshots + accepted hints) avoids
+        // noisy repeated blocks being shown in agent prompts/logs.
+        // Reprime logic - deterministic based on absolute position only
         if backend=="smollm" {
-            // SmolLM: Reprime when session.index_pos >= effective_context AND tokens_since_reprime >= reprime_interval
+            // SmolLM: Reprime when session.index_pos >= effective_context AND i % reprime_interval == 0 (absolute position)
             let session = session_smol.as_ref().unwrap();
-            if session.index_pos() >= effective_context && tokens_since_reprime >= cli.reprime_interval {
+            if i < reprime_hold_until {
+                // skip reprime to preserve agent hint influence
+            } else if session.index_pos() >= effective_context && (i % cli.reprime_interval) == 0 && i > 0 {
                 let end = 1 + i;
                 let start = end.saturating_sub(effective_context);
                 let history = &ids[start..end];
                 logits_t = session_smol.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(history)?;
-                tokens_since_reprime = 0;
+                if let Some(dir) = wdog.as_ref() {
+                    let rec = json!({"phase":"context_reprime","i":i,"window":effective_context});
+                    watchdog_write_jsonl(dir, "watchdog_encode_steps.jsonl", &rec);
+                }
             }
         }
 
@@ -1048,6 +1989,29 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         };
         ace.encode_interval(c_lo, c_hi)?;
 
+        if let Some(dir) = wdog.as_ref() {
+            // Record stable per-step digest without leaking logits.
+            let p_digest = {
+                if backend=="smollm" {
+                    let vec = logits_t.to_vec1::<f32>()?; // Won't be written directly
+                    hex16(&blake3_f32_bin16(&vec))
+                } else {
+                    let vec = logits_t.to_vec1::<f32>()?;
+                    hex16(&blake3_f32_bin16(&vec))
+                }
+            };
+            let rec = json!({
+                "phase": "encode_step",
+                "i": i,
+                "sym": sym,
+                "c_lo": c_lo,
+                "c_hi": c_hi,
+                "pdf_digest": p_digest,
+                "bytes_out": ace.bytes_written(),
+            });
+            watchdog_write_jsonl(dir, "watchdog_encode_steps.jsonl", &rec);
+        }
+
         if backend=="smollm" {
             logits_t = session_smol.as_mut().unwrap().step_logits_tensor(sym)?;
         } else {
@@ -1055,42 +2019,92 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 logits_t = session_rwkv.as_mut().unwrap().step_logits_tensor(sym)?;
             }
         }
-        tokens_since_reprime += 1;
+        // tokens_since_reprime removed - using absolute position repriming
 
-        if scan_enabled && (i + 1) >= next_scan_boundary {
-            let chunk_end = 1 + i; let chunk_start = chunk_end.saturating_sub(scan_chunk);
-            if let Some(wtr) = csv_writer_opt.as_mut() {
-                let prefix_end_byte = if offsets.is_empty() { chunk_end } else { offsets[(chunk_end - 1).min(offsets.len() - 1)].1 as usize };
-                let chunk_index = (chunk_end / scan_chunk).max(1);
-                eprintln!("[scan] [{}] chunk {}/{} tokens[{}..{}] lookahead={} -> agent...", backend, chunk_index, total_scan_chunks, chunk_start, chunk_end, cli.scan_lookahead);
-                // RWKV-specific: increase allowed steps modestly if default and backend is rwkv7
-                let max_steps = if backend=="rwkv7" && cli.scan_max_steps == 7 { 10 } else { cli.scan_max_steps };
-                let (agent_text, agent_duration_ms, agent_calls) = run_agent_for_chunk(input, &data, prefix_end_byte, chunk_index, &cli.scan_python, &cli.scan_mcp_config, max_steps, cli.scan_verbose, &scan_dir, cli.scan_agent_timeout)?;
-                eprintln!("[scan] [{}] chunk {}/{} agent done in {} ms (calls={}), computing XE...", backend, chunk_index, total_scan_chunks, agent_duration_ms, agent_calls);
-                let (baseline_bits, conditioned_bits) = if backend=="smollm" { compute_cross_entropy_for_chunk_smol(scan_session_smol.as_mut().unwrap(), tok_hf.as_ref().unwrap(), bos_id, &ids, chunk_end, &agent_text, cli.scan_max_hint_tokens, cli.scan_lookahead)? } else { compute_cross_entropy_for_chunk_rwkv(scan_session_rwkv.as_mut().unwrap(), tok_rwkv.as_ref().unwrap(), bos_id, &ids, chunk_end, &agent_text, cli.scan_max_hint_tokens, cli.scan_lookahead)? };
-                let bits_saved=(baseline_bits-conditioned_bits).max(0.0); let percent_saved=if baseline_bits>0.0 { bits_saved / baseline_bits } else { 0.0 }; let gate= if bits_saved>0.0 { 1 } else { 0 };
-                total_bits_saved += bits_saved; total_baseline_bits += baseline_bits; total_agent_calls += agent_calls as u64; total_chunks += 1;
-                eprintln!("[scan] chunk {}/{} baseline={:.4} bits cond={:.4} bits saved={:.4} ({:.2}%) gate={}", chunk_index, total_scan_chunks, baseline_bits, conditioned_bits, bits_saved, percent_saved*100.0, gate);
-                wtr.write_record(&[ input.to_string_lossy().to_string(), chunk_index.to_string(), chunk_start.to_string(), chunk_end.to_string(), agent_text.len().to_string(), agent_duration_ms.to_string(), format!("{:.6}", baseline_bits), format!("{:.6}" , conditioned_bits), format!("{:.6}", bits_saved), format!("{:.6}", percent_saved*100.0), agent_calls.to_string(), gate.to_string() ])?; wtr.flush()?;
-            }
-            next_scan_boundary += scan_chunk;
-        }
+        // Old scan block moved to agent boundary above
         if i % 1024 == 0 { bar.set_position(i as u64); let bytes_so_far = ace.bytes_written(); let bpb = (8.0 * bytes_so_far as f64) / (orig_len_bytes as f64); bar.set_message(format!("bytes={}  bpb={:.3}", bytes_so_far, bpb)); }
     }
-    bar.finish_and_clear(); ace.finish()?;
+    bar.finish_and_clear();
+    // Finish encoder and retrieve payload bytes
+    let payload_bytes = ace.finish()?;
+    if let Some(dir) = wdog.as_ref() {
+        let rec = json!({"phase":"encode_done","bytes_out": payload_bytes.len()});
+        watchdog_write_jsonl(dir, "watchdog_encode_steps.jsonl", &rec);
+    }
+
+    // Build structured gating records per boundary (candidate + budget + gate)
+    let gates_present = agent_enabled;
+    // Write final file: header -> optional agent gates -> payload
+    {
+        let mut out_file = BufWriter::new(File::create(output)?);
+        let reserved_flags = flags_pack(agent_enabled, agent_mock, gates_present, agent_chunk);
+        let header_v2 = HeaderBinV2 { bos_token_id: bos_id, token_count, orig_len_bytes, model_hash16, tokenizer_hash16, orig_hash16: orig_blake3_16, reserved_flags, context_window: cli.context as u32, vocab_size: vocab_size as u32, model_file_repr_len: weight_repr.len() as u32, reprime_interval: cli.reprime_interval as u32 };
+        write_header_v2(&mut out_file, &header_v2, weight_repr.as_bytes())?;
+        if gates_present { write_agent_gates_v2(&mut out_file, &gate_records)?; }
+        use std::io::Write as _;
+        out_file.write_all(&payload_bytes)?;
+        out_file.flush()?;
+    }
 
     let enc_bytes = fs::metadata(output)?.len() as u64; let elapsed = t0.elapsed(); let bpb = (8.0 * enc_bytes as f64) / (orig_len_bytes as f64); let char_count = String::from_utf8_lossy(&data).chars().count() as u64; let bpc = if char_count > 0 { (8.0 * enc_bytes as f64) / (char_count as f64) } else { f64::NAN };
     println!("Encoded: {} bytes -> {} bytes | bits/byte={:.3} | bits/char={:.3} | context={} | time={:.2?}", orig_len_bytes, enc_bytes, bpb, bpc, cli.context, elapsed);
-    if scan_enabled { let mut meta=scan_meta; if let Some(obj)=meta.as_object_mut() { obj.insert("orig_len_bytes".to_string(), json!(orig_len_bytes)); obj.insert("encoded_len_bytes".to_string(), json!(enc_bytes)); obj.insert("bits_per_byte".to_string(), json!(bpb)); obj.insert("bits_per_char".to_string(), json!(bpc)); obj.insert("elapsed_sec".to_string(), json!(elapsed.as_secs_f64())); obj.insert("scan_total_chunks".to_string(), json!(total_chunks)); obj.insert("scan_total_agent_calls".to_string(), json!(total_agent_calls)); obj.insert("scan_total_bits_saved".to_string(), json!(total_bits_saved)); let percent_overall = if total_baseline_bits>0.0 { total_bits_saved/total_baseline_bits } else { 0.0 }; obj.insert("scan_percent_saved_overall".to_string(), json!(percent_overall*100.0)); } let meta_path=scan_dir.join("meta.json"); fs::write(meta_path, serde_json::to_vec_pretty(&meta)?)?; }
+    if let Some(dir) = wdog.as_ref() {
+        let rec = json!({
+            "phase":"summary",
+            "orig_len_bytes": orig_len_bytes,
+            "enc_len_bytes": enc_bytes,
+            "bits_per_byte": bpb,
+            "bits_per_char": bpc,
+            "elapsed_sec": elapsed.as_secs_f64()
+        });
+        watchdog_write_jsonl(dir, "watchdog_encode_steps.jsonl", &rec);
+    }
+    if scan_enabled || agent_enabled { let mut meta=scan_meta; if let Some(obj)=meta.as_object_mut() { obj.insert("orig_len_bytes".to_string(), json!(orig_len_bytes)); obj.insert("encoded_len_bytes".to_string(), json!(enc_bytes)); obj.insert("bits_per_byte".to_string(), json!(bpb)); obj.insert("bits_per_char".to_string(), json!(bpc)); obj.insert("elapsed_sec".to_string(), json!(elapsed.as_secs_f64())); obj.insert("scan_total_chunks".to_string(), json!(total_chunks)); obj.insert("scan_total_agent_calls".to_string(), json!(total_agent_calls)); obj.insert("scan_total_bits_saved".to_string(), json!(total_bits_saved)); let percent_overall = if total_baseline_bits>0.0 { total_bits_saved/total_baseline_bits } else { 0.0 }; obj.insert("scan_percent_saved_overall".to_string(), json!(percent_overall*100.0)); } let meta_path=scan_dir.join("meta.json"); fs::write(meta_path, serde_json::to_vec_pretty(&meta)?)?; }
+
+    // Cleanup agent memory for this run (ensure no cross-run contamination)
+    if agent_enabled {
+        let mem_dir = scan_dir.join("agent_mem");
+        let _ = fs::remove_dir_all(mem_dir);
+    }
     Ok(())
 }
 
 fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
+    let reuse_scan_mode = cli.reuse_scan_dir.is_some();
     let device = detect_device(cli.cpu);
     let mut rdr = BufReader::new(File::open(input)?);
     let (header, model_file_repr) = read_header_v2(&mut rdr)?;
     let backend = cli.backend.to_lowercase();
     let vocab_size = header.vocab_size as usize;
+    let agent_in_header = flags_unpack_agent_used(header.reserved_flags);
+    let agent_mock_in_header = flags_unpack_agent_mock(header.reserved_flags);
+    let agent_chunk = flags_unpack_agent_chunk(header.reserved_flags).max(1);
+    let agent_script_path = cli.scan_agent_script.clone();
+    let is_mock_script = agent_script_path.file_name().and_then(|s| s.to_str()).unwrap_or("") == "deterministic_mock_agent_cli.py";
+    if agent_in_header {
+        if !cli.agent { anyhow::bail!("file requires --agent for deterministic decoding"); }
+        if agent_mock_in_header && !is_mock_script { anyhow::bail!("file encoded with deterministic mock agent; pass --scan-agent-script agent/deterministic_mock_agent_cli.py"); }
+        if !agent_mock_in_header && is_mock_script { anyhow::bail!("file encoded with real agent; deterministic mock agent cannot be used for decoding"); }
+    }
+    // Prepare optional log dir when agent is required
+    let mut run_dir: Option<PathBuf> = None;
+    if agent_in_header || cli.scan || reuse_scan_mode {
+        if let Some(reuse_dir) = &cli.reuse_scan_dir {
+            // Reuse existing scan directory
+            run_dir = Some(reuse_dir.clone());
+            if !reuse_dir.exists() { anyhow::bail!("Reuse scan directory does not exist: {}", reuse_dir.display()); }
+            eprintln!("[reuse] Using existing scan directory for decode: {}", reuse_dir.display());
+        } else {
+            let ts = Utc::now().format("%Y%m%d_%H%M%S");
+            let run_dir_name = format!("{}_decode_{}_{}", input.file_stem().and_then(|s| s.to_str()).unwrap_or("input"), backend, ts);
+            let mut dir = cli.scan_output_dir.join(run_dir_name);
+            if let Ok(override_dir) = std::env::var("CANDLEZIP_WATCHDOG_DIR") {
+                dir = PathBuf::from(override_dir);
+            }
+            fs::create_dir_all(&dir).ok();
+            run_dir = Some(dir);
+        }
+    }
 
     if backend=="smollm" {
         let model_file_str = String::from_utf8_lossy(&model_file_repr).to_string();
@@ -1108,21 +2122,199 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 anyhow::bail!("tokenizer hash mismatch. Use --force-mismatch to override.");
             }
         }
+        // * Enforce agent usage consistency if present in header
+        if agent_in_header && !cli.agent {
+            anyhow::bail!("file requires --agent for deterministic decoding");
+        }
         let tokenizer = HfTokenizer::from_file(tok_path.to_str().unwrap()).map_err(|e| anyhow::anyhow!("failed loading tokenizer: {e}"))?;
         let mut session = SmolLmSession::load(&weight_paths, &config_path, device, vocab_size)?;
+        // Optional gating section directly after header (supports v1 bits or v2 structured)
+        let mut gates_bytes: Vec<u8> = Vec::new();
+        let mut gate_records: Vec<GateRecordV2> = Vec::new();
+        if flags_unpack_agent_gates(header.reserved_flags) {
+            let mut magic = [0u8;4];
+            rdr.read_exact(&mut magic)?;
+            if magic == AGT2_MAGIC {
+                let count = read_var_u64(&mut rdr)? as usize;
+                let mut buf = vec![0u8; count];
+                rdr.read_exact(&mut buf)?;
+                for b in buf { gate_records.push(GateRecordV2{ gate: (b>>0)&1, candidate_id: (b>>1)&0b11, budget_id: (b>>3)&0b11 }); }
+            } else if magic == AGTB_MAGIC {
+                let nbits = read_var_u64(&mut rdr)?;
+                let nbytes = ((nbits + 7) / 8) as usize;
+                let mut bytes = vec![0u8; nbytes];
+                rdr.read_exact(&mut bytes)?;
+                gates_bytes = bytes;
+            } else { anyhow::bail!("invalid gating magic"); }
+        }
         let mut payload = Vec::new(); rdr.read_to_end(&mut payload)?; let mut acd = ArithmeticDecoder::new(&payload[..])?; let mut logits_t = session.step_logits_tensor(header.bos_token_id)?;
+        let wdog = watchdog_dir();
+        // Load reuse data if in reuse mode
+        let reuse_gates = if reuse_scan_mode { load_gate_decisions_from_csv(run_dir.as_ref().unwrap()) } else { std::collections::HashMap::new() };
+        let agent_cache = if cli.reuse || reuse_scan_mode {
+            if let Some(dir) = wdog.as_ref() {
+                load_cached_agent_results(dir)
+            } else {
+                std::collections::HashMap::new()
+            }
+        } else {
+            std::collections::HashMap::new()
+        };
+        if let Some(dir) = wdog.as_ref() {
+            let rec = json!({"phase":"decode_init","backend":"smollm","bos":header.bos_token_id,"reuse":cli.reuse});
+            watchdog_write_jsonl(dir, "watchdog_decode_steps.jsonl", &rec);
+        }
         let mut out_tokens: Vec<u32> = Vec::with_capacity(header.token_count as usize + 1); out_tokens.push(header.bos_token_id);
         let bar = ProgressBar::new(header.token_count); bar.set_style(ProgressStyle::with_template("{wide_bar} {pos}/{len}").unwrap());
-        let mut logits_vec = logits_t.to_vec1::<f32>()?; let mut pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
         let effective_context = (header.context_window as usize).saturating_sub(1).min(511);
-        let mut tokens_since_reprime = 0usize;
-        for i in 0..header.token_count {
-            if session.index_pos() >= effective_context && tokens_since_reprime >= header.reprime_interval as usize {
-                let end = out_tokens.len(); let start = end.saturating_sub(effective_context); let history = &out_tokens[start..end]; logits_t = session.reprime_with_history_and_get_last_logits_tensor(history)?; tokens_since_reprime = 0; logits_vec = logits_t.to_vec1::<f32>()?; pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
+        // tokens_since_reprime removed - using absolute position repriming
+        let mut next_agent_boundary = agent_chunk;
+        // Load gates: prefer structured v2; else bits; else fallback to proof.csv in watchdog dir
+        let mut gate_decisions: Vec<u8> = Vec::new();
+        if !gate_records.is_empty() {
+            // use structured
+        } else if !gates_bytes.is_empty() {
+            let total_bits = (gates_bytes.len() * 8) as usize;
+            for i in 0..total_bits { gate_decisions.push(get_gate_bit(&gates_bytes, i)); }
+        } else if let Some(dir) = watchdog_dir().as_ref() {
+            let proof_path = Path::new(dir).join("proof.csv");
+            if let Ok(txt) = fs::read_to_string(&proof_path) {
+                for (li, line) in txt.lines().enumerate() {
+                    if li == 0 { continue; }
+                    let parts: Vec<&str> = line.split(',').collect();
+                    if parts.len() >= 12 { if let Ok(g) = parts[11].trim().parse::<u8>() { gate_decisions.push(g); } }
+                }
             }
-            let sym = acd.decode_symbol(&pdf)? as u32; out_tokens.push(sym); logits_t = session.step_logits_tensor(sym)?; tokens_since_reprime += 1; logits_vec = logits_t.to_vec1::<f32>()?; pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min()); if i % 1024 == 0 { bar.set_position(i); }
         }
-        bar.finish_and_clear(); let detok = tokenizer.decode(&out_tokens[1..], true).map_err(|e| anyhow::anyhow!("tokenizer.decode failed: {e}"))?; fs::write(output, detok.as_bytes())?; Ok(())
+        let mut first_mismatch_written = false;
+        for i in 0..header.token_count {
+            // Context reprime if needed - deterministic based on absolute position only  
+            if session.index_pos() >= effective_context && (i % (header.reprime_interval as u64)) == 0 && i > 0 {
+                let end = out_tokens.len(); 
+                let start = end.saturating_sub(effective_context); 
+                let history = &out_tokens[start..end]; 
+                logits_t = session.reprime_with_history_and_get_last_logits_tensor(history)?; 
+                if let Some(dir) = wdog.as_ref() {
+                    let rec = json!({"phase":"context_reprime","i":i,"window":effective_context});
+                    watchdog_write_jsonl(dir, "watchdog_decode_steps.jsonl", &rec);
+                }
+            }
+            // Agent priming at boundary, before decoding current token
+            if agent_in_header && (i + 1) == next_agent_boundary as u64 {
+                let chunk_index = (next_agent_boundary / agent_chunk).max(1);
+                let (gate, cand_id, bud_id) = if let Some(&(cached_gate, cached_cid, cached_bid)) = reuse_gates.get(&chunk_index) {
+                    // Use cached gate decision from CSV
+                    eprintln!("[reuse] Using cached gate decision for decode chunk {}: gate={}, candidate={}, budget={}", chunk_index, cached_gate, cached_cid, cached_bid);
+                    (cached_gate, cached_cid as u8, cached_bid as u8)
+                } else if !gate_records.is_empty() {
+                    let rec = gate_records.get(chunk_index.saturating_sub(1)).copied().unwrap_or_default();
+                    (rec.gate, rec.candidate_id, rec.budget_id)
+                } else {
+                    let g = gate_decisions.get(chunk_index.saturating_sub(1)).copied().unwrap_or_else(|| get_gate_bit(&gates_bytes, chunk_index.saturating_sub(1)));
+                    (g, 0, 2)
+                };
+                let agent_text = if cli.reuse {
+                    if let Some(cached) = agent_cache.get(&chunk_index) {
+                        eprintln!("[agent] [smollm] boundary {}/{} -> reusing cached agent result", chunk_index, ((header.token_count as usize + agent_chunk - 1) / agent_chunk));
+                        cached.agent_text.clone()
+                    } else {
+                        anyhow::bail!("--reuse specified but no cached agent result for chunk {}", chunk_index);
+                    }
+                } else {
+                let prefix_text = tokenizer.decode(&out_tokens[1..], true).map_err(|e| anyhow::anyhow!("tokenizer.decode failed: {e}"))?;
+                    let (agent_text, _dur_ms, _calls) = run_agent_for_prefix_text(
+                    &prefix_text,
+                    chunk_index,
+                    &agent_script_path,
+                    &cli.scan_python,
+                    &cli.scan_mcp_config,
+                    if cli.scan_max_steps == 7 { 10 } else { cli.scan_max_steps },
+                    cli.scan_verbose,
+                    run_dir.as_deref().unwrap_or_else(|| Path::new("scan_output")),
+                    cli.scan_agent_timeout,
+                )?;
+                    agent_text
+                };
+                if gate == 1 {
+                    // Record agent text to memory only when gate == 1 to ensure symmetry
+                    if let Some(dir) = run_dir.as_ref() {
+                        append_agent_memory(dir, chunk_index, &agent_text);
+                    }
+                    // Deterministically construct candidates and apply selected id and budget
+                    let build_candidates = |s: &str| -> Vec<String> {
+                        let normalized: String = s.chars().map(|c| if c.is_control() { ' ' } else { c }).collect();
+                        let mut out = Vec::new();
+                        out.push(normalized.clone());
+                        let head = if normalized.len() > 2000 { normalized[..2000].to_string() } else { normalized.clone() };
+                        out.push(head);
+                        let nums: String = normalized.lines().filter(|l| l.chars().any(|c| c.is_ascii_digit())).collect::<Vec<&str>>().join("\n");
+                        out.push(nums);
+                        let caps: String = normalized.split_whitespace().filter(|w| { let mut chs = w.chars(); match chs.next() { Some(c) if c.is_ascii_uppercase() => true, _ => false } }).collect::<Vec<&str>>().join(" ");
+                        out.push(caps);
+                        out
+                    };
+                    let candidates = build_candidates(&agent_text);
+                    let selected = candidates.get(cand_id as usize).cloned().unwrap_or_else(|| agent_text.clone());
+                    let hint_ids = tokenize_hint_smol(&tokenizer, &selected, cli.scan_max_hint_tokens)?;
+                    let max_ctx = session.max_context_length().saturating_sub(1);
+                    let budgets = [max_ctx/8, max_ctx/4, max_ctx/2, (max_ctx*3)/4];
+                    let budget_val = budgets.get(bud_id as usize).copied().unwrap_or(max_ctx/4);
+                    let mut prime: Vec<u32> = Vec::new();
+                    // History first, then hint (must match encode)
+                    let history = &out_tokens[..];
+                    let hist_take = max_ctx.saturating_sub(budget_val).min(history.len());
+                    if hist_take > 0 { let hist_start = history.len().saturating_sub(hist_take); prime.extend_from_slice(&history[hist_start..]); }
+                    let hint_take = hint_ids.len().min(budget_val);
+                    if hint_take > 0 { prime.extend_from_slice(&hint_ids[..hint_take]); }
+                    logits_t = session.reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                }
+                // tokens_since_reprime removed - using absolute position repriming
+                next_agent_boundary += agent_chunk;
+            }
+            // Compute pdf from current logits
+            let logits_vec = logits_t.to_vec1::<f32>()?; let pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
+            // Decode symbol and step
+            let sym = acd.decode_symbol(&pdf)? as u32; out_tokens.push(sym); logits_t = session.step_logits_tensor(sym)?; if i % 1024 == 0 { bar.set_position(i); }
+            if let Some(dir) = wdog.as_ref() {
+                // Compare against encode trace if available to pinpoint first differing symbol
+                let enc_trace = watchdog_load_encode_trace(dir);
+                if (i as usize) < enc_trace.len() {
+                    if let Some(enc) = &enc_trace[i as usize] {
+                        if enc.sym != sym && !first_mismatch_written {
+                            first_mismatch_written = true;
+                            let rec = json!({
+                                "phase":"mismatch",
+                                "i": i,
+                                "encode_sym": enc.sym,
+                                "decode_sym": sym,
+                                "note": "first differing symbol"
+                            });
+                            watchdog_try_write_json(dir, "watchdog_mismatch.json", &rec);
+                        }
+                    }
+                }
+            }
+            if let Some(dir) = wdog.as_ref() {
+                let p_digest = {
+                    let vec = logits_t.to_vec1::<f32>()?;
+                    hex16(&blake3_f32_bin16(&vec))
+                };
+                let rec = json!({"phase":"decode_step","i":i,"sym":sym,"pdf_digest":p_digest});
+                watchdog_write_jsonl(dir, "watchdog_decode_steps.jsonl", &rec);
+            }
+        }
+        bar.finish_and_clear(); let detok = tokenizer.decode(&out_tokens[1..], true).map_err(|e| anyhow::anyhow!("tokenizer.decode failed: {e}"))?; fs::write(output, detok.as_bytes())?;
+        if let Some(dir) = wdog.as_ref() {
+            let rec = json!({"phase":"decode_done","tokens": out_tokens.len()});
+            watchdog_write_jsonl(dir, "watchdog_decode_steps.jsonl", &rec);
+        }
+        // Cleanup agent memory dir if created
+        if agent_in_header {
+            if let Some(dir) = run_dir {
+                let _ = fs::remove_dir_all(dir.join("agent_mem"));
+            }
+        }
+        Ok(())
     } else if backend=="rwkv7" {
         let model_path = cli.rwkv_model.clone();
         let config_path = cli.rwkv_config.clone();
@@ -1139,8 +2331,30 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
             anyhow::bail!("tokenizer hash mismatch. Use --force-mismatch to override.");
         }
     }
+        if agent_in_header && !cli.agent {
+            anyhow::bail!("file requires --agent for deterministic decoding");
+        }
         let tokenizer = candlerwkv7::models::rwkv7::Tokenizer::new(&tok_path)?;
         let mut session = Rwkv7Session::load(&model_path, &config_path, device)?;
+        // Optional gating section directly after header
+        let mut gates_bytes: Vec<u8> = Vec::new();
+        let mut gates_v2: Vec<GateRecordV2> = Vec::new();
+        if flags_unpack_agent_gates(header.reserved_flags) {
+            let mut magic = [0u8;4];
+            rdr.read_exact(&mut magic)?;
+            if magic == AGT2_MAGIC {
+                let count = read_var_u64(&mut rdr)? as usize;
+                let mut buf = vec![0u8; count];
+                rdr.read_exact(&mut buf)?;
+                for b in buf { gates_v2.push(GateRecordV2{ gate: (b>>0)&1, candidate_id: (b>>1)&0b11, budget_id: (b>>3)&0b11 }); }
+            } else if magic == AGTB_MAGIC {
+                let nbits = read_var_u64(&mut rdr)?;
+                let nbytes = ((nbits + 7) / 8) as usize;
+                let mut bytes = vec![0u8; nbytes];
+                rdr.read_exact(&mut bytes)?;
+                gates_bytes = bytes;
+            } else { anyhow::bail!("invalid gating magic"); }
+        }
         let mut payload = Vec::new();
         rdr.read_to_end(&mut payload)?;
         let mut acd = ArithmeticDecoder::new(&payload[..])?;
@@ -1149,9 +2363,94 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         out_syms.push(header.bos_token_id);
         let bar = ProgressBar::new(header.token_count);
         bar.set_style(ProgressStyle::with_template("{wide_bar} {pos}/{len}").unwrap());
-
-        // RWKV7 decoding with proper literal handling
+        let mut next_agent_boundary = agent_chunk;
+        let wdog = watchdog_dir();
+        // Load reuse data if in reuse mode
+        let reuse_gates = if reuse_scan_mode { load_gate_decisions_from_csv(run_dir.as_ref().unwrap()) } else { std::collections::HashMap::new() };
+        let agent_cache = if cli.reuse || reuse_scan_mode {
+            if let Some(dir) = wdog.as_ref() {
+                load_cached_agent_results(dir)
+            } else {
+                std::collections::HashMap::new()
+            }
+        } else {
+            std::collections::HashMap::new()
+        };
+        if let Some(dir) = wdog.as_ref() {
+            let rec = json!({"phase":"decode_init","backend":"rwkv7","bos":header.bos_token_id,"reuse":cli.reuse});
+            watchdog_write_jsonl(dir, "watchdog_decode_steps.jsonl", &rec);
+        }
+        let mut first_mismatch_written = false;
+        // RWKV7 decoding with proper literal handling and agent priming
         for i in 0..header.token_count {
+            // Agent priming at boundary
+            if agent_in_header && (i + 1) == next_agent_boundary as u64 {
+                let chunk_index = (next_agent_boundary / agent_chunk).max(1);
+                let (gate, cand_id, bud_id) = if let Some(&(cached_gate, cached_cid, cached_bid)) = reuse_gates.get(&chunk_index) {
+                    // Use cached gate decision from CSV
+                    eprintln!("[reuse] Using cached gate decision for decode chunk {}: gate={}, candidate={}, budget={}", chunk_index, cached_gate, cached_cid, cached_bid);
+                    (cached_gate, cached_cid as u8, cached_bid as u8)
+                } else if !gates_v2.is_empty() {
+                    let rec = gates_v2.get(chunk_index.saturating_sub(1)).copied().unwrap_or_default();
+                    (rec.gate, rec.candidate_id, rec.budget_id)
+                } else {
+                    (get_gate_bit(&gates_bytes, chunk_index.saturating_sub(1)), 0, 2)
+                };
+                if gate == 1 {
+                    let agent_text = if cli.reuse {
+                    if let Some(cached) = agent_cache.get(&chunk_index) {
+                        eprintln!("[agent] [rwkv7] boundary {}/{} -> reusing cached agent result", chunk_index, ((header.token_count as usize + agent_chunk - 1) / agent_chunk));
+                        cached.agent_text.clone()
+                    } else {
+                        anyhow::bail!("--reuse specified but no cached agent result for chunk {}", chunk_index);
+                    }
+                    } else {
+                        let detok_bytes_prefix = rwkv_detok_with_literals(&tokenizer, &out_syms[1..], session.vocab_size());
+                        let prefix_text = String::from_utf8_lossy(&detok_bytes_prefix).to_string();
+                        let (agent_text, _dur_ms, _calls) = run_agent_for_prefix_text(
+                            &prefix_text, chunk_index, &agent_script_path, &cli.scan_python, &cli.scan_mcp_config,
+                            if cli.scan_max_steps == 7 { 10 } else { cli.scan_max_steps }, cli.scan_verbose,
+                            run_dir.as_deref().unwrap_or_else(|| Path::new("scan_output")), cli.scan_agent_timeout,
+                        )?;
+                        agent_text
+                    };
+                    // Record agent text to memory only when gate == 1 to ensure symmetry
+                    if let Some(dir) = run_dir.as_ref() {
+                        append_agent_memory(dir, chunk_index, &agent_text);
+                    }
+                    // Deterministically pick candidate and budget (from metadata)
+                    let build_candidates = |s: &str| -> Vec<String> {
+                        let normalized: String = s.chars().map(|c| if c.is_control() { ' ' } else { c }).collect();
+                        let mut out = Vec::new();
+                        out.push(normalized.clone());
+                        let head = if normalized.len() > 2000 { normalized[..2000].to_string() } else { normalized.clone() };
+                        out.push(head);
+                        let nums: String = normalized.lines().filter(|l| l.chars().any(|c| c.is_ascii_digit())).collect::<Vec<&str>>().join("\n");
+                        out.push(nums);
+                        let caps: String = normalized.split_whitespace().filter(|w| { let mut chs = w.chars(); match chs.next() { Some(c) if c.is_ascii_uppercase() => true, _ => false } }).collect::<Vec<&str>>().join(" ");
+                        out.push(caps);
+                        out
+                    };
+                    let candidates = build_candidates(&agent_text);
+                    let selected = candidates.get(cand_id as usize).cloned().unwrap_or_else(|| agent_text.clone());
+                    let hint_ids = tokenize_hint_rwkv(&tokenizer, &selected, cli.scan_max_hint_tokens)?;
+                    // Build prime: history + hint (match encode ordering)
+                    let max_ctx = session.max_context_length().saturating_sub(1);
+                    let budgets = [max_ctx/8, max_ctx/4, max_ctx/2, (max_ctx*3)/4];
+                    let budget_val = budgets.get(bud_id as usize).copied().unwrap_or(max_ctx/4);
+                    let mut prime: Vec<u32> = Vec::new();
+                    // Filter out literals from history, then take history first up to (max_ctx - budget_val)
+                    let mut filtered_hist: Vec<u32> = Vec::with_capacity(out_syms.len());
+                    for &t in out_syms.iter() { if (t as usize) < session.vocab_size() { filtered_hist.push(t); } }
+                    let hist_take = max_ctx.saturating_sub(budget_val).min(filtered_hist.len());
+                    if hist_take > 0 { prime.extend_from_slice(&filtered_hist[filtered_hist.len().saturating_sub(hist_take)..]); }
+                    let hint_take = hint_ids.len().min(budget_val);
+                    if hint_take > 0 { prime.extend_from_slice(&hint_ids[..hint_take]); }
+                    logits_t = session.reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                }
+                next_agent_boundary += agent_chunk;
+            }
+
             let logits_vec = logits_t.to_vec1::<f32>()?;
             let pdf = combined_pdf_with_literals(&logits_vec, session.vocab_size());
             let sym = acd.decode_symbol(&pdf)? as u32;
@@ -1162,6 +2461,28 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 logits_t = session.step_logits_tensor(sym)?;
             }
 
+            if let Some(dir) = wdog.as_ref() {
+                let vec = logits_t.to_vec1::<f32>()?;
+                let rec = json!({"phase":"decode_step","i":i,"sym":sym,"pdf_digest":hex16(&blake3_f32_bin16(&vec))});
+                watchdog_write_jsonl(dir, "watchdog_decode_steps.jsonl", &rec);
+                // Compare against encode trace (if present) to mark first differing symbol deterministically
+                let enc_trace = watchdog_load_encode_trace(dir);
+                if (i as usize) < enc_trace.len() {
+                    if let Some(enc) = &enc_trace[i as usize] {
+                        if enc.sym != sym && !first_mismatch_written {
+                            first_mismatch_written = true;
+                            let rec = json!({
+                                "phase":"mismatch",
+                                "i": i,
+                                "encode_sym": enc.sym,
+                                "decode_sym": sym,
+                                "note": "first differing symbol"
+                            });
+                            watchdog_try_write_json(dir, "watchdog_mismatch.json", &rec);
+                        }
+                    }
+                }
+            }
             if i % 256 == 0 { bar.set_position(i); }
         }
         bar.finish_and_clear();
@@ -1169,6 +2490,16 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         // Convert combined symbol stream back to bytes
         let detok_bytes = rwkv_detok_with_literals(&tokenizer, &out_syms[1..], session.vocab_size());
         fs::write(output, &detok_bytes)?;
+        if let Some(dir) = wdog.as_ref() {
+            let rec = json!({"phase":"decode_done","symbols": out_syms.len()});
+            watchdog_write_jsonl(dir, "watchdog_decode_steps.jsonl", &rec);
+        }
+        // Cleanup agent memory dir if created
+        if agent_in_header {
+            if let Some(dir) = run_dir {
+                let _ = fs::remove_dir_all(dir.join("agent_mem"));
+            }
+        }
         Ok(())
     } else {
         anyhow::bail!("unknown backend {}", backend);
