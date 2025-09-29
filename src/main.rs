@@ -1012,7 +1012,7 @@ fn select_agent_runner(agent_script: &Path, python_exe: &str) -> anyhow::Result<
 }
 
 fn read_agent_memory(scan_dir: &Path) -> String {
-    let mem_file = scan_dir.join("agent_mem").join("memory.txt");
+    let mem_file = scan_dir.join("agent_memory").join("memory.txt");
     if let Ok(bytes) = fs::read(&mem_file) {
         if let Ok(text) = String::from_utf8(bytes) { return text; }
     }
@@ -1020,14 +1020,14 @@ fn read_agent_memory(scan_dir: &Path) -> String {
 }
 
 fn append_agent_memory(scan_dir: &Path, chunk_index: usize, agent_text: &str) {
-    let mem_dir = scan_dir.join("agent_mem"); let _ = fs::create_dir_all(&mem_dir);
+    let mem_dir = scan_dir.join("agent_memory"); let _ = fs::create_dir_all(&mem_dir);
     let mem_file = mem_dir.join("memory.txt");
     let rec = format!("\n# chunk:{}\n{}\n", chunk_index, agent_text.trim());
     if let Ok(mut f) = File::options().create(true).append(true).open(mem_file) { let _ = f.write_all(rec.as_bytes()); }
 }
 
-// * Scratchpad aggregates prior prefix text and accepted gated hints for agent reflection
-fn scratchpad_path(scan_dir: &Path) -> PathBuf { scan_dir.join("agent_mem").join("scratchpad.txt") }
+// * Scratchpad aggregates prior prefix text and accepted gated hints for agent reflection (ephemeral under scan_dir)
+fn scratchpad_path(scan_dir: &Path) -> PathBuf { scan_dir.join("agent_memory").join("scratchpad.txt") }
 
 fn append_scratchpad(scan_dir: &Path, section: &str, content: &str) {
     let path = scratchpad_path(scan_dir); let _ = fs::create_dir_all(scan_dir.join("agent_mem"));
@@ -1759,8 +1759,19 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
 
     let mut reprime_hold_until: usize = 0; // skip context re-prime while hint should remain effective
     // Load reuse data if in reuse mode
-    let reuse_gates = if reuse_scan_mode { load_gate_decisions_from_csv(&scan_dir) } else { std::collections::HashMap::new() };
-    let reuse_cache = if reuse_scan_mode { load_cached_agent_results(&scan_dir) } else { std::collections::HashMap::new() };
+    let reuse_gates = if reuse_scan_mode { 
+        let reuse_dir = cli.reuse_scan_dir.as_ref().unwrap();
+        load_gate_decisions_from_csv(reuse_dir) 
+    } else { std::collections::HashMap::new() };
+    let reuse_cache = if reuse_scan_mode { 
+        let reuse_dir = cli.reuse_scan_dir.as_ref().unwrap();
+        let cache = load_cached_agent_results(reuse_dir);
+        eprintln!("[debug] Loaded {} entries from agent cache in {}", cache.len(), reuse_dir.display());
+        for (k, v) in &cache {
+            eprintln!("[debug] Cache entry: chunk {} -> {} chars", k, v.agent_text.len());
+        }
+        cache
+    } else { std::collections::HashMap::new() };
     for (i, &sym) in ids.iter().skip(1).enumerate() {
         // * Agentic Conditioning: at the start of each chunk boundary (before encoding current token)
         if (agent_enabled || reuse_scan_mode) && (i + 1) == next_agent_boundary {
@@ -1768,9 +1779,14 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
             let prefix_end_byte = if offsets.is_empty() { i } else if i == 0 { 0 } else { offsets[(i - 1).min(offsets.len() - 1)].1 as usize };
             let prefix_text_for_cache = String::from_utf8_lossy(&data[..prefix_end_byte.min(data.len())]).to_string();
             // Reuse cached agent output if available in reuse mode; otherwise run agent
+            // When reusing, we must not run the agent at all
             let (agent_text, agent_duration_ms, agent_calls) = if let Some(cached) = reuse_cache.get(&chunk_index) {
                 eprintln!("[reuse] [{}] boundary {}/{} -> reusing cached agent result", backend, chunk_index, ((token_count as usize + agent_chunk - 1) / agent_chunk));
                 (cached.agent_text.clone(), 0, cached.agent_calls)
+            } else if reuse_scan_mode {
+                eprintln!("[debug] Looking for chunk {} in reuse_cache with {} entries", chunk_index, reuse_cache.len());
+                eprintln!("[reuse] [{}] boundary {}/{} -> no cached agent result; using empty hint", backend, chunk_index, ((token_count as usize + agent_chunk - 1) / agent_chunk));
+                (String::new(), 0, 0)
             } else {
                 eprintln!("[agent] [{}] boundary {}/{} tokens[..{}] -> agent...", backend, chunk_index, ((token_count as usize + agent_chunk - 1) / agent_chunk), i);
                 let max_steps = if backend=="rwkv7" && cli.scan_max_steps == 7 { 10 } else { cli.scan_max_steps };
@@ -1955,6 +1971,53 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                         "budget_id": best_bid,
                     });
                     watchdog_write_jsonl(dir, "watchdog_encode_steps.jsonl", &rec);
+                }
+            } else if reuse_scan_mode {
+                // In reuse mode, use cached gate decisions and apply priming accordingly
+                if let Some(&(cached_gate, cached_cid, cached_bid)) = reuse_gates.get(&chunk_index) {
+                    eprintln!("[reuse] Using cached gate decision for encode chunk {}: gate={}, candidate={}, budget={}", chunk_index, cached_gate, cached_cid, cached_bid);
+                    if cached_gate == 1 {
+                        // Apply priming using cached candidate and budget to match original encode
+                        let build_candidates = |s: &str| -> Vec<String> {
+                            let normalized: String = s.chars().map(|c| if c.is_control() { ' ' } else { c }).collect();
+                            let mut out = Vec::new();
+                            out.push(normalized.clone());
+                            let head = if normalized.len() > 2000 { normalized[..2000].to_string() } else { normalized.clone() };
+                            out.push(head);
+                            let nums: String = normalized.lines().filter(|l| l.chars().any(|c| c.is_ascii_digit())).collect::<Vec<&str>>().join("\n");
+                            out.push(nums);
+                            let caps: String = normalized.split_whitespace().filter(|w| {
+                                let mut chs = w.chars();
+                                match chs.next() { Some(c) if c.is_ascii_uppercase() => true, _ => false }
+                            }).collect::<Vec<&str>>().join(" ");
+                            out.push(caps);
+                            out
+                        };
+                        let selected_text = &build_candidates(&agent_text)[cached_cid as usize];
+                        let hint_ids_all: Vec<u32> = if backend=="smollm" { tokenize_hint_smol(tok_hf.as_ref().unwrap(), selected_text, cli.scan_max_hint_tokens)? } else { tokenize_hint_rwkv(tok_rwkv.as_ref().unwrap(), selected_text, cli.scan_max_hint_tokens)? };
+                        let max_ctx = if backend=="smollm" { session_smol.as_ref().unwrap().max_context_length().saturating_sub(1) } else { session_rwkv.as_ref().unwrap().max_context_length().saturating_sub(1) };
+                        let budgets = [max_ctx/8, max_ctx/4, max_ctx/2, (max_ctx*3)/4];
+                        let budget_val = budgets[cached_bid as usize];
+                        let mut prime: Vec<u32> = Vec::new();
+                        if backend=="smollm" {
+                            let history = &ids[..=i];
+                            let hist_take = max_ctx.saturating_sub(budget_val).min(history.len());
+                            if hist_take > 0 { let hist_start = history.len() - hist_take; prime.extend_from_slice(&history[hist_start..]); }
+                            let hint_take = hint_ids_all.len().min(budget_val);
+                            if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
+                            logits_t = session_smol.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                        } else {
+                            let mut filtered_hist: Vec<u32> = Vec::with_capacity(i + 1);
+                            for &t in ids[..=i].iter() { if (t as usize) < vocab_size { filtered_hist.push(t); } }
+                            let hist_take = max_ctx.saturating_sub(budget_val).min(filtered_hist.len());
+                            if hist_take > 0 { prime.extend_from_slice(&filtered_hist[filtered_hist.len()-hist_take..]); }
+                            let hint_take = hint_ids_all.len().min(budget_val);
+                            if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
+                            logits_t = session_rwkv.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                        }
+                        // Hold context re-prime for upcoming lookahead tokens so hint remains active
+                        reprime_hold_until = i.saturating_add(cli.scan_lookahead);
+                    }
                 }
             }
             next_agent_boundary += agent_chunk;
@@ -2151,7 +2214,9 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         let wdog = watchdog_dir();
         // Load reuse data if in reuse mode
         let reuse_gates = if reuse_scan_mode { load_gate_decisions_from_csv(run_dir.as_ref().unwrap()) } else { std::collections::HashMap::new() };
-        let agent_cache = if cli.reuse || reuse_scan_mode {
+        let agent_cache = if reuse_scan_mode {
+            load_cached_agent_results(run_dir.as_ref().unwrap())
+        } else if cli.reuse {
             if let Some(dir) = wdog.as_ref() {
                 load_cached_agent_results(dir)
             } else {
@@ -2187,9 +2252,12 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
             }
         }
         let mut first_mismatch_written = false;
+        let mut reprime_hold_until: u64 = 0; // skip context re-prime while hint should remain effective
         for i in 0..header.token_count {
             // Context reprime if needed - deterministic based on absolute position only  
-            if session.index_pos() >= effective_context && (i % (header.reprime_interval as u64)) == 0 && i > 0 {
+            if i < reprime_hold_until {
+                // skip reprime to preserve agent hint influence
+            } else if session.index_pos() >= effective_context && (i % (header.reprime_interval as u64)) == 0 && i > 0 {
                 let end = out_tokens.len(); 
                 let start = end.saturating_sub(effective_context); 
                 let history = &out_tokens[start..end]; 
@@ -2213,29 +2281,32 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                     let g = gate_decisions.get(chunk_index.saturating_sub(1)).copied().unwrap_or_else(|| get_gate_bit(&gates_bytes, chunk_index.saturating_sub(1)));
                     (g, 0, 2)
                 };
-                let agent_text = if cli.reuse {
-                    if let Some(cached) = agent_cache.get(&chunk_index) {
-                        eprintln!("[agent] [smollm] boundary {}/{} -> reusing cached agent result", chunk_index, ((header.token_count as usize + agent_chunk - 1) / agent_chunk));
-                        cached.agent_text.clone()
-                    } else {
-                        anyhow::bail!("--reuse specified but no cached agent result for chunk {}", chunk_index);
-                    }
-                } else {
-                let prefix_text = tokenizer.decode(&out_tokens[1..], true).map_err(|e| anyhow::anyhow!("tokenizer.decode failed: {e}"))?;
-                    let (agent_text, _dur_ms, _calls) = run_agent_for_prefix_text(
-                    &prefix_text,
-                    chunk_index,
-                    &agent_script_path,
-                    &cli.scan_python,
-                    &cli.scan_mcp_config,
-                    if cli.scan_max_steps == 7 { 10 } else { cli.scan_max_steps },
-                    cli.scan_verbose,
-                    run_dir.as_deref().unwrap_or_else(|| Path::new("scan_output")),
-                    cli.scan_agent_timeout,
-                )?;
-                    agent_text
-                };
                 if gate == 1 {
+                    let agent_text = if cli.reuse || reuse_scan_mode {
+                        if let Some(cached) = agent_cache.get(&chunk_index) {
+                            eprintln!("[agent] [smollm] boundary {}/{} -> reusing cached agent result", chunk_index, ((header.token_count as usize + agent_chunk - 1) / agent_chunk));
+                            cached.agent_text.clone()
+                        } else if cli.reuse {
+                            anyhow::bail!("--reuse specified but no cached agent result for chunk {}", chunk_index);
+                        } else {
+                            eprintln!("[reuse] [smollm] boundary {}/{} -> no cached agent result; using empty hint", chunk_index, ((header.token_count as usize + agent_chunk - 1) / agent_chunk));
+                            String::new()
+                        }
+                    } else {
+                        let prefix_text = tokenizer.decode(&out_tokens[1..], true).map_err(|e| anyhow::anyhow!("tokenizer.decode failed: {e}"))?;
+                        let (agent_text, _dur_ms, _calls) = run_agent_for_prefix_text(
+                            &prefix_text,
+                            chunk_index,
+                            &agent_script_path,
+                            &cli.scan_python,
+                            &cli.scan_mcp_config,
+                            if cli.scan_max_steps == 7 { 10 } else { cli.scan_max_steps },
+                            cli.scan_verbose,
+                            run_dir.as_deref().unwrap_or_else(|| Path::new("scan_output")),
+                            cli.scan_agent_timeout,
+                        )?;
+                        agent_text
+                    };
                     // Record agent text to memory only when gate == 1 to ensure symmetry
                     if let Some(dir) = run_dir.as_ref() {
                         append_agent_memory(dir, chunk_index, &agent_text);
@@ -2267,6 +2338,10 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                     let hint_take = hint_ids.len().min(budget_val);
                     if hint_take > 0 { prime.extend_from_slice(&hint_ids[..hint_take]); }
                     logits_t = session.reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                    // Hold context re-prime for upcoming lookahead tokens so hint remains active
+                    reprime_hold_until = i.saturating_add(cli.scan_lookahead as u64);
+                } else {
+                    eprintln!("[agent] [smollm] Skipping agent priming for chunk {} (gate=0)", chunk_index);
                 }
                 // tokens_since_reprime removed - using absolute position repriming
                 next_agent_boundary += agent_chunk;
@@ -2367,7 +2442,9 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         let wdog = watchdog_dir();
         // Load reuse data if in reuse mode
         let reuse_gates = if reuse_scan_mode { load_gate_decisions_from_csv(run_dir.as_ref().unwrap()) } else { std::collections::HashMap::new() };
-        let agent_cache = if cli.reuse || reuse_scan_mode {
+        let agent_cache = if reuse_scan_mode {
+            load_cached_agent_results(run_dir.as_ref().unwrap())
+        } else if cli.reuse {
             if let Some(dir) = wdog.as_ref() {
                 load_cached_agent_results(dir)
             } else {
@@ -2381,6 +2458,7 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
             watchdog_write_jsonl(dir, "watchdog_decode_steps.jsonl", &rec);
         }
         let mut first_mismatch_written = false;
+        let mut reprime_hold_until: u64 = 0; // skip context re-prime while hint should remain effective
         // RWKV7 decoding with proper literal handling and agent priming
         for i in 0..header.token_count {
             // Agent priming at boundary
@@ -2397,13 +2475,16 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                     (get_gate_bit(&gates_bytes, chunk_index.saturating_sub(1)), 0, 2)
                 };
                 if gate == 1 {
-                    let agent_text = if cli.reuse {
-                    if let Some(cached) = agent_cache.get(&chunk_index) {
-                        eprintln!("[agent] [rwkv7] boundary {}/{} -> reusing cached agent result", chunk_index, ((header.token_count as usize + agent_chunk - 1) / agent_chunk));
-                        cached.agent_text.clone()
-                    } else {
-                        anyhow::bail!("--reuse specified but no cached agent result for chunk {}", chunk_index);
-                    }
+                    let agent_text = if cli.reuse || reuse_scan_mode {
+                        if let Some(cached) = agent_cache.get(&chunk_index) {
+                            eprintln!("[agent] [rwkv7] boundary {}/{} -> reusing cached agent result", chunk_index, ((header.token_count as usize + agent_chunk - 1) / agent_chunk));
+                            cached.agent_text.clone()
+                        } else if cli.reuse {
+                            anyhow::bail!("--reuse specified but no cached agent result for chunk {}", chunk_index);
+                        } else {
+                            eprintln!("[reuse] [rwkv7] boundary {}/{} -> no cached agent result; using empty hint", chunk_index, ((header.token_count as usize + agent_chunk - 1) / agent_chunk));
+                            String::new()
+                        }
                     } else {
                         let detok_bytes_prefix = rwkv_detok_with_literals(&tokenizer, &out_syms[1..], session.vocab_size());
                         let prefix_text = String::from_utf8_lossy(&detok_bytes_prefix).to_string();
@@ -2447,6 +2528,10 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                     let hint_take = hint_ids.len().min(budget_val);
                     if hint_take > 0 { prime.extend_from_slice(&hint_ids[..hint_take]); }
                     logits_t = session.reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                    // Hold context re-prime for upcoming lookahead tokens so hint remains active
+                    reprime_hold_until = i.saturating_add(cli.scan_lookahead as u64);
+                } else {
+                    eprintln!("[agent] [rwkv7] Skipping agent priming for chunk {} (gate=0)", chunk_index);
                 }
                 next_agent_boundary += agent_chunk;
             }

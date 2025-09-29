@@ -340,8 +340,11 @@ def run_agent(task_description: str, mcp_config_path: str, max_steps: int) -> st
     if not embedder_config.get("config", {}).get("api_key"):
         print("Warning: Missing Google API key for embeddings. Memory may not function optimally.")
     
-    # Set up CrewAI storage directory 
-    os.environ.setdefault("CREWAI_STORAGE_DIR", os.path.abspath(os.path.join(".", "agent_memory")))
+    # Set up CrewAI storage directory to be inside the run's scan directory (same dir as proof.csv)
+    # Respect CANDLEZIP_WATCHDOG_DIR when present; otherwise fall back to local ./agent_memory
+    run_dir = os.environ.get("CANDLEZIP_WATCHDOG_DIR")
+    storage_dir = os.path.abspath(os.path.join(run_dir if run_dir else os.getcwd(), "agent_memory"))
+    os.environ["CREWAI_STORAGE_DIR"] = storage_dir
     # Enable persistence for long-term learning
     os.environ.pop("CREWAI_DISABLE_PERSISTENCE", None)  # Remove disable flag if present
     
