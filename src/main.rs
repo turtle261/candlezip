@@ -1,12 +1,10 @@
 use std::fs::{self, File};
-use std::io::{BufReader, BufWriter, Read, Write, Seek, SeekFrom};
+use std::io::{BufReader, BufWriter, Read, Write};
 use std::path::{Path, PathBuf};
-use std::time::Instant;
 use std::process::{Command, Stdio};
 use std::io::{self as stdio, BufRead};
 use anyhow::{Result, bail, Context};
 use blake3::Hasher;
-use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
 use clap::{Parser, Subcommand, ValueHint};
 use hf_hub::api::sync::Api;
 use indicatif::{ProgressBar, ProgressStyle};
@@ -14,7 +12,6 @@ use serde_json::json;
 use tokenizers::Tokenizer as HfTokenizer;
 use chrono::Utc;
 use csv;
-use candle_core::{Device, Tensor, DType, IndexOp};
 
 mod models;
 use models::{LanguageModelSession, SmolLmSession, Rwkv7Session};
@@ -78,7 +75,7 @@ struct Cli {
     scan_verbose: bool,
     #[arg(long, default_value_t = 512)]
     scan_lookahead: usize,
-    #[arg(long, default_value_t = 300)]
+    #[arg(long, default_value_t = 360)]
     scan_agent_timeout: u64,
 
     /// Gate only if relative savings >= this percent (0-100)
@@ -115,6 +112,10 @@ struct Cli {
     /// Reuse gate decisions and agent outputs from a previous scan directory (for iterative testing)
     #[arg(long, value_hint = ValueHint::DirPath)]
     reuse_scan_dir: Option<PathBuf>,
+    
+    /// Policy for tool selection: aligned (default), randomized, leave-one-out:<tool_id>, always-on, react-unpriced, retrieval-only
+    #[arg(long, default_value = "aligned")]
+    policy: String,
 }
 
 #[derive(Subcommand, Debug, Clone)]
@@ -216,11 +217,6 @@ const AC_BASE: u32 = 2;
 const AC_PRECISION: u32 = 32;
 
 // Defaults (HF Hub)
-const DEFAULT_MODEL_REPO: &str = "HuggingFaceTB/SmolLM2-135M";
-const DEFAULT_MODEL_FILE: &str = "auto";
-const DEFAULT_TOKENIZER_REPO: &str = "HuggingFaceTB/SmolLM2-135M";
-const DEFAULT_TOKENIZER_FILE: &str = "tokenizer.json";
-
 fn ac_p_min() -> f64 {
     let base = AC_BASE as f64;
     2.0 * base.powi(-(AC_PRECISION as i32 - 2))
@@ -280,7 +276,6 @@ impl<W: std::io::Write> ArithmeticEncoder<W> {
     }
 
     fn write_byte(&mut self, byte: u8) -> anyhow::Result<()> {
-        use std::io::Write as _;
         self.out.write_all(&[byte])?;
         self.bytes_out += 1;
         Ok(())
@@ -355,6 +350,7 @@ impl<W: std::io::Write> ArithmeticEncoder<W> {
     }
 
     fn bytes_written(&self) -> u64 { self.bytes_out }
+    #[allow(dead_code)]
     fn into_inner(self) -> W { self.out }
 }
 
@@ -469,7 +465,7 @@ struct HeaderBinV2 {
 }
 
 fn write_var_u64<W: std::io::Write>(w: &mut W, mut v: u64) -> anyhow::Result<()> {
-    use std::io::Write as _;
+    // no-op
     while v >= 0x80 {
         w.write_all(&[((v as u8) & 0x7F) | 0x80])?;
         v >>= 7;
@@ -479,7 +475,7 @@ fn write_var_u64<W: std::io::Write>(w: &mut W, mut v: u64) -> anyhow::Result<()>
 }
 
 fn read_var_u64<R: std::io::Read>(r: &mut R) -> anyhow::Result<u64> {
-    use std::io::Read as _;
+    // no-op
     let mut shift = 0u32;
     let mut out: u64 = 0;
     loop {
@@ -560,16 +556,8 @@ const AGT2_MAGIC: [u8; 4] = *b"AGT2"; // structured gating section (v2)
 #[derive(Clone, Copy, Debug, Default)]
 struct GateRecordV2 { gate: u8, candidate_id: u8, budget_id: u8 }
 
-fn write_agent_gates<W: std::io::Write>(w: &mut W, gates_bits: &[u8], nbits: u64) -> anyhow::Result<()> {
-    use std::io::Write as _;
-    w.write_all(&AGTB_MAGIC)?;
-    write_var_u64(w, nbits)?;
-    w.write_all(gates_bits)?;
-    Ok(())
-}
-
 fn write_agent_gates_v2<W: std::io::Write>(w: &mut W, records: &[GateRecordV2]) -> anyhow::Result<()> {
-    use std::io::Write as _;
+    // no-op
     w.write_all(&AGT2_MAGIC)?;
     write_var_u64(w, records.len() as u64)?;
     for rec in records {
@@ -580,18 +568,6 @@ fn write_agent_gates_v2<W: std::io::Write>(w: &mut W, records: &[GateRecordV2]) 
         w.write_all(&[byte])?;
     }
     Ok(())
-}
-
-fn read_agent_gates<R: std::io::Read>(r: &mut R) -> anyhow::Result<(Vec<u8>, u64)> {
-    use std::io::Read as _;
-    let mut magic = [0u8;4];
-    r.read_exact(&mut magic)?;
-    if magic != AGTB_MAGIC { anyhow::bail!("invalid gating magic"); }
-    let nbits = read_var_u64(r)?;
-    let nbytes = ((nbits + 7) / 8) as usize;
-    let mut bytes = vec![0u8; nbytes];
-    r.read_exact(&mut bytes)?;
-    Ok((bytes, nbits))
 }
 
 fn get_gate_bit(gates_bytes: &[u8], idx: usize) -> u8 {
@@ -690,14 +666,6 @@ fn softmax_pdf_floor(logits: &[f32], vocab_size: usize, p_floor: f64) -> Vec<f64
     let norm: f64 = pdf.iter().sum();
     for i in 0..vocab_size { pdf[i] /= norm; }
     pdf
-}
-
-fn bounds_for_symbol_on_device(logits: &candle_core::Tensor, vocab_size: usize, sym: usize) -> anyhow::Result<(f64,f64)> {
-    if sym >= vocab_size { anyhow::bail!("symbol {} out of bounds for vocab size {}", sym, vocab_size); }
-    let dims = logits.dims(); if dims.len() != 1 { anyhow::bail!("expected 1D logits tensor, got {:?}", dims); }
-    let tensor_len = dims[0]; if tensor_len != vocab_size { anyhow::bail!("logits tensor size {} doesn't match vocab size {}", tensor_len, vocab_size); }
-    let logits_vec = logits.to_vec1::<f32>()?; let pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
-    let p_sym = pdf[sym]; let c_lo = if sym==0 { 0.0 } else { pdf[0..sym].iter().sum::<f64>() }; let c_hi = c_lo + p_sym; Ok((c_lo, c_hi))
 }
 
 fn combined_pdf_with_literals(logits_vec: &[f32], vocab_size: usize) -> Vec<f64> {
@@ -852,12 +820,111 @@ fn blake3_f32_bin16(values: &[f32]) -> [u8; 16] {
     out
 }
 
-fn blake3_f64_bin16(values: &[f64]) -> [u8; 16] {
-    let mut hasher = Hasher::new();
-    for v in values { hasher.update(&v.to_le_bytes()); }
-    let mut out = [0u8; 16];
-    out.copy_from_slice(hasher.finalize().as_bytes()[..16].as_ref());
-    out
+// ============================================================================
+// SIMDL v1.1: Document Index and Pricing Functions
+// ============================================================================
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+struct DocumentEntry {
+    doc_id: usize,
+    domain: String,
+    file_name: String,
+    size_bytes: usize,
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+struct DocumentIndex {
+    documents: Vec<DocumentEntry>,
+    max_span_len_bytes: usize,
+}
+
+impl DocumentIndex {
+    fn new() -> Self {
+        Self {
+            documents: Vec::new(),
+            max_span_len_bytes: 1024, // Default max span length
+        }
+    }
+    
+    fn add_document(&mut self, domain: &str, file_name: &str, size_bytes: usize) -> usize {
+        let doc_id = self.documents.len();
+        self.documents.push(DocumentEntry {
+            doc_id,
+            domain: domain.to_string(),
+            file_name: file_name.to_string(),
+            size_bytes,
+        });
+        doc_id
+    }
+    
+    fn get_document(&self, doc_id: usize) -> Option<&DocumentEntry> {
+        self.documents.get(doc_id)
+    }
+    
+    fn save_to_path(&self, path: &Path) -> Result<()> {
+        let json_str = serde_json::to_string_pretty(self)?;
+        fs::write(path, json_str)?;
+        Ok(())
+    }
+    
+    fn load_from_path(path: &Path) -> Result<Self> {
+        if path.exists() {
+            let json_str = fs::read_to_string(path)?;
+            let index: DocumentIndex = serde_json::from_str(&json_str)?;
+            Ok(index)
+        } else {
+            Ok(DocumentIndex::new())
+        }
+    }
+}
+
+/// Compute transcript pricing using zstd compression
+fn compute_transcript_price_bits(transcript_text: &str) -> Result<u64> {
+    let transcript_bytes = transcript_text.as_bytes();
+    let compressed = zstd::bulk::compress(transcript_bytes, 19)?;
+    Ok((compressed.len() * 8) as u64)
+}
+
+/// Compute pointer pricing based on document index
+fn compute_pointer_price_bits(doc_index: &DocumentIndex, doc_id: usize, _start_offset: usize, _span_len: usize) -> Result<u64> {
+    let doc_entry = doc_index.get_document(doc_id)
+        .ok_or_else(|| anyhow::anyhow!("Document ID {} not found in index", doc_id))?;
+    
+    let n_docs = doc_index.documents.len();
+    let doc_size_bytes = doc_entry.size_bytes;
+    let max_span_bytes = doc_index.max_span_len_bytes;
+    
+    // Calculate required bits for each component
+    let doc_id_bits = if n_docs <= 1 { 1 } else { (n_docs as f64).log2().ceil() as u64 };
+    let start_bits = if doc_size_bytes <= 1 { 1 } else { (doc_size_bytes as f64).log2().ceil() as u64 };
+    let span_bits = if max_span_bytes <= 1 { 1 } else { (max_span_bytes as f64).log2().ceil() as u64 };
+    
+    Ok(doc_id_bits + start_bits + span_bits)
+}
+
+/// Extract domain and identifiers from file path for SIMDL grouping
+fn extract_simdl_identifiers(input_path: &Path, agent_script: &Path, policy: &str) -> (String, String, String, String, String) {
+    let domain = input_path.parent()
+        .and_then(|p| p.file_name())
+        .and_then(|n| n.to_str())
+        .unwrap_or("unknown")
+        .to_string();
+        
+    let agent_id = agent_script.file_stem()
+        .and_then(|n| n.to_str())
+        .unwrap_or("unknown")
+        .to_string();
+        
+    let toolset_id = format!("policy_{}", policy);
+    
+    let run_id = Utc::now().format("%Y%m%d_%H%M%S").to_string();
+    
+    let chunk_id_prefix = input_path.file_stem()
+        .and_then(|n| n.to_str())
+        .unwrap_or("unknown")
+        .to_string();
+        
+    (domain, agent_id, toolset_id, run_id, chunk_id_prefix)
 }
 
 fn watchdog_dir() -> Option<PathBuf> {
@@ -885,6 +952,7 @@ fn watchdog_try_write_json(dir: &Path, file: &str, v: &serde_json::Value) {
 #[derive(Clone, Debug)]
 struct EncodeStepRef {
     sym: u32,
+    #[allow(dead_code)]
     pdf_digest: Option<String>,
 }
 
@@ -911,6 +979,7 @@ fn watchdog_load_encode_trace(dir: &Path) -> Vec<Option<EncodeStepRef>> {
 
 #[derive(Clone, Debug)]
 struct AgentResultCache {
+    #[allow(dead_code)]
     chunk_index: usize,
     agent_text: String,
     agent_calls: u32,
@@ -1030,64 +1099,71 @@ fn append_agent_memory(scan_dir: &Path, chunk_index: usize, agent_text: &str) {
 fn scratchpad_path(scan_dir: &Path) -> PathBuf { scan_dir.join("agent_memory").join("scratchpad.txt") }
 
 fn append_scratchpad(scan_dir: &Path, section: &str, content: &str) {
-    let path = scratchpad_path(scan_dir); let _ = fs::create_dir_all(scan_dir.join("agent_mem"));
+    let path = scratchpad_path(scan_dir); let _ = fs::create_dir_all(scan_dir.join("agent_memory"));
     let mut rec = String::new();
     rec.push_str("\n==== "); rec.push_str(section); rec.push_str(" ====" ); rec.push('\n');
     rec.push_str(content.trim()); rec.push('\n');
     let _ = fs::OpenOptions::new().create(true).append(true).open(&path).and_then(|mut f| f.write_all(rec.as_bytes()));
 }
 
-// * Summary of accepted hints for better agent context
-fn append_scratchpad_summary(scan_dir: &Path) {
-    let path = scratchpad_path(scan_dir);
-    let content = fs::read_to_string(&path).unwrap_or_default();
+// * Learning data: write directly from Rust after gating decision for the SAME chunk.
+//   This avoids off-by-one and ensures consistency with proof.csv.
+fn write_learning_entry(
+    scan_dir: &Path,
+    input_file: &Path,
+    chunk_index: usize,
+    gate: u8,
+    bits_saved: f64,
+    baseline_bits: f64,
+    candidate_id: usize,
+    budget_id: usize,
+    agent_text: &str,
+) -> anyhow::Result<()> {
+    // no-op
+    // Mirror Python naming: candlezip_{file_stem}_{md5(abs_path)[:8]}_learning.jsonl
+    let memory_dir = scan_dir.join("agent_memory");
+    fs::create_dir_all(&memory_dir)?;
+    let abs_str = input_file.canonicalize().unwrap_or(input_file.to_path_buf()).to_string_lossy().to_string();
+    let md5_8 = {
+        let digest = md5::compute(abs_str.as_bytes());
+        format!("{:x}", digest)[..8].to_string()
+    };
+    let file_stem = input_file.file_stem().and_then(|s| s.to_str()).unwrap_or("unknown");
+    let learning_file = memory_dir.join(format!("candlezip_{}_{}_learning.jsonl", file_stem, md5_8));
 
-    // Remove existing SUMMARY blocks to avoid duplication
-    let mut cleaned = String::new();
-    let mut in_summary = false;
-    for line in content.lines() {
-        if line.starts_with("==== SUMMARY OF ACCEPTED HINTS ====") {
-            in_summary = true;
-            continue;
-        }
-        if in_summary {
-            if line.starts_with("==== ") { // next section begins
-                in_summary = false;
-            } else {
-                continue; // skip lines inside previous summary
-            }
-        }
-        cleaned.push_str(line);
-        cleaned.push('\n');
-    }
-
-    // Collect unique accepted hint headers
-    use std::collections::BTreeSet;
-    let mut hints: BTreeSet<String> = BTreeSet::new();
-    for line in cleaned.lines() { // scan cleaned (without prior summaries)
-        if line.starts_with("==== accepted_hint") {
-            hints.insert(line.trim().to_string());
-        }
-    }
-
-    // If no hints, do not add a summary section
-    let new_content = if hints.is_empty() {
-        cleaned
+    let success = gate == 1;
+    let summary = if success {
+        format!(
+            "COMPRESSION SUCCESS (Chunk {}): Your prediction strategy succeeded! You saved {:.2} bits (baseline: {:.2} bits). The successful approach used candidate {} with budget {}. Key success factors: Your output provided precise contextual information that reduced prediction uncertainty. Remember this pattern and strategy for similar text content in future chunks.",
+            chunk_index, bits_saved, baseline_bits, candidate_id, budget_id
+        )
     } else {
-        let mut summary = String::new();
-        summary.push_str("\n==== SUMMARY OF ACCEPTED HINTS ====\n");
-        summary.push_str("These hints were successfully applied and improved compression in previous chunks:\n");
-        for h in hints {
-            summary.push_str("- ");
-            summary.push_str(&h);
-            summary.push('\n');
-        }
-        let mut out = cleaned;
-        out.push_str(&summary);
-        out
+        format!(
+            "COMPRESSION ATTEMPT (Chunk {}): Your prediction did not improve compression (saved {:.2} bits from baseline {:.2}). The attempted approach used candidate {} with budget {}. Learning opportunity: Consider different prediction strategies, more specific content, or alternative tool usage patterns for this type of text content.",
+            chunk_index, bits_saved, baseline_bits, candidate_id, budget_id
+        )
     };
 
-    let _ = fs::write(&path, new_content.as_bytes());
+    let learning_entry = json!({
+        "type": "compression_learning",
+        "chunk_index": chunk_index,
+        "file_path": input_file.to_string_lossy(),
+        "gate_result": gate,
+        "bits_saved": bits_saved,
+        "baseline_bits": baseline_bits,
+        "candidate_id": candidate_id,
+        "budget_id": budget_id,
+        "agent_output": agent_text,
+        "success": success,
+        "timestamp": std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs_f64(),
+        "summary": summary
+    });
+
+    if let Ok(mut f) = fs::OpenOptions::new().create(true).append(true).open(&learning_file) {
+        writeln!(f, "{}", serde_json::to_string(&learning_entry)?)?;
+        eprintln!("[Learning] Recorded chunk {} -> gate={}, bits_saved={:.2}", chunk_index, gate, bits_saved);
+    }
+    Ok(())
 }
 
 // * Agent output hygiene & caching for cross-run consistency
@@ -1473,11 +1549,7 @@ fn run_agent_for_prefix_text(
     if !text_out.is_empty() { agent_text = text_out; }
     if dur_out > 0 { duration_ms = dur_out; }
     calls = calls.saturating_add(calls_out).saturating_add(calls_err);
-    if agent_text.trim().is_empty() {
-        let mut s = if prefix_text.len() > 1000 { prefix_text[prefix_text.len()-1000..].to_string() } else { prefix_text.to_string() };
-        let normalized: String = s.chars().map(|c| if c.is_control() { ' ' } else { c }).collect();
-        return Ok((normalized, duration_ms, calls));
-    }
+    // Do not synthesize or duplicate; return possibly empty if agent yielded nothing
     // Don't append to agent memory here - will be handled after gating decision in decode path
     Ok((agent_text, duration_ms, calls))
 }
@@ -1559,61 +1631,13 @@ fn cross_entropy_bits_over_span_rwkv(
     Ok(bits)
 }
 
-fn compute_cross_entropy_for_chunk_smol(
-    session: &mut SmolLmSession,
-    tokenizer: &HfTokenizer,
-    _bos_id: u32,
-    all_ids_with_bos: &[u32],
-    chunk_end: usize,
-    agent_text: &str,
-    max_hint_tokens: usize,
-    lookahead: usize,
-) -> anyhow::Result<(f64, f64)> {
-    let total_len = all_ids_with_bos.len();
-    let end = (chunk_end + lookahead).min(total_len);
-    let target_ids = if chunk_end < end { &all_ids_with_bos[chunk_end..end] } else { &[][..] };
-    if target_ids.is_empty() { return Ok((0.0, 0.0)); }
-    let max_ctx = session.max_context_length().saturating_sub(1);
-    let history_start = chunk_end.saturating_sub(max_ctx.min(chunk_end));
-    let history = &all_ids_with_bos[history_start..chunk_end];
-    let baseline = cross_entropy_bits_over_span(session, history, target_ids, None)?;
-    let hint_ids = tokenize_hint_smol(tokenizer, agent_text, max_hint_tokens)?;
-    if hint_ids.is_empty() { eprintln!("[scan] Warning: No hint tokens generated from agent text (length {})", agent_text.len()); return Ok((baseline, baseline)); }
-    let conditioned = cross_entropy_bits_over_span(session, history, target_ids, Some(&hint_ids))?;
-    eprintln!("[scan] XE computation: {} target tokens, {} hint tokens, baseline={:.4} bits, conditioned={:.4} bits, diff={:.4}", target_ids.len(), hint_ids.len(), baseline, conditioned, baseline - conditioned);
-    Ok((baseline, conditioned))
-}
-
-fn compute_cross_entropy_for_chunk_rwkv(
-    session: &mut Rwkv7Session,
-    tokenizer: &candlerwkv7::models::rwkv7::Tokenizer,
-    _bos_id: u32,
-    all_ids_with_bos: &[u32],
-    chunk_end: usize,
-    agent_text: &str,
-    max_hint_tokens: usize,
-    lookahead: usize,
-) -> anyhow::Result<(f64, f64)> {
-    let total_len = all_ids_with_bos.len();
-    let end = (chunk_end + lookahead).min(total_len);
-    let target_ids = if chunk_end < end { &all_ids_with_bos[chunk_end..end] } else { &[][..] };
-    if target_ids.is_empty() { return Ok((0.0, 0.0)); }
-    let history = &all_ids_with_bos[0..chunk_end];
-    let baseline = cross_entropy_bits_over_span_rwkv(session, history, target_ids, None, session.vocab_size())?;
-    let hint_ids = tokenize_hint_rwkv(tokenizer, agent_text, max_hint_tokens)?;
-    if hint_ids.is_empty() { eprintln!("[scan] Warning: No hint tokens generated from agent text (length {})", agent_text.len()); return Ok((baseline, baseline)); }
-    let conditioned = cross_entropy_bits_over_span_rwkv(session, history, target_ids, Some(&hint_ids), session.vocab_size())?;
-    eprintln!("[scan] XE computation: {} target tokens, {} hint tokens, baseline={:.4} bits, conditioned={:.4} bits, diff={:.4}", target_ids.len(), hint_ids.len(), baseline, conditioned, baseline - conditioned);
-    Ok((baseline, conditioned))
-}
-
 // ----------------------------------
 // Encode / Decode (unified)
 // ----------------------------------
 
 fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     let t0 = std::time::Instant::now();
-    let reuse_scan_mode = cli.reuse_scan_dir.is_some();
+    // reuse scan directory flag (defined below when scan is initialized)
     let device = detect_device(cli.cpu);
     eprintln!("Device: {}", if device.is_cuda() { "CUDA" } else { "CPU" });
 
@@ -1650,6 +1674,22 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
 
     // Read input
     let data = fs::read(input).with_context(|| "reading input")?; let orig_len_bytes = data.len() as u64; let orig_blake3_16 = blake3_bytes_bin16(&data);
+    
+    // Initialize SIMDL v1.1 document index and identifiers
+    let mut doc_index = DocumentIndex::load_from_path(&Path::new("index_meta.json")).unwrap_or_else(|_| DocumentIndex::new());
+    // Deduplicate: if (domain, file_name, size_bytes) exists, reuse its doc_id
+    let domain_name = input.parent().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or("unknown");
+    let file_name_only = input.file_name().and_then(|n| n.to_str()).unwrap_or("unknown").to_string();
+    let size_b = orig_len_bytes as usize;
+    let mut existing = None;
+    for e in &doc_index.documents {
+        if e.domain == domain_name && e.file_name == file_name_only && e.size_bytes == size_b {
+            existing = Some(e.doc_id);
+            break;
+        }
+    }
+    let doc_id = match existing { Some(id) => id, None => doc_index.add_document(&domain_name, &file_name_only, size_b) };
+    let (domain, agent_id, toolset_id, run_id, chunk_id_prefix) = extract_simdl_identifiers(input, &cli.scan_agent_script, &cli.policy);
 
     // Tokenize - match _gptzip implementation exactly
     let (mut ids, offsets): (Vec<u32>, Vec<(usize,usize)>) = if let Some(ref tok)=tok_hf {
@@ -1688,25 +1728,28 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
             if !scan_dir.exists() { anyhow::bail!("Reuse scan directory does not exist: {}", scan_dir.display()); }
             eprintln!("[reuse] Using existing scan directory: {}", scan_dir.display());
         } else {
-            // Per-run dir to prevent cross-run contamination and logs overlap
-            let ts = Utc::now().format("%Y%m%d_%H%M%S");
-            let run_dir_name = format!("{}_{}_{}", input.file_stem().and_then(|s| s.to_str()).unwrap_or("input"), backend, ts);
-            scan_dir = scan_dir.join(run_dir_name);
-            fs::create_dir_all(&scan_dir).ok();
-        }
-        // Honor self-test watchdog directory override if present
-        if let Ok(dir) = std::env::var("CANDLEZIP_WATCHDOG_DIR") {
-            scan_dir = PathBuf::from(dir);
+            // Check for self-test watchdog directory BEFORE creating any directories to avoid duplication
+            if let Ok(dir) = std::env::var("CANDLEZIP_WATCHDOG_DIR") {
+                scan_dir = PathBuf::from(dir);
+            } else {
+                // Per-run dir to prevent cross-run contamination and logs overlap
+                let ts = Utc::now().format("%Y%m%d_%H%M%S");
+                let run_dir_name = format!("{}_{}_{}", input.file_stem().and_then(|s| s.to_str()).unwrap_or("input"), backend, ts);
+                scan_dir = scan_dir.join(run_dir_name);
+            }
             fs::create_dir_all(&scan_dir).ok();
         }
         // Create CSV writer only if not reusing (for new runs)
         if !reuse_scan_mode {
             let csv_path=scan_dir.join("proof.csv"); let csv_f=File::create(&csv_path)?; let mut wtr = csv::Writer::from_writer(csv_f);
-            // Extend header to include candidate_id and budget_id columns for v2 gating
+            // Extend header to include SIMDL v1.1 columns for offline lambda-sweeps and pricing
             wtr.write_record([
                 "file","chunk_index","start_token","end_token","agent_text_len","agent_duration_ms",
                 "cross_entropy_baseline_bits","cross_entropy_conditioned_bits","bits_saved","percent_saved",
-                "agent_calls","gate","candidate_id","budget_id"
+                "agent_calls","gate","candidate_id","budget_id",
+                // New SIMDL v1.1 columns
+                "gate_bits","price_transcript_bits","price_pointer_bits","tool_id_best",
+                "tool_snapshot_id","args_hash","output_hash","domain","agent_id","toolset_id","run_id","chunk_id"
             ]) ?; wtr.flush()?; csv_writer_opt=Some(wtr);
         }
         scan_meta = json!({"input_file": input.to_string_lossy(), "started_at": Utc::now().to_rfc3339(), "backend": backend, "context": cli.context, "reprime_interval": cli.reprime_interval, "agent": {"enabled": agent_enabled, "chunk_size": agent_chunk, "max_steps": cli.scan_max_steps, "max_hint_tokens": cli.scan_max_hint_tokens, "mcp_config": cli.scan_mcp_config.to_string_lossy(), "python": cli.scan_python }, "scan": scan_enabled, "reuse_scan_dir": reuse_scan_mode, "run_dir": scan_dir.to_string_lossy() });
@@ -1758,6 +1801,12 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     }
 
     let mut reprime_hold_until: usize = 0; // skip context re-prime while hint should remain effective
+    // Track previous chunk results for learning callback (set env vars before next agent call)
+    let mut prev_gate = 0;
+    let mut prev_bits_saved = 0.0;
+    let mut prev_baseline = 0.0;
+    let mut prev_cid = 0;
+    let mut prev_bid = 0;
     // Load reuse data if in reuse mode
     let reuse_gates = if reuse_scan_mode { 
         let reuse_dir = cli.reuse_scan_dir.as_ref().unwrap();
@@ -1775,7 +1824,10 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     for (i, &sym) in ids.iter().skip(1).enumerate() {
         // * Agentic Conditioning: at the start of each chunk boundary (before encoding current token)
         if (agent_enabled || reuse_scan_mode) && (i + 1) == next_agent_boundary {
-            let chunk_index = (next_agent_boundary / agent_chunk).max(1);
+            // chunk_index is the chunk we're ABOUT TO START (1-indexed)
+            // When next_agent_boundary=512, we're starting chunk 1 (tokens 0-511)
+            // When next_agent_boundary=1024, we're starting chunk 2 (tokens 512-1023)
+            let chunk_index = next_agent_boundary / agent_chunk;
             let prefix_end_byte = if offsets.is_empty() { i } else if i == 0 { 0 } else { offsets[(i - 1).min(offsets.len() - 1)].1 as usize };
             let prefix_text_for_cache = String::from_utf8_lossy(&data[..prefix_end_byte.min(data.len())]).to_string();
             // Reuse cached agent output if available in reuse mode; otherwise run agent
@@ -1793,6 +1845,12 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 // Set environment variables for the Python agent before calling it
                 std::env::set_var("CANDLEZIP_INPUT_FILE", input.to_string_lossy().to_string());
                 std::env::set_var("CANDLEZIP_CHUNK_INDEX", chunk_index.to_string());
+                // Set learning data from PREVIOUS chunk so the callback records correct results
+                std::env::set_var("CANDLEZIP_LAST_GATE", prev_gate.to_string());
+                std::env::set_var("CANDLEZIP_LAST_BITS_SAVED", format!("{:.6}", prev_bits_saved));
+                std::env::set_var("CANDLEZIP_LAST_BASELINE_BITS", format!("{:.6}", prev_baseline));
+                std::env::set_var("CANDLEZIP_LAST_CANDIDATE_ID", prev_cid.to_string());
+                std::env::set_var("CANDLEZIP_LAST_BUDGET_ID", prev_bid.to_string());
                 run_agent_for_chunk(input, &data, prefix_end_byte, chunk_index, &agent_script_path, &cli.scan_python, &cli.scan_mcp_config, max_steps, cli.scan_verbose, &scan_dir, cli.scan_agent_timeout)?
             };
             if agent_duration_ms > 0 { eprintln!("[agent] [{}] boundary {}/{} agent done in {} ms (calls={}), priming...", backend, chunk_index, ((token_count as usize + agent_chunk - 1) / agent_chunk), agent_duration_ms, agent_calls); }
@@ -1820,37 +1878,35 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 let candidates = build_candidates(&agent_text);
                 let max_ctx = if backend=="smollm" { session_smol.as_ref().unwrap().max_context_length().saturating_sub(1) } else { session_rwkv.as_ref().unwrap().max_context_length().saturating_sub(1) };
                 let budgets: [usize;4] = [max_ctx/8, max_ctx/4, max_ctx/2, (max_ctx*3)/4];
+                let total_len = ids.len();
+                let end = (chunk_end + cli.scan_lookahead).min(total_len);
+                let target_ids = if chunk_end < end { &ids[chunk_end..end] } else { &[][..] };
+                if target_ids.is_empty() { continue; }
                 let mut best_bits_saved = f64::NEG_INFINITY;
                 let mut best_baseline = 0.0f64; let mut best_conditioned = 0.0f64; let mut best_cid = 0usize; let mut best_bid = 2usize; let mut best_hint_len = 0usize;
-                for (cid, cand) in candidates.iter().enumerate() {
-                    if backend=="smollm" {
+                if backend=="smollm" {
+                    let history_start = chunk_end.saturating_sub(session_smol.as_ref().unwrap().max_context_length().saturating_sub(1).min(chunk_end));
+                    let history = &ids[history_start..chunk_end];
+                    let baseline_once = cross_entropy_bits_over_span(scan_session_smol.as_mut().unwrap(), history, target_ids, None)?;
+                    for (cid, cand) in candidates.iter().enumerate() {
                         let hint_ids_all = tokenize_hint_smol(tok_hf.as_ref().unwrap(), cand, cli.scan_max_hint_tokens).unwrap_or_else(|_| Vec::new());
                         for (bid, &b) in budgets.iter().enumerate() {
                             let hint_slice = if hint_ids_all.len() > b { &hint_ids_all[..b] } else { &hint_ids_all[..] };
-                            let total_len = ids.len();
-                            let end = (chunk_end + cli.scan_lookahead).min(total_len);
-                            let target_ids = if chunk_end < end { &ids[chunk_end..end] } else { &[][..] };
-                            if target_ids.is_empty() { continue; }
-                            let history_start = chunk_end.saturating_sub(session_smol.as_ref().unwrap().max_context_length().saturating_sub(1).min(chunk_end));
-                            let history = &ids[history_start..chunk_end];
-                            let baseline = cross_entropy_bits_over_span(scan_session_smol.as_mut().unwrap(), history, target_ids, None)?;
-                            let conditioned = if hint_slice.is_empty() { baseline } else { cross_entropy_bits_over_span(scan_session_smol.as_mut().unwrap(), history, target_ids, Some(hint_slice))? };
-                            let saved = baseline - conditioned; // raw (may be negative)
-                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline; best_conditioned = conditioned; best_cid = cid; best_bid = bid; best_hint_len = hint_slice.len(); }
+                            let conditioned = if hint_slice.is_empty() { baseline_once } else { cross_entropy_bits_over_span(scan_session_smol.as_mut().unwrap(), history, target_ids, Some(hint_slice))? };
+                            let saved = baseline_once - conditioned;
+                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline_once; best_conditioned = conditioned; best_cid = cid; best_bid = bid; best_hint_len = hint_slice.len(); }
                         }
-                    } else {
+                    }
+                } else {
+                    let history = &ids[0..chunk_end];
+                    let baseline_once = cross_entropy_bits_over_span_rwkv(scan_session_rwkv.as_mut().unwrap(), history, target_ids, None, vocab_size)?;
+                    for (cid, cand) in candidates.iter().enumerate() {
                         let hint_ids_all = tokenize_hint_rwkv(tok_rwkv.as_ref().unwrap(), cand, cli.scan_max_hint_tokens).unwrap_or_else(|_| Vec::new());
                         for (bid, &b) in budgets.iter().enumerate() {
                             let hint_slice = if hint_ids_all.len() > b { &hint_ids_all[..b] } else { &hint_ids_all[..] };
-                            let total_len = ids.len();
-                            let end = (chunk_end + cli.scan_lookahead).min(total_len);
-                            let target_ids = if chunk_end < end { &ids[chunk_end..end] } else { &[][..] };
-                            if target_ids.is_empty() { continue; }
-                            let history = &ids[0..chunk_end];
-                            let baseline = cross_entropy_bits_over_span_rwkv(scan_session_rwkv.as_mut().unwrap(), history, target_ids, None, vocab_size)?;
-                            let conditioned = if hint_slice.is_empty() { baseline } else { cross_entropy_bits_over_span_rwkv(scan_session_rwkv.as_mut().unwrap(), history, target_ids, Some(hint_slice), vocab_size)? };
-                            let saved = baseline - conditioned; // raw (may be negative)
-                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline; best_conditioned = conditioned; best_cid = cid; best_bid = bid; best_hint_len = hint_slice.len(); }
+                            let conditioned = if hint_slice.is_empty() { baseline_once } else { cross_entropy_bits_over_span_rwkv(scan_session_rwkv.as_mut().unwrap(), history, target_ids, Some(hint_slice), vocab_size)? };
+                            let saved = baseline_once - conditioned;
+                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline_once; best_conditioned = conditioned; best_cid = cid; best_bid = bid; best_hint_len = hint_slice.len(); }
                         }
                     }
                 }
@@ -1866,24 +1922,29 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                     let end_byte = if i == 0 { 0 } else { offsets[(i - 1).min(offsets.len() - 1)].1 as usize };
                     String::from_utf8_lossy(&data[..end_byte.min(data.len())]).to_string()
                 };
-                append_scratchpad(&scan_dir, &format!("prefix_chunk_{}", chunk_index + 1), &prefix_snapshot);
+                // Write prefix snapshot for the CURRENT chunk (no +1), only during encode
+                if !reuse_scan_mode {
+                    append_scratchpad(&scan_dir, &format!("prefix_chunk_{}", chunk_index), &prefix_snapshot);
+                }
                 if gate == 1 {
                     let selected_text = &build_candidates(&agent_text)[best_cid];
-                    append_scratchpad(&scan_dir, &format!("accepted_hint_chunk_{}_cand{}_bud{}", chunk_index + 1, best_cid, best_bid), selected_text);
+                    if !reuse_scan_mode {
+                        append_scratchpad(&scan_dir, &format!("accepted_hint_chunk_{}_cand{}_bud{}", chunk_index, best_cid, best_bid), selected_text);
+                    }
                     // Cache successful agent result only if it improves compression
                     if let Some(dir) = wdog.as_ref() {
                         cache_agent_result(dir, chunk_index, &agent_text, agent_calls);
                     }
-                    // Only append to agent memory if gate == 1 to ensure symmetry
+                    // Only append to agent memory if gate == 1 to ensure symmetry, and avoid duplicates by ensuring this chunk not already recorded
                     append_agent_memory(&scan_dir, chunk_index, &agent_text);
                     // Also cache the agent result for potential reuse
                     agent_cache_put(input, chunk_index, &prefix_text_for_cache, &agent_text);
-                    // Set environment variables for the Python agent to record the result
-                    std::env::set_var("CANDLEZIP_LAST_GATE", "1");
-                    std::env::set_var("CANDLEZIP_LAST_BITS_SAVED", format!("{:.6}", best_bits_saved));
-                    std::env::set_var("CANDLEZIP_LAST_BASELINE_BITS", format!("{:.6}", best_baseline));
-                    std::env::set_var("CANDLEZIP_LAST_CANDIDATE_ID", best_cid.to_string());
-                    std::env::set_var("CANDLEZIP_LAST_BUDGET_ID", best_bid.to_string());
+                    // Store results for next chunk's learning callback
+                    prev_gate = 1;
+                    prev_bits_saved = best_bits_saved;
+                    prev_baseline = best_baseline;
+                    prev_cid = best_cid;
+                    prev_bid = best_bid;
                 } else {
                     // Clear any existing cached result for this chunk to prevent contamination
                     if let Some(dir) = wdog.as_ref() {
@@ -1896,12 +1957,12 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                     let key = agent_cache_key(input, chunk_index, &prefix_text_for_cache);
                     let path = cache_dir.join(format!("{}.txt", key));
                     let _ = fs::remove_file(path);
-                    // Set environment variables for the Python agent to record the failed result
-                    std::env::set_var("CANDLEZIP_LAST_GATE", "0");
-                    std::env::set_var("CANDLEZIP_LAST_BITS_SAVED", format!("{:.6}", best_bits_saved));
-                    std::env::set_var("CANDLEZIP_LAST_BASELINE_BITS", format!("{:.6}", best_baseline));
-                    std::env::set_var("CANDLEZIP_LAST_CANDIDATE_ID", best_cid.to_string());
-                    std::env::set_var("CANDLEZIP_LAST_BUDGET_ID", best_bid.to_string());
+                    // Store results for next chunk's learning callback
+                    prev_gate = 0;
+                    prev_bits_saved = best_bits_saved;
+                    prev_baseline = best_baseline;
+                    prev_cid = best_cid;
+                    prev_bid = best_bid;
                 }
                 gate_records.push(GateRecordV2{ gate, candidate_id: best_cid as u8, budget_id: best_bid as u8 });
                 if gate == 1 {
@@ -1930,8 +1991,10 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                     }
                     // Hold context re-prime for upcoming lookahead tokens so hint remains active
                     reprime_hold_until = i.saturating_add(cli.scan_lookahead);
-                    // Also record accepted hint in scratchpad (already recorded above but ensure after final selection)
-                    append_scratchpad(&scan_dir, &format!("accepted_hint_applied_chunk_{}_cand{}_bud{}", chunk_index + 1, best_cid, best_bid), selected_text);
+                    // Also record accepted hint in scratchpad (ensure only once per encode)
+                    if !reuse_scan_mode {
+                        append_scratchpad(&scan_dir, &format!("accepted_hint_applied_chunk_{}_cand{}_bud{}", chunk_index, best_cid, best_bid), selected_text);
+                    }
                     if let Some(dir) = wdog.as_ref() {
                         let rec = json!({
                             "phase": "agent_reprime",
@@ -1955,8 +2018,38 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 }
                 total_bits_saved += best_bits_saved.max(0.0); total_baseline_bits += best_baseline; total_agent_calls += agent_calls as u64; total_chunks += 1;
                 let start_tok = i.saturating_sub(agent_chunk);
-                // Extend CSV with candidate_id and budget_id at the end
-                wtr.write_record(&[ input.to_string_lossy().to_string(), chunk_index.to_string(), start_tok.to_string(), i.to_string(), agent_text.len().to_string(), agent_duration_ms.to_string(), format!("{:.6}", best_baseline), format!("{:.6}" , best_conditioned), format!("{:.6}", best_bits_saved), format!("{:.6}", (if best_baseline>0.0 { best_bits_saved / best_baseline } else { 0.0 })*100.0), agent_calls.to_string(), gate.to_string(), best_cid.to_string(), best_bid.to_string() ])?; wtr.flush()?;
+                
+                // SIMDL v1.1: Compute pricing values
+                let gate_bits = if gate == 1 { 5 } else { 0 };
+                let price_transcript_bits = if !agent_text.is_empty() {
+                    compute_transcript_price_bits(&agent_text).unwrap_or(0)
+                } else { 0 };
+                let price_pointer_bits = if !agent_text.is_empty() {
+                    compute_pointer_price_bits(&doc_index, doc_id, 0, agent_text.len()).unwrap_or(0)
+                } else { 0 };
+                let tool_id_best = if gate == 1 { format!("cand_{}_bud_{}", best_cid, best_bid) } else { "none".to_string() };
+                let tool_snapshot_id = format!("snap_{}", chunk_index);
+                let args_hash = blake3_bytes_bin16(agent_text.as_bytes());
+                let output_hash = blake3_bytes_bin16(agent_text.as_bytes());
+                let chunk_id = format!("{}:{}", chunk_id_prefix, chunk_index);
+                
+                // Extend CSV with SIMDL v1.1 columns
+                wtr.write_record(&[ 
+                    input.to_string_lossy().to_string(), chunk_index.to_string(), start_tok.to_string(), i.to_string(), 
+                    agent_text.len().to_string(), agent_duration_ms.to_string(), 
+                    format!("{:.6}", best_baseline), format!("{:.6}" , best_conditioned), 
+                    format!("{:.6}", best_bits_saved), 
+                    format!("{:.6}", (if best_baseline>0.0 { best_bits_saved / best_baseline } else { 0.0 })*100.0), 
+                    agent_calls.to_string(), gate.to_string(), best_cid.to_string(), best_bid.to_string(),
+                    // New SIMDL v1.1 columns
+                    gate_bits.to_string(), price_transcript_bits.to_string(), price_pointer_bits.to_string(), tool_id_best,
+                    tool_snapshot_id, hex16(&args_hash), hex16(&output_hash), domain.clone(), agent_id.clone(), toolset_id.clone(), run_id.clone(), chunk_id
+                ])?; wtr.flush()?;
+
+                // Write learning entry only during encode (not reuse)
+                if agent_enabled && !reuse_scan_mode {
+                    let _ = write_learning_entry(&scan_dir, input, chunk_index, gate, best_bits_saved, best_baseline, best_cid, best_bid, &agent_text);
+                }
                 if let Some(dir) = wdog.as_ref() {
                     let hint_token_count: usize = best_hint_len;
                     let rec = json!({
@@ -2129,6 +2222,12 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         let mem_dir = scan_dir.join("agent_mem");
         let _ = fs::remove_dir_all(mem_dir);
     }
+    
+    // Save SIMDL v1.1 document index 
+    if let Err(e) = doc_index.save_to_path(&Path::new("index_meta.json")) {
+        eprintln!("Warning: Failed to save document index: {}", e);
+    }
+    
     Ok(())
 }
 
@@ -2269,7 +2368,7 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
             }
             // Agent priming at boundary, before decoding current token
             if agent_in_header && (i + 1) == next_agent_boundary as u64 {
-                let chunk_index = (next_agent_boundary / agent_chunk).max(1);
+                let chunk_index = next_agent_boundary / agent_chunk;
                 let (gate, cand_id, bud_id) = if let Some(&(cached_gate, cached_cid, cached_bid)) = reuse_gates.get(&chunk_index) {
                     // Use cached gate decision from CSV
                     eprintln!("[reuse] Using cached gate decision for decode chunk {}: gate={}, candidate={}, budget={}", chunk_index, cached_gate, cached_cid, cached_bid);
@@ -2463,7 +2562,7 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         for i in 0..header.token_count {
             // Agent priming at boundary
             if agent_in_header && (i + 1) == next_agent_boundary as u64 {
-                let chunk_index = (next_agent_boundary / agent_chunk).max(1);
+                let chunk_index = next_agent_boundary / agent_chunk;
                 let (gate, cand_id, bud_id) = if let Some(&(cached_gate, cached_cid, cached_bid)) = reuse_gates.get(&chunk_index) {
                     // Use cached gate decision from CSV
                     eprintln!("[reuse] Using cached gate decision for decode chunk {}: gate={}, candidate={}, budget={}", chunk_index, cached_gate, cached_cid, cached_bid);

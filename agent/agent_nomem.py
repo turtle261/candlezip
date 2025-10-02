@@ -235,7 +235,7 @@ def load_mcp_servers(config_path: str = "mcp_config.json") -> List[StdioServerPa
         print(f"Warning: Failed to load MCP config: {e}")
         return []
 
-def build_embedder_config() -> dict:
+def build_embedder_config() -> dict: # remove for nomem
     """Build Google embedder config after environment is loaded.
     
     Returns:
@@ -246,7 +246,7 @@ def build_embedder_config() -> dict:
     # Default to latest Google embedding model naming
     model_name = os.getenv("GOOGLE_EMBEDDING_MODEL", "gemini-embedding-001")
     return {
-        "provider": "google-generativeai",
+        "provider": "google",
         "config": {
             "model": model_name,
             "task_type": "retrieval_document",
@@ -304,10 +304,10 @@ def create_agent(task_description: str, max_steps: int, embedder_config: dict) -
             "thereby reducing the expected description length under arithmetic coding."
         ),
         llm=llm,
-        memory=True,  # Enable CrewAI's built-in long-term memory
+        memory=False,
         reasoning=True,
         planning=True,
-        max_reasoning_attempts=max_steps,
+        max_reasoning_attempts=(max_steps - 1 if max_steps - 1 > 0 else 1),
         verbose=True,
         allow_delegation=False,
         max_iter=max_steps,
@@ -336,10 +336,8 @@ def run_agent(task_description: str, mcp_config_path: str, max_steps: int) -> st
     collection_name = setup_file_specific_memory(input_file_path)
     print(f"[Memory] Using collection: {collection_name}")
     
-    # Build embedder configuration AFTER env is loaded
-    embedder_config = build_embedder_config()
-    if not embedder_config.get("config", {}).get("api_key"):
-        print("Warning: Missing Google API key for embeddings. Memory may not function optimally.")
+    # Disable embedder/memory entirely in no-memory agent
+    embedder_config = {"provider": "none", "config": {}}
     
     # Set up CrewAI storage directory to be inside the run's scan directory (same dir as proof.csv)
     # Respect CANDLEZIP_WATCHDOG_DIR when present; otherwise fall back to local ./agent_memory
@@ -352,11 +350,8 @@ def run_agent(task_description: str, mcp_config_path: str, max_steps: int) -> st
     # Create agent with memory enabled
     agent = create_agent(task_description, max_steps, embedder_config)
     
-    # Load learning context from previous chunks  
-    learning_context = load_learning_context(input_file_path, chunk_index)
-    
-    # Create enhanced task description with learning context
-    enhanced_task_description = task_description + learning_context
+    # No cross-chunk memory: use task description only
+    enhanced_task_description = task_description
     
     # Disable learning callback: learning entries are written from Rust after gating to ensure exact alignment
     task_callback = None
@@ -388,8 +383,8 @@ def run_agent(task_description: str, mcp_config_path: str, max_steps: int) -> st
                     tasks=[task],
                     process=Process.sequential,
                     verbose=True,
-                    memory=True,  # Enable memory for learning
-                    embedder=embedder_config,
+                    memory=False,
+                    embedder=None,
                     task_callback=task_callback  # Add learning callback
                 )
                 t0 = _now_ms()
@@ -402,14 +397,13 @@ def run_agent(task_description: str, mcp_config_path: str, max_steps: int) -> st
             print(f"Warning: Running without MCP due to configuration/runtime error: {e}")
             # Fall through to run without MCP tools
     
-    # Run without MCP tools but still with memory enabled
+    # Run without MCP tools, no memory
     crew = Crew(
         agents=[agent],
         tasks=[task],
         process=Process.sequential,
         verbose=True,
-        memory=True,  # Enable memory for learning
-        embedder=embedder_config,
+        memory=False,
         task_callback=task_callback  # Add learning callback
     )
     t0 = _now_ms()

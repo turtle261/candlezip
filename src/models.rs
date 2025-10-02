@@ -165,6 +165,7 @@ impl LanguageModelSession for Rwkv7Session {
 }
 
 impl Rwkv7Session {
+    #[allow(dead_code)]
     pub fn estimate_state_entropy(&self) -> Result<f32> {
         let mut total = 0.0f32;
         let mut count = 0usize;
