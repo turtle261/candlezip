@@ -1,0 +1,1742 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 32.4344ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 49.433ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.9454134s
+- Watching for configuration updates...
+> Initialized in 2.0283861s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_asyoulik_78e91080
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 0eb4300d-822c-4265-afd6-2cdc1e55afc7                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 3f1f24f9-9e73-4b12-9de3-b25c1770d5aa
+    Status: Executing Task...
+    ├── 🧠 Reasoning...
+    └── 🧠 Thinking...┌──────────────────────────────── Tool Usage ─────────────────────────────────┐
+│                                                                             │
+│  Tool Usage Started                                                         │
+│  Name: create_reasoning_plan                                                │
+│  Status: In Progress                                                        │
+│  Tool Args: {'ready': True, 'plan': '1. Understand the task from my         │
+│  professional perspective: As Predictive Compression Intelligence, my       │
+│  primary goal is to reduce information entropy for upcoming token           │
+│  predictions. This task requires me to find the exact continuation of a     │
+│  given text prefix, which directly translates to providing the most         │
+│  precise and information-dense content possible. By finding the verbatim    │
+│  continuation, I am effectively eliminating uncertainty for the language    │
+│  model, leading to maximum entropy reduction. The text appears to be from   │
+│  a play, likely Shakespeare\'s "As You Like It" given the character names   │
+│  and dialogue style.\n\n2. Key steps to complete it:\n    * Analyze the     │
+│  provided prefix to identify key phrases, character names, and potential    │
+│  source material (e.g., "As You Like It").\n    * Use the available tools   │
+│  to search within the `/C/Users/Noah/Documents/sink` directory for the      │
+│  exact prefix or highly similar content.\n    * If found, extract the       │
+│  immediate continuation (100-200 words) verbatim.\n    * If not found, I    │
+│  will need to generate a continuation based on the context, but the task    │
+│  explicitly states "You MUST use MCP tools aggressively to find the exact   │
+│  immediate continuation", implying a strong expectation of finding the      │
+│  source.\n\n3. Approach to challenges:\n    * Challenge: Not finding the    │
+│  exact prefix within the allowed directory.\n        * Approach: If a       │
+│  direct match for the entire prefix isn\'t found, I will try searching for  │
+│  smaller, unique phrases or character interactions from the prefix to       │
+│  locate the document. I will prioritize searching for the play\'s title if  │
+│  I can infer it (which I have: "As You Like It").\n    * Challenge: The     │
+│  directory structure is unknown.\n        * Approach: I will start by       │
+│  listing the directory contents to understand the available files. Then, I  │
+│  will use `search_files_content` to look for the prefix.\n\n4. Strategic    │
+│  use of available tools:\n    *                                             │
+│  `list_directory(path=\'/C/Users/Noah/Documents/sink\')`: To get an         │
+│  overview of the files in the `/C/Users/Noah/Documents/sink` directory.     │
+│  This helps me understand the potential sources.\n    *                     │
+│  `search_files_content(path=\'/C/Users/Noah/Documents/sink\',               │
+│  query=\'ourself to this most faithful shepherd?\')`: This is the most      │
+│  direct tool to find the exact prefix. I will use the last sentence of the  │
+│  prefix as the initial query, as it\'s less likely to be a common phrase.   │
+│  If this fails, I will try other distinctive phrases from the prefix.\n     │
+│  * `read_text_file(path=\'<found_file_path>\')`: Once a file containing     │
+│  the prefix is identified, I will read its content to extract the           │
+│  continuation.\n    * After reading the file, I will programmatically find  │
+│  the exact position of the prefix and extract the next 100-200 words,       │
+│  ensuring it is plain text only.\n\n5. Expected outcome and alignment with  │
+│  goal:\n    The expected outcome is a plain text continuation of 100-200    │
+│  words, extracted verbatim from the source document. This directly aligns   │
+│  with my goal of minimizing future token prediction entropy by providing    │
+│  the most accurate and context-rich information possible, allowing the      │
+│  language model to assign high probability to the actual upcoming           │
+│  tokens.'}                                                                  │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+🚀 Crew: crew
+├── 📋 Task: 3f1f24f9-9e73-4b12-9de3-b25c1770d5aa
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  1. Understand the task from my professional perspective: As Predictive     │
+│  Compression Intelligence, my primary goal is to reduce information         │
+│  entropy for upcoming token predictions. This task requires me to find the  │
+│  exact continuation of a given text prefix, which directly translates to    │
+│  providing the most precise and information-dense content possible. By      │
+│  finding the verbatim continuation, I am effectively eliminating            │
+│  uncertainty for the language model, leading to maximum entropy reduction.  │
+│  The text appears to be from a play, likely Shakespeare's "As You Like It"  │
+│  given the character names and dialogue style.                              │
+│                                                                             │
+│  2. Key steps to complete it:                                               │
+│      * Analyze the provided prefix to identify key phrases, character       │
+│  names, and potential source material (e.g., "As You Like It").             │
+│      * Use the available tools to search within the                         │
+│  `/C/Users/Noah/Documents/sink` directory for the exact prefix or highly    │
+│  similar content.                                                           │
+│      * If found, extract the immediate continuation (100-200 words)         │
+│  verbatim.                                                                  │
+│      * If not found, I will need to generate a continuation based on the    │
+│  context, but the task explicitly states "You MUST use MCP tools            │
+│  aggressively to find the exact immediate continuation", implying a strong  │
+│  expectation of finding the source.                                         │
+│                                                                             │
+│  3. Approach to challenges:                                                 │
+│      * Challenge: Not finding the exact prefix within the allowed           │
+│  directory.                                                                 │
+│          * Approach: If a direct match for the entire prefix isn't found,   │
+│  I will try searching for smaller, unique phrases or character              │
+│  interactions from the prefix to locate the document. I will prioritize     │
+│  searching for the play's title if I can infer it (which I have: "As You    │
+│  Like It").                                                                 │
+│      * Challenge: The directory structure is unknown.                       │
+│          * Approach: I will start by listing the directory contents to      │
+│  understand the available files. Then, I will use `search_files_content`    │
+│  to look for the prefix.                                                    │
+│                                                                             │
+│  4. Strategic use of available tools:                                       │
+│      * `list_directory(path='/C/Users/Noah/Documents/sink')`: To get an     │
+│  overview of the files in the `/C/Users/Noah/Documents/sink` directory.     │
+│  This helps me understand the potential sources.                            │
+│      * `search_files_content(path='/C/Users/Noah/Documents/sink',           │
+│  query='ourself to this most faithful shepherd?')`: This is the most        │
+│  direct tool to find the exact prefix. I will use the last sentence of the  │
+│  prefix as the initial query, as it's less likely to be a common phrase.    │
+│  If this fails, I will try other distinctive phrases from the prefix.       │
+│      * `read_text_file(path='<found_file_path>')`: Once a file containing   │
+│  the prefix is identified, I will read its content to extract the           │
+│  continuation.                                                              │
+│      * After reading the file, I will programmatically find the exact       │
+│  position of the prefix and extract the next 100-200 words, ensuring it is  │
+│  plain text only.                                                           │
+│                                                                             │
+│  5. Expected outcome and alignment with goal:                               │
+│      The expected outcome is a plain text continuation of 100-200 words,    │
+│  extracted verbatim from the source document. This directly aligns with my  │
+│  goal of minimizing future token prediction entropy by providing the most   │
+│  accurate and context-rich information possible, allowing the language      │
+│  model to assign high probability to the actual upcoming tokens.            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  e.                                                                         │
+│  PHEBE   Nor I.                                                             │
+│  ORLANDO Nor I.                                                             │
+│  [Exeunt]"                                                                  │
+│  The continuation starts after "To seem despiteful and ungentle to you:".   │
+│  Let's extract the next 100-200 words.                                      │
+│  "You are there followed by a faithful shepherd;                            │
+│  Look upon him, love him; he worships you.                                  │
+│  PHEBE   Good shepherd, tell this youth what 'tis to love.                  │
+│  SILVIUS It is to be all made of sighs and tears;                           │
+│  And so am I for Phebe.                                                     │
+│  PHEBE   And I for Ganymede.                                                │
+│  ORLANDO And I for Rosalind.                                                │
+│  ROSALIND        And I for no woman.                                        │
+│  SILVIUS It is to be all made of faith and service;                         │
+│  And so am I for Phebe.                                                     │
+│  PHEBE   And I for Ganymede.                                                │
+│  ORLANDO And I for Rosalind.                                                │
+│  ROSALIND        And I for no woman.                                        │
+│  SILVIUS It is to be all made of fantasy,                                   │
+│  All made of passion and all made of wishes,                                │
+│  All adoration, duty, and observance,                                       │
+│  All humbleness, all patience and impatience,                               │
+│  All purity, all trial, all observance;                                     │
+│  And so am I for Phebe.                                                     │
+│  PHEBE   And so am I for Ganymede.                                          │
+│  ORLANDO And so am I for Rosalind.                                          │
+│  ROSALIND        And so am I for no woman.                                  │
+│  PHEBE   If this be so, why blame you me to love you?                       │
+│  SILVIUS If this be so, why blame you me to love you?                       │
+│  ORLANDO If this be so, why blame you me to love you?                       │
+│  ROSALIND        Who do you speak to, 'Why blame you me to love you?'       │
+│  ORLANDO To her that is not here, nor doth not hear.                        │
+│  ROSALIND        Pray you, no more of this; 'tis like the howling           │
+│  of Irish wolves against the moon.                                          │
+│  [To SILVIUS]                                                               │
+│  I will help you, if I can:                                                 │
+│  [To PHEBE]                                                                 │
+│  I would love you, if I could. To-morrow meet me all together.              │
+│  [To PHEBE]                                                                 │
+│  I will marry you, if ever I marry woman, and I'll be                       │
+│  married to-morrow:                                                         │
+│  [To ORLANDO]                                                               │
+│  I will satisfy you, if ever I satisfied man, and you                       │
+│  shall be married to-morrow:                                                │
+│  [To SILVIUS]                                                               │
+│  I will content you, if what pleases you contents                           │
+│  you, and you shall be married to-morrow.                                   │
+│  [To ORLANDO]                                                               │
+│  As you love Rosalind, meet:                                                │
+│  [To SILVIUS]                                                               │
+│  as you love Phebe, meet: and as I love no woman,                           │
+│  I'll meet. So fare you well: I have left you commands.                     │
+│  SILVIUS I'll not fail, if I live.                                          │
+│  PHEBE   Nor I.                                                             │
+│  ORLANDO Nor I.                                                             │
+│  [Exeunt]"                                                                  │
+│  Let's count the words.                                                     │
+│  "You are there followed by a faithful shepherd; Look upon him, love him,   │
+│  he worships you. PHEBE Good shepherd, tell this youth what 'tis to love.   │
+│  SILVIUS It is to be all made of sighs and tears; And so am I for Phebe.    │
+│  PHEBE And I for Ganymede. ORLANDO And I for Rosalind. ROSALIND And I for   │
+│  no woman. SILVIUS It is to be all made of faith and service; And so am I   │
+│  for Phebe. PHEBE And I for Ganymede. ORLANDO And I for Rosalind. ROSALIND  │
+│  And I for no woman. SILVIUS It is to be all made of fantasy, All made of   │
+│  passion and all made of wishes, All adoration, duty, and observance, All   │
+│  humbleness, all patience and impatience, All purity, all trial, all        │
+│  observance; And so am I for Phebe. PHEBE And so am I for Ganymede.         │
+│  ORLANDO And so am I for Rosalind. ROSALIND And so am I for no woman.       │
+│  PHEBE If this be so, why blame you me to love you? SILVIUS If this be so,  │
+│  why blame you me to love you? ORLANDO If this be so, why blame you me to   │
+│  love you? ROSALIND Who do you speak to, 'Why blame you me to love you?'    │
+│  ORLANDO To her that is not here, nor doth not hear. ROSALIND Pray you, no  │
+│  more of this; 'tis like the howling of Irish wolves against the moon. [To  │
+│  SILVIUS] I will help you, if I can: [To PHEBE] I would love you, if I      │
+│  could. To-morrow meet me all together. [To PHEBE] I will marry you, if     │
+│  ever I marry woman, and I'll be married to-morrow: [To ORLANDO] I will     │
+│  satisfy you, if ever I satisfied man, and you shall be married to-morrow:  │
+│  [To SILVIUS] I will content you, if what pleases you contents you, and     │
+│  you shall be married to-morrow. [To ORLANDO] As you love Rosalind, meet:   │
+│  [To SILVIUS] as you love Phebe, meet: and as I love no woman, I'll meet.   │
+│  So fare you well: I have left you commands. SILVIUS I'll not fail, if I    │
+│  live. PHEBE Nor I. ORLANDO Nor I. [Exeunt]"                                │
+│  Word count: 300 words. This is more than 200 words. I need to trim it to   │
+│  be between 100-200 words.                                                  │
+│  Let's try to get around 150 words.                                         │
+│  "You are there followed by a faithful shepherd;                            │
+│  Look upon him, love him; he worships you.                                  │
+│  PHEBE   Good shepherd, tell this youth what 'tis to love.                  │
+│  SILVIUS It is to be all made of sighs and tears;                           │
+│  And so am I for Phebe.                                                     │
+│  PHEBE   And I for Ganymede.                                                │
+│  ORLANDO And I for Rosalind.                                                │
+│  ROSALIND        And I for no woman.                                        │
+│  SILVIUS It is to be all made of faith and service;                         │
+│  And so am I for Phebe.                                                     │
+│  PHEBE   And I for Ganymede.                                                │
+│  ORLANDO And I for Rosalind.                                                │
+│  ROSALIND        And I for no woman.                                        │
+│  SILVIUS It is to be all made of fantasy,                                   │
+│  All made of passion and all made of wishes,                                │
+│  All adoration, duty, and observance,                                       │
+│  All humbleness, all patience and impatience,                               │
+│  All purity, all trial, all observance;                                     │
+│  And so am I for Phebe.                                                     │
+│  PHEBE   And so am I for Ganymede.                                          │
+│  ORLANDO And so am I for Rosalind.                                          │
+│  ROSALIND        And so am I for no woman.                                  │
+│  PHEBE   If this be so, why blame you me to love you?                       │
+│  SILVIUS If this be so, why blame you me to love you?                       │
+│  ORLANDO If this be so, why blame you me to love you?                       │
+│  ROSALIND        Who do you speak to, 'Why blame you me to love you?'       │
+│  ORLANDO To her that is not here, nor doth not hear.                        │
+│  ROSALIND        Pray you, no more of this; 'tis like the howling           │
+│  of Irish wolves against the moon."                                         │
+│  Let's count these words:                                                   │
+│  "You are there followed by a faithful shepherd; Look upon him, love him,   │
+│  he worships you. PHEBE Good shepherd, tell this youth what 'tis to love.   │
+│  SILVIUS It is to be all made of sighs and tears; And so am I for Phebe.    │
+│  PHEBE And I for Ganymede. ORLANDO And I for Rosalind. ROSALIND And I for   │
+│  no woman. SILVIUS It is to be all made of faith and service; And so am I   │
+│  for Phebe. PHEBE And I for Ganymede. ORLANDO And I for Rosalind. ROSALIND  │
+│  And I for no woman. SILVIUS It is to be all made of fantasy, All made of   │
+│  passion and all made of wishes, All adoration, duty, and observance, All   │
+│  humbleness, all patience and impatience, All purity, all trial, all        │
+│  observance; And so am I for Phebe. PHEBE And so am I for Ganymede.         │
+│  ORLANDO And so am I for Rosalind. ROSALIND And so am I for no woman.       │
+│  PHEBE If this be so, why blame you me to love you? SILVIUS If this be so,  │
+│  why blame you me to love you? ORLANDO If this be so, why blame you me to   │
+│  love you? ROSALIND Who do you speak to, 'Why blame you me to love you?'    │
+│  ORLANDO To her that is not here, nor doth not hear. ROSALIND Pray you, no  │
+│  more of this; 'tis like the howling of Irish wolves against the moon."     │
+│  Word count: 190 words. This is within the 100-200 word range.You are       │
+│  there followed by a faithful shepherd;                                     │
+│  Look upon him, love him; he worships you.                                  │
+│  PHEBE   Good shepherd, tell this youth what 'tis to love.                  │
+│  SILVIUS It is to be all made of sighs and tears;                           │
+│  And so am I for Phebe.                                                     │
+│  PHEBE   And I for Ganymede.                                                │
+│  ORLANDO And I for Rosalind.                                                │
+│  ROSALIND        And I for no woman.                                        │
+│  SILVIUS It is to be all made of faith and service;                         │
+│  And so am I for Phebe.                                                     │
+│  PHEBE   And I for Ganymede.                                                │
+│  ORLANDO And I for Rosalind.                                                │
+│  ROSALIND        And I for no woman.                                        │
+│  SILVIUS It is to be all made of fantasy,                                   │
+│  All made of passion and all made of wishes,                                │
+│  All adoration, duty, and observance,                                       │
+│  All humbleness, all patience and impatience,                               │
+│  All purity, all trial, all observance;                                     │
+│  And so am I for Phebe.                                                     │
+│  PHEBE   And so am I for Ganymede.                                          │
+│  ORLANDO And so am I for Rosalind.                                          │
+│  ROSALIND        And so am I for no woman.                                  │
+│  PHEBE   If this be so, why blame you me to love you?                       │
+│  SILVIUS If this be so, why blame you me to love you?                       │
+│  ORLANDO If this be so, why blame you me to love you?                       │
+│  ROSALIND        Who do you speak to, 'Why blame you me to love you?'       │
+│  ORLANDO To her that is not here, nor doth not hear.                        │
+│  ROSALIND        Pray you, no more of this; 'tis like the howling           │
+│  of Irish wolves against the moon.                                          │
+│                                                                             │
+│  # chunk:76                                                                 │
+│  that every day                                                             │
+│  Men of great worth resorted to this forest,                                │
+│  Address'd a mighty power; which were on foot,                              │
+│  In his own conduct, purposely to take                                      │
+│  His brother here and put him to the sword:                                 │
+│  And to the skirts of this wild wood he came;                               │
+│  Where meeting with an old religious man,                                   │
+│  After some question with him, was converted                                │
+│  Both from his enterprise and from the world,                               │
+│  His crown bequeathing to his banish'd brother,                             │
+│  And all their lands restored to them again                                 │
+│  That were with him exiled. This to be true,                                │
+│  I do engage my life.                                                       │
+│  DUKE SENIOR     Welcome, young man;                                        │
+│  Thou offer'st fairly to thy brothers here.                                 │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  ourself to this most faithful shepherd?                                    │
+│                                                                             │
+│  PHEBE   So is the bargain.                                                 │
+│                                                                             │
+│  ROSALIND        You say, that you'll have Phebe, if she will?              │
+│                                                                             │
+│  SILVIUS Though to have her and death were both one thing.                  │
+│                                                                             │
+│  ROSALIND        I have promised to make all this matter even.              │
+│          Keep you your word, O duke, to give your daughter;                 │
+│          You yours, Orlando, to receive his daughter:                       │
+│          Keep your word, Phebe, that you'll marry me,                       │
+│          Or else refusing me, to wed this shepherd:                         │
+│          Keep your word, Silvius, that you'll marry her.                    │
+│          If she refuse me: and from hence I go,                             │
+│          To make these doubts all even.                                     │
+│                                                                             │
+│          [Exeunt ROSALIND and CELIA]                                        │
+│                                                                             │
+│  DUKE SENIOR     I do remember in this shepherd boy                         │
+│          Some lively touches of my daughter's favour.                       │
+│                                                                             │
+│  ORLANDO My lord, the first time that I ever saw him                        │
+│          Methought he was a brother to your daughter:                       │
+│          But, my good lord, this boy is forest-born,                        │
+│          And hath been tutor'd in the rudiments                             │
+│          Of many desperate studies by his uncle,                            │
+│          Whom he reports to be a great magician,                            │
+│          Obscured in the circle of this forest.                             │
+│                                                                             │
+│          [Enter TOUCHSTONE and AUDREY]                                      │
+│                                                                             │
+│  JAQUES  There is, sure, another flood toward, and these                    │
+│          couples are coming to the ark. Here comes a pair of                │
+│          very strange beasts, which in all tongues are called fools.        │
+│                                                                             │
+│  TOUCHSTONE      Salutation and greeting to you all!                        │
+│                                                                             │
+│  JAQUES  Good my lord, bid him welcome: this is the                         │
+│          motley-minded gentleman that I have so often met in                │
+│          the forest: he hath been a courtier, he swears.                    │
+│                                                                             │
+│  TOUCHSTONE      If any man doubt that, let him put me to my                │
+│          purgation. I have trod a measure; I have flattered                 │
+│          a lady; I have been politic with my friend, smooth                 │
+│          with mine enemy; I have undone three tailors; I have               │
+│          had four quarrels, and like to have fought one.                    │
+│                                                                             │
+│  JAQUES  And how was that ta'en up?                                         │
+│                                                                             │
+│  TOUCHSTONE      Faith, we met, and found the quarrel was upon the          │
+│          seventh cause.                                                     │
+│                                                                             │
+│  JAQUES  How seventh cause? Good my lord, like this fellow.                 │
+│                                                                             │
+│  DUKE SENIOR     I like him very well.                                      │
+│                                                                             │
+│  TOUCHSTONE      God 'ild you, sir; I desire you of the like. I             │
+│          press in here, sir, amongst the rest of the country                │
+│          copulatives, to swear and to forswear: according as                │
+│          marriage binds and blood breaks: a poor virgin,                    │
+│          sir, an ill-favoured thing, sir, but mine own; a poor              │
+│          humour of mine, sir, to take that that no man else                 │
+│          will: rich honesty dwells like a miser, sir, in a                  │
+│          poor house; as your pearl in your foul oyster.                     │
+│                                                                             │
+│  DUKE SENIOR     By my faith, he is very swift and sententious.             │
+│                                                                             │
+│  TOUCHSTONE      According to the fool's bolt, sir, and such dulcet         │
+│  diseases.                                                                  │
+│                                                                             │
+│  JAQUES  But, for the seventh cause; how did you find the                   │
+│          quarrel on the seventh cause?                                      │
+│                                                                             │
+│  TOUCHSTONE      Upon a lie seven times removed:--bear your body more       │
+│          seeming, Audrey:--as thus, sir. I did dislike the                  │
+│          cut of a certain courtier's beard: he sent me word,                │
+│          if I said his beard was not cut well, he was in the                │
+│          mind it was: this is called the Retort Courteous.                  │
+│          If I sent him word again 'it was not well cut,' he                 │
+│          would send me word, he cut it to please himself:                   │
+│          this is called the Quip Modest. If again 'it was                   │
+│          not well cut,' he disabled my judgment: this is                    │
+│          called the Reply Churlish. If again 'it was not                    │
+│          well cut,' he would answer, I spake not true: this                 │
+│          is called the Reproof Valiant. If again 'it was not                │
+│          well cut,' he would say I lied: this is called the                 │
+│          Counter-cheque Quarrelsome: and so to the Lie                      │
+│          Circumstantial and the Lie Direct.                                 │
+│                                                                             │
+│  JAQUES  And how oft did you say his beard was not well cut?                │
+│                                                                             │
+│  TOUCHSTONE      I durst go no further than the Lie Circumstantial,         │
+│          nor he durst not give me the Lie Direct; and so we                 │
+│          measured swords and parted.                                        │
+│                                                                             │
+│  JAQUES  Can you nominate in order now the degrees of the lie?              │
+│                                                                             │
+│  TOUCHSTONE      O sir, we quarrel in print, by the book; as you have       │
+│          books for good manners: I will name you the degrees.               │
+│          The first, the Retort Courteous; the second, the                   │
+│          Quip Modest; the third, the Reply Churlish; the                    │
+│          fourth, the Reproof Valiant; the fifth, the                        │
+│          Countercheque Quarrelsome; the sixth, the Lie with                 │
+│          Circumstance; the seventh, the Lie Direct. All                     │
+│          these you may avoid but the Lie Direct; and you may                │
+│          avoid that too, with an If. I knew when seven                      │
+│          justices could not take up a quarrel, but when the                 │
+│          parties were met themselves, one of them thought but               │
+│          of an If, as, 'If you said so, then I said so;' and                │
+│          they shook hands and swore brothers. Your If is the                │
+│          only peacemaker; much virtue in If.                                │
+│                                                                             │
+│  JAQUES  Is not this a rare fellow, my lord? he's as good at                │
+│          any thing and yet a fool.                                          │
+│                                                                             │
+│  DUKE SENIOR     He uses his folly like a stalking-horse and under          │
+│          the presentation of that he shoots his wit.                        │
+│                                                                             │
+│          [Enter HYMEN, ROSALIND, and CELIA]                                 │
+│                                                                             │
+│          [Still Music]                                                      │
+│                                                                             │
+│  HYMEN           Then is there mirth in heaven,                             │
+│          When earthly things made even                                      │
+│          Atone together.                                                    │
+│          Good duke, receive thy daughter                                    │
+│          Hymen from heaven brought her,                                     │
+│          Yea, brought her hither,                                           │
+│          That thou mightst join her hand with his                           │
+│          Whose heart within his bosom is.                                   │
+│                                                                             │
+│  ROSALIND        [To DUKE SENIOR]  To you I give myself, for I am yours.    │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          To you I give myself, for I am yours.                              │
+│                                                                             │
+│  DUKE SENIOR     If there be truth in sight, you are my daughter.           │
+│                                                                             │
+│  ORLANDO If there be truth in sight, you are my Rosalind.                   │
+│                                                                             │
+│  PHEBE   If sight and shape be true,                                        │
+│          Why then, my love adieu!                                           │
+│                                                                             │
+│  ROSALIND        I'll have no father, if you be not he:                     │
+│          I'll have no husband, if you be not he:                            │
+│          Nor ne'er wed woman, if you be not she.                            │
+│                                                                             │
+│  HYMEN           Peace, ho! I bar confusion:                                │
+│          'Tis I must make conclusion                                        │
+│          Of these most strange events:                                      │
+│          Here's eight that must take hands                                  │
+│          To join in Hymen's bands,                                          │
+│          If truth holds true contents.                                      │
+│          You and you no cross shall part:                                   │
+│          You and you are heart in heart                                     │
+│          You to his love must accord,                                       │
+│          Or have a woman to your lord:                                      │
+│          You and you are sure together,                                     │
+│          As the winter to foul weather.                                     │
+│          Whiles a wedlock-hymn we sing,                                     │
+│          Feed yourselves with questioning;                                  │
+│          That reason wonder may diminish,                                   │
+│          How thus we met, and these things finish.                          │
+│                                                                             │
+│          SONG.                                                              │
+│          Wedding is great Juno's crown:                                     │
+│          O blessed bond of board and bed!                                   │
+│          'Tis Hymen peoples every town;                                     │
+│          High wedlock then be honoured:                                     │
+│          Honour, high honour and renown,                                    │
+│          To Hymen, god of every town!                                       │
+│                                                                             │
+│  DUKE SENIOR     O my dear niece, welcome thou art to me!                   │
+│          Even daughter, welcome, in no less degree.                         │
+│                                                                             │
+│  PHEBE   I will not eat my word, now thou art mine;                         │
+│          Thy faith my fancy to thee doth combine.                           │
+│                                                                             │
+│          [Enter JAQUES DE BOYS]                                             │
+│                                                                             │
+│  JAQUES DE BOYS  Let me have audience for a word or two:                    │
+│          I am the second son of old Sir Rowland,                            │
+│          That bring these tidings to this fair assembly.                    │
+│          Duke Frederick, hearing how that every day                         │
+│          Men of great worth resorted to this forest,                        │
+│          Address'd a mighty power; which were on foot,                      │
+│          In his own conduct, purposely to take                              │
+│          His brother here and put him to the sword:                         │
+│          And to the skirts of this wild wood he came;                       │
+│          Where meeting with an old religious man,                           │
+│          After some question with him, was converted                        │
+│          Both from his enterprise and from the world,                       │
+│          His crown bequeathing to his banish'd brother,                     │
+│          And all their lands restored to them again                         │
+│          That were with him exiled. This to be true,                        │
+│          I do engage my life.                                               │
+│                                                                             │
+│  DUKE SENIOR     Welcome, young man;                                        │
+│          Thou offer'st fairly to thy brothers' wedding:                     │
+│          To one his lands withheld, and to the other                        │
+│          A land itself at large, a potent dukedom.                          │
+│          First, in this forest, let us do those ends                        │
+│          That here were well begun and well begot:                          │
+│          And after, every of this happy number                              │
+│          That have endured shrewd days and nights with us                   │
+│          Shall share the good of our returned fortune,                      │
+│          According to the measure of their states.                          │
+│          Meantime, forget this new-fall'n dignity                           │
+│          And fall into our rustic revelry.                                  │
+│          Play, music! And you, brides and bridegrooms all,                  │
+│          With measure heap'd in joy, to the measures fall.                  │
+│                                                                             │
+│  JAQUES  Sir, by your patience. If I heard you rightly,                     │
+│          The duke hath put on a religious life                              │
+│          And thrown into neglect the pompous court?                         │
+│                                                                             │
+│  JAQUES DE BOYS  He hath.                                                   │
+│                                                                             │
+│  JAQUES  To him will I : out of these convertites                           │
+│          There is much matter to be heard and learn'd.                      │
+│                                                                             │
+│          [To DUKE SENIOR]                                                   │
+│                                                                             │
+│          You to your former honour I bequeath;                              │
+│          Your patience and your virtue well deserves it:                    │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          You to a love that your true faith doth merit:                     │
+│                                                                             │
+│          [To OLIVER]                                                        │
+│                                                                             │
+│          You to your land and love and great allies:                        │
+│                                                                             │
+│          [To SILVIUS]                                                       │
+│                                                                             │
+│          You to a long and well-deserved bed:                               │
+│                                                                             │
+│          [To TOUCHSTONE                                                     │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│  1. Understand the task from my professional perspective: As Predictive     │
+│  Compression Intelligence, my primary goal is to reduce information         │
+│  entropy for upcoming token predictions. This task requires me to find the  │
+│  exact continuation of a given text prefix, which directly translates to    │
+│  providing the most precise and information-dense content possible. By      │
+│  finding the verbatim continuation, I am effectively eliminating            │
+│  uncertainty for the language model, leading to maximum entropy reduction.  │
+│  The text appears to be from a play, likely Shakespeare's "As You Like It"  │
+│  given the character names and dialogue style.                              │
+│                                                                             │
+│  2. Key steps to complete it:                                               │
+│      * Analyze the provided prefix to identify key phrases, character       │
+│  names, and potential source material (e.g., "As You Like It").             │
+│      * Use the available tools to search within the                         │
+│  `/C/Users/Noah/Documents/sink` directory for the exact prefix or highly    │
+│  similar content.                                                           │
+│      * If found, extract the immediate continuation (100-200 words)         │
+│  verbatim.                                                                  │
+│      * If not found, I will need to generate a continuation based on the    │
+│  context, but the task explicitly states "You MUST use MCP tools            │
+│  aggressively to find the exact immediate continuation", implying a strong  │
+│  expectation of finding the source.                                         │
+│                                                                             │
+│  3. Approach to challenges:                                                 │
+│      * Challenge: Not finding the exact prefix within the allowed           │
+│  directory.                                                                 │
+│          * Approach: If a direct match for the entire prefix isn't found,   │
+│  I will try searching for smaller, unique phrases or character              │
+│  interactions from the prefix to locate the document. I will prioritize     │
+│  searching for the play's title if I can infer it (which I have: "As You    │
+│  Like It").                                                                 │
+│      * Challenge: The directory structure is unknown.                       │
+│          * Approach: I will start by listing the directory contents to      │
+│  understand the available files. Then, I will use `search_files_content`    │
+│  to look for the prefix.                                                    │
+│                                                                             │
+│  4. Strategic use of available tools:                                       │
+│      * `list_directory(path='/C/Users/Noah/Documents/sink')`: To get an     │
+│  overview of the files in the `/C/Users/Noah/Documents/sink` directory.     │
+│  This helps me understand the potential sources.                            │
+│      * `search_files_content(path='/C/Users/Noah/Documents/sink',           │
+│  query='ourself to this most faithful shepherd?')`: This is the most        │
+│  direct tool to find the exact prefix. I will use the last sentence of the  │
+│  prefix as the initial query, as it's less likely to be a common phrase.    │
+│  If this fails, I will try other distinctive phrases from the prefix.       │
+│      * `read_text_file(path='<found_file_path>')`: Once a file containing   │
+│  the prefix is identified, I will read its content to extract the           │
+│  continuation.                                                              │
+│      * After reading the file, I will programmatically find the exact       │
+│  position of the prefix and extract the next 100-200 words, ensuring it is  │
+│  plain text only.                                                           │
+│                                                                             │
+│  5. Expected outcome and alignment with goal:                               │
+│      The expected outcome is a plain text continuation of 100-200 words,    │
+│  extracted verbatim from the source document. This directly aligns with my  │
+│  goal of minimizing future token prediction entropy by providing the most   │
+│  accurate and context-rich information possible, allowing the language      │
+│  model to assign high probability to the actual upcoming tokens.            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool list_directory with arguments: {"path":"/C/Users/Noah/Documents/sink"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool list_directory took: 487.2533ms
+🚀 Crew: crew
+├── 📋 Task: 3f1f24f9-9e73-4b12-9de3-b25c1770d5aa
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   └── 🔧 Used list_directory (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: The task requires me to find the exact continuation of the        │
+│  provided text prefix, which appears to be from a play, likely              │
+│  Shakespeare's "As You Like It". I need to use the available tools to       │
+│  search within the `/C/Users/Noah/Documents/sink` directory for this        │
+│  content and extract the next 100-200 words verbatim.                       │
+│  First, I will list the contents of the `/C/Users/Noah/Documents/sink`      │
+│  directory to understand what files are available.                          │
+│                                                                             │
+│  Using Tool: list_directory                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\"}"                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  [DIR] cantrbry                                                             │
+│  [DIR] enwik8_samples                                                       │
+│  [DIR] synthetic                                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool search_files_content with arguments: {"path":"/C/Users/Noah/Documents/sink","pattern":"*.txt","query":"ourself to this most faithful shepherd?"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool search_files_content took: 601.1358ms
+🚀 Crew: crew
+├── 📋 Task: 3f1f24f9-9e73-4b12-9de3-b25c1770d5aa
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_directory (1)
+│   └── 🔧 Used search_files_content (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: _text_files                                                       │
+│  [FILE] test_file.txt                                                       │
+│  Thought: I see a few directories and one file. Given the nature of the     │
+│  text (Shakespearean play), it's highly probable that the content would be  │
+│  in a larger text file, possibly within one of the subdirectories. I will   │
+│  start by searching for the exact phrase "ourself to this most faithful     │
+│  shepherd?" within all text files in the `/C/Users/Noah/Documents/sink`     │
+│  directory and its subdirectories. This is a distinctive phrase that        │
+│  should help me pinpoint the correct file.                                  │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\", \"pattern\": \"*.txt\",      │
+│  \"query\": \"ourself to this most faithful shepherd?\"}"                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  /C/Users/Noah/Documents/sink/cantrbry/asyoulik.txt                         │
+│    3834:14: You'll give yourself to this most faithful shepherd?            │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool read_text_file with arguments: {"path":"/C/Users/Noah/Documents/sink/cantrbry/asyoulik.txt"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool read_text_file took: 489.558ms
+🚀 Crew: crew
+├── 📋 Task: 3f1f24f9-9e73-4b12-9de3-b25c1770d5aa
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_directory (1)
+│   ├── 🔧 Used search_files_content (1)
+│   └── 🔧 Used read_text_file (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The `search_files_content` tool found the phrase         │
+│  "You'll give yourself to this most faithful shepherd?" in                  │
+│  `/C/Users/Noah/Documents/sink/cantrbry/asyoulik.txt`. The prefix provided  │
+│  is "ourself to this most faithful shepherd?". It seems there's a slight    │
+│  difference in the first word ("ourself" vs "yourself") and the presence    │
+│  of "You'll give" at the beginning. However, the rest of the phrase is      │
+│  identical, and the context strongly suggests this is the correct file      │
+│  ("asyoulik.txt" likely stands for "As You Like It").                       │
+│  I will now read the content of this file to find the exact prefix and      │
+│  extract the continuation. I will read the entire file to ensure I get the  │
+│  full context.                                                              │
+│                                                                             │
+│  Using Tool: read_text_file                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/cantrbry/asyoulik.txt\"}"       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│          DRAMATIS PERSONAE                                                  │
+│                                                                             │
+│                                                                             │
+│  DUKE SENIOR     living in banishment.                                      │
+│                                                                             │
+│  DUKE FREDERICK  his brother, an usurper of his dominions.                  │
+│                                                                             │
+│                                                                             │
+│  AMIENS  |                                                                  │
+│          |  lords attending on the banished duke.                           │
+│  JAQUES  |                                                                  │
+│                                                                             │
+│                                                                             │
+│  LE BEAU a courtier attending upon Frederick.                               │
+│                                                                             │
+│  CHARLES wrestler to Frederick.                                             │
+│                                                                             │
+│                                                                             │
+│  OLIVER          |                                                          │
+│                  |                                                          │
+│  JAQUES (JAQUES DE BOYS:)        |  sons of Sir Rowland de Boys.            │
+│                  |                                                          │
+│  ORLANDO         |                                                          │
+│                                                                             │
+│                                                                             │
+│  ADAM    |                                                                  │
+│          |  servants to Oliver.                                             │
+│  DENNIS  |                                                                  │
+│                                                                             │
+│                                                                             │
+│  TOUCHSTONE      a clown.                                                   │
+│                                                                             │
+│  SIR OLIVER MARTEXT      a vicar.                                           │
+│                                                                             │
+│                                                                             │
+│  CORIN   |                                                                  │
+│          |  shepherds.                                                      │
+│  SILVIUS |                                                                  │
+│                                                                             │
+│                                                                             │
+│  WILLIAM a country fellow in love with Audrey.                              │
+│                                                                             │
+│          A person representing HYMEN. (HYMEN:)                              │
+│                                                                             │
+│  ROSALIND        daughter to the banished duke.                             │
+│                                                                             │
+│  CELIA   daughter to Frederick.                                             │
+│                                                                             │
+│  PHEBE   a shepherdess.                                                     │
+│                                                                             │
+│  AUDREY  a country wench.                                                   │
+│                                                                             │
+│          Lords, pages, and attendants, &c.                                  │
+│          (Forester:)                                                        │
+│          (A Lord:)                                                          │
+│          (First Lord:)                                                      │
+│          (Second Lord:)                                                     │
+│          (First Page:)                                                      │
+│          (Second Page:)                                                     │
+│                                                                             │
+│                                                                             │
+│  SCENE   Oliver's house; Duke Frederick's court; and the                    │
+│          Forest of Arden.                                                   │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT I                                                                      │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE I Orchard of Oliver's house.                                         │
+│                                                                             │
+│                                                                             │
+│          [Enter ORLANDO and ADAM]                                           │
+│                                                                             │
+│  ORLANDO As I remember, Adam, it was upon this fashion                      │
+│          bequeathed me by will but poor a thousand crowns,                  │
+│          and, as thou sayest, charged my brother, on his                    │
+│          blessing, to breed me well: and there begins my                    │
+│          sadness. My brother Jaques he keeps at school, and                 │
+│          report speaks goldenly of his profit: for my part,                 │
+│          he keeps me rustically at home, or, to speak more                  │
+│          properly, stays me here at home unkept; for call you               │
+│          that keeping for a gentleman of my birth, that                     │
+│          differs not from the stalling of an ox? His horses                 │
+│          are bred better; for, besides that they are fair                   │
+│          with their feeding, they are taught their manage,                  │
+│          and to that end riders dearly hired: but I, his                    │
+│          brother, gain nothing under him but growth; for the                │
+│          which his animals on his dunghills are as much                     │
+│          bound to him as I. Besides this nothing that he so                 │
+│          plentifully gives me, the something that nature gave               │
+│          me his countenance seems to take from me: he lets                  │
+│          me feed with his hinds, bars me the place of a                     │
+│          brother, and, as much as in him lies, min...                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 3f1f24f9-9e73-4b12-9de3-b25c1770d5aa
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_directory (1)
+│   ├── 🔧 Used search_files_content (1)
+│   └── 🔧 Used read_text_file (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│                                                                             │
+│                                                                             │
+│  PHEBE   So is the bargain.                                                 │
+│                                                                             │
+│  ROSALIND        You say, that you'll have Phebe, if she will?              │
+│                                                                             │
+│  SILVIUS Though to have her and death were both one thing.                  │
+│                                                                             │
+│  ROSALIND        I have promised to make all this matter even.              │
+│          Keep you your word, O duke, to give your daughter;                 │
+│          You yours, Orlando, to receive his daughter:                       │
+│          Keep your word, Phebe, that you'll marry me,                       │
+│          Or else refusing me, to wed this shepherd:                         │
+│          Keep your word, Silvius, that you'll marry her.                    │
+│          If she refuse me: and from hence I go,                             │
+│          To make these doubts all even.                                     │
+│                                                                             │
+│          [Exeunt ROSALIND and CELIA]                                        │
+│                                                                             │
+│  DUKE SENIOR     I do remember in this shepherd boy                         │
+│          Some lively touches of my daughter's favour.                       │
+│                                                                             │
+│  ORLANDO My lord, the first time that I ever saw him                        │
+│          Methought he was a brother to your daughter:                       │
+│          But, my good lord, this boy is forest-born,                        │
+│          And hath been tutor'd in the rudiments                             │
+│          Of many desperate studies by his uncle,                            │
+│          Whom he reports to be a great magician,                            │
+│          Obscured in the circle of this forest.                             │
+│                                                                             │
+│          [Enter TOUCHSTONE and AUDREY]                                      │
+│                                                                             │
+│  JAQUES  There is, sure, another flood toward, and these                    │
+│          couples are coming to the ark. Here comes a pair of                │
+│          very strange beasts, which in all tongues are called fools.        │
+│                                                                             │
+│  TOUCHSTONE      Salutation and greeting to you all!                        │
+│                                                                             │
+│  JAQUES  Good my lord, bid him welcome: this is the                         │
+│          motley-minded gentleman that I have so often met in                │
+│          the forest: he hath been a courtier, he swears.                    │
+│                                                                             │
+│  TOUCHSTONE      If any man doubt that, let him put me to my                │
+│          purgation. I have trod a measure; I have flattered                 │
+│          a lady; I have been politic with my friend, smooth                 │
+│          with mine enemy; I have undone three tailors; I have               │
+│          had four quarrels, and like to have fought one.                    │
+│                                                                             │
+│  JAQUES  And how was that ta'en up?                                         │
+│                                                                             │
+│  TOUCHSTONE      Faith, we met, and found the quarrel was upon the          │
+│          seventh cause.                                                     │
+│                                                                             │
+│  JAQUES  How seventh cause? Good my lord, like this fellow.                 │
+│                                                                             │
+│  DUKE SENIOR     I like him very well.                                      │
+│                                                                             │
+│  TOUCHSTONE      God 'ild you, sir; I desire you of the like. I             │
+│          press in here, sir, amongst the rest of the country                │
+│          copulatives, to swear and to forswear: according as                │
+│          marriage binds and blood breaks: a poor virgin,                    │
+│          sir, an ill-favoured thing, sir, but mine own; a poor              │
+│          humour of mine, sir, to take that that no man else                 │
+│          will: rich honesty dwells like a miser, sir, in a                  │
+│          poor house; as your pearl in your foul oyster.                     │
+│                                                                             │
+│  DUKE SENIOR     By my faith, he is very swift and sententious.             │
+│                                                                             │
+│  TOUCHSTONE      According to the fool's bolt, sir, and such dulcet         │
+│  diseases.                                                                  │
+│                                                                             │
+│  JAQUES  But, for the seventh cause; how did you find the                   │
+│          quarrel on the seventh cause?                                      │
+│                                                                             │
+│  TOUCHSTONE      Upon a lie seven times removed:--bear your body more       │
+│          seeming, Audrey:--as thus, sir. I did dislike the                  │
+│          cut of a certain courtier's beard: he sent me word,                │
+│          if I said his beard was not cut well, he was in the                │
+│          mind it was: this is called the Retort Courteous.                  │
+│          If I sent him word again 'it was not well cut,' he                 │
+│          would send me word, he cut it to please himself:                   │
+│          this is called the Quip Modest. If again 'it was                   │
+│          not well cut,' he disabled my judgment: this is                    │
+│          called the Reply Churlish. If again 'it was not                    │
+│          well cut,' he would answer, I spake not true: this                 │
+│          is called the Reproof Valiant. If again 'it was not                │
+│          well cut,' he would say I lied: this is called the                 │
+│          Counter-cheque Quarrelsome: and so to the Lie                      │
+│          Circumstantial and the Lie Direct.                                 │
+│                                                                             │
+│  JAQUES  And how oft did you say his beard was not well cut?                │
+│                                                                             │
+│  TOUCHSTONE      I durst go no further than the Lie Circumstantial,         │
+│          nor he durst not give me the Lie Direct; and so we                 │
+│          measured swords and parted.                                        │
+│                                                                             │
+│  JAQUES  Can you nominate in order now the degrees of the lie?              │
+│                                                                             │
+│  TOUCHSTONE      O sir, we quarrel in print, by the book; as you have       │
+│          books for good manners: I will name you the degrees.               │
+│          The first, the Retort Courteous; the second, the                   │
+│          Quip Modest; the third, the Reply Churlish; the                    │
+│          fourth, the Reproof Valiant; the fifth, the                        │
+│          Countercheque Quarrelsome; the sixth, the Lie with                 │
+│          Circumstance; the seventh, the Lie Direct. All                     │
+│          these you may avoid but the Lie Direct; and you may                │
+│          avoid that too, with an If. I knew when seven                      │
+│          justices could not take up a quarrel, but when the                 │
+│          parties were met themselves, one of them thought but               │
+│          of an If, as, 'If you said so, then I said so;' and                │
+│          they shook hands and swore brothers. Your If is the                │
+│          only peacemaker; much virtue in If.                                │
+│                                                                             │
+│  JAQUES  Is not this a rare fellow, my lord? he's as good at                │
+│          any thing and yet a fool.                                          │
+│                                                                             │
+│  DUKE SENIOR     He uses his folly like a stalking-horse and under          │
+│          the presentation of that he shoots his wit.                        │
+│                                                                             │
+│          [Enter HYMEN, ROSALIND, and CELIA]                                 │
+│                                                                             │
+│          [Still Music]                                                      │
+│                                                                             │
+│  HYMEN           Then is there mirth in heaven,                             │
+│          When earthly things made even                                      │
+│          Atone together.                                                    │
+│          Good duke, receive thy daughter                                    │
+│          Hymen from heaven brought her,                                     │
+│          Yea, brought her hither,                                           │
+│          That thou mightst join her hand with his                           │
+│          Whose heart within his bosom is.                                   │
+│                                                                             │
+│  ROSALIND        [To DUKE SENIOR]  To you I give myself, for I am yours.    │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          To you I give myself, for I am yours.                              │
+│                                                                             │
+│  DUKE SENIOR     If there be truth in sight, you are my daughter.           │
+│                                                                             │
+│  ORLANDO If there be truth in sight, you are my Rosalind.                   │
+│                                                                             │
+│  PHEBE   If sight and shape be true,                                        │
+│          Why then, my love adieu!                                           │
+│                                                                             │
+│  ROSALIND        I'll have no father, if you be not he:                     │
+│          I'll have no husband, if you be not he:                            │
+│          Nor ne'er wed woman, if you be not she.                            │
+│                                                                             │
+│  HYMEN           Peace, ho! I bar confusion:                                │
+│          'Tis I must make conclusion                                        │
+│          Of these most strange events:                                      │
+│          Here's eight that must take hands                                  │
+│          To join in Hymen's bands,                                          │
+│          If truth holds true contents.                                      │
+│          You and you no cross shall part:                                   │
+│          You and you are heart in heart                                     │
+│          You to his love must accord,                                       │
+│          Or have a woman to your lord:                                      │
+│          You and you are sure together,                                     │
+│          As the winter to foul weather.                                     │
+│          Whiles a wedlock-hymn we sing,                                     │
+│          Feed yourselves with questioning;                                  │
+│          That reason wonder may diminish,                                   │
+│          How thus we met, and these things finish.                          │
+│                                                                             │
+│          SONG.                                                              │
+│          Wedding is great Juno's crown:                                     │
+│          O blessed bond of board and bed!                                   │
+│          'Tis Hymen peoples every town;                                     │
+│          High wedlock then be honoured:                                     │
+│          Honour, high honour and renown,                                    │
+│          To Hymen, god of every town!                                       │
+│                                                                             │
+│  DUKE SENIOR     O my dear niece, welcome thou art to me!                   │
+│          Even daughter, welcome, in no less degree.                         │
+│                                                                             │
+│  PHEBE   I will not eat my word, now thou art mine;                         │
+│          Thy faith my fancy to thee doth combine.                           │
+│                                                                             │
+│          [Enter JAQUES DE BOYS]                                             │
+│                                                                             │
+│  JAQUES DE BOYS  Let me have audience for a word or two:                    │
+│          I am the second son of old Sir Rowland,                            │
+│          That bring these tidings to this fair assembly.                    │
+│          Duke Frederick, hearing how that every day                         │
+│          Men of great worth resorted to this forest,                        │
+│          Address'd a mighty power; which were on foot,                      │
+│          In his own conduct, purposely to take                              │
+│          His brother here and put him to the sword:                         │
+│          And to the skirts of this wild wood he came;                       │
+│          Where meeting with an old religious man,                           │
+│          After some question with him, was converted                        │
+│          Both from his enterprise and from the world,                       │
+│          His crown bequeathing to his banish'd brother,                     │
+│          And all their lands restored to them again                         │
+│          That were with him exiled. This to be true,                        │
+│          I do engage my life.                                               │
+│                                                                             │
+│  DUKE SENIOR     Welcome, young man;                                        │
+│          Thou offer'st fairly to thy brothers' wedding:                     │
+│          To one his lands withheld, and to the other                        │
+│          A land itself at large, a potent dukedom.                          │
+│          First, in this forest, let us do those ends                        │
+│          That here were well begun and well begot:                          │
+│          And after, every of this happy number                              │
+│          That have endured shrewd days and nights with us                   │
+│          Shall share the good of our returned fortune,                      │
+│          According to the measure of their states.                          │
+│          Meantime, forget this new-fall'n dignity                           │
+│          And fall into our rustic revelry.                                  │
+│          Play, music! And you, brides and bridegrooms all,                  │
+│          With measure heap'd in joy, to the measures fall.                  │
+│                                                                             │
+│  JAQUES  Sir, by your patience. If I heard you rightly,                     │
+│          The duke hath put on a religious life                              │
+│          And thrown into neglect the pompous court?                         │
+│                                                                             │
+│  JAQUES DE BOYS  He hath.                                                   │
+│                                                                             │
+│  JAQUES  To him will I : out of these convertites                           │
+│          There is much matter to be heard and learn'd.                      │
+│                                                                             │
+│          [To DUKE SENIOR]                                                   │
+│                                                                             │
+│          You to your former honour I bequeath;                              │
+│          Your patience and your virtue well deserves it:                    │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          You to a love that your true faith doth merit:                     │
+│                                                                             │
+│          [To OLIVER]                                                        │
+│                                                                             │
+│          You to your land and love and great allies:                        │
+│                                                                             │
+│          [To SILVIUS]                                                       │
+│                                                                             │
+│          You to a long and well-deserved bed:                               │
+│                                                                             │
+│          [To TOUCHSTONE]                                                    │
+│          And you to wrangling; for thy loving voyage                        │
+│          Is but for two months victuall'd. So, to your pleasures:           │
+│          I am for other than for dancing measures.                          │
+│                                                                             │
+│  DUKE SENIOR     Stay, Jaques, stay.                                        │
+│                                                                             │
+│  JAQUES  To see no pastime I     what you would have                        │
+│          I'll stay to know at your abandon'd cave.                          │
+│                                                                             │
+│          [Exit]                                                             │
+│                                                                             │
+│  DUKE SENIOR     Proceed, proceed: we will begin these rites,               │
+│          As we do trust they'll end, in true delights.                      │
+│                                                                             │
+│          [A dance]                                                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 3f1f24f9-9e73-4b12-9de3-b25c1770d5aa
+│   Assigned to: Predictive Compression Intelligence
+│   Status: ✅ Completed
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_directory (1)
+│   ├── 🔧 Used search_files_content (1)
+│   └── 🔧 Used read_text_file (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: 3f1f24f9-9e73-4b12-9de3-b25c1770d5aa                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 0eb4300d-822c-4265-afd6-2cdc1e55afc7                                   │
+│  Tool Args:                                                                 │
+│  Final Output:                                                              │
+│                                                                             │
+│  PHEBE   So is the bargain.                                                 │
+│                                                                             │
+│  ROSALIND        You say, that you'll have Phebe, if she will?              │
+│                                                                             │
+│  SILVIUS Though to have her and death were both one thing.                  │
+│                                                                             │
+│  ROSALIND        I have promised to make all this matter even.              │
+│          Keep you your word, O duke, to give your daughter;                 │
+│          You yours, Orlando, to receive his daughter:                       │
+│          Keep your word, Phebe, that you'll marry me,                       │
+│          Or else refusing me, to wed this shepherd:                         │
+│          Keep your word, Silvius, that you'll marry her.                    │
+│          If she refuse me: and from hence I go,                             │
+│          To make these doubts all even.                                     │
+│                                                                             │
+│          [Exeunt ROSALIND and CELIA]                                        │
+│                                                                             │
+│  DUKE SENIOR     I do remember in this shepherd boy                         │
+│          Some lively touches of my daughter's favour.                       │
+│                                                                             │
+│  ORLANDO My lord, the first time that I ever saw him                        │
+│          Methought he was a brother to your daughter:                       │
+│          But, my good lord, this boy is forest-born,                        │
+│          And hath been tutor'd in the rudiments                             │
+│          Of many desperate studies by his uncle,                            │
+│          Whom he reports to be a great magician,                            │
+│          Obscured in the circle of this forest.                             │
+│                                                                             │
+│          [Enter TOUCHSTONE and AUDREY]                                      │
+│                                                                             │
+│  JAQUES  There is, sure, another flood toward, and these                    │
+│          couples are coming to the ark. Here comes a pair of                │
+│          very strange beasts, which in all tongues are called fools.        │
+│                                                                             │
+│  TOUCHSTONE      Salutation and greeting to you all!                        │
+│                                                                             │
+│  JAQUES  Good my lord, bid him welcome: this is the                         │
+│          motley-minded gentleman that I have so often met in                │
+│          the forest: he hath been a courtier, he swears.                    │
+│                                                                             │
+│  TOUCHSTONE      If any man doubt that, let him put me to my                │
+│          purgation. I have trod a measure; I have flattered                 │
+│          a lady; I have been politic with my friend, smooth                 │
+│          with mine enemy; I have undone three tailors; I have               │
+│          had four quarrels, and like to have fought one.                    │
+│                                                                             │
+│  JAQUES  And how was that ta'en up?                                         │
+│                                                                             │
+│  TOUCHSTONE      Faith, we met, and found the quarrel was upon the          │
+│          seventh cause.                                                     │
+│                                                                             │
+│  JAQUES  How seventh cause? Good my lord, like this fellow.                 │
+│                                                                             │
+│  DUKE SENIOR     I like him very well.                                      │
+│                                                                             │
+│  TOUCHSTONE      God 'ild you, sir; I desire you of the like. I             │
+│          press in here, sir, amongst the rest of the country                │
+│          copulatives, to swear and to forswear: according as                │
+│          marriage binds and blood breaks: a poor virgin,                    │
+│          sir, an ill-favoured thing, sir, but mine own; a poor              │
+│          humour of mine, sir, to take that that no man else                 │
+│          will: rich honesty dwells like a miser, sir, in a                  │
+│          poor house; as your pearl in your foul oyster.                     │
+│                                                                             │
+│  DUKE SENIOR     By my faith, he is very swift and sententious.             │
+│                                                                             │
+│  TOUCHSTONE      According to the fool's bolt, sir, and such dulcet         │
+│  diseases.                                                                  │
+│                                                                             │
+│  JAQUES  But, for the seventh cause; how did you find the                   │
+│          quarrel on the seventh cause?                                      │
+│                                                                             │
+│  TOUCHSTONE      Upon a lie seven times removed:--bear your body more       │
+│          seeming, Audrey:--as thus, sir. I did dislike the                  │
+│          cut of a certain courtier's beard: he sent me word,                │
+│          if I said his beard was not cut well, he was in the                │
+│          mind it was: this is called the Retort Courteous.                  │
+│          If I sent him word again 'it was not well cut,' he                 │
+│          would send me word, he cut it to please himself:                   │
+│          this is called the Quip Modest. If again 'it was                   │
+│          not well cut,' he disabled my judgment: this is                    │
+│          called the Reply Churlish. If again 'it was not                    │
+│          well cut,' he would answer, I spake not true: this                 │
+│          is called the Reproof Valiant. If again 'it was not                │
+│          well cut,' he would say I lied: this is called the                 │
+│          Counter-cheque Quarrelsome: and so to the Lie                      │
+│          Circumstantial and the Lie Direct.                                 │
+│                                                                             │
+│  JAQUES  And how oft did you say his beard was not well cut?                │
+│                                                                             │
+│  TOUCHSTONE      I durst go no further than the Lie Circumstantial,         │
+│          nor he durst not give me the Lie Direct; and so we                 │
+│          measured swords and parted.                                        │
+│                                                                             │
+│  JAQUES  Can you nominate in order now the degrees of the lie?              │
+│                                                                             │
+│  TOUCHSTONE      O sir, we quarrel in print, by the book; as you have       │
+│          books for good manners: I will name you the degrees.               │
+│          The first, the Retort Courteous; the second, the                   │
+│          Quip Modest; the third, the Reply Churlish; the                    │
+│          fourth, the Reproof Valiant; the fifth, the                        │
+│          Countercheque Quarrelsome; the sixth, the Lie with                 │
+│          Circumstance; the seventh, the Lie Direct. All                     │
+│          these you may avoid but the Lie Direct; and you may                │
+│          avoid that too, with an If. I knew when seven                      │
+│          justices could not take up a quarrel, but when the                 │
+│          parties were met themselves, one of them thought but               │
+│          of an If, as, 'If you said so, then I said so;' and                │
+│          they shook hands and swore brothers. Your If is the                │
+│          only peacemaker; much virtue in If.                                │
+│                                                                             │
+│  JAQUES  Is not this a rare fellow, my lord? he's as good at                │
+│          any thing and yet a fool.                                          │
+│                                                                             │
+│  DUKE SENIOR     He uses his folly like a stalking-horse and under          │
+│          the presentation of that he shoots his wit.                        │
+│                                                                             │
+│          [Enter HYMEN, ROSALIND, and CELIA]                                 │
+│                                                                             │
+│          [Still Music]                                                      │
+│                                                                             │
+│  HYMEN           Then is there mirth in heaven,                             │
+│          When earthly things made even                                      │
+│          Atone together.                                                    │
+│          Good duke, receive thy daughter                                    │
+│          Hymen from heaven brought her,                                     │
+│          Yea, brought her hither,                                           │
+│          That thou mightst join her hand with his                           │
+│          Whose heart within his bosom is.                                   │
+│                                                                             │
+│  ROSALIND        [To DUKE SENIOR]  To you I give myself, for I am yours.    │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          To you I give myself, for I am yours.                              │
+│                                                                             │
+│  DUKE SENIOR     If there be truth in sight, you are my daughter.           │
+│                                                                             │
+│  ORLANDO If there be truth in sight, you are my Rosalind.                   │
+│                                                                             │
+│  PHEBE   If sight and shape be true,                                        │
+│          Why then, my love adieu!                                           │
+│                                                                             │
+│  ROSALIND        I'll have no father, if you be not he:                     │
+│          I'll have no husband, if you be not he:                            │
+│          Nor ne'er wed woman, if you be not she.                            │
+│                                                                             │
+│  HYMEN           Peace, ho! I bar confusion:                                │
+│          'Tis I must make conclusion                                        │
+│          Of these most strange events:                                      │
+│          Here's eight that must take hands                                  │
+│          To join in Hymen's bands,                                          │
+│          If truth holds true contents.                                      │
+│          You and you no cross shall part:                                   │
+│          You and you are heart in heart                                     │
+│          You to his love must accord,                                       │
+│          Or have a woman to your lord:                                      │
+│          You and you are sure together,                                     │
+│          As the winter to foul weather.                                     │
+│          Whiles a wedlock-hymn we sing,                                     │
+│          Feed yourselves with questioning;                                  │
+│          That reason wonder may diminish,                                   │
+│          How thus we met, and these things finish.                          │
+│                                                                             │
+│          SONG.                                                              │
+│          Wedding is great Juno's crown:                                     │
+│          O blessed bond of board and bed!                                   │
+│          'Tis Hymen peoples every town;                                     │
+│          High wedlock then be honoured:                                     │
+│          Honour, high honour and renown,                                    │
+│          To Hymen, god of every town!                                       │
+│                                                                             │
+│  DUKE SENIOR     O my dear niece, welcome thou art to me!                   │
+│          Even daughter, welcome, in no less degree.                         │
+│                                                                             │
+│  PHEBE   I will not eat my word, now thou art mine;                         │
+│          Thy faith my fancy to thee doth combine.                           │
+│                                                                             │
+│          [Enter JAQUES DE BOYS]                                             │
+│                                                                             │
+│  JAQUES DE BOYS  Let me have audience for a word or two:                    │
+│          I am the second son of old Sir Rowland,                            │
+│          That bring these tidings to this fair assembly.                    │
+│          Duke Frederick, hearing how that every day                         │
+│          Men of great worth resorted to this forest,                        │
+│          Address'd a mighty power; which were on foot,                      │
+│          In his own conduct, purposely to take                              │
+│          His brother here and put him to the sword:                         │
+│          And to the skirts of this wild wood he came;                       │
+│          Where meeting with an old religious man,                           │
+│          After some question with him, was converted                        │
+│          Both from his enterprise and from the world,                       │
+│          His crown bequeathing to his banish'd brother,                     │
+│          And all their lands restored to them again                         │
+│          That were with him exiled. This to be true,                        │
+│          I do engage my life.                                               │
+│                                                                             │
+│  DUKE SENIOR     Welcome, young man;                                        │
+│          Thou offer'st fairly to thy brothers' wedding:                     │
+│          To one his lands withheld, and to the other                        │
+│          A land itself at large, a potent dukedom.                          │
+│          First, in this forest, let us do those ends                        │
+│          That here were well begun and well begot:                          │
+│          And after, every of this happy number                              │
+│          That have endured shrewd days and nights with us                   │
+│          Shall share the good of our returned fortune,                      │
+│          According to the measure of their states.                          │
+│          Meantime, forget this new-fall'n dignity                           │
+│          And fall into our rustic revelry.                                  │
+│          Play, music! And you, brides and bridegrooms all,                  │
+│          With measure heap'd in joy, to the measures fall.                  │
+│                                                                             │
+│  JAQUES  Sir, by your patience. If I heard you rightly,                     │
+│          The duke hath put on a religious life                              │
+│          And thrown into neglect the pompous court?                         │
+│                                                                             │
+│  JAQUES DE BOYS  He hath.                                                   │
+│                                                                             │
+│  JAQUES  To him will I : out of these convertites                           │
+│          There is much matter to be heard and learn'd.                      │
+│                                                                             │
+│          [To DUKE SENIOR]                                                   │
+│                                                                             │
+│          You to your former honour I bequeath;                              │
+│          Your patience and your virtue well deserves it:                    │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          You to a love that your true faith doth merit:                     │
+│                                                                             │
+│          [To OLIVER]                                                        │
+│                                                                             │
+│          You to your land and love and great allies:                        │
+│                                                                             │
+│          [To SILVIUS]                                                       │
+│                                                                             │
+│          You to a long and well-deserved bed:                               │
+│                                                                             │
+│          [To TOUCHSTONE]                                                    │
+│          And you to wrangling; for thy loving voyage                        │
+│          Is but for two months victuall'd. So, to your pleasures:           │
+│          I am for other than for dancing measures.                          │
+│                                                                             │
+│  DUKE SENIOR     Stay, Jaques, stay.                                        │
+│                                                                             │
+│  JAQUES  To see no pastime I     what you would have                        │
+│          I'll stay to know at your abandon'd cave.                          │
+│                                                                             │
+│          [Exit]                                                             │
+│                                                                             │
+│  DUKE SENIOR     Proceed, proceed: we will begin these rites,               │
+│          As we do trust they'll end, in true delights.                      │
+│                                                                             │
+│          [A dance]                                                          │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "\n\nPHEBE\tSo is the bargain.\n\nROSALIND\tYou say, that you'll have Phebe, if she will?\n\nSILVIUS\tThough to have her and death were both one thing.\n\nROSALIND\tI have promised to make all this matter even.\n\tKeep you your word, O duke, to give your daughter;\n\tYou yours, Orlando, to receive his daughter:\n\tKeep your word, Phebe, that you'll marry me,\n\tOr else refusing me, to wed this shepherd:\n\tKeep your word, Silvius, that you'll marry her.\n\tIf she refuse me: and from hence I go,\n\tTo make these doubts all even.\n\n\t[Exeunt ROSALIND and CELIA]\n\nDUKE SENIOR\tI do remember in this shepherd boy\n\tSome lively touches of my daughter's favour.\n\nORLANDO\tMy lord, the first time that I ever saw him\n\tMethought he was a brother to your daughter:\n\tBut, my good lord, this boy is forest-born,\n\tAnd hath been tutor'd in the rudiments\n\tOf many desperate studies by his uncle,\n\tWhom he reports to be a great magician,\n\tObscured in the circle of this forest.\n\n\t[Enter TOUCHSTONE and AUDREY]\n\nJAQUES\tThere is, sure, another flood toward, and these\n\tcouples are coming to the ark. Here comes a pair of\n\tvery strange beasts, which in all tongues are called fools.\n\nTOUCHSTONE\tSalutation and greeting to you all!\n\nJAQUES\tGood my lord, bid him welcome: this is the\n\tmotley-minded gentleman that I have so often met in\n\tthe forest: he hath been a courtier, he swears.\n\nTOUCHSTONE\tIf any man doubt that, let him put me to my\n\tpurgation. I have trod a measure; I have flattered\n\ta lady; I have been politic with my friend, smooth\n\twith mine enemy; I have undone three tailors; I have\n\thad four quarrels, and like to have fought one.\n\nJAQUES\tAnd how was that ta'en up?\n\nTOUCHSTONE\tFaith, we met, and found the quarrel was upon the\n\tseventh cause.\n\nJAQUES\tHow seventh cause? Good my lord, like this fellow.\n\nDUKE SENIOR\tI like him very well.\n\nTOUCHSTONE\tGod 'ild you, sir; I desire you of the like. I\n\tpress in here, sir, amongst the rest of the country\n\tcopulatives, to swear and to forswear: according as\n\tmarriage binds and blood breaks: a poor virgin,\n\tsir, an ill-favoured thing, sir, but mine own; a poor\n\thumour of mine, sir, to take that that no man else\n\twill: rich honesty dwells like a miser, sir, in a\n\tpoor house; as your pearl in your foul oyster.\n\nDUKE SENIOR\tBy my faith, he is very swift and sententious.\n\nTOUCHSTONE\tAccording to the fool's bolt, sir, and such dulcet diseases.\n\nJAQUES\tBut, for the seventh cause; how did you find the\n\tquarrel on the seventh cause?\n\nTOUCHSTONE\tUpon a lie seven times removed:--bear your body more\n\tseeming, Audrey:--as thus, sir. I did dislike the\n\tcut of a certain courtier's beard: he sent me word,\n\tif I said his beard was not cut well, he was in the\n\tmind it was: this is called the Retort Courteous.\n\tIf I sent him word again 'it was not well cut,' he\n\twould send me word, he cut it to please himself:\n\tthis is called the Quip Modest. If again 'it was\n\tnot well cut,' he disabled my judgment: this is\n\tcalled the Reply Churlish. If again 'it was not\n\twell cut,' he would answer, I spake not true: this\n\tis called the Reproof Valiant. If again 'it was not\n\twell cut,' he would say I lied: this is called the\n\tCounter-cheque Quarrelsome: and so to the Lie\n\tCircumstantial and the Lie Direct.\n\nJAQUES\tAnd how oft did you say his beard was not well cut?\n\nTOUCHSTONE\tI durst go no further than the Lie Circumstantial,\n\tnor he durst not give me the Lie Direct; and so we\n\tmeasured swords and parted.\n\nJAQUES\tCan you nominate in order now the degrees of the lie?\n\nTOUCHSTONE\tO sir, we quarrel in print, by the book; as you have\n\tbooks for good manners: I will name you the degrees.\n\tThe first, the Retort Courteous; the second, the\n\tQuip Modest; the third, the Reply Churlish; the\n\tfourth, the Reproof Valiant; the fifth, the\n\tCountercheque Quarrelsome; the sixth, the Lie with\n\tCircumstance; the seventh, the Lie Direct. All\n\tthese you may avoid but the Lie Direct; and you may\n\tavoid that too, with an If. I knew when seven\n\tjustices could not take up a quarrel, but when the\n\tparties were met themselves, one of them thought but\n\tof an If, as, 'If you said so, then I said so;' and\n\tthey shook hands and swore brothers. Your If is the\n\tonly peacemaker; much virtue in If.\n\nJAQUES\tIs not this a rare fellow, my lord? he's as good at\n\tany thing and yet a fool.\n\nDUKE SENIOR\tHe uses his folly like a stalking-horse and under\n\tthe presentation of that he shoots his wit.\n\n\t[Enter HYMEN, ROSALIND, and CELIA]\n\n\t[Still Music]\n\nHYMEN\t        Then is there mirth in heaven,\n\tWhen earthly things made even\n\tAtone together.\n\tGood duke, receive thy daughter\n\tHymen from heaven brought her,\n\tYea, brought her hither,\n\tThat thou mightst join her hand with his\n\tWhose heart within his bosom is.\n\nROSALIND\t[To DUKE SENIOR]  To you I give myself, for I am yours.\n\n\t[To ORLANDO]\n\n\tTo you I give myself, for I am yours.\n\nDUKE SENIOR\tIf there be truth in sight, you are my daughter.\n\nORLANDO\tIf there be truth in sight, you are my Rosalind.\n\nPHEBE\tIf sight and shape be true,\n\tWhy then, my love adieu!\n\nROSALIND\tI'll have no father, if you be not he:\n\tI'll have no husband, if you be not he:\n\tNor ne'er wed woman, if you be not she.\n\nHYMEN\t        Peace, ho! I bar confusion:\n\t'Tis I must make conclusion\n\tOf these most strange events:\n\tHere's eight that must take hands\n\tTo join in Hymen's bands,\n\tIf truth holds true contents.\n\tYou and you no cross shall part:\n\tYou and you are heart in heart\n\tYou to his love must accord,\n\tOr have a woman to your lord:\n\tYou and you are sure together,\n\tAs the winter to foul weather.\n\tWhiles a wedlock-hymn we sing,\n\tFeed yourselves with questioning;\n\tThat reason wonder may diminish,\n\tHow thus we met, and these things finish.\n\t\n\tSONG.\n\tWedding is great Juno's crown:\n\tO blessed bond of board and bed!\n\t'Tis Hymen peoples every town;\n\tHigh wedlock then be honoured:\n\tHonour, high honour and renown,\n\tTo Hymen, god of every town!\n\nDUKE SENIOR\tO my dear niece, welcome thou art to me!\n\tEven daughter, welcome, in no less degree.\n\nPHEBE\tI will not eat my word, now thou art mine;\n\tThy faith my fancy to thee doth combine.\n\n\t[Enter JAQUES DE BOYS]\n\nJAQUES DE BOYS\tLet me have audience for a word or two:\n\tI am the second son of old Sir Rowland,\n\tThat bring these tidings to this fair assembly.\n\tDuke Frederick, hearing how that every day\n\tMen of great worth resorted to this forest,\n\tAddress'd a mighty power; which were on foot,\n\tIn his own conduct, purposely to take\n\tHis brother here and put him to the sword:\n\tAnd to the skirts of this wild wood he came;\n\tWhere meeting with an old religious man,\n\tAfter some question with him, was converted\n\tBoth from his enterprise and from the world,\n\tHis crown bequeathing to his banish'd brother,\n\tAnd all their lands restored to them again\n\tThat were with him exiled. This to be true,\n\tI do engage my life.\n\nDUKE SENIOR\tWelcome, young man;\n\tThou offer'st fairly to thy brothers' wedding:\n\tTo one his lands withheld, and to the other\n\tA land itself at large, a potent dukedom.\n\tFirst, in this forest, let us do those ends\n\tThat here were well begun and well begot:\n\tAnd after, every of this happy number\n\tThat have endured shrewd days and nights with us\n\tShall share the good of our returned fortune,\n\tAccording to the measure of their states.\n\tMeantime, forget this new-fall'n dignity\n\tAnd fall into our rustic revelry.\n\tPlay, music! And you, brides and bridegrooms all,\n\tWith measure heap'd in joy, to the measures fall.\n\nJAQUES\tSir, by your patience. If I heard you rightly,\n\tThe duke hath put on a religious life\n\tAnd thrown into neglect the pompous court?\n\nJAQUES DE BOYS\tHe hath.\n\nJAQUES\tTo him will I : out of these convertites\n\tThere is much matter to be heard and learn'd.\n\n\t[To DUKE SENIOR]\n\n\tYou to your former honour I bequeath;\n\tYour patience and your virtue well deserves it:\n\n\t[To ORLANDO]\n\n\tYou to a love that your true faith doth merit:\n\n\t[To OLIVER]\n\n\tYou to your land and love and great allies:\n\n\t[To SILVIUS]\n\n\tYou to a long and well-deserved bed:\n\n\t[To TOUCHSTONE]\n\tAnd you to wrangling; for thy loving voyage\n\tIs but for two months victuall'd. So, to your pleasures:\n\tI am for other than for dancing measures.\n\nDUKE SENIOR\tStay, Jaques, stay.\n\nJAQUES\tTo see no pastime I\twhat you would have\n\tI'll stay to know at your abandon'd cave.\n\n\t[Exit]\n\nDUKE SENIOR\tProceed, proceed: we will begin these rites,\n\tAs we do trust they'll end, in true delights.\n\n\t[A dance]", "duration_ms": 242150}
+
+
+PHEBE	So is the bargain.
+
+ROSALIND	You say, that you'll have Phebe, if she will?
+
+SILVIUS	Though to have her and death were both one thing.
+
+ROSALIND	I have promised to make all this matter even.
+	Keep you your word, O duke, to give your daughter;
+	You yours, Orlando, to receive his daughter:
+	Keep your word, Phebe, that you'll marry me,
+	Or else refusing me, to wed this shepherd:
+	Keep your word, Silvius, that you'll marry her.
+	If she refuse me: and from hence I go,
+	To make these doubts all even.
+
+	[Exeunt ROSALIND and CELIA]
+
+DUKE SENIOR	I do remember in this shepherd boy
+	Some lively touches of my daughter's favour.
+
+ORLANDO	My lord, the first time that I ever saw him
+	Methought he was a brother to your daughter:
+	But, my good lord, this boy is forest-born,
+	And hath been tutor'd in the rudiments
+	Of many desperate studies by his uncle,
+	Whom he reports to be a great magician,
+	Obscured in the circle of this forest.
+
+	[Enter TOUCHSTONE and AUDREY]
+
+JAQUES	There is, sure, another flood toward, and these
+	couples are coming to the ark. Here comes a pair of
+	very strange beasts, which in all tongues are called fools.
+
+TOUCHSTONE	Salutation and greeting to you all!
+
+JAQUES	Good my lord, bid him welcome: this is the
+	motley-minded gentleman that I have so often met in
+	the forest: he hath been a courtier, he swears.
+
+TOUCHSTONE	If any man doubt that, let him put me to my
+	purgation. I have trod a measure; I have flattered
+	a lady; I have been politic with my friend, smooth
+	with mine enemy; I have undone three tailors; I have
+	had four quarrels, and like to have fought one.
+
+JAQUES	And how was that ta'en up?
+
+TOUCHSTONE	Faith, we met, and found the quarrel was upon the
+	seventh cause.
+
+JAQUES	How seventh cause? Good my lord, like this fellow.
+
+DUKE SENIOR	I like him very well.
+
+TOUCHSTONE	God 'ild you, sir; I desire you of the like. I
+	press in here, sir, amongst the rest of the country
+	copulatives, to swear and to forswear: according as
+	marriage binds and blood breaks: a poor virgin,
+	sir, an ill-favoured thing, sir, but mine own; a poor
+	humour of mine, sir, to take that that no man else
+	will: rich honesty dwells like a miser, sir, in a
+	poor house; as your pearl in your foul oyster.
+
+DUKE SENIOR	By my faith, he is very swift and sententious.
+
+TOUCHSTONE	According to the fool's bolt, sir, and such dulcet diseases.
+
+JAQUES	But, for the seventh cause; how did you find the
+	quarrel on the seventh cause?
+
+TOUCHSTONE	Upon a lie seven times removed:--bear your body more
+	seeming, Audrey:--as thus, sir. I did dislike the
+	cut of a certain courtier's beard: he sent me word,
+	if I said his beard was not cut well, he was in the
+	mind it was: this is called the Retort Courteous.
+	If I sent him word again 'it was not well cut,' he
+	would send me word, he cut it to please himself:
+	this is called the Quip Modest. If again 'it was
+	not well cut,' he disabled my judgment: this is
+	called the Reply Churlish. If again 'it was not
+	well cut,' he would answer, I spake not true: this
+	is called the Reproof Valiant. If again 'it was not
+	well cut,' he would say I lied: this is called the
+	Counter-cheque Quarrelsome: and so to the Lie
+	Circumstantial and the Lie Direct.
+
+JAQUES	And how oft did you say his beard was not well cut?
+
+TOUCHSTONE	I durst go no further than the Lie Circumstantial,
+	nor he durst not give me the Lie Direct; and so we
+	measured swords and parted.
+
+JAQUES	Can you nominate in order now the degrees of the lie?
+
+TOUCHSTONE	O sir, we quarrel in print, by the book; as you have
+	books for good manners: I will name you the degrees.
+	The first, the Retort Courteous; the second, the
+	Quip Modest; the third, the Reply Churlish; the
+	fourth, the Reproof Valiant; the fifth, the
+	Countercheque Quarrelsome; the sixth, the Lie with
+	Circumstance; the seventh, the Lie Direct. All
+	these you may avoid but the Lie Direct; and you may
+	avoid that too, with an If. I knew when seven
+	justices could not take up a quarrel, but when the
+	parties were met themselves, one of them thought but
+	of an If, as, 'If you said so, then I said so;' and
+	they shook hands and swore brothers. Your If is the
+	only peacemaker; much virtue in If.
+
+JAQUES	Is not this a rare fellow, my lord? he's as good at
+	any thing and yet a fool.
+
+DUKE SENIOR	He uses his folly like a stalking-horse and under
+	the presentation of that he shoots his wit.
+
+	[Enter HYMEN, ROSALIND, and CELIA]
+
+	[Still Music]
+
+HYMEN	        Then is there mirth in heaven,
+	When earthly things made even
+	Atone together.
+	Good duke, receive thy daughter
+	Hymen from heaven brought her,
+	Yea, brought her hither,
+	That thou mightst join her hand with his
+	Whose heart within his bosom is.
+
+ROSALIND	[To DUKE SENIOR]  To you I give myself, for I am yours.
+
+	[To ORLANDO]
+
+	To you I give myself, for I am yours.
+
+DUKE SENIOR	If there be truth in sight, you are my daughter.
+
+ORLANDO	If there be truth in sight, you are my Rosalind.
+
+PHEBE	If sight and shape be true,
+	Why then, my love adieu!
+
+ROSALIND	I'll have no father, if you be not he:
+	I'll have no husband, if you be not he:
+	Nor ne'er wed woman, if you be not she.
+
+HYMEN	        Peace, ho! I bar confusion:
+	'Tis I must make conclusion
+	Of these most strange events:
+	Here's eight that must take hands
+	To join in Hymen's bands,
+	If truth holds true contents.
+	You and you no cross shall part:
+	You and you are heart in heart
+	You to his love must accord,
+	Or have a woman to your lord:
+	You and you are sure together,
+	As the winter to foul weather.
+	Whiles a wedlock-hymn we sing,
+	Feed yourselves with questioning;
+	That reason wonder may diminish,
+	How thus we met, and these things finish.
+	
+	SONG.
+	Wedding is great Juno's crown:
+	O blessed bond of board and bed!
+	'Tis Hymen peoples every town;
+	High wedlock then be honoured:
+	Honour, high honour and renown,
+	To Hymen, god of every town!
+
+DUKE SENIOR	O my dear niece, welcome thou art to me!
+	Even daughter, welcome, in no less degree.
+
+PHEBE	I will not eat my word, now thou art mine;
+	Thy faith my fancy to thee doth combine.
+
+	[Enter JAQUES DE BOYS]
+
+JAQUES DE BOYS	Let me have audience for a word or two:
+	I am the second son of old Sir Rowland,
+	That bring these tidings to this fair assembly.
+	Duke Frederick, hearing how that every day
+	Men of great worth resorted to this forest,
+	Address'd a mighty power; which were on foot,
+	In his own conduct, purposely to take
+	His brother here and put him to the sword:
+	And to the skirts of this wild wood he came;
+	Where meeting with an old religious man,
+	After some question with him, was converted
+	Both from his enterprise and from the world,
+	His crown bequeathing to his banish'd brother,
+	And all their lands restored to them again
+	That were with him exiled. This to be true,
+	I do engage my life.
+
+DUKE SENIOR	Welcome, young man;
+	Thou offer'st fairly to thy brothers' wedding:
+	To one his lands withheld, and to the other
+	A land itself at large, a potent dukedom.
+	First, in this forest, let us do those ends
+	That here were well begun and well begot:
+	And after, every of this happy number
+	That have endured shrewd days and nights with us
+	Shall share the good of our returned fortune,
+	According to the measure of their states.
+	Meantime, forget this new-fall'n dignity
+	And fall into our rustic revelry.
+	Play, music! And you, brides and bridegrooms all,
+	With measure heap'd in joy, to the measures fall.
+
+JAQUES	Sir, by your patience. If I heard you rightly,
+	The duke hath put on a religious life
+	And thrown into neglect the pompous court?
+
+JAQUES DE BOYS	He hath.
+
+JAQUES	To him will I : out of these convertites
+	There is much matter to be heard and learn'd.
+
+	[To DUKE SENIOR]
+
+	You to your former honour I bequeath;
+	Your patience and your virtue well deserves it:
+
+	[To ORLANDO]
+
+	You to a love that your true faith doth merit:
+
+	[To OLIVER]
+
+	You to your land and love and great allies:
+
+	[To SILVIUS]
+
+	You to a long and well-deserved bed:
+
+	[To TOUCHSTONE]
+	And you to wrangling; for thy loving voyage
+	Is but for two months victuall'd. So, to your pleasures:
+	I am for other than for dancing measures.
+
+DUKE SENIOR	Stay, Jaques, stay.
+
+JAQUES	To see no pastime I	what you would have
+	I'll stay to know at your abandon'd cave.
+
+	[Exit]
+
+DUKE SENIOR	Proceed, proceed: we will begin these rites,
+	As we do trust they'll end, in true delights.
+
+	[A dance]
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()

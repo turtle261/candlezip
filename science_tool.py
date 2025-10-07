@@ -282,7 +282,7 @@ class BenchmarkConfig:
     context: int = 512
     reprime_interval: int = 512
     scan_lookahead: int = 512
-    scan_max_steps: int = 12
+    scan_max_steps: int = 15
     scan_agent_timeout: int = 300
     
     # Output configuration
@@ -425,7 +425,6 @@ class CandleZipRunner:
         # Build command
         cmd = [
             str(self.binary_path),
-            "self-test",
             "--backend", config.backend,
             "--agent",
             "--scan",
@@ -433,10 +432,11 @@ class CandleZipRunner:
             "--context", str(config.context),
             "--reprime-interval", str(config.reprime_interval),
             "--scan-agent-script", str(agent.script_path),
-            "--scan_max_steps", str(config.scan_max_steps),
+            "--scan-max-steps", str(config.scan_max_steps),
             "--scan-agent-timeout", str(config.scan_agent_timeout),
             "--scan-mcp-config", str(toolset.mcp_config_path),
-            "--scan_output_dir", str(output_dir),
+            "--scan-output-dir", str(output_dir),
+            "self-test",
             str(input_file)
         ]
         
@@ -446,7 +446,6 @@ class CandleZipRunner:
                 env=env,
                 capture_output=True,
                 text=True,
-                timeout=3600  # 1 hour max
             )
             
             if result.returncode == 0:

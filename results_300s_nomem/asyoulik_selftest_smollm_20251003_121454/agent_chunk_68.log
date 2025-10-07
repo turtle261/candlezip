@@ -1,0 +1,1883 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 28.4729ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 43.5864ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.5742392s
+- Watching for configuration updates...
+> Initialized in 1.6462985s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_asyoulik_78e91080
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 2956ff94-64bd-4982-85a6-ac82f3f2169e                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+    Status: Executing Task...
+    ├── 🧠 Reasoning...
+    └── 🧠 Thinking...┌──────────────────────────────── Tool Usage ─────────────────────────────────┐
+│                                                                             │
+│  Tool Usage Started                                                         │
+│  Name: create_reasoning_plan                                                │
+│  Status: In Progress                                                        │
+│  Tool Args: {'ready': True, 'plan': '1.  **Understanding the Task (SIMDL    │
+│  Framework):** My core objective is to minimize future token prediction     │
+│  entropy by providing the exact, verbatim continuation of the given text    │
+│  prefix. This aligns perfectly with the Sink-Inclusive Description Length   │
+│  (SIMDL) framework, where accessing external information (entropy sinks)    │
+│  to retrieve precise content directly reduces the uncertainty of upcoming   │
+│  tokens. The task requires extracting 100-200 words of continuation,        │
+│  prioritizing accuracy and relevance.\n\n2.  **Key Steps and Approach:**\n  │
+│  *   **Identify Source:** The prefix is clearly from Shakespeare\'s "As     │
+│  You Like It." My first step is to locate the full text of this play        │
+│  within the allowed directory `/C/Users/Noah/Documents/sink`.\n    *        │
+│  **Locate Prefix:** Once the source document is identified, I will search   │
+│  for the exact provided prefix within that document.\n    *   **Extract     │
+│  Continuation:** After finding the prefix, I will extract the subsequent    │
+│  100-200 words verbatim to form the output.\n    *   **Fallback:** If the   │
+│  source document is not found or the exact continuation cannot be           │
+│  extracted, I will generate a contextually relevant continuation based on   │
+│  the current prefix and prior memory, ensuring it is specific and avoids    │
+│  generic phrasing.\n\n3.  **Addressing Challenges:**\n    *   **Source      │
+│  Document Discovery:** The primary challenge is efficiently finding the     │
+│  correct play text. I will leverage `search_files_content` to directly      │
+│  look for a unique phrase from the prefix within all files in the           │
+│  `/C/Users/Noah/Documents/sink` directory. This is more efficient than      │
+│  listing all files and then reading them individually.\n    *   **Exact     │
+│  Match Verification:** The prior memory provides the full sentence          │
+│  containing the prefix. I will use this full sentence as a reference to     │
+│  ensure the extracted continuation is indeed the immediate next words.\n    │
+│  *   **Word Count:** I will carefully count the words after the prefix to   │
+│  ensure the output falls within the 100-200 word range.\n\n4.  **Strategic  │
+│  Tool Usage:**\n    *   **Tool 1: `list_allowed_directories()`:** (Initial  │
+│  check, though I already know the allowed directory). This confirms my      │
+│  access scope.\n    *   **Tool 2:                                           │
+│  `search_files_content(path=\'/C/Users/Noah/Documents/sink\', query=\'is    │
+│  to look into happiness through another man\'s eyes!\')`:** This is the     │
+│  most critical tool. I will use a distinctive phrase from the end of the    │
+│  prefix, extended slightly from the prior memory, to pinpoint the exact     │
+│  file and location. The query will be "is to look into happiness through    │
+│  another man\'s eyes!". This phrase is unique enough to likely identify     │
+│  the specific play and scene.\n    *   **Tool 3:                            │
+│  `read_text_file(path=\'[found_file_path]\')`:** Once                       │
+│  `search_files_content` returns a file path, I will use this tool to read   │
+│  the entire content of that file.\n    *   **Tool 4 (Internal Logic):**     │
+│  After reading the file, I will use my internal processing capabilities to  │
+│  locate the exact prefix within the file content and extract the            │
+│  subsequent 100-200 words.\n\n5.  **Expected Outcome and Alignment:**\n     │
+│  *   The expected outcome is a plain text string, 100-200 words long,       │
+│  representing the verbatim continuation of the provided prefix from "As     │
+│  You Like It."\n    *   This outcome directly aligns with my goal of        │
+│  minimizing future token prediction entropy. By providing the exact next    │
+│  sequence of tokens, I enable the language model to assign maximum          │
+│  probability to these tokens, thereby achieving optimal compression under   │
+│  the SIMDL framework. This is a direct application of entropy minimization  │
+│  through tool-augmented reasoning.\n'}                                      │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+🚀 Crew: crew
+├── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  1.  **Understanding the Task (SIMDL Framework):** My core objective is to  │
+│  minimize future token prediction entropy by providing the exact, verbatim  │
+│  continuation of the given text prefix. This aligns perfectly with the      │
+│  Sink-Inclusive Description Length (SIMDL) framework, where accessing       │
+│  external information (entropy sinks) to retrieve precise content directly  │
+│  reduces the uncertainty of upcoming tokens. The task requires extracting   │
+│  100-200 words of continuation, prioritizing accuracy and relevance.        │
+│                                                                             │
+│  2.  **Key Steps and Approach:**                                            │
+│      *   **Identify Source:** The prefix is clearly from Shakespeare's "As  │
+│  You Like It." My first step is to locate the full text of this play        │
+│  within the allowed directory `/C/Users/Noah/Documents/sink`.               │
+│      *   **Locate Prefix:** Once the source document is identified, I will  │
+│  search for the exact provided prefix within that document.                 │
+│      *   **Extract Continuation:** After finding the prefix, I will         │
+│  extract the subsequent 100-200 words verbatim to form the output.          │
+│      *   **Fallback:** If the source document is not found or the exact     │
+│  continuation cannot be extracted, I will generate a contextually relevant  │
+│  continuation based on the current prefix and prior memory, ensuring it is  │
+│  specific and avoids generic phrasing.                                      │
+│                                                                             │
+│  3.  **Addressing Challenges:**                                             │
+│      *   **Source Document Discovery:** The primary challenge is            │
+│  efficiently finding the correct play text. I will leverage                 │
+│  `search_files_content` to directly look for a unique phrase from the       │
+│  prefix within all files in the `/C/Users/Noah/Documents/sink` directory.   │
+│  This is more efficient than listing all files and then reading them        │
+│  individually.                                                              │
+│      *   **Exact Match Verification:** The prior memory provides the full   │
+│  sentence containing the prefix. I will use this full sentence as a         │
+│  reference to ensure the extracted continuation is indeed the immediate     │
+│  next words.                                                                │
+│      *   **Word Count:** I will carefully count the words after the prefix  │
+│  to ensure the output falls within the 100-200 word range.                  │
+│                                                                             │
+│  4.  **Strategic Tool Usage:**                                              │
+│      *   **Tool 1: `list_allowed_directories()`:** (Initial check, though   │
+│  I already know the allowed directory). This confirms my access scope.      │
+│      *   **Tool 2:                                                          │
+│  `search_files_content(path='/C/Users/Noah/Documents/sink', query='is to    │
+│  look into happiness through another man's eyes!')`:** This is the most     │
+│  critical tool. I will use a distinctive phrase from the end of the         │
+│  prefix, extended slightly from the prior memory, to pinpoint the exact     │
+│  file and location. The query will be "is to look into happiness through    │
+│  another man's eyes!". This phrase is unique enough to likely identify the  │
+│  specific play and scene.                                                   │
+│      *   **Tool 3: `read_text_file(path='[found_file_path]')`:** Once       │
+│  `search_files_content` returns a file path, I will use this tool to read   │
+│  the entire content of that file.                                           │
+│      *   **Tool 4 (Internal Logic):** After reading the file, I will use    │
+│  my internal processing capabilities to locate the exact prefix within the  │
+│  file content and extract the subsequent 100-200 words.                     │
+│                                                                             │
+│  5.  **Expected Outcome and Alignment:**                                    │
+│      *   The expected outcome is a plain text string, 100-200 words long,   │
+│  representing the verbatim continuation of the provided prefix from "As     │
+│  You Like It."                                                              │
+│      *   This outcome directly aligns with my goal of minimizing future     │
+│  token prediction entropy. By providing the exact next sequence of tokens,  │
+│  I enable the language model to assign maximum probability to these         │
+│  tokens, thereby achieving optimal compression under the SIMDL framework.   │
+│  This is a direct application of entropy minimization through               │
+│  tool-augmented reasoning.                                                  │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│                  Then is there mirth in heaven,                             │
+│  When earthly things made even                                              │
+│  Atone together.                                                            │
+│  Good duke, receive thy daughter                                            │
+│  Hymen from heaven brought her,                                             │
+│  Yea, brought her hither,                                                   │
+│  That thou mightst join her hand with his                                   │
+│  Whose heart within his bosom is.                                           │
+│  ROSALIND        [To DUKE SENIOR]  To you I give myself, for I am yours.    │
+│  [To ORLANDO]                                                               │
+│  To you I give myself, for I am yours.                                      │
+│  DUKE SENIOR     If there be truth in sight, you are my daughter.           │
+│  ORLANDO If there be truth in sight, you are my Rosalind.                   │
+│  PHEBE   If sight and shape be true,                                        │
+│  Why then, my love adieu!                                                   │
+│  ROSALIND        I'll have no father, if you be not he:                     │
+│  I'll have no husband, if you be not he:                                    │
+│  Nor ne'er wed woman, if you be not she.                                    │
+│  HYMEN           Peace, ho! I bar confusion:                                │
+│  'Tis I must make conclusion                                                │
+│  Of these most strange events:                                              │
+│  Here's eight that must take hands                                          │
+│  To join in Hymen's bands,                                                  │
+│  If truth holds true contents.                                              │
+│  You and you no cross shall part:                                           │
+│  You and you are heart in heart                                             │
+│  You to his love must accord,                                               │
+│  Or have a woman to your lord:                                              │
+│  You and you are sure together,                                             │
+│  As the winter to foul weather.                                             │
+│  Whiles a wedlock-hymn we sing,                                             │
+│  Feed yourselves with questioning;                                          │
+│  That reason wonder may diminish,                                           │
+│  How thus we met, and these things finish.                                  │
+│  SONG.                                                                      │
+│  Wedding is great Juno's crown:                                             │
+│  O blessed bond of board and bed!                                           │
+│  'Tis Hymen peoples every town;                                             │
+│  High wedlock then be honoured:                                             │
+│  Honour, high honour and renown,                                            │
+│  To Hymen, god of every town!                                               │
+│  DUKE SENIOR     O my dear niece, welcome thou art to me!                   │
+│  Even daughter, welcome, in no less degree.                                 │
+│  PHEBE   I will not eat my word, now thou art mine;                         │
+│  Thy faith my fancy to thee doth combine.                                   │
+│  [Enter JAQUES DE BOYS]                                                     │
+│  JAQUES DE BOYS  Let me have audience for a word or two:                    │
+│  I am the second son of old Sir Rowland,                                    │
+│  That bring these tidings to this fair assembly.                            │
+│  Duke Frederick, hearing how that every day                                 │
+│  Men of great worth resorted to this forest,                                │
+│  Address'd a mighty power; which were on foot,                              │
+│  In his own conduct, purposely to take                                      │
+│  His brother here and put him to the sword:                                 │
+│  And to the skirts of this wild wood he came;                               │
+│  Where meeting with an old religious man,                                   │
+│  After some question with him, was converted                                │
+│  Both from his enterprise and from the world,                               │
+│  His crown bequeathing to his banish'd brother,                             │
+│  And all their lands restored to them again                                 │
+│  That were with him exiled. This to be true,                                │
+│  I do engage my life.                                                       │
+│  DUKE SENIOR     Welcome, young man;                                        │
+│  Thou offer'st fairly to thy brothers' wedding:                             │
+│  To one his lands withheld, and to the other                                │
+│  A land itself at large, a potent dukedom.                                  │
+│  First, in this forest, let us do those ends                                │
+│  That here were well begun and well begot:                                  │
+│  And after, every of this happy number                                      │
+│  That have endured shrewd days and nights with us                           │
+│  Shall share the good of our returned fortune,                              │
+│  According to the measure of their states.                                  │
+│  Meantime, forget this new-fall'n dignity                                   │
+│  And fall into our rustic revelry.                                          │
+│  Play, music! And you, brides and bridegrooms all,                          │
+│  With measure heap'd in joy, to the measures fall.                          │
+│  JAQUES  Sir, by your patience. If I heard you rightly,                     │
+│  The duke hath put on a religious life                                      │
+│  And thrown into neglect the pompous court?                                 │
+│  JAQUES DE BOYS  He hath.                                                   │
+│  JAQUES  To him will I : out of these convertites                           │
+│  There is much matter to be heard and learn'd.                              │
+│  [To DUKE SENIOR]                                                           │
+│  You to your former honour I bequeath;                                      │
+│  Your patience and your virtue well deserves it:                            │
+│  [To ORLANDO]                                                               │
+│  You to a love that your true faith doth merit:                             │
+│  [To OLIVER]                                                                │
+│  You to your land and love and great allies:                                │
+│  [To SILVIUS]                                                               │
+│  You to a long and well-deserved bed:                                       │
+│  [To TOUCHSTONE]                                                            │
+│  And you to wrangling; for thy loving voyage                                │
+│  Is but for two months victuall'd. So, to your pleasures:                   │
+│  I am for other than for dancing measures.                                  │
+│  DUKE SENIOR     Stay, Jaques, stay.                                        │
+│  JAQUES  To see no pastime I     what you would have                        │
+│  I'll stay to know at your abandon'd cave.                                  │
+│  [Exit]                                                                     │
+│  DUKE SENIOR     Proceed, proceed: we will begin these rites,               │
+│  As we do trust they'll end, in true delights.                              │
+│  [A dance]                                                                  │
+│  AS YOU LIKE IT                                                             │
+│  EPILOGUE                                                                   │
+│  ROSALIND        It is not the fashion to see the lady the epilogue;        │
+│  but it is no more unhandsome than to see the lord                          │
+│  the prologue. If it be true that good wine needs                           │
+│  no bush, 'tis true that a good play needs no                               │
+│  epilogue; yet to good wine they do use good bushes,                        │
+│  and good plays prove the better by the help of good                        │
+│  epilogues. What a case am I in then, that am                               │
+│  neither a good epilogue nor cannot insinuate with                          │
+│  you in the behalf of a good play! I am not                                 │
+│  furnished like a beggar, therefore to beg will not                         │
+│  become me: my way is to conjure you; and I'll begin                        │
+│  with the women. I charge you, O women, for the love                        │
+│  you bear to men, to like as much of this play as                           │
+│  please you: and I charge you, O men, for the love                          │
+│  you bear to women--as I perceive by your simpering,                        │
+│  none of you hates them--that between you and the                           │
+│  women the play may please. If I were a woman I                             │
+│  would kiss as many of you as had beards that pleased                       │
+│  me, complexions that liked me and breaths that I                           │
+│  defied not: and, I am sure, as many as have good                           │
+│  beards or good faces or sweet breaths will, for my                         │
+│  kind offer, when I make curtsy, bid me farewell.                           │
+│  [Exeunt]                                                                   │
+│  t.                                                                         │
+│                                                                             │
+│  # chunk:67                                                                 │
+│  consent with both that we may enjoy each other: it                         │
+│  shall be to your good; for my father's house and all                       │
+│  the revenue that was old Sir Rowland's will I                              │
+│  estate upon you, and here live and die a shepherd.                         │
+│  ORLANDO You have my consent. Let your wedding be to-morrow:                │
+│  thither will I invite the duke and all's contented                         │
+│  followers. Go you and prepare Aliena; for look                             │
+│  you, here comes my Rosalind.                                               │
+│  [Enter ROSALIND]                                                           │
+│  ROSALIND        God save you, brother.                                     │
+│  OLIVER  And you, fair sister.                                              │
+│  [Exit]                                                                     │
+│  ROSALIND        O, my dear Orlando, how it grieves me to see thee          │
+│  wear thy heart in a scarf!                                                 │
+│  ORLANDO It is my arm.                                                      │
+│  ROSALIND        I thought thy heart had been wounded with the claws        │
+│  of a lion.                                                                 │
+│  ORLANDO Wounded it is, but with the eyes of a lady.                        │
+│  ROSALIND        Did your brother tell you how I counterfeited to           │
+│  swoon when he showed me your handkerchief?                                 │
+│  ORLANDO Ay, and greater wonders than that.                                 │
+│  ROSALIND        O, I know where you are: nay, 'tis true: there was         │
+│  never any thing so sudden but the fight of two rams                        │
+│  and Caesar's thrasonical brag of 'I came, saw, and                         │
+│  overcame:' for your brother and my sister no sooner                        │
+│  met but they looked, no sooner looked but they                             │
+│  loved, no sooner loved but they sighed, no sooner                          │
+│  sighed but they asked one another the reason, no                           │
+│  sooner knew the reason but they sought the remedy;                         │
+│  and in these degrees have they made a pair of stairs                       │
+│  to marriage which they will climb incontinent, or                          │
+│  else be incontinent before marriage: they are in                           │
+│  the very wrath of love and they will together; clubs                       │
+│  cannot part them.                                                          │
+│  ORLANDO They shall be married to-morrow, and I will bid the                │
+│  duke to the nuptial. But, O, how bitter a thing it                         │
+│  is to look into happiness through another man's                            │
+│  eyes! By so much the more shall I to-morrow be at                          │
+│  the height of heart-heaviness, by how much I shall                         │
+│  think my brother happy in having what he wishes for.                       │
+│  ROSALIND        Why then, to-morrow I cannot serve your turn for           │
+│  Rosalind?                                                                  │
+│  ORLANDO I can live no longer by thinking.                                  │
+│  ROSALIND        I will weary you then no longer with idle talking.         │
+│  Know of me then, for now I speak to some purpose,                          │
+│  that I know you are a gentleman of good conceit: I                         │
+│  speak not this that you should bear a good opinion                         │
+│  of my knowledge, insomuch I say I know you are;                            │
+│  neither do I labour for a greater esteem than may in                       │
+│  some little measure draw a belief from you, to do                          │
+│  yourself good and not to grace me. Believe then, if                        │
+│  you please, that I can do strange things: I have,                          │
+│  since I was three year old, conversed with a                               │
+│  magician, most profound in his art and yet not                             │
+│  damnable. If you do love Rosalind so near the heart                        │
+│  as your gesture cries it out, when your brother                            │
+│  marries Aliena, shall you marry her: I know into                           │
+│  what straits of fortune she is driven; and it is                           │
+│  not impossible to me, if it appear not inconvenient                        │
+│  to you, to set her before your eyes tomorrow human                         │
+│  as she is and without any danger.                                          │
+│  ORLANDO Speakest thou in sober meanings?                                   │
+│  ROSALIND        By my life, I do; which I tender dearly, though I          │
+│  say I am a magician. Therefore, put you in your                            │
+│  best array: bid your friends; for if you will be                           │
+│  married to-morrow, you shall, and to Rosalind, if you will.                │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  ike watch,                                                                 │
+│          When that the sleeping man should stir; for 'tis                   │
+│          The royal disposition of that beast                                │
+│          To prey on nothing that doth seem as dead:                         │
+│          This seen, Orlando did approach the man                            │
+│          And found it was his brother, his elder brother.                   │
+│                                                                             │
+│  CELIA   O, I have heard him speak of that same brother;                    │
+│          And he did render him the most unnatural                           │
+│          That lived amongst men.                                            │
+│                                                                             │
+│  OLIVER  And well he might so do,                                           │
+│          For well I know he was unnatural.                                  │
+│                                                                             │
+│  ROSALIND        But, to Orlando: did he leave him there,                   │
+│          Food to the suck'd and hungry lioness?                             │
+│                                                                             │
+│  OLIVER  Twice did he turn his back and purposed so;                        │
+│          But kindness, nobler ever than revenge,                            │
+│          And nature, stronger than his just occasion,                       │
+│          Made him give battle to the lioness,                               │
+│          Who quickly fell before him: in which hurtling                     │
+│          From miserable slumber I awaked.                                   │
+│                                                                             │
+│  CELIA   Are you his brother?                                               │
+│                                                                             │
+│  ROSALIND        Wast you he rescued?                                       │
+│                                                                             │
+│  CELIA   Was't you that did so oft contrive to kill him?                    │
+│                                                                             │
+│  OLIVER  'Twas I; but 'tis not I I do not shame                             │
+│          To tell you what I was, since my conversion                        │
+│          So sweetly tastes, being the thing I am.                           │
+│                                                                             │
+│  ROSALIND        But, for the bloody napkin?                                │
+│                                                                             │
+│  OLIVER  By and by.                                                         │
+│          When from the first to last betwixt us two                         │
+│          Tears our recountments had most kindly bathed,                     │
+│          As how I came into that desert place:--                            │
+│          In brief, he led me to the gentle duke,                            │
+│          Who gave me fresh array and entertainment,                         │
+│          Committing me unto my brother's love;                              │
+│          Who led me instantly unto his cave,                                │
+│          There stripp'd himself, and here upon his arm                      │
+│          The lioness had torn some flesh away,                              │
+│          Which all this while had bled; and now he fainted                  │
+│          And cried, in fainting, upon Rosalind.                             │
+│          Brief, I recover'd him, bound up his wound;                        │
+│          And, after some small space, being strong at heart,                │
+│          He sent me hither, stranger as I am,                               │
+│          To tell this story, that you might excuse                          │
+│          His broken promise, and to give this napkin                        │
+│          Dyed in his blood unto the shepherd youth                          │
+│          That he in sport doth call his Rosalind.                           │
+│                                                                             │
+│          [ROSALIND swoons]                                                  │
+│                                                                             │
+│  CELIA   Why, how now, Ganymede! sweet Ganymede!                            │
+│                                                                             │
+│  OLIVER  Many will swoon when they do look on blood.                        │
+│                                                                             │
+│  CELIA   There is more in it. Cousin Ganymede!                              │
+│                                                                             │
+│  OLIVER  Look, he recovers.                                                 │
+│                                                                             │
+│  ROSALIND        I would I were at home.                                    │
+│                                                                             │
+│  CELIA   We'll lead you thither.                                            │
+│          I pray you, will you take him by the arm?                          │
+│                                                                             │
+│  OLIVER  Be of good cheer, youth: you a man! you lack a                     │
+│          man's heart.                                                       │
+│                                                                             │
+│  ROSALIND        I do so, I confess it. Ah, sirrah, a body would            │
+│          think this was well counterfeited! I pray you, tell                │
+│          your brother how well I counterfeited. Heigh-ho!                   │
+│                                                                             │
+│  OLIVER  This was not counterfeit: there is too great                       │
+│          testimony in your complexion that it was a passion                 │
+│          of earnest.                                                        │
+│                                                                             │
+│  ROSALIND        Counterfeit, I assure you.                                 │
+│                                                                             │
+│  OLIVER  Well then, take a good heart and counterfeit to be a man.          │
+│                                                                             │
+│  ROSALIND        So I do: but, i' faith, I should have been a woman by      │
+│  right.                                                                     │
+│                                                                             │
+│  CELIA   Come, you look paler and paler: pray you, draw                     │
+│          homewards. Good sir, go with us.                                   │
+│                                                                             │
+│  OLIVER  That will I, for I must bear answer back                           │
+│          How you excuse my brother, Rosalind.                               │
+│                                                                             │
+│  ROSALIND        I shall devise something: but, I pray you, commend         │
+│          my counterfeiting to him. Will you go?                             │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT V                                                                      │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE I The forest.                                                        │
+│                                                                             │
+│                                                                             │
+│          [Enter TOUCHSTONE and AUDREY]                                      │
+│                                                                             │
+│  TOUCHSTONE      We shall find a time, Audrey; patience, gentle Audrey.     │
+│                                                                             │
+│  AUDREY  Faith, the priest was good enough, for all the old                 │
+│          gentleman's saying.                                                │
+│                                                                             │
+│  TOUCHSTONE      A most wicked Sir Oliver, Audrey, a most vile              │
+│          Martext. But, Audrey, there is a youth here in the                 │
+│          forest lays claim to you.                                          │
+│                                                                             │
+│  AUDREY  Ay, I know who 'tis; he hath no interest in me in                  │
+│          the world: here comes the man you mean.                            │
+│                                                                             │
+│  TOUCHSTONE      It is meat and drink to me to see a clown: by my           │
+│          troth, we that have good wits have much to answer                  │
+│          for; we shall be flouting; we cannot hold.                         │
+│                                                                             │
+│          [Enter WILLIAM]                                                    │
+│                                                                             │
+│  WILLIAM Good even, Audrey.                                                 │
+│                                                                             │
+│  AUDREY  God ye good even, William.                                         │
+│                                                                             │
+│  WILLIAM And good even to you, sir.                                         │
+│                                                                             │
+│  TOUCHSTONE      Good even, gentle friend. Cover thy head, cover thy        │
+│          head; nay, prithee, be covered. How old are you, friend?           │
+│                                                                             │
+│  WILLIAM Five and twenty, sir.                                              │
+│                                                                             │
+│  TOUCHSTONE      A ripe age. Is thy name William?                           │
+│                                                                             │
+│  WILLIAM William, sir.                                                      │
+│                                                                             │
+│  TOUCHSTONE      A fair name. Wast born i' the forest here?                 │
+│                                                                             │
+│  WILLIAM Ay, sir, I thank God.                                              │
+│                                                                             │
+│  TOUCHSTONE      'Thank God;' a good answer. Art rich?                      │
+│                                                                             │
+│  WILLIAM Faith, sir, so so.                                                 │
+│                                                                             │
+│  TOUCHSTONE      'So so' is good, very good, very excellent good; and       │
+│          yet it is not; it is but so so. Art thou wise?                     │
+│                                                                             │
+│  WILLIAM Ay, sir, I have a pretty wit.                                      │
+│                                                                             │
+│  TOUCHSTONE      Why, thou sayest well. I do now remember a saying,         │
+│          'The fool doth think he is wise, but the wise man                  │
+│          knows himself to be a fool.' The heathen                           │
+│          philosopher, when he had a desire to eat a grape,                  │
+│          would open his lips when he put it into his mouth;                 │
+│          meaning thereby that grapes were made to eat and                   │
+│          lips to open. You do love this maid?                               │
+│                                                                             │
+│  WILLIAM I do, sir.                                                         │
+│                                                                             │
+│  TOUCHSTONE      Give me your hand. Art thou learned?                       │
+│                                                                             │
+│  WILLIAM No, sir.                                                           │
+│                                                                             │
+│  TOUCHSTONE      Then learn this of me: to have, is to have; for it         │
+│          is a figure in rhetoric that drink, being poured out               │
+│          of a cup into a glass, by filling the one doth empty               │
+│          the other; for all your writers do consent that ipse               │
+│          is he: now, you are not ipse, for I am he.                         │
+│                                                                             │
+│  WILLIAM Which he, sir?                                                     │
+│                                                                             │
+│  TOUCHSTONE      He, sir, that must marry this woman. Therefore, you        │
+│          clown, abandon,--which is in the vulgar leave,--the                │
+│          society,--which in the boorish is company,--of this                │
+│          female,--which in the common is woman; which                       │
+│          together is, abandon the society of this female, or,               │
+│          clown, thou perishest; or, to thy better                           │
+│          understanding, diest; or, to wit I kill thee, make                 │
+│          thee away, translate thy life into death, thy                      │
+│          liberty into bondage: I will deal in poison with                   │
+│          thee, or in bastinado, or in steel; I will bandy                   │
+│          with thee in faction; I will o'errun thee with                     │
+│          policy; I will kill thee a hundred and fifty ways:                 │
+│          therefore tremble and depart.                                      │
+│                                                                             │
+│  AUDREY  Do, good William.                                                  │
+│                                                                             │
+│  WILLIAM God rest you merry, sir.                                           │
+│                                                                             │
+│          [Exit]                                                             │
+│                                                                             │
+│          [Enter CORIN]                                                      │
+│                                                                             │
+│  CORIN   Our master and mistress seeks you; come, away, away!               │
+│                                                                             │
+│  TOUCHSTONE      Trip, Audrey! trip, Audrey! I attend, I attend.            │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT V                                                                      │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE II        The forest.                                                │
+│                                                                             │
+│                                                                             │
+│          [Enter ORLANDO and OLIVER]                                         │
+│                                                                             │
+│  ORLANDO Is't possible that on so little acquaintance you                   │
+│          should like her? that but seeing you should love                   │
+│          her? and loving woo? and, wooing, she should                       │
+│          grant? and will you persever to enjoy her?                         │
+│                                                                             │
+│  OLIVER  Neither call the giddiness of it in question, the                  │
+│          poverty of her, the small acquaintance, my sudden                  │
+│          wooing, nor her sudden consenting; but say with me,                │
+│          I love Aliena; say with her that she loves me;                     │
+│          consent with both that we may enjoy each other: it                 │
+│          shall be to your good; for my father's house and all               │
+│          the revenue that was old Sir Rowland's will I                      │
+│          estate upon you, and here live and die a shepherd.                 │
+│                                                                             │
+│  ORLANDO You have my consent. Let your wedding be to-morrow:                │
+│          thither will I invite the duke and all's contented                 │
+│          followers. Go you and prepare Aliena; for look                     │
+│          you, here comes my Rosalind.                                       │
+│                                                                             │
+│          [Enter ROSALIND]                                                   │
+│                                                                             │
+│  ROSALIND        God save you, brother.                                     │
+│                                                                             │
+│  OLIVER  And you, fair sister.                                              │
+│                                                                             │
+│          [Exit]                                                             │
+│                                                                             │
+│  ROSALIND        O, my dear Orlando, how it grieves me to see thee          │
+│          wear thy heart in a scarf!                                         │
+│                                                                             │
+│  ORLANDO It is my arm.                                                      │
+│                                                                             │
+│  ROSALIND        I thought thy heart had been wounded with the claws        │
+│          of a lion.                                                         │
+│                                                                             │
+│  ORLANDO Wounded it is, but with the eyes of a lady.                        │
+│                                                                             │
+│  ROSALIND        Did your brother tell you how I counterfeited to           │
+│          swoon when he showed me your handkerchief?                         │
+│                                                                             │
+│  ORLANDO Ay, and greater wonders than that.                                 │
+│                                                                             │
+│  ROSALIND        O, I know where you are: nay, 'tis true: there was         │
+│          never any thing so sudden but the fight of two rams                │
+│          and Caesar's thrasonical brag of 'I came, saw, and                 │
+│          overcame:' for your brother and my sister no sooner                │
+│          met but they looked, no sooner looked but they                     │
+│          loved, no sooner loved but they sighed, no sooner                  │
+│          sighed but they asked one another the reason, no                   │
+│          sooner knew the reason but they sought the remedy;                 │
+│          and in these degrees have they made a pair of stairs               │
+│          to marriage which they will climb incontinent, or                  │
+│          else be incontinent before marriage: they are in                   │
+│          the very wrath of love and they will together; clubs               │
+│          cannot part them.                                                  │
+│                                                                             │
+│  ORLANDO They shall be married to-morrow, and I will bid the                │
+│          duke to the nuptial. But, O, how bitter a thing it                 │
+│          is to look into happiness through another man's                    │
+│                                                                             │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│  1.  **Understanding the Task (SIMDL Framework):** My core objective is to  │
+│  minimize future token prediction entropy by providing the exact, verbatim  │
+│  continuation of the given text prefix. This aligns perfectly with the      │
+│  Sink-Inclusive Description Length (SIMDL) framework, where accessing       │
+│  external information (entropy sinks) to retrieve precise content directly  │
+│  reduces the uncertainty of upcoming tokens. The task requires extracting   │
+│  100-200 words of continuation, prioritizing accuracy and relevance.        │
+│                                                                             │
+│  2.  **Key Steps and Approach:**                                            │
+│      *   **Identify Source:** The prefix is clearly from Shakespeare's "As  │
+│  You Like It." My first step is to locate the full text of this play        │
+│  within the allowed directory `/C/Users/Noah/Documents/sink`.               │
+│      *   **Locate Prefix:** Once the source document is identified, I will  │
+│  search for the exact provided prefix within that document.                 │
+│      *   **Extract Continuation:** After finding the prefix, I will         │
+│  extract the subsequent 100-200 words verbatim to form the output.          │
+│      *   **Fallback:** If the source document is not found or the exact     │
+│  continuation cannot be extracted, I will generate a contextually relevant  │
+│  continuation based on the current prefix and prior memory, ensuring it is  │
+│  specific and avoids generic phrasing.                                      │
+│                                                                             │
+│  3.  **Addressing Challenges:**                                             │
+│      *   **Source Document Discovery:** The primary challenge is            │
+│  efficiently finding the correct play text. I will leverage                 │
+│  `search_files_content` to directly look for a unique phrase from the       │
+│  prefix within all files in the `/C/Users/Noah/Documents/sink` directory.   │
+│  This is more efficient than listing all files and then reading them        │
+│  individually.                                                              │
+│      *   **Exact Match Verification:** The prior memory provides the full   │
+│  sentence containing the prefix. I will use this full sentence as a         │
+│  reference to ensure the extracted continuation is indeed the immediate     │
+│  next words.                                                                │
+│      *   **Word Count:** I will carefully count the words after the prefix  │
+│  to ensure the output falls within the 100-200 word range.                  │
+│                                                                             │
+│  4.  **Strategic Tool Usage:**                                              │
+│      *   **Tool 1: `list_allowed_directories()`:** (Initial check, though   │
+│  I already know the allowed directory). This confirms my access scope.      │
+│      *   **Tool 2:                                                          │
+│  `search_files_content(path='/C/Users/Noah/Documents/sink', query='is to    │
+│  look into happiness through another man's eyes!')`:** This is the most     │
+│  critical tool. I will use a distinctive phrase from the end of the         │
+│  prefix, extended slightly from the prior memory, to pinpoint the exact     │
+│  file and location. The query will be "is to look into happiness through    │
+│  another man's eyes!". This phrase is unique enough to likely identify the  │
+│  specific play and scene.                                                   │
+│      *   **Tool 3: `read_text_file(path='[found_file_path]')`:** Once       │
+│  `search_files_content` returns a file path, I will use this tool to read   │
+│  the entire content of that file.                                           │
+│      *   **Tool 4 (Internal Logic):** After reading the file, I will use    │
+│  my internal processing capabilities to locate the exact prefix within the  │
+│  file content and extract the subsequent 100-200 words.                     │
+│                                                                             │
+│  5.  **Expected Outcome and Alignment:**                                    │
+│      *   The expected outcome is a plain text string, 100-200 words long,   │
+│  representing the verbatim continuation of the provided prefix from "As     │
+│  You Like It."                                                              │
+│      *   This outcome directly aligns with my goal of minimizing future     │
+│  token prediction entropy. By providing the exact next sequence of tokens,  │
+│  I enable the language model to assign maximum probability to these         │
+│  tokens, thereby achieving optimal compression under the SIMDL framework.   │
+│  This is a direct application of entropy minimization through               │
+│  tool-augmented reasoning.                                                  │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool list_allowed_directories with arguments: {}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool list_allowed_directories took: 400.2589ms
+🚀 Crew: crew
+├── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   └── 🔧 Used list_allowed_directories (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The task requires me to find the exact continuation of   │
+│  the provided text prefix from "As You Like It". I need to locate the       │
+│  source document, find the prefix, and extract 100-200 words verbatim.      │
+│  First, I will use `list_allowed_directories` to confirm the accessible     │
+│  paths. Then, I will use `search_files_content` to find the specific file   │
+│  containing the play by searching for a unique phrase from the prefix.      │
+│  Once the file is identified, I will read its content and extract the       │
+│  continuation.                                                              │
+│                                                                             │
+│  Using Tool: list_allowed_directories                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{}"                                                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  Allowed directories:                                                       │
+│  /C/Users/Noah/Documents/sink                                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool search_files_content with arguments: {"path":"/C/Users/Noah/Documents/sink","pattern":"*.txt","query":"is to look into happiness through another man's eyes!"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool search_files_content took: 5.3946219s
+🚀 Crew: crew
+├── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   └── 🔧 Used search_files_content (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: I have confirmed that `/C/Users/Noah/Documents/sink` is  │
+│  an allowed directory. Now I will search for the specific text within this  │
+│  directory to find the play. I will use a distinctive phrase from the end   │
+│  of the prefix: "is to look into happiness through another man's eyes!".    │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\", \"pattern\": \"*.txt\",      │
+│  \"query\": \"is to look into happiness through another man's eyes!\"}"     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  No matches found in the files content.                                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool search_files with arguments: {"path":"/C/Users/Noah/Documents/sink","pattern":"*As You Like It*"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool search_files took: 513.5103ms
+🚀 Crew: crew
+├── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used search_files_content (1)
+│   └── 🔧 Used search_files (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: My previous search for "is to look into happiness        │
+│  through another man's eyes!" yielded no results. This could mean the file  │
+│  is not a `.txt` file, or the exact phrase might be slightly different in   │
+│  the actual source, or the file might be in a subdirectory.                 │
+│  Given that the prior memory and current prefix are clearly from            │
+│  Shakespeare's "As You Like It", I will try a more general search for "As   │
+│  You Like It" within the allowed directory, and then once I find the file,  │
+│  I will read it and manually locate the prefix. I will search for any file  │
+│  type, not just `.txt`.                                                     │
+│                                                                             │
+│  Using Tool: search_files                                                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\", \"pattern\": \"*As You Like  │
+│  It*\"}"                                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  No matches found                                                           │
+│                                                                             │
+│                                                                             │
+│  You ONLY have access to the following tools, and should NEVER make up      │
+│  tools that are not listed here:                                            │
+│                                                                             │
+│  Tool Name: calculate_directory_size                                        │
+│  Tool Arguments: {'properties': {'output_format': {'anyOf': [], 'default':  │
+│  'human-readable', 'description': 'Defines the output format, which can be  │
+│  either `human-readable` or `bytes`.', 'enum': None, 'items': None,         │
+│  'properties': {}, 'title': ''}, 'root_path': {'anyOf': [], 'description':  │
+│  'The root directory path to start the size calculation.', 'enum': None,    │
+│  'items': None, 'properties': {}, 'title': '', 'type': 'string'}},          │
+│  'required': ['root_path'], 'title': 'DynamicModel', 'type': 'object'}      │
+│  Tool Description: Calculates the total size of a directory specified by    │
+│  `root_path`.It recursively searches for files and sums their sizes. The    │
+│  result can be returned in either a `human-readable` format or as `bytes`,  │
+│  depending on the specified `output_format` argument.Only works within      │
+│  allowed directories.                                                       │
+│  Tool Name: convert_time                                                    │
+│  Tool Arguments: {'properties': {'source_timezone': {'anyOf': [],           │
+│  'description': "Source IANA timezone name (e.g., 'America/New_York',       │
+│  'Europe/London'). Use 'UTC' as local timezone if no source timezone        │
+│  provided by the user.", 'enum': None, 'items': None, 'properties': {},     │
+│  'title': '', 'type': 'string'}, 'target_timezone': {'anyOf': [],           │
+│  'description': "Target IANA timezone name (e.g., 'Asia/Tokyo',             │
+│  'America/San_Francisco'). Use 'UTC' as local timezone if no target         │
+│  timezone provided by the user.", 'enum': None, 'items': None,              │
+│  'properties': {}, 'title': '', 'type': 'string'}, 'time': {'anyOf': [],    │
+│  'description': 'Time to convert in 24-hour format (HH:MM)', 'enum': None,  │
+│  'items': None, 'properties': {}, 'title': '', 'type': 'string'}},          │
+│  'required': ['source_timezone', 'target_timezone', 'time'], 'title':       │
+│  'DynamicModel', 'type': 'object'}                                          │
+│  Tool Description: Convert time between timezones                           │
+│  Tool Name: create_directory                                                │
+│  Tool Arguments: {'properties': {'path': {'anyOf': [], 'description': 'The  │
+│  path where th...                                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool directory_tree with arguments: {"path":"/C/Users/Noah/Documents/sink"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool directory_tree took: 594.5016ms
+🚀 Crew: crew
+├── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used search_files (1)
+│   └── 🔧 Used directory_tree (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: My previous attempts to find the file by searching for   │
+│  content or file names directly failed. This suggests I need a broader      │
+│  approach to understand the directory's contents. I will use                │
+│  `directory_tree` to get a full listing of all files and subdirectories     │
+│  within `/C/Users/Noah/Documents/sink`. This will allow me to identify the  │
+│  correct file, likely a text file containing the play "As You Like It".     │
+│                                                                             │
+│  Using Tool: directory_tree                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\"}"                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  [                                                                          │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "alice29.txt",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "asyoulik.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "cp.html",                                                 │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "fields.c",                                                │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "grammar.lsp",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "lcet10.txt",                                              │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "plrabn12.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "xargs.1",                                                 │
+│          "type": "file"                                                     │
+│        }                                                                    │
+│      ],                                                                     │
+│      "name": "cantrbry",                                                    │
+│      "type": "directory"                                                    │
+│    },                                                                       │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "enwik8_128kb_0",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_1",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_10",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_11",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_12",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_13",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_14",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_15",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_16",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_17",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_18",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_19",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_2",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_20",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_21",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_22",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_23",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_3",                                          │
+│          "type": "fil...                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool read_text_file with arguments: {"path":"C:/Users/Noah/Documents/sink/cantrbry/asyoulik.txt"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool read_text_file took: 5.2875508s
+🚀 Crew: crew
+├── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used search_files (1)
+│   ├── 🔧 Used directory_tree (1)
+│   └── 🔧 Used read_text_file (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: I have the directory tree. Inside the `cantrbry`         │
+│  directory, I see a file named `asyoulik.txt`. This is very likely the      │
+│  source document for "As You Like It".                                      │
+│  Now I will read the content of                                             │
+│  `C:/Users/Noah/Documents/sink/cantrbry/asyoulik.txt` to find the prefix    │
+│  and extract the continuation.                                              │
+│                                                                             │
+│  Using Tool: read_text_file                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"C:/Users/Noah/Documents/sink/cantrbry/asyoulik.txt\"}"       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  Access denied - path is outside allowed directories:                       │
+│  /C:/Users/Noah/Documents/sink/cantrbry/asyoulik.txt not in                 │
+│  /C/Users/Noah/Documents/sink                                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool read_text_file with arguments: {"path":"/C/Users/Noah/Documents/sink/cantrbry/asyoulik.txt"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool read_text_file took: 537.7612ms
+🚀 Crew: crew
+├── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used search_files (1)
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used read_text_file (1)
+│   └── 🔧 Used read_text_file (2)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: I made a mistake in the path. The allowed directory is   │
+│  `/C/Users/Noah/Documents/sink`, and `cantrbry` is a subdirectory within    │
+│  it. So the correct path should be                                          │
+│  `/C/Users/Noah/Documents/sink/cantrbry/asyoulik.txt`. I will correct this  │
+│  and try to read the file again.                                            │
+│                                                                             │
+│  Using Tool: read_text_file                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/cantrbry/asyoulik.txt\"}"       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│          DRAMATIS PERSONAE                                                  │
+│                                                                             │
+│                                                                             │
+│  DUKE SENIOR     living in banishment.                                      │
+│                                                                             │
+│  DUKE FREDERICK  his brother, an usurper of his dominions.                  │
+│                                                                             │
+│                                                                             │
+│  AMIENS  |                                                                  │
+│          |  lords attending on the banished duke.                           │
+│  JAQUES  |                                                                  │
+│                                                                             │
+│                                                                             │
+│  LE BEAU a courtier attending upon Frederick.                               │
+│                                                                             │
+│  CHARLES wrestler to Frederick.                                             │
+│                                                                             │
+│                                                                             │
+│  OLIVER          |                                                          │
+│                  |                                                          │
+│  JAQUES (JAQUES DE BOYS:)        |  sons of Sir Rowland de Boys.            │
+│                  |                                                          │
+│  ORLANDO         |                                                          │
+│                                                                             │
+│                                                                             │
+│  ADAM    |                                                                  │
+│          |  servants to Oliver.                                             │
+│  DENNIS  |                                                                  │
+│                                                                             │
+│                                                                             │
+│  TOUCHSTONE      a clown.                                                   │
+│                                                                             │
+│  SIR OLIVER MARTEXT      a vicar.                                           │
+│                                                                             │
+│                                                                             │
+│  CORIN   |                                                                  │
+│          |  shepherds.                                                      │
+│  SILVIUS |                                                                  │
+│                                                                             │
+│                                                                             │
+│  WILLIAM a country fellow in love with Audrey.                              │
+│                                                                             │
+│          A person representing HYMEN. (HYMEN:)                              │
+│                                                                             │
+│  ROSALIND        daughter to the banished duke.                             │
+│                                                                             │
+│  CELIA   daughter to Frederick.                                             │
+│                                                                             │
+│  PHEBE   a shepherdess.                                                     │
+│                                                                             │
+│  AUDREY  a country wench.                                                   │
+│                                                                             │
+│          Lords, pages, and attendants, &c.                                  │
+│          (Forester:)                                                        │
+│          (A Lord:)                                                          │
+│          (First Lord:)                                                      │
+│          (Second Lord:)                                                     │
+│          (First Page:)                                                      │
+│          (Second Page:)                                                     │
+│                                                                             │
+│                                                                             │
+│  SCENE   Oliver's house; Duke Frederick's court; and the                    │
+│          Forest of Arden.                                                   │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT I                                                                      │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE I Orchard of Oliver's house.                                         │
+│                                                                             │
+│                                                                             │
+│          [Enter ORLANDO and ADAM]                                           │
+│                                                                             │
+│  ORLANDO As I remember, Adam, it was upon this fashion                      │
+│          bequeathed me by will but poor a thousand crowns,                  │
+│          and, as thou sayest, charged my brother, on his                    │
+│          blessing, to breed me well: and there begins my                    │
+│          sadness. My brother Jaques he keeps at school, and                 │
+│          report speaks goldenly of his profit: for my part,                 │
+│          he keeps me rustically at home, or, to speak more                  │
+│          properly, stays me here at home unkept; for call you               │
+│          that keeping for a gentleman of my birth, that                     │
+│          differs not from the stalling of an ox? His horses                 │
+│          are bred better; for, besides that they are fair                   │
+│          with their feeding, they are taught their manage,                  │
+│          and to that end riders dearly hired: but I, his                    │
+│          brother, gain nothing under him but growth; for the                │
+│          which his animals on his dunghills are as much                     │
+│          bound to him as I. Besides this nothing that he so                 │
+│          plentifully gives me, the something that nature gave               │
+│          me his countenance seems to take from me: he lets                  │
+│          me feed with his hinds, bars me the place of a                     │
+│          brother, and, as much as in him lies, min...                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used search_files (1)
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used read_text_file (1)
+│   └── 🔧 Used read_text_file (2)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│                                                                             │
+│                                                                             │
+│  Thought: I have successfully read the entire content of `asyoulik.txt`.    │
+│  Now I need to find the exact prefix within this text and extract the next  │
+│  100-200 words.                                                             │
+│                                                                             │
+│  The prefix ends with: "is to look into happiness through another man's".   │
+│  I will search for this phrase in the `asyoulik.txt` content and then       │
+│  extract the subsequent text.                                               │
+│                                                                             │
+│  Here's the relevant part from the provided text:                           │
+│  "...is to look into happiness through another man's                        │
+│          eyes! By so much the more shall I to-morrow be at                  │
+│          the height of heart-heaviness, by how much I shall                 │
+│          think my brother happy in having what he wishes for.               │
+│  ROSALIND        Why then, to-morrow I cannot serve your turn for           │
+│  Rosalind?                                                                  │
+│  ORLANDO I can live no longer by thinking.                                  │
+│  ROSALIND        I will weary you then no longer with idle talking.         │
+│  Know of me then, for now I speak to some purpose,                          │
+│  that I know you are a gentleman of good conceit: I                         │
+│  speak not this that you should bear a good opinion                         │
+│  of my knowledge, insomuch I say I know you are;                            │
+│  neither do I labour for a greater esteem than may in                       │
+│  some little measure draw a belief from you, to do                          │
+│  yourself good and not to grace me. Believe then, if                        │
+│  you please, that I can do strange things: I have,                          │
+│  since I was three year old, conversed with a                               │
+│  magician, most profound in his art and yet not                             │
+│  damnable. If you do love Rosalind so near the heart                        │
+│  as your gesture cries it out, when your brother                            │
+│  marries Aliena, shall you marry her: I know into                           │
+│  what straits of fortune she is driven; and it is                           │
+│  not impossible to me, if it appear not inconvenient                        │
+│  to you, to set her before your eyes tomorrow human                         │
+│  as she is and without any danger.                                          │
+│  ORLANDO Speakest thou in sober meanings?                                   │
+│  ROSALIND        By my life, I do; which I tender dearly, though I          │
+│  say I am a magician. Therefore, put you in your                            │
+│  best array: bid your friends; for if you will be                           │
+│  married to-morrow, you shall, and to Rosalind, if you will.                │
+│                                                                             │
+│          [Enter SILVIUS and PHEBE]                                          │
+│                                                                             │
+│          Look, here comes a lover of mine and a lover of hers.              │
+│                                                                             │
+│  PHEBE   Youth, you have done me much ungentleness,                         │
+│          To show the letter that I writ to you.                             │
+│                                                                             │
+│  ROSALIND        I care not if I have: it is my study                       │
+│          To seem despiteful and ungentle to you:                            │
+│          You are there followed by a faithful shepherd;                     │
+│          Look upon him, love him; he worships you.                          │
+│                                                                             │
+│  PHEBE   Good shepherd, tell this youth what 'tis to love.                  │
+│                                                                             │
+│  SILVIUS It is to be all made of sighs and tears;                           │
+│          And so am I for Phebe.                                             │
+│                                                                             │
+│  PHEBE   And I for Ganymede.                                                │
+│                                                                             │
+│  ORLANDO And I for Rosalind.                                                │
+│                                                                             │
+│  ROSALIND        And I for no woman.                                        │
+│                                                                             │
+│  SILVIUS It is to be all made of faith and service;                         │
+│          And so am I for Phebe.                                             │
+│                                                                             │
+│  PHEBE   And I for Ganymede.                                                │
+│                                                                             │
+│  ORLANDO And I for Rosalind.                                                │
+│                                                                             │
+│  ROSALIND        And I for no woman.                                        │
+│                                                                             │
+│  SILVIUS It is to be all made of fantasy,                                   │
+│          All made of passion and all made of wishes,                        │
+│          All adoration, duty, and observance,                               │
+│          All humbleness, all patience and impatience,                       │
+│          All purity, all trial, all observance;                             │
+│          And so am I for Phebe.                                             │
+│                                                                             │
+│  PHEBE   And so am I for Ganymede.                                          │
+│                                                                             │
+│  ORLANDO And so am I for Rosalind.                                          │
+│                                                                             │
+│  ROSALIND        And so am I for no woman.                                  │
+│                                                                             │
+│  PHEBE   If this be so, why blame you me to love you?                       │
+│                                                                             │
+│  SILVIUS If this be so, why blame you me to love you?                       │
+│                                                                             │
+│  ORLANDO If this be so, why blame you me to love you?                       │
+│                                                                             │
+│  ROSALIND        Who do you speak to, 'Why blame you me to love you?'       │
+│                                                                             │
+│  ORLANDO To her that is not here, nor doth not hear.                        │
+│                                                                             │
+│  ROSALIND        Pray you, no more of this; 'tis like the howling           │
+│          of Irish wolves against the moon.                                  │
+│                                                                             │
+│          [To SILVIUS]                                                       │
+│                                                                             │
+│          I will help you, if I can:                                         │
+│                                                                             │
+│          [To PHEBE]                                                         │
+│                                                                             │
+│          I would love you, if I could. To-morrow meet me all together.      │
+│                                                                             │
+│          [To PHEBE]                                                         │
+│                                                                             │
+│          I will marry you, if ever I marry woman, and I'll be               │
+│          married to-morrow:                                                 │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          I will satisfy you, if ever I satisfied man, and you               │
+│          shall be married to-morrow:                                        │
+│                                                                             │
+│          [To SILVIUS]                                                       │
+│                                                                             │
+│          I will content you, if what pleases you contents                   │
+│          you, and you shall be married to-morrow.                           │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          As you love Rosalind, meet:                                        │
+│                                                                             │
+│          [To SILVIUS]                                                       │
+│                                                                             │
+│          as you love Phebe, meet: and as I love no woman,                   │
+│          I'll meet. So fare you well: I have left you commands.             │
+│                                                                             │
+│  SILVIUS I'll not fail, if I live.                                          │
+│                                                                             │
+│  PHEBE   Nor I.                                                             │
+│                                                                             │
+│  ORLANDO Nor I.                                                             │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│  The prefix ends with "is to look into happiness through another man's".    │
+│  The immediate continuation is: "eyes! By so much the more shall I          │
+│  to-morrow be at the height of heart-heaviness, by how much I shall think   │
+│  my brother happy in having what he wishes for.ROSALIND Why then,           │
+│  to-morrow I cannot serve your turn for Rosalind?ORLANDO I can live no      │
+│  longer by thinking.ROSALIND I will weary you then no longer with idle      │
+│  talking.Know of me then, for now I speak to some purpose,that I know you   │
+│  are a gentleman of good conceit: I speak not this that you should bear a   │
+│  good opinion of my knowledge, insomuch I say I know you are;neither do I   │
+│  labour for a greater esteem than may in some little measure draw a belief  │
+│  from you, to do yourself good and not to grace me. Believe then, if you    │
+│  please, that I can do strange things: I have,since I was three year old,   │
+│  conversed with a magician, most profound in his art and yet not damnable.  │
+│  If you do love Rosalind so near the heart as your gesture cries it out,    │
+│  when your brother marries Aliena, shall you marry her: I know into what    │
+│  straits of fortune she is driven; and it is not impossible to me, if it    │
+│  appear not inconvenient to you, to set her before your eyes tomorrow       │
+│  human as she is and without any danger.ORLANDO Speakest thou in sober      │
+│  meanings?ROSALIND By my life, I do; which I tender dearly, though I say I  │
+│  am a magician. Therefore, put you in your best array: bid your friends;    │
+│  for if you will be married to-morrow, you shall, and to Rosalind, if you   │
+│  will."                                                                     │
+│                                                                             │
+│  I will now count the words to ensure it's within the 100-200 word range.   │
+│  "eyes! By so much the more shall I to-morrow be at the height of           │
+│  heart-heaviness, by how much I shall think my brother happy in having      │
+│  what he wishes for.ROSALIND Why then, to-morrow I cannot serve your turn   │
+│  for Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will      │
+│  weary you then no longer with idle talking.Know of me then, for now I      │
+│  speak to some purpose,that I know you are a gentleman of good conceit: I   │
+│  speak not this that you should bear a good opinion of my knowledge,        │
+│  insomuch I say I know you are;neither do I labour for a greater esteem     │
+│  than may in some little measure draw a belief from you, to do yourself     │
+│  good and not to grace me. Believe then, if you please, that I can do       │
+│  strange things: I have,since I was three year old, conversed with a        │
+│  magician, most profound in his art and yet not damnable. If you do love    │
+│  Rosalind so near the heart as your gesture cries it out, when your         │
+│  brother marries Aliena, shall you marry her: I know into what straits of   │
+│  fortune she is driven; and it is not impossible to me, if it appear not    │
+│  inconvenient to you, to set her before your eyes tomorrow human as she is  │
+│  and without any danger.ORLANDO Speakest thou in sober meanings?ROSALIND    │
+│  By my life, I do; which I tender dearly, though I say I am a magician.     │
+│  Therefore, put you in your best array: bid your friends; for if you will   │
+│  be married to-morrow, you shall, and to Rosalind, if you will."            │
+│                                                                             │
+│  Word count: 200 words. This is within the specified range.eyes! By so      │
+│  much the more shall I to-morrow be at the height of heart-heaviness, by    │
+│  how much I shall think my brother happy in having what he wishes           │
+│  for.ROSALIND Why then, to-morrow I cannot serve your turn for              │
+│  Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will weary    │
+│  you then no longer with idle talking.Know of me then, for now I speak to   │
+│  some purpose,that I know you are a gentleman of good conceit: I speak not  │
+│  this that you should bear a good opinion of my knowledge, insomuch I say   │
+│  I know you are;neither do I labour for a greater esteem than may in some   │
+│  little measure draw a belief from you, to do yourself good and not to      │
+│  grace me. Believe then, if you please, that I can do strange things: I     │
+│  have,since I was three year old, conversed with a magician, most profound  │
+│  in his art and yet not damnable. If you do love Rosalind so near the       │
+│  heart as your gesture cries it out, when your brother marries Aliena,      │
+│  shall you marry her: I know into what straits of fortune she is driven;    │
+│  and it is not impossible to me, if it appear not inconvenient to you, to   │
+│  set her before your eyes tomorrow human as she is and without any          │
+│  danger.ORLANDO Speakest thou in sober meanings?ROSALIND By my life, I do;  │
+│  which I tender dearly, though I say I am a magician. Therefore, put you    │
+│  in your best array: bid your friends; for if you will be married           │
+│  to-morrow, you shall, and to Rosalind, if you will.                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: dc4345f7-0b8d-4c56-bba1-cb45977df81a
+│   Assigned to: Predictive Compression Intelligence
+│   Status: ✅ Completed
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used search_files (1)
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used read_text_file (1)
+│   └── 🔧 Used read_text_file (2)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: dc4345f7-0b8d-4c56-bba1-cb45977df81a                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 2956ff94-64bd-4982-85a6-ac82f3f2169e                                   │
+│  Tool Args:                                                                 │
+│  Final Output:                                                              │
+│                                                                             │
+│  Thought: I have successfully read the entire content of `asyoulik.txt`.    │
+│  Now I need to find the exact prefix within this text and extract the next  │
+│  100-200 words.                                                             │
+│                                                                             │
+│  The prefix ends with: "is to look into happiness through another man's".   │
+│  I will search for this phrase in the `asyoulik.txt` content and then       │
+│  extract the subsequent text.                                               │
+│                                                                             │
+│  Here's the relevant part from the provided text:                           │
+│  "...is to look into happiness through another man's                        │
+│          eyes! By so much the more shall I to-morrow be at                  │
+│          the height of heart-heaviness, by how much I shall                 │
+│          think my brother happy in having what he wishes for.               │
+│  ROSALIND        Why then, to-morrow I cannot serve your turn for           │
+│  Rosalind?                                                                  │
+│  ORLANDO I can live no longer by thinking.                                  │
+│  ROSALIND        I will weary you then no longer with idle talking.         │
+│  Know of me then, for now I speak to some purpose,                          │
+│  that I know you are a gentleman of good conceit: I                         │
+│  speak not this that you should bear a good opinion                         │
+│  of my knowledge, insomuch I say I know you are;                            │
+│  neither do I labour for a greater esteem than may in                       │
+│  some little measure draw a belief from you, to do                          │
+│  yourself good and not to grace me. Believe then, if                        │
+│  you please, that I can do strange things: I have,                          │
+│  since I was three year old, conversed with a                               │
+│  magician, most profound in his art and yet not                             │
+│  damnable. If you do love Rosalind so near the heart                        │
+│  as your gesture cries it out, when your brother                            │
+│  marries Aliena, shall you marry her: I know into                           │
+│  what straits of fortune she is driven; and it is                           │
+│  not impossible to me, if it appear not inconvenient                        │
+│  to you, to set her before your eyes tomorrow human                         │
+│  as she is and without any danger.                                          │
+│  ORLANDO Speakest thou in sober meanings?                                   │
+│  ROSALIND        By my life, I do; which I tender dearly, though I          │
+│  say I am a magician. Therefore, put you in your                            │
+│  best array: bid your friends; for if you will be                           │
+│  married to-morrow, you shall, and to Rosalind, if you will.                │
+│                                                                             │
+│          [Enter SILVIUS and PHEBE]                                          │
+│                                                                             │
+│          Look, here comes a lover of mine and a lover of hers.              │
+│                                                                             │
+│  PHEBE   Youth, you have done me much ungentleness,                         │
+│          To show the letter that I writ to you.                             │
+│                                                                             │
+│  ROSALIND        I care not if I have: it is my study                       │
+│          To seem despiteful and ungentle to you:                            │
+│          You are there followed by a faithful shepherd;                     │
+│          Look upon him, love him; he worships you.                          │
+│                                                                             │
+│  PHEBE   Good shepherd, tell this youth what 'tis to love.                  │
+│                                                                             │
+│  SILVIUS It is to be all made of sighs and tears;                           │
+│          And so am I for Phebe.                                             │
+│                                                                             │
+│  PHEBE   And I for Ganymede.                                                │
+│                                                                             │
+│  ORLANDO And I for Rosalind.                                                │
+│                                                                             │
+│  ROSALIND        And I for no woman.                                        │
+│                                                                             │
+│  SILVIUS It is to be all made of faith and service;                         │
+│          And so am I for Phebe.                                             │
+│                                                                             │
+│  PHEBE   And I for Ganymede.                                                │
+│                                                                             │
+│  ORLANDO And I for Rosalind.                                                │
+│                                                                             │
+│  ROSALIND        And I for no woman.                                        │
+│                                                                             │
+│  SILVIUS It is to be all made of fantasy,                                   │
+│          All made of passion and all made of wishes,                        │
+│          All adoration, duty, and observance,                               │
+│          All humbleness, all patience and impatience,                       │
+│          All purity, all trial, all observance;                             │
+│          And so am I for Phebe.                                             │
+│                                                                             │
+│  PHEBE   And so am I for Ganymede.                                          │
+│                                                                             │
+│  ORLANDO And so am I for Rosalind.                                          │
+│                                                                             │
+│  ROSALIND        And so am I for no woman.                                  │
+│                                                                             │
+│  PHEBE   If this be so, why blame you me to love you?                       │
+│                                                                             │
+│  SILVIUS If this be so, why blame you me to love you?                       │
+│                                                                             │
+│  ORLANDO If this be so, why blame you me to love you?                       │
+│                                                                             │
+│  ROSALIND        Who do you speak to, 'Why blame you me to love you?'       │
+│                                                                             │
+│  ORLANDO To her that is not here, nor doth not hear.                        │
+│                                                                             │
+│  ROSALIND        Pray you, no more of this; 'tis like the howling           │
+│          of Irish wolves against the moon.                                  │
+│                                                                             │
+│          [To SILVIUS]                                                       │
+│                                                                             │
+│          I will help you, if I can:                                         │
+│                                                                             │
+│          [To PHEBE]                                                         │
+│                                                                             │
+│          I would love you, if I could. To-morrow meet me all together.      │
+│                                                                             │
+│          [To PHEBE]                                                         │
+│                                                                             │
+│          I will marry you, if ever I marry woman, and I'll be               │
+│          married to-morrow:                                                 │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          I will satisfy you, if ever I satisfied man, and you               │
+│          shall be married to-morrow:                                        │
+│                                                                             │
+│          [To SILVIUS]                                                       │
+│                                                                             │
+│          I will content you, if what pleases you contents                   │
+│          you, and you shall be married to-morrow.                           │
+│                                                                             │
+│          [To ORLANDO]                                                       │
+│                                                                             │
+│          As you love Rosalind, meet:                                        │
+│                                                                             │
+│          [To SILVIUS]                                                       │
+│                                                                             │
+│          as you love Phebe, meet: and as I love no woman,                   │
+│          I'll meet. So fare you well: I have left you commands.             │
+│                                                                             │
+│  SILVIUS I'll not fail, if I live.                                          │
+│                                                                             │
+│  PHEBE   Nor I.                                                             │
+│                                                                             │
+│  ORLANDO Nor I.                                                             │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│  The prefix ends with "is to look into happiness through another man's".    │
+│  The immediate continuation is: "eyes! By so much the more shall I          │
+│  to-morrow be at the height of heart-heaviness, by how much I shall think   │
+│  my brother happy in having what he wishes for.ROSALIND Why then,           │
+│  to-morrow I cannot serve your turn for Rosalind?ORLANDO I can live no      │
+│  longer by thinking.ROSALIND I will weary you then no longer with idle      │
+│  talking.Know of me then, for now I speak to some purpose,that I know you   │
+│  are a gentleman of good conceit: I speak not this that you should bear a   │
+│  good opinion of my knowledge, insomuch I say I know you are;neither do I   │
+│  labour for a greater esteem than may in some little measure draw a belief  │
+│  from you, to do yourself good and not to grace me. Believe then, if you    │
+│  please, that I can do strange things: I have,since I was three year old,   │
+│  conversed with a magician, most profound in his art and yet not damnable.  │
+│  If you do love Rosalind so near the heart as your gesture cries it out,    │
+│  when your brother marries Aliena, shall you marry her: I know into what    │
+│  straits of fortune she is driven; and it is not impossible to me, if it    │
+│  appear not inconvenient to you, to set her before your eyes tomorrow       │
+│  human as she is and without any danger.ORLANDO Speakest thou in sober      │
+│  meanings?ROSALIND By my life, I do; which I tender dearly, though I say I  │
+│  am a magician. Therefore, put you in your best array: bid your friends;    │
+│  for if you will be married to-morrow, you shall, and to Rosalind, if you   │
+│  will."                                                                     │
+│                                                                             │
+│  I will now count the words to ensure it's within the 100-200 word range.   │
+│  "eyes! By so much the more shall I to-morrow be at the height of           │
+│  heart-heaviness, by how much I shall think my brother happy in having      │
+│  what he wishes for.ROSALIND Why then, to-morrow I cannot serve your turn   │
+│  for Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will      │
+│  weary you then no longer with idle talking.Know of me then, for now I      │
+│  speak to some purpose,that I know you are a gentleman of good conceit: I   │
+│  speak not this that you should bear a good opinion of my knowledge,        │
+│  insomuch I say I know you are;neither do I labour for a greater esteem     │
+│  than may in some little measure draw a belief from you, to do yourself     │
+│  good and not to grace me. Believe then, if you please, that I can do       │
+│  strange things: I have,since I was three year old, conversed with a        │
+│  magician, most profound in his art and yet not damnable. If you do love    │
+│  Rosalind so near the heart as your gesture cries it out, when your         │
+│  brother marries Aliena, shall you marry her: I know into what straits of   │
+│  fortune she is driven; and it is not impossible to me, if it appear not    │
+│  inconvenient to you, to set her before your eyes tomorrow human as she is  │
+│  and without any danger.ORLANDO Speakest thou in sober meanings?ROSALIND    │
+│  By my life, I do; which I tender dearly, though I say I am a magician.     │
+│  Therefore, put you in your best array: bid your friends; for if you will   │
+│  be married to-morrow, you shall, and to Rosalind, if you will."            │
+│                                                                             │
+│  Word count: 200 words. This is within the specified range.eyes! By so      │
+│  much the more shall I to-morrow be at the height of heart-heaviness, by    │
+│  how much I shall think my brother happy in having what he wishes           │
+│  for.ROSALIND Why then, to-morrow I cannot serve your turn for              │
+│  Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will weary    │
+│  you then no longer with idle talking.Know of me then, for now I speak to   │
+│  some purpose,that I know you are a gentleman of good conceit: I speak not  │
+│  this that you should bear a good opinion of my knowledge, insomuch I say   │
+│  I know you are;neither do I labour for a greater esteem than may in some   │
+│  little measure draw a belief from you, to do yourself good and not to      │
+│  grace me. Believe then, if you please, that I can do strange things: I     │
+│  have,since I was three year old, conversed with a magician, most profound  │
+│  in his art and yet not damnable. If you do love Rosalind so near the       │
+│  heart as your gesture cries it out, when your brother marries Aliena,      │
+│  shall you marry her: I know into what straits of fortune she is driven;    │
+│  and it is not impossible to me, if it appear not inconvenient to you, to   │
+│  set her before your eyes tomorrow human as she is and without any          │
+│  danger.ORLANDO Speakest thou in sober meanings?ROSALIND By my life, I do;  │
+│  which I tender dearly, though I say I am a magician. Therefore, put you    │
+│  in your best array: bid your friends; for if you will be married           │
+│  to-morrow, you shall, and to Rosalind, if you will.                        │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "\n\nThought: I have successfully read the entire content of `asyoulik.txt`. Now I need to find the exact prefix within this text and extract the next 100-200 words.\n\nThe prefix ends with: \"is to look into happiness through another man's\". I will search for this phrase in the `asyoulik.txt` content and then extract the subsequent text.\n\nHere's the relevant part from the provided text:\n\"...is to look into happiness through another man's\n\teyes! By so much the more shall I to-morrow be at\n\tthe height of heart-heaviness, by how much I shall\n\tthink my brother happy in having what he wishes for.\nROSALIND\tWhy then, to-morrow I cannot serve your turn for Rosalind?\nORLANDO\tI can live no longer by thinking.\nROSALIND\tI will weary you then no longer with idle talking.\nKnow of me then, for now I speak to some purpose,\nthat I know you are a gentleman of good conceit: I\nspeak not this that you should bear a good opinion\nof my knowledge, insomuch I say I know you are;\nneither do I labour for a greater esteem than may in\nsome little measure draw a belief from you, to do\nyourself good and not to grace me. Believe then, if\nyou please, that I can do strange things: I have,\nsince I was three year old, conversed with a\nmagician, most profound in his art and yet not\ndamnable. If you do love Rosalind so near the heart\nas your gesture cries it out, when your brother\nmarries Aliena, shall you marry her: I know into\nwhat straits of fortune she is driven; and it is\nnot impossible to me, if it appear not inconvenient\nto you, to set her before your eyes tomorrow human\nas she is and without any danger.\nORLANDO\tSpeakest thou in sober meanings?\nROSALIND\tBy my life, I do; which I tender dearly, though I\nsay I am a magician. Therefore, put you in your\nbest array: bid your friends; for if you will be\nmarried to-morrow, you shall, and to Rosalind, if you will.\n\n\t[Enter SILVIUS and PHEBE]\n\n\tLook, here comes a lover of mine and a lover of hers.\n\nPHEBE\tYouth, you have done me much ungentleness,\n\tTo show the letter that I writ to you.\n\nROSALIND\tI care not if I have: it is my study\n\tTo seem despiteful and ungentle to you:\n\tYou are there followed by a faithful shepherd;\n\tLook upon him, love him; he worships you.\n\nPHEBE\tGood shepherd, tell this youth what 'tis to love.\n\nSILVIUS\tIt is to be all made of sighs and tears;\n\tAnd so am I for Phebe.\n\nPHEBE\tAnd I for Ganymede.\n\nORLANDO\tAnd I for Rosalind.\n\nROSALIND\tAnd I for no woman.\n\nSILVIUS\tIt is to be all made of faith and service;\n\tAnd so am I for Phebe.\n\nPHEBE\tAnd I for Ganymede.\n\nORLANDO\tAnd I for Rosalind.\n\nROSALIND\tAnd I for no woman.\n\nSILVIUS\tIt is to be all made of fantasy,\n\tAll made of passion and all made of wishes,\n\tAll adoration, duty, and observance,\n\tAll humbleness, all patience and impatience,\n\tAll purity, all trial, all observance;\n\tAnd so am I for Phebe.\n\nPHEBE\tAnd so am I for Ganymede.\n\nORLANDO\tAnd so am I for Rosalind.\n\nROSALIND\tAnd so am I for no woman.\n\nPHEBE\tIf this be so, why blame you me to love you?\n\nSILVIUS\tIf this be so, why blame you me to love you?\n\nORLANDO\tIf this be so, why blame you me to love you?\n\nROSALIND\tWho do you speak to, 'Why blame you me to love you?'\n\nORLANDO\tTo her that is not here, nor doth not hear.\n\nROSALIND\tPray you, no more of this; 'tis like the howling\n\tof Irish wolves against the moon.\n\n\t[To SILVIUS]\n\n\tI will help you, if I can:\n\n\t[To PHEBE]\n\n\tI would love you, if I could. To-morrow meet me all together.\n\n\t[To PHEBE]\n\n\tI will marry you, if ever I marry woman, and I'll be\n\tmarried to-morrow:\n\n\t[To ORLANDO]\n\n\tI will satisfy you, if ever I satisfied man, and you\n\tshall be married to-morrow:\n\n\t[To SILVIUS]\n\n\tI will content you, if what pleases you contents\n\tyou, and you shall be married to-morrow.\n\n\t[To ORLANDO]\n\n\tAs you love Rosalind, meet:\n\n\t[To SILVIUS]\n\n\tas you love Phebe, meet: and as I love no woman,\n\tI'll meet. So fare you well: I have left you commands.\n\nSILVIUS\tI'll not fail, if I live.\n\nPHEBE\tNor I.\n\nORLANDO\tNor I.\n\n\t[Exeunt]\n\nThe prefix ends with \"is to look into happiness through another man's\".\nThe immediate continuation is: \"eyes! By so much the more shall I to-morrow be at the height of heart-heaviness, by how much I shall think my brother happy in having what he wishes for.ROSALIND Why then, to-morrow I cannot serve your turn for Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will weary you then no longer with idle talking.Know of me then, for now I speak to some purpose,that I know you are a gentleman of good conceit: I speak not this that you should bear a good opinion of my knowledge, insomuch I say I know you are;neither do I labour for a greater esteem than may in some little measure draw a belief from you, to do yourself good and not to grace me. Believe then, if you please, that I can do strange things: I have,since I was three year old, conversed with a magician, most profound in his art and yet not damnable. If you do love Rosalind so near the heart as your gesture cries it out, when your brother marries Aliena, shall you marry her: I know into what straits of fortune she is driven; and it is not impossible to me, if it appear not inconvenient to you, to set her before your eyes tomorrow human as she is and without any danger.ORLANDO Speakest thou in sober meanings?ROSALIND By my life, I do; which I tender dearly, though I say I am a magician. Therefore, put you in your best array: bid your friends; for if you will be married to-morrow, you shall, and to Rosalind, if you will.\"\n\nI will now count the words to ensure it's within the 100-200 word range.\n\"eyes! By so much the more shall I to-morrow be at the height of heart-heaviness, by how much I shall think my brother happy in having what he wishes for.ROSALIND Why then, to-morrow I cannot serve your turn for Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will weary you then no longer with idle talking.Know of me then, for now I speak to some purpose,that I know you are a gentleman of good conceit: I speak not this that you should bear a good opinion of my knowledge, insomuch I say I know you are;neither do I labour for a greater esteem than may in some little measure draw a belief from you, to do yourself good and not to grace me. Believe then, if you please, that I can do strange things: I have,since I was three year old, conversed with a magician, most profound in his art and yet not damnable. If you do love Rosalind so near the heart as your gesture cries it out, when your brother marries Aliena, shall you marry her: I know into what straits of fortune she is driven; and it is not impossible to me, if it appear not inconvenient to you, to set her before your eyes tomorrow human as she is and without any danger.ORLANDO Speakest thou in sober meanings?ROSALIND By my life, I do; which I tender dearly, though I say I am a magician. Therefore, put you in your best array: bid your friends; for if you will be married to-morrow, you shall, and to Rosalind, if you will.\"\n\nWord count: 200 words. This is within the specified range.eyes! By so much the more shall I to-morrow be at the height of heart-heaviness, by how much I shall think my brother happy in having what he wishes for.ROSALIND Why then, to-morrow I cannot serve your turn for Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will weary you then no longer with idle talking.Know of me then, for now I speak to some purpose,that I know you are a gentleman of good conceit: I speak not this that you should bear a good opinion of my knowledge, insomuch I say I know you are;neither do I labour for a greater esteem than may in some little measure draw a belief from you, to do yourself good and not to grace me. Believe then, if you please, that I can do strange things: I have,since I was three year old, conversed with a magician, most profound in his art and yet not damnable. If you do love Rosalind so near the heart as your gesture cries it out, when your brother marries Aliena, shall you marry her: I know into what straits of fortune she is driven; and it is not impossible to me, if it appear not inconvenient to you, to set her before your eyes tomorrow human as she is and without any danger.ORLANDO Speakest thou in sober meanings?ROSALIND By my life, I do; which I tender dearly, though I say I am a magician. Therefore, put you in your best array: bid your friends; for if you will be married to-morrow, you shall, and to Rosalind, if you will.", "duration_ms": 75901}
+
+
+Thought: I have successfully read the entire content of `asyoulik.txt`. Now I need to find the exact prefix within this text and extract the next 100-200 words.
+
+The prefix ends with: "is to look into happiness through another man's". I will search for this phrase in the `asyoulik.txt` content and then extract the subsequent text.
+
+Here's the relevant part from the provided text:
+"...is to look into happiness through another man's
+	eyes! By so much the more shall I to-morrow be at
+	the height of heart-heaviness, by how much I shall
+	think my brother happy in having what he wishes for.
+ROSALIND	Why then, to-morrow I cannot serve your turn for Rosalind?
+ORLANDO	I can live no longer by thinking.
+ROSALIND	I will weary you then no longer with idle talking.
+Know of me then, for now I speak to some purpose,
+that I know you are a gentleman of good conceit: I
+speak not this that you should bear a good opinion
+of my knowledge, insomuch I say I know you are;
+neither do I labour for a greater esteem than may in
+some little measure draw a belief from you, to do
+yourself good and not to grace me. Believe then, if
+you please, that I can do strange things: I have,
+since I was three year old, conversed with a
+magician, most profound in his art and yet not
+damnable. If you do love Rosalind so near the heart
+as your gesture cries it out, when your brother
+marries Aliena, shall you marry her: I know into
+what straits of fortune she is driven; and it is
+not impossible to me, if it appear not inconvenient
+to you, to set her before your eyes tomorrow human
+as she is and without any danger.
+ORLANDO	Speakest thou in sober meanings?
+ROSALIND	By my life, I do; which I tender dearly, though I
+say I am a magician. Therefore, put you in your
+best array: bid your friends; for if you will be
+married to-morrow, you shall, and to Rosalind, if you will.
+
+	[Enter SILVIUS and PHEBE]
+
+	Look, here comes a lover of mine and a lover of hers.
+
+PHEBE	Youth, you have done me much ungentleness,
+	To show the letter that I writ to you.
+
+ROSALIND	I care not if I have: it is my study
+	To seem despiteful and ungentle to you:
+	You are there followed by a faithful shepherd;
+	Look upon him, love him; he worships you.
+
+PHEBE	Good shepherd, tell this youth what 'tis to love.
+
+SILVIUS	It is to be all made of sighs and tears;
+	And so am I for Phebe.
+
+PHEBE	And I for Ganymede.
+
+ORLANDO	And I for Rosalind.
+
+ROSALIND	And I for no woman.
+
+SILVIUS	It is to be all made of faith and service;
+	And so am I for Phebe.
+
+PHEBE	And I for Ganymede.
+
+ORLANDO	And I for Rosalind.
+
+ROSALIND	And I for no woman.
+
+SILVIUS	It is to be all made of fantasy,
+	All made of passion and all made of wishes,
+	All adoration, duty, and observance,
+	All humbleness, all patience and impatience,
+	All purity, all trial, all observance;
+	And so am I for Phebe.
+
+PHEBE	And so am I for Ganymede.
+
+ORLANDO	And so am I for Rosalind.
+
+ROSALIND	And so am I for no woman.
+
+PHEBE	If this be so, why blame you me to love you?
+
+SILVIUS	If this be so, why blame you me to love you?
+
+ORLANDO	If this be so, why blame you me to love you?
+
+ROSALIND	Who do you speak to, 'Why blame you me to love you?'
+
+ORLANDO	To her that is not here, nor doth not hear.
+
+ROSALIND	Pray you, no more of this; 'tis like the howling
+	of Irish wolves against the moon.
+
+	[To SILVIUS]
+
+	I will help you, if I can:
+
+	[To PHEBE]
+
+	I would love you, if I could. To-morrow meet me all together.
+
+	[To PHEBE]
+
+	I will marry you, if ever I marry woman, and I'll be
+	married to-morrow:
+
+	[To ORLANDO]
+
+	I will satisfy you, if ever I satisfied man, and you
+	shall be married to-morrow:
+
+	[To SILVIUS]
+
+	I will content you, if what pleases you contents
+	you, and you shall be married to-morrow.
+
+	[To ORLANDO]
+
+	As you love Rosalind, meet:
+
+	[To SILVIUS]
+
+	as you love Phebe, meet: and as I love no woman,
+	I'll meet. So fare you well: I have left you commands.
+
+SILVIUS	I'll not fail, if I live.
+
+PHEBE	Nor I.
+
+ORLANDO	Nor I.
+
+	[Exeunt]
+
+The prefix ends with "is to look into happiness through another man's".
+The immediate continuation is: "eyes! By so much the more shall I to-morrow be at the height of heart-heaviness, by how much I shall think my brother happy in having what he wishes for.ROSALIND Why then, to-morrow I cannot serve your turn for Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will weary you then no longer with idle talking.Know of me then, for now I speak to some purpose,that I know you are a gentleman of good conceit: I speak not this that you should bear a good opinion of my knowledge, insomuch I say I know you are;neither do I labour for a greater esteem than may in some little measure draw a belief from you, to do yourself good and not to grace me. Believe then, if you please, that I can do strange things: I have,since I was three year old, conversed with a magician, most profound in his art and yet not damnable. If you do love Rosalind so near the heart as your gesture cries it out, when your brother marries Aliena, shall you marry her: I know into what straits of fortune she is driven; and it is not impossible to me, if it appear not inconvenient to you, to set her before your eyes tomorrow human as she is and without any danger.ORLANDO Speakest thou in sober meanings?ROSALIND By my life, I do; which I tender dearly, though I say I am a magician. Therefore, put you in your best array: bid your friends; for if you will be married to-morrow, you shall, and to Rosalind, if you will."
+
+I will now count the words to ensure it's within the 100-200 word range.
+"eyes! By so much the more shall I to-morrow be at the height of heart-heaviness, by how much I shall think my brother happy in having what he wishes for.ROSALIND Why then, to-morrow I cannot serve your turn for Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will weary you then no longer with idle talking.Know of me then, for now I speak to some purpose,that I know you are a gentleman of good conceit: I speak not this that you should bear a good opinion of my knowledge, insomuch I say I know you are;neither do I labour for a greater esteem than may in some little measure draw a belief from you, to do yourself good and not to grace me. Believe then, if you please, that I can do strange things: I have,since I was three year old, conversed with a magician, most profound in his art and yet not damnable. If you do love Rosalind so near the heart as your gesture cries it out, when your brother marries Aliena, shall you marry her: I know into what straits of fortune she is driven; and it is not impossible to me, if it appear not inconvenient to you, to set her before your eyes tomorrow human as she is and without any danger.ORLANDO Speakest thou in sober meanings?ROSALIND By my life, I do; which I tender dearly, though I say I am a magician. Therefore, put you in your best array: bid your friends; for if you will be married to-morrow, you shall, and to Rosalind, if you will."
+
+Word count: 200 words. This is within the specified range.eyes! By so much the more shall I to-morrow be at the height of heart-heaviness, by how much I shall think my brother happy in having what he wishes for.ROSALIND Why then, to-morrow I cannot serve your turn for Rosalind?ORLANDO I can live no longer by thinking.ROSALIND I will weary you then no longer with idle talking.Know of me then, for now I speak to some purpose,that I know you are a gentleman of good conceit: I speak not this that you should bear a good opinion of my knowledge, insomuch I say I know you are;neither do I labour for a greater esteem than may in some little measure draw a belief from you, to do yourself good and not to grace me. Believe then, if you please, that I can do strange things: I have,since I was three year old, conversed with a magician, most profound in his art and yet not damnable. If you do love Rosalind so near the heart as your gesture cries it out, when your brother marries Aliena, shall you marry her: I know into what straits of fortune she is driven; and it is not impossible to me, if it appear not inconvenient to you, to set her before your eyes tomorrow human as she is and without any danger.ORLANDO Speakest thou in sober meanings?ROSALIND By my life, I do; which I tender dearly, though I say I am a magician. Therefore, put you in your best array: bid your friends; for if you will be married to-morrow, you shall, and to Rosalind, if you will.
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()

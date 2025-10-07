@@ -1,0 +1,680 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 30.9113ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 41.1718ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.6849248s
+- Watching for configuration updates...
+> Initialized in 1.7575798s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_alice29_cfc6fc73
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: ed685c47-1f2f-44c3-911e-258fd7f271b4                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: ea65a0cb-f890-40ff-b151-0d34f060ea25
+    Status: Executing Task...
+    └── ✅ Reasoning Completed (Not Ready)┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│   `unless it was written to nobody, which isn't usual, you know.' `Who is   │
+│  it directed to?' said one of the jurymen. `It isn't directed at all,'      │
+│  said the White Rabbit; `in fact, there's nothing written on the OUTSIDE.'  │
+│  He unfolded the paper as he spoke, and added `It isn't a letter, after     │
+│  all: it's a set of verses.' `Are they in the prisoner's handwriting?'      │
+│  asked another of they jurymen. `No, they're not,' said the White Rabbit,   │
+│  `and that's the queerest thing about it.' (The jury all looked puzzled.)   │
+│  `He must have imitated somebody else's hand,' said the King. (The jury     │
+│  all brightened up again.) `Please your Majesty,' said the Knave, `I        │
+│  didn't write it, and they can't prove I did: there's no name signed at     │
+│  the end.' `If you didn't sign it,' said the King, `that only makes the     │
+│  matter worse. You MUST have meant some mischief, or else you'd have        │
+│  signed your name like an honest man.' There was a general clapping of      │
+│  hands at this: it was the first really clever thing the King had said      │
+│  that day. `That PROVES his guilt,' said the Queen. `It proves nothing of   │
+│  the sort!' said Alice. `Why, you don't even know what they're about!'      │
+│  `Read them,' said the King. The White Rabbit put on his spectacles.        │
+│  `Where shall I begin, please your Majesty?' he asked. `Begin at the        │
+│  beginning,' the King said gravely, `and go on till you come to the end:    │
+│  then stop.' These were the verses the White Rabbit read:-- `They told me   │
+│  you had been to her, And mentioned me to him: She gave me a good           │
+│  character, But said I could not swim. He sent them word I had not gone     │
+│  (We know it to be true): If she should push the matter on, What would      │
+│  become of you? I gave her one, they gave him two, You gave us three or     │
+│  more; They all returned from him to you, Though they were mine before. If  │
+│  I or she should chance to be Involved in this affair, He trusts to you to  │
+│  set them free, Exactly as we were. My notion was that you had been         │
+│  (Before she had this fit) An obstacle that came between Him, and           │
+│  ourselves, and it. Don't let him know she liked them best, For this must   │
+│  ever be A secret, kept from all the rest, Between yourself and me.'        │
+│  `That's the most important piece of evidence we've heard yet,' said the    │
+│  King, rubbing his hands; `so now let the jury--' `If any one of them can   │
+│  explain it,' said Alice, (she had grown so large in the last few minutes   │
+│  that she wasn't a bit afraid of interrupting him,) `I'll give him          │
+│  sixpence. _I_ don't believe there's an atom of meaning in it.' The jury    │
+│  all wrote down on their slates, `SHE doesn't believe there's an atom of    │
+│  meaning in it,' but none of them attempted to explain the paper. `If       │
+│  there's no meaning in it,' said the King, `that saves a world of trouble,  │
+│  you know, as we needn't try to find any. And yet I don't know,' he went    │
+│  on, spreading out the verses on his knee, and looking at them with one     │
+│  eye; `I seem to see some meaning in them, after all. "--SAID I COULD NOT   │
+│  SWIM--" you can't swim, can you?' he added, turning to the Knave. The      │
+│  Knave shook his head sadly. `Do I look like it?' he said. (Which he        │
+│  certainly did NOT, being made entirely of cardboard.) `All right, so       │
+│  far,' said the King, and he went on muttering over the verses to himself:  │
+│  `"WE KNOW IT TO BE TRUE--" that's the jury, of course-- "I GAVE HER ONE,   │
+│  THEY GAVE HIM TWO--" why, that must be what he did with the tarts, you     │
+│  know--' `But, it goes on "THEY ALL RETURNED FROM HIM TO YOU,"' said        │
+│  Alice. `Why, there they are!' said the King triumphantly, pointing to the  │
+│  tarts on the table. `Nothing can be clearer than THAT. Then                │
+│  again--"BEFORE SHE HAD THIS FIT--" you never had fits, my dear, I think?'  │
+│  he said to the Queen. `Never!' said the Queen furiously, throwing an       │
+│  inkstand at the Lizard as she spoke. (The unfortunate little Bill had      │
+│  left off writing on his slate with one finger, as he found it made no      │
+│  mark; but he now hastily began again, using the ink, that was trickling    │
+│  down his face, as long as it lasted.) `Then the words don't FIT you,'      │
+│  said the King, looking round the court with a smile. There was a dead      │
+│  silence. `It's a pun!' the King added in an offended tone, and everybody   │
+│  laughed, `Let the jury consider their verdict,' the King said, for about   │
+│  the twentieth time that day. `No, no!' said the Queen. `Sentence           │
+│  first--verdict afterwards.' `Stuff and nonsense!' said Alice loudly. `The  │
+│  idea of having the sentence first!' `Hold your tongue!' said the Queen,    │
+│  turning purple. `I won't!' said Alice. `Off with her head!' the Queen      │
+│  shouted at the top of her voice. Nobody moved. `Who cares for you?' said   │
+│  Alice, (she had grown to her full size by this time.) `You're nothing but  │
+│  a pack of cards!' At this the whole pack rose up into the air, and came    │
+│  flying down upon her: she gave a little scream, half of fright and half    │
+│  of anger, and tried to beat them off, and found herself lying on the       │
+│  bank, with her head in the lap of her sister, who was gently brushing      │
+│  away some dead leaves that had fluttered down from the trees upon her      │
+│  face. `Wake up, Alice dear!' said her sister; `Why, what a long sleep      │
+│  you've had!' `Oh, I've had such a curious dream!' said Alice, and she      │
+│  told her sister, as well as she could remember them, all these strange     │
+│  Adventures of hers that you have just been reading about; and when she     │
+│  had finished, her sister kissed her, and said, `It WAS a curious dream,    │
+│  dear, certainly: but now run in to your tea; it's getting late.' So Alice  │
+│  got up and ran off, thinking while she ran, as well she might, what a      │
+│  wonderful dream it had been. But her sister sat still just as she left     │
+│  her, leaning her head on her hand, watching the setting sun, and thinking  │
+│  of little Alice and all her wonderful Adventures, till she too began       │
+│  dreaming after a fashion, and this was her dream:-- First, she dreamed of  │
+│  little Alice herself, and once again the tiny hands were clasped upon her  │
+│  knee, and the bright eager eyes were looking up into hers--she could hear  │
+│  the very tones of her voice, and see that queer little toss of her head    │
+│  to keep back the wandering hair that WOULD always get into her eyes--and   │
+│  still as she listened, or seemed to listen, the whole place around her     │
+│  became alive the strange creatures of her little sister's dream. The long  │
+│  grass rustled at her feet as the White Rabbit hurried by--the frightened   │
+│  Mouse splashed his way through the neighbouring pool--she could hear the   │
+│  rattle of the teacups as the March Hare and his friends shared their       │
+│  never-ending meal, and the shrill voice of the Queen ordering off her      │
+│  unfortunate guests to execution--once more the pig-baby was sneezing on    │
+│  the Duchess's knee, while plates and dishes crashed around it--once more   │
+│  the shriek of the Gryphon, the squeaking of the Lizard's slate-pencil,     │
+│  and the choking of the suppressed guinea-pigs, filled the air, mixed up    │
+│  with the distant sobs of the miserable Mock Turtle. So she sat on, with    │
+│  closed eyes, and half believed herself in Wonderland, though she knew she  │
+│  had but to open them again, and all would change to dull reality--the      │
+│  grass would be only rustling in the wind, and the pool rippling to the     │
+│  waving of the reeds--the rattling teacups would change to tinkling sheep-  │
+│  bells, and the Queen's shrill cries to the voice of the shepherd boy--and  │
+│  the sneeze of the baby, the shriek of the Gryphon, and all thy other       │
+│  queer noises, would change (she knew) to the confused clamour of the busy  │
+│  farm-yard--while the lowing of the cattle in the distance would take the   │
+│  place of the Mock Turtle's heavy sobs. Lastly, she pictured to herself     │
+│  how this same little sister of hers would, in the after-time, be herself   │
+│  a grown woman; and how she would keep, through all her riper years, the    │
+│  simple and loving heart of her childhood: and how she would gather about   │
+│  her other little children, and make THEIR eyes bright and eager with many  │
+│  a strange tale, perhaps even with the dream of Wonderland of long ago:     │
+│  and how she would feel with all their simple sorrows, and find a pleasure  │
+│  in all their simple joys, remembering her own child-life, and the happy    │
+│  summer days. THE END                                                       │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  irst.'                                                                     │
+│                                                                             │
+│    `Why?' said the Caterpillar.                                             │
+│                                                                             │
+│    Here was another puzzling question; and as Alice could not               │
+│  think of any good reason, and as the Caterpillar seemed to be in           │
+│  a VERY unpleasant state of mind, she turned away.                          │
+│                                                                             │
+│    `Come back!' the Caterpillar called after her.  `I've something          │
+│  important to say!'                                                         │
+│                                                                             │
+│    This sounded promising, certainly:  Alice turned and came back           │
+│  again.                                                                     │
+│                                                                             │
+│    `Keep your temper,' said the Caterpillar.                                │
+│                                                                             │
+│    `Is that all?' said Alice, swallowing down her anger as well as          │
+│  she could.                                                                 │
+│                                                                             │
+│    `No,' said the Caterpillar.                                              │
+│                                                                             │
+│    Alice thought she might as well wait, as she had nothing else            │
+│  to do, and perhaps after all it might tell her something worth             │
+│  hearing.  For some minutes it puffed away without speaking, but            │
+│  at last it unfolded its arms, took the hookah out of its mouth             │
+│  again, and said, `So you think you're changed, do you?'                    │
+│                                                                             │
+│    `I'm afraid I am, sir,' said Alice; `I can't remember things as          │
+│  I used--and I don't keep the same size for ten minutes together!'          │
+│                                                                             │
+│    `Can't remember WHAT things?' said the Caterpillar.                      │
+│                                                                             │
+│    `Well, I've tried to say "HOW DOTH THE LITTLE BUSY BEE," but it          │
+│  all came different!' Alice replied in a very melancholy voice.             │
+│                                                                             │
+│    `Repeat, "YOU ARE OLD, FATHER WILLIAM,"' said the Caterpillar.           │
+│                                                                             │
+│    Alice folded her hands, and began:--                                     │
+│                                                                             │
+│      `You are old, Father William,' the young man said,                     │
+│        `And your hair has become very white;                                │
+│      And yet you incessantly stand on your head--                           │
+│        Do you think, at your age, it is right?'                             │
+│                                                                             │
+│      `In my youth,' Father William replied to his son,                      │
+│        `I feared it might injure the brain;                                 │
+│      But, now that I'm perfectly sure I have none,                          │
+│        Why, I do it again and again.'                                       │
+│                                                                             │
+│      `You are old,' said the youth, `as I mentioned before,                 │
+│        And have grown most uncommonly fat;                                  │
+│      Yet you turned a back-somersault in at the door--                      │
+│        Pray, what is the reason of that?'                                   │
+│                                                                             │
+│      `In my youth,' said the sage, as he shook his grey locks,              │
+│        `I kept all my limbs very supple                                     │
+│      By the use of this ointment--one shilling the box--                    │
+│        Allow me to sell you a couple?'                                      │
+│                                                                             │
+│      `You are old,' said the youth, `and your jaws are too weak             │
+│        For anything tougher than suet;                                      │
+│      Yet you finished the goose, with the bones and the beak--              │
+│        Pray how did you manage to do it?'                                   │
+│                                                                             │
+│      `In my youth,' said his father, `I took to the law,                    │
+│        And argued each case with my wife;                                   │
+│      And the muscular strength, which it gave to my jaw,                    │
+│        Has lasted the rest of my life.'                                     │
+│                                                                             │
+│      `You are old,' said the youth, `one would hardly suppose               │
+│        That your eye was as steady as ever;                                 │
+│      Yet you balanced an eel on the end of your nose--                      │
+│        What made you so awfully clever?'                                    │
+│                                                                             │
+│      `I have answered three questions, and that is enough,'                 │
+│        Said his father; `don't give yourself airs!                          │
+│      Do you think I can listen all day to such stuff?                       │
+│        Be off, or I'll kick you down stairs!'                               │
+│                                                                             │
+│                                                                             │
+│    `That is not said right,' said the Caterpillar.                          │
+│                                                                             │
+│    `Not QUITE right, I'm afraid,' said Alice, timidly; `some of the         │
+│  words have got altered.'                                                   │
+│                                                                             │
+│    `It is wrong from beginning to end,' said the Caterpillar                │
+│  decidedly, and there was silence for some minutes.                         │
+│                                                                             │
+│    The Caterpillar was the first to speak.                                  │
+│                                                                             │
+│    `What size do you want to be?' it asked.                                 │
+│                                                                             │
+│    `Oh, I'm not particular as to size,' Alice hastily replied;              │
+│  `only one doesn't like changing so often, you know.'                       │
+│                                                                             │
+│    `I DON'T know,' said the Caterpillar.                                    │
+│                                                                             │
+│    Alice said nothing:  she had never been so much contradicted in          │
+│  her life before, and she felt that she was losing her temper.              │
+│                                                                             │
+│    `Are you content now?' said the Caterpillar.                             │
+│                                                                             │
+│    `Well, I should like to be a LITTLE larger, sir, if you                  │
+│  wouldn't mind,' said Alice:  `three inches is such a wretched              │
+│  height to be.'                                                             │
+│                                                                             │
+│    `It is a very good height indeed!' said the Caterpillar                  │
+│  angrily, rearing itself upright as it spoke (it was exactly three          │
+│  inches high).                                                              │
+│                                                                             │
+│    `But I'm not used to it!' pleaded poor Alice in a piteous tone.          │
+│  And she thought of herself, `I wish the creatures wouldn't be so           │
+│  easily offended!'                                                          │
+│                                                                             │
+│    `You'll get used to it in time,' said the Caterpillar; and it            │
+│  put the hookah into its mouth and began smoking again.                     │
+│                                                                             │
+│    This time Alice waited patiently until it chose to speak again.          │
+│  In a minute or two the Caterpillar took the hookah out of its              │
+│  mouth and yawned once or twice, and shook itself.  Then it got             │
+│  down off the mushroom, and crawled away in the grass, merely               │
+│  remarking as it went, `One side will make you grow taller, and             │
+│  the other side will make you grow shorter.'                                │
+│                                                                             │
+│    `One side of WHAT?  The other side of WHAT?' thought Alice to            │
+│  herself.                                                                   │
+│                                                                             │
+│    `Of the mushroom,' said the Caterpillar, just as if she had              │
+│  asked it aloud; and in another moment it was out of sight.                 │
+│                                                                             │
+│    Alice remained looking thoughtfully at the mushroom for a                │
+│  minute, trying to make out which were the two sides of it; and as          │
+│  it was perfectly round, she found this a very difficult question.          │
+│  However, at last she stretched her arms round it as far as they            │
+│  would go, and broke off a bit of the edge with each hand.                  │
+│                                                                             │
+│    `And now which is which?' she said to herself, and nibbled a             │
+│  little of the right-hand bit to try the effect:  the next moment           │
+│  she felt a violent blow underneath her chin:  it had struck her            │
+│  foot!                                                                      │
+│                                                                             │
+│    She was a good deal frightened by this very sudden change, but           │
+│  she felt that there was no time to be lost, as she was shrinking           │
+│  rapidly; so she set to work at once to eat some of the other bit.          │
+│  Her chin was pressed so closely against her foot, that there was           │
+│  hardly room to open her mouth; but she did it at last, and                 │
+│  managed to swallow a morsel of the lefthand bit.                           │
+│                                                                             │
+│                                                                             │
+│       *       *       *       *       *       *       *                     │
+│                                                                             │
+│           *       *       *       *       *       *                         │
+│                                                                             │
+│       *       *       *       *       *       *       *                     │
+│                                                                             │
+│    `Come, my head's free at last!' said Alice in a tone of                  │
+│  delight, which changed into alarm in another moment, when she              │
+│  found that her shoulders were nowhere to be found:  all she could          │
+│  see, when she looked down, was an immense length of neck, which            │
+│  seemed to rise like a stalk out of a sea of green leaves that lay          │
+│  far below her.                                                             │
+│                                                                             │
+│    `What CAN all that green stuff be?' said Alice.  `And where              │
+│  HAVE my shoulders got to?  And oh, my poor hands, how is it I              │
+│  can't see you?'  She was moving them about as she spoke, but no            │
+│  result seemed to follow, except a little shaking among the                 │
+│  distant green leaves.                                                      │
+│                                                                             │
+│    As there seemed to be no chance of getting her hands up to her           │
+│  head, she tried to get her head down to them, and was delighted            │
+│  to find that her neck would bend about easily in any direction,            │
+│  like a serpent.  She had just succeeded in curving it down into a          │
+│  graceful zigzag, and was going to dive in among the leaves, which          │
+│  she found to be nothing but the tops of the trees under which she          │
+│  had been wandering, when a sharp hiss made her draw back in a              │
+│  hurry:  a large pigeon had flown into her face, and was beating            │
+│  her violently with its wings.                                              │
+│                                                                             │
+│    `Serpent!' screamed the Pigeon.                                          │
+│                                                                             │
+│    `I'm NOT a serpent!' said Alice indignantly.  `Let me alone!'            │
+│                                                                             │
+│    `Serpent, I say again!' repeated the Pigeon, but in a more               │
+│  subdued tone, and added with a kind of sob, `I've tried every              │
+│  way, and nothing seems to suit them!'                                      │
+│                                                                             │
+│    `I haven't the least idea what you're talking about,' said               │
+│  Alice.                                                                     │
+│                                                                             │
+│    `I've tried the roots of trees, and I've tried banks, and I've           │
+│  tried hedges,' the Pigeon went on, without attending to her; `but          │
+│  those serpents!  There's no pleasing them!'                                │
+│                                                                             │
+│    Alice was more and more puzzled, but she thought there was no            │
+│  use in saying anything more till the Pigeon had finished.                  │
+│                                                                             │
+│    `As if it wasn't trouble enough hatching the eggs,' said the             │
+│  Pigeon; `but I must be on the look-out for serpents night and              │
+│  day!  Why, I haven't had a wink of sleep these three weeks!'               │
+│                                                                             │
+│    `I'm very sorry you've been annoyed,' said Alice, who was                │
+│  beginning to see its meaning.                                              │
+│                                                                             │
+│    `And just as I'd taken the highest tree in the wood,' continued          │
+│                                                                             │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool directory_tree with arguments: {"path":"/C/Users/Noah/Documents/sink"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool directory_tree took: 451.0991ms
+🚀 Crew: crew
+└── 📋 Task: ea65a0cb-f890-40ff-b151-0d34f060ea25
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    └── 🔧 Used directory_tree (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Action: directory_tree                                            │
+│                                                                             │
+│  Using Tool: directory_tree                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\"}"                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  [                                                                          │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "alice29.txt",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "asyoulik.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "cp.html",                                                 │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "fields.c",                                                │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "grammar.lsp",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "lcet10.txt",                                              │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "plrabn12.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "xargs.1",                                                 │
+│          "type": "file"                                                     │
+│        }                                                                    │
+│      ],                                                                     │
+│      "name": "cantrbry",                                                    │
+│      "type": "directory"                                                    │
+│    },                                                                       │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "enwik8_128kb_0",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_1",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_10",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_11",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_12",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_13",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_14",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_15",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_16",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_17",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_18",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_19",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_2",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_20",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_21",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_22",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_23",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_3",                                          │
+│          "type": "fil...                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool read_text_file with arguments: {"path":"/C/Users/Noah/Documents/sink/cantrbry/alice29.txt"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool read_text_file took: 492.6387ms
+🚀 Crew: crew
+└── 📋 Task: ea65a0cb-f890-40ff-b151-0d34f060ea25
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    ├── 🔧 Used directory_tree (1)
+    └── 🔧 Used read_text_file (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The prefix is from "Alice's Adventures in Wonderland".   │
+│  I can see a file named `alice29.txt` in the `cantrbry` directory. This is  │
+│  a very strong candidate for the source document. I will read the content   │
+│  of `alice29.txt` to find the continuation.                                 │
+│                                                                             │
+│  Using Tool: read_text_file                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/cantrbry/alice29.txt\"}"        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                  ALICE'S ADVENTURES IN WONDERLAND                           │
+│                                                                             │
+│                            Lewis Carroll                                    │
+│                                                                             │
+│                 THE MILLENNIUM FULCRUM EDITION 2.9                          │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                              CHAPTER I                                      │
+│                                                                             │
+│                        Down the Rabbit-Hole                                 │
+│                                                                             │
+│                                                                             │
+│    Alice was beginning to get very tired of sitting by her sister           │
+│  on the bank, and of having nothing to do:  once or twice she had           │
+│  peeped into the book her sister was reading, but it had no                 │
+│  pictures or conversations in it, `and what is the use of a book,'          │
+│  thought Alice `without pictures or conversation?'                          │
+│                                                                             │
+│    So she was considering in her own mind (as well as she could,            │
+│  for the hot day made her feel very sleepy and stupid), whether             │
+│  the pleasure of making a daisy-chain would be worth the trouble            │
+│  of getting up and picking the daisies, when suddenly a White               │
+│  Rabbit with pink eyes ran close by her.                                    │
+│                                                                             │
+│    There was nothing so VERY remarkable in that; nor did Alice              │
+│  think it so VERY much out of the way to hear the Rabbit say to             │
+│  itself, `Oh dear!  Oh dear!  I shall be late!'  (when she thought          │
+│  it over afterwards, it occurred to her that she ought to have              │
+│  wondered at this, but at the time it all seemed quite natural);            │
+│  but when the Rabbit actually TOOK A WATCH OUT OF ITS WAISTCOAT-            │
+│  POCKET, and looked at it, and then hurried on, Alice started to            │
+│  her feet, for it flashed across her mind that she had never                │
+│  before seen a rabbit with either a waistcoat-pocket, or a watch to         │
+│  take out of it, and burning with curiosity, she ran across the             │
+│  field after it, and fortunately was just in time to see it pop             │
+│  down a large rabbit-hole under the hedge.                                  │
+│                                                                             │
+│    In another moment down went Alice after it, never once                   │
+│  considering how in the world she was to get out again.                     │
+│                                                                             │
+│    The rabbit-hole went straight on like a tunnel for some way,             │
+│  and then dipped suddenly down, so suddenly that Alice had not a            │
+│  moment to think about stopping herself before she found herself            │
+│  falling down a very deep well.                                             │
+│                                                                             │
+│    Either the well was very deep, or s...                                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: ea65a0cb-f890-40ff-b151-0d34f060ea25
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    ├── 🔧 Used directory_tree (1)
+    └── 🔧 Used read_text_file (1)┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│  the Pigeon, raising its voice to a shriek, `and just as I was thinking I   │
+│  should be free of them at last, they must needs come wriggling down from   │
+│  the sky! Ugh, Serpent!'                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: ea65a0cb-f890-40ff-b151-0d34f060ea25
+    Assigned to: Predictive Compression Intelligence
+    Status: ✅ Completed
+    ├── ✅ Reasoning Completed (Not Ready)
+    ├── 🔧 Used directory_tree (1)
+    └── 🔧 Used read_text_file (1)┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: ea65a0cb-f890-40ff-b151-0d34f060ea25                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: ed685c47-1f2f-44c3-911e-258fd7f271b4                                   │
+│  Tool Args:                                                                 │
+│  Final Output: the Pigeon, raising its voice to a shriek, `and just as I    │
+│  was thinking I should be free of them at last, they must needs come        │
+│  wriggling down from the sky! Ugh, Serpent!'                                │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "the Pigeon, raising its voice to a shriek, `and just as I was thinking I should be free of them at last, they must needs come wriggling down from the sky! Ugh, Serpent!'", "duration_ms": 158829}
+the Pigeon, raising its voice to a shriek, `and just as I was thinking I should be free of them at last, they must needs come wriggling down from the sky! Ugh, Serpent!'
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()

@@ -1,0 +1,907 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 31.6188ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 51.2013ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.9840905s
+- Watching for configuration updates...
+> Initialized in 2.0674513s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_asyoulik_78e91080
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 4d704192-9ccd-4c54-9a8d-32f5c7122dc8                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 6da93d23-d441-4037-9386-5b1824d85238
+    Status: Executing Task...
+    └── ✅ Reasoning Completed (Not Ready)┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│   count the words, excluding speaker names and stage directions.            │
+│  1.  synod                                                                  │
+│  2.  was                                                                    │
+│  3.  devised,                                                               │
+│  4.  Of                                                                     │
+│  5.  many                                                                   │
+│  6.  faces,                                                                 │
+│  7.  eyes                                                                   │
+│  8.  and                                                                    │
+│  9.  hearts,                                                                │
+│  10. To                                                                     │
+│  11. have                                                                   │
+│  12. the                                                                    │
+│  13. touches                                                                │
+│  14. dearest                                                                │
+│  15. prized.                                                                │
+│  16. Heaven                                                                 │
+│  17. would                                                                  │
+│  18. that                                                                   │
+│  19. she                                                                    │
+│  20. these                                                                  │
+│  21. gifts                                                                  │
+│  22. should                                                                 │
+│  23. have,                                                                  │
+│  24. And                                                                    │
+│  25. I                                                                      │
+│  26. to                                                                     │
+│  27. live                                                                   │
+│  28. and                                                                    │
+│  29. die                                                                    │
+│  30. her                                                                    │
+│  31. slave.                                                                 │
+│  32. O                                                                      │
+│  33. most                                                                   │
+│  34. gentle                                                                 │
+│  35. pulpiter!                                                              │
+│  36. what                                                                   │
+│  37. tedious                                                                │
+│  38. homily                                                                 │
+│  39. of                                                                     │
+│  40. love                                                                   │
+│  41. have                                                                   │
+│  42. you                                                                    │
+│  43. wearied                                                                │
+│  44. your                                                                   │
+│  45. parishioners                                                           │
+│  46. withal,                                                                │
+│  47. and                                                                    │
+│  48. never                                                                  │
+│  49. cried                                                                  │
+│  50. 'Have                                                                  │
+│  51. patience,                                                              │
+│  52. good                                                                   │
+│  53. people!'                                                               │
+│  54. How                                                                    │
+│  55. now!                                                                   │
+│  56. back,                                                                  │
+│  57. friends!                                                               │
+│  58. Shepherd,                                                              │
+│  59. go                                                                     │
+│  60. off                                                                    │
+│  61. a                                                                      │
+│  62. little.                                                                │
+│  63. Go                                                                     │
+│  64. with                                                                   │
+│  65. him,                                                                   │
+│  66. sirrah.                                                                │
+│  67. Come,                                                                  │
+│  68. shepherd,                                                              │
+│  69. let                                                                    │
+│  70. us                                                                     │
+│  71. make                                                                   │
+│  72. an                                                                     │
+│  73. honourable                                                             │
+│  74. retreat;                                                               │
+│  75. though                                                                 │
+│  76. not                                                                    │
+│  77. with                                                                   │
+│  78. bag                                                                    │
+│  79. and                                                                    │
+│  80. baggage,                                                               │
+│  81. yet                                                                    │
+│  82. with                                                                   │
+│  83. scrip                                                                  │
+│  84. and                                                                    │
+│  85. scrippage.                                                             │
+│  86. Didst                                                                  │
+│  87. thou                                                                   │
+│  88. hear                                                                   │
+│  89. these                                                                  │
+│  90. verses?                                                                │
+│  91. O,                                                                     │
+│  92. yes,                                                                   │
+│  93. I                                                                      │
+│  94. heard                                                                  │
+│  95. them                                                                   │
+│  96. all,                                                                   │
+│  97. and                                                                    │
+│  98. more                                                                   │
+│  99. too;                                                                   │
+│  100. for                                                                   │
+│  101. some                                                                  │
+│  102. of                                                                    │
+│  103. them                                                                  │
+│  104. had                                                                   │
+│  105. in                                                                    │
+│  106. them                                                                  │
+│  107. more                                                                  │
+│  108. feet                                                                  │
+│  109. than                                                                  │
+│  110. the                                                                   │
+│  111. verses                                                                │
+│  112. would                                                                 │
+│  113. bear.                                                                 │
+│  114. That's                                                                │
+│  115. no                                                                    │
+│  116. matter:                                                               │
+│  117. the                                                                   │
+│  118. feet                                                                  │
+│  119. might                                                                 │
+│  120. bear                                                                  │
+│  121. the                                                                   │
+│  122. verses.                                                               │
+│  123. Ay,                                                                   │
+│  124. but                                                                   │
+│  125. the                                                                   │
+│  126. feet                                                                  │
+│  127. were                                                                  │
+│  128. lame                                                                  │
+│  129. and                                                                   │
+│  130. could                                                                 │
+│  131. not                                                                   │
+│  132. bear                                                                  │
+│  133. themselves                                                            │
+│  134. without                                                               │
+│  135. the                                                                   │
+│  136. verse                                                                 │
+│  137. and                                                                   │
+│  138. therefore                                                             │
+│  139. stood                                                                 │
+│  140. lamely                                                                │
+│  141. in                                                                    │
+│  142. the                                                                   │
+│  143. verse.                                                                │
+│  144. But                                                                   │
+│  145. didst                                                                 │
+│  146. thou                                                                  │
+│  147. hear                                                                  │
+│  148. without                                                               │
+│  149. wondering                                                             │
+│  150. how                                                                   │
+│  151. thy                                                                   │
+│  152. name                                                                  │
+│  153. should                                                                │
+│  154. be                                                                    │
+│  155. hanged                                                                │
+│  156. and                                                                   │
+│  157. carved                                                                │
+│  158. upon                                                                  │
+│  159. these                                                                 │
+│  160. trees?                                                                │
+│  161. I                                                                     │
+│  162. was                                                                   │
+│  163. seven                                                                 │
+│  164. of                                                                    │
+│  165. the                                                                   │
+│  166. nine                                                                  │
+│  167. days                                                                  │
+│  168. out                                                                   │
+│  169. of                                                                    │
+│  170. the                                                                   │
+│  171. wonder                                                                │
+│  172. before                                                                │
+│  173. you                                                                   │
+│  174. came;                                                                 │
+│  175. for                                                                   │
+│  176. look                                                                  │
+│  177. here                                                                  │
+│  178. what                                                                  │
+│  179. I                                                                     │
+│  180. found                                                                 │
+│  181. on                                                                    │
+│  182. a                                                                     │
+│  183. palm-tree.                                                            │
+│  184. I                                                                     │
+│  185. was                                                                   │
+│  186. never                                                                 │
+│  187. so                                                                    │
+│  188. be-rhymed                                                             │
+│  189. since                                                                 │
+│  190. Pythagoras'                                                           │
+│  191. time,                                                                 │
+│  192. that                                                                  │
+│  193. I                                                                     │
+│  194. was                                                                   │
+│  195. an                                                                    │
+│  196. Irish                                                                 │
+│  197. rat,                                                                  │
+│  198. which                                                                 │
+│  199. I                                                                     │
+│  200. can                                                                   │
+│  201. hardly                                                                │
+│  202. remember.                                                             │
+│  This is 202 words, which is slightly over the 100-200 word range. I will   │
+│  trim it to be within the range, aiming for around 190 words.               │
+│  Let's re-count and stop at around 190 words.                               │
+│  1.  synod                                                                  │
+│  2.  was                                                                    │
+│  3.  devised,                                                               │
+│  4.  Of                                                                     │
+│  5.  many                                                                   │
+│  6.  faces,                                                                 │
+│  7.  eyes                                                                   │
+│  8.  and                                                                    │
+│  9.  hearts,                                                                │
+│  10. To                                                                     │
+│  11. have                                                                   │
+│  12. the                                                                    │
+│  13. touches                                                                │
+│  14. dearest                                                                │
+│  15. prized.                                                                │
+│  16. Heaven                                                                 │
+│  17. would                                                                  │
+│  18. that                                                                   │
+│  19. she                                                                    │
+│  20. these                                                                  │
+│  21. gifts                                                                  │
+│  22. should                                                                 │
+│  23. have,                                                                  │
+│  24. And                                                                    │
+│  25. I                                                                      │
+│  26. to                                                                     │
+│  27. live                                                                   │
+│  28. and                                                                    │
+│  29. die                                                                    │
+│  30. her                                                                    │
+│  31. slave.                                                                 │
+│  32. ROSALIND                                                               │
+│  33. O                                                                      │
+│  34. most                                                                   │
+│  35. gentle                                                                 │
+│  36. pulpiter!                                                              │
+│  37. what                                                                   │
+│  38. tedious                                                                │
+│  39. homily                                                                 │
+│  40. of                                                                     │
+│  41. love                                                                   │
+│  42. have                                                                   │
+│  43. you                                                                    │
+│  44. wearied                                                                │
+│  45. your                                                                   │
+│  46. parishioners                                                           │
+│  47. withal,                                                                │
+│  48. and                                                                    │
+│  49. never                                                                  │
+│  50. cried                                                                  │
+│  51. 'Have                                                                  │
+│  52. patience,                                                              │
+│  53. good                                                                   │
+│  54. people!'                                                               │
+│  55. CELIA                                                                  │
+│  56. How                                                                    │
+│  57. now!                                                                   │
+│  58. back,                                                                  │
+│  59. friends!                                                               │
+│  60. Shepherd,                                                              │
+│  61. go                                                                     │
+│  62. off                                                                    │
+│  63. a                                                                      │
+│  64. little.                                                                │
+│  65. Go                                                                     │
+│  66. with                                                                   │
+│  67. him,                                                                   │
+│  68. sirrah.                                                                │
+│  69. TOUCHSTONE                                                             │
+│  70. Come,                                                                  │
+│  71. shepherd,                                                              │
+│  72. let                                                                    │
+│  73. us                                                                     │
+│  74. make                                                                   │
+│  75. an                                                                     │
+│  76. honourable                                                             │
+│  77. retreat;                                                               │
+│  78. though                                                                 │
+│  79. not                                                                    │
+│  80. with                                                                   │
+│  81. bag                                                                    │
+│  82. and                                                                    │
+│  83. baggage,                                                               │
+│  84. yet                                                                    │
+│  85. with                                                                   │
+│  86. scrip                                                                  │
+│  87. and                                                                    │
+│  88. scrippage.                                                             │
+│  89. CELIA                                                                  │
+│  90. Didst                                                                  │
+│  91. thou                                                                   │
+│  92. hear                                                                   │
+│  93. these                                                                  │
+│  94. verses?                                                                │
+│  95. ROSALIND                                                               │
+│  96. O,                                                                     │
+│  97. yes,                                                                   │
+│  98. I                                                                      │
+│  99. heard                                                                  │
+│  100. them                                                                  │
+│  101. all,                                                                  │
+│  102. and                                                                   │
+│  103. more                                                                  │
+│  104. too;                                                                  │
+│  105. for                                                                   │
+│  106. some                                                                  │
+│  107. of                                                                    │
+│  108. them                                                                  │
+│  109. had                                                                   │
+│  110. in                                                                    │
+│  111. them                                                                  │
+│  112. more                                                                  │
+│  113. feet                                                                  │
+│  114. than                                                                  │
+│  115. the                                                                   │
+│  116. verses                                                                │
+│  117. would                                                                 │
+│  118. bear.                                                                 │
+│  119. CELIA                                                                 │
+│  120. That's                                                                │
+│  121. no                                                                    │
+│  122. matter:                                                               │
+│  123. the                                                                   │
+│  124. feet                                                                  │
+│  125. might                                                                 │
+│  126. bear                                                                  │
+│  127. the                                                                   │
+│  128. verses.                                                               │
+│  129. ROSALIND                                                              │
+│  130. Ay,                                                                   │
+│  131. but                                                                   │
+│  132. the                                                                   │
+│  133. feet                                                                  │
+│  134. were                                                                  │
+│  135. lame                                                                  │
+│  136. and                                                                   │
+│  137. could                                                                 │
+│  138. not                                                                   │
+│  139. bear                                                                  │
+│  140. themselves                                                            │
+│  141. without                                                               │
+│  142. the                                                                   │
+│  143. verse                                                                 │
+│  144. and                                                                   │
+│  145. therefore                                                             │
+│  146. stood                                                                 │
+│  147. lamely                                                                │
+│  148. in                                                                    │
+│  149. the                                                                   │
+│  150. verse.                                                                │
+│  151. CELIA                                                                 │
+│  152. But                                                                   │
+│  153. didst                                                                 │
+│  154. thou                                                                  │
+│  155. hear                                                                  │
+│  156. without                                                               │
+│  157. wondering                                                             │
+│  158. how                                                                   │
+│  159. thy                                                                   │
+│  160. name                                                                  │
+│  161. should                                                                │
+│  162. be                                                                    │
+│  163. hanged                                                                │
+│  164. and                                                                   │
+│  165. carved                                                                │
+│  166. upon                                                                  │
+│  167. these                                                                 │
+│  168. trees?                                                                │
+│  169. ROSALIND                                                              │
+│  170. I                                                                     │
+│  171. was                                                                   │
+│  172. seven                                                                 │
+│  173. of                                                                    │
+│  174. the                                                                   │
+│  175. nine                                                                  │
+│  176. days                                                                  │
+│  177. out                                                                   │
+│  178. of                                                                    │
+│  179. the                                                                   │
+│  180. wonder                                                                │
+│  181. before                                                                │
+│  182. you                                                                   │
+│  183. came;                                                                 │
+│  184. for                                                                   │
+│  185. look                                                                  │
+│  186. here                                                                  │
+│  187. what                                                                  │
+│  188. I                                                                     │
+│  189. found                                                                 │
+│  190. on                                                                    │
+│  191. a                                                                     │
+│  192. palm-tree.                                                            │
+│  I will remove the speaker names and stage directions for the final         │
+│  output.                                                                    │
+│  The continuation will be:                                                  │
+│  "synod was devised, Of many faces, eyes and hearts, To have the touches    │
+│  dearest prized. Heaven would that she these gifts should have, And I to    │
+│  live and die her slave. O most gentle pulpiter! what tedious homily of     │
+│  love have you wearied your parishioners withal, and never cried 'Have      │
+│  patience, good people!' How now! back, friends! Shepherd, go off a         │
+│  little. Go with him, sirrah. Come, shepherd, let us make an honourable     │
+│  retreat; though not with bag and baggage, yet with scrip and scrippage.    │
+│  Didst thou hear these verses? O, yes, I heard them all, and more too; for  │
+│  some of them had in them more feet than the verses would bear. That's no   │
+│  matter: the feet might bear the verses. Ay, but the feet were lame and     │
+│  could not bear themselves without the verse and therefore stood lamely in  │
+│  the verse. But didst thou hear without wondering how thy name should be    │
+│  hanged and carved upon these trees? I was seven of the nine days out of    │
+│  the wonder before you came; for look here what I found on a palm-tree."    │
+│  This is 191 words. This is within the 100-200 word range.synod was         │
+│  devised, Of many faces, eyes and hearts, To have the touches dearest       │
+│  prized. Heaven would that she these gifts should have, And I to live and   │
+│  die her slave. O most gentle pulpiter! what tedious homily of love have    │
+│  you wearied your parishioners withal, and never cried 'Have patience,      │
+│  good people!' How now! back, friends! Shepherd, go off a little. Go with   │
+│  him, sirrah. Come, shepherd, let us make an honourable retreat; though     │
+│  not with bag and baggage, yet with scrip and scrippage. Didst thou hear    │
+│  these verses? O, yes, I heard them all, and more too; for some of them     │
+│  had in them more feet than the verses would bear. That's no matter: the    │
+│  feet might bear the verses. Ay, but the feet were lame and could not bear  │
+│  themselves without the verse and therefore stood lamely in the verse. But  │
+│  didst thou hear without wondering how thy name should be hanged and        │
+│  carved upon these trees? I was seven of the nine days out of the wonder    │
+│  before you came; for look here what I found on a palm-tree.                │
+│                                                                             │
+│  # chunk:43                                                                 │
+│  Why, what a medicine were this to find out this fellow! Pale as a oyster.  │
+│  And what else? A beard neglected, which you have not; but I pardon you     │
+│  for that, for simply your having in beard is a younger brother's revenue:  │
+│  then your hose should be ungartered, your bonnet unbanded, your sleeve     │
+│  unbuttoned, your shoe untied and every thing about you demonstrating a     │
+│  careless desolation. But you are no such man; you are rather point-device  │
+│  in your accoutrements, as loving yourself than seeming the lover. Fair     │
+│  youth, I would you knew me. I should do my duty and curtsy before you,     │
+│  but, by my troth, I care not for you.                                      │
+│                                                                             │
+│  # chunk:45                                                                 │
+│  nor a man's good wit seconded with the forward child Understanding, it     │
+│  strikes a man more dead than a great reckoning in a little room. Truly, I  │
+│  would the gods had made thee poetical. I do not know what 'poetical' is:   │
+│  is it honest in deed and word? is it a true thing? No, truly; for the      │
+│  truest poetry is the most feigning; and lovers are given to poetry, and    │
+│  what they swear in poetry may be said as lovers they do feign. Do you      │
+│  wish then that the gods had made me poetical? I do, truly; for thou        │
+│  swearest to me thou art honest: now, if thou wert a poet, I might have     │
+│  some hope thou didst feign. Would you not have me honest? No, truly,       │
+│  unless thou wert hard-favoured; for honesty coupled to beauty is to have   │
+│  honey a sauce to sugar. A material fool! Well, I am not fair; and          │
+│  therefore I pray the gods make me honest. Truly, and to cast away honesty  │
+│  upon a foul slut were to put good meat into an unclean dish. I am not a    │
+│  slut, though I thank the gods I am foul. Well, praised be the gods for     │
+│  thy foulness!                                                              │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  e cony that you see dwell where she is kindled.                            │
+│                                                                             │
+│  ORLANDO Your accent is something finer than you could                      │
+│          purchase in so removed a dwelling.                                 │
+│                                                                             │
+│  ROSALIND        I have been told so of many: but indeed an old             │
+│          religious uncle of mine taught me to speak, who was                │
+│          in his youth an inland man; one that knew courtship                │
+│          too well, for there he fell in love. I have heard                  │
+│          him read many lectures against it, and I thank God                 │
+│          I am not a woman, to be touched with so many                       │
+│          giddy offences as he hath generally taxed their                    │
+│          whole sex withal.                                                  │
+│                                                                             │
+│  ORLANDO Can you remember any of the principal evils that he                │
+│          laid to the charge of women?                                       │
+│                                                                             │
+│  ROSALIND        There were none principal; they were all like one          │
+│          another as half-pence are, every one fault seeming                 │
+│          monstrous till his fellow fault came to match it.                  │
+│                                                                             │
+│  ORLANDO I prithee, recount some of them.                                   │
+│                                                                             │
+│  ROSALIND        No, I will not cast away my physic but on those that       │
+│          are sick. There is a man haunts the forest, that                   │
+│          abuses our young plants with carving 'Rosalind' on                 │
+│          their barks; hangs odes upon hawthorns and elegies                 │
+│          on brambles, all, forsooth, deifying the name of                   │
+│          Rosalind: if I could meet that fancy-monger I would                │
+│          give him some good counsel, for he seems to have the               │
+│          quotidian of love upon him.                                        │
+│                                                                             │
+│  ORLANDO I am he that is so love-shaked: I pray you tell me                 │
+│          your remedy.                                                       │
+│                                                                             │
+│  ROSALIND        There is none of my uncle's marks upon you: he             │
+│          taught me how to know a man in love; in which cage                 │
+│          of rushes I am sure you are not prisoner.                          │
+│                                                                             │
+│  ORLANDO What were his marks?                                               │
+│                                                                             │
+│  ROSALIND        A lean cheek, which you have not, a blue eye and           │
+│          sunken, which you have not, an unquestionable                      │
+│          spirit, which you have not, a beard neglected,                     │
+│          which you have not; but I pardon you for that, for                 │
+│          simply your having in beard is a younger brother's                 │
+│          revenue: then your hose should be ungartered, your                 │
+│          bonnet unbanded, your sleeve unbuttoned, your shoe                 │
+│          untied and every thing about you demonstrating a                   │
+│          careless desolation; but you are no such man; you                  │
+│          are rather point-device in your accoutrements as                   │
+│          loving yourself than seeming the lover of any other.               │
+│                                                                             │
+│  ORLANDO Fair youth, I would I could make thee believe I love.              │
+│                                                                             │
+│  ROSALIND        Me believe it! you may as soon make her that you           │
+│          love believe it; which, I warrant, she is apter to                 │
+│          do than to confess she does: that is one of the                    │
+│          points in the which women still give the lie to                    │
+│          their consciences. But, in good sooth, are you he                  │
+│          that hangs the verses on the trees, wherein Rosalind               │
+│          is so admired?                                                     │
+│                                                                             │
+│  ORLANDO I swear to thee, youth, by the white hand of                       │
+│          Rosalind, I am that he, that unfortunate he.                       │
+│                                                                             │
+│  ROSALIND        But are you so much in love as your rhymes speak?          │
+│                                                                             │
+│  ORLANDO Neither rhyme nor reason can express how much.                     │
+│                                                                             │
+│  ROSALIND        Love is merely a madness, and, I tell you, deserves        │
+│          as well a dark house and a whip as madmen do: and                  │
+│          the reason why they are not so punished and cured                  │
+│          is, that the lunacy is so ordinary that the whippers               │
+│          are in love too. Yet I profess curing it by counsel.               │
+│                                                                             │
+│  ORLANDO Did you ever cure any so?                                          │
+│                                                                             │
+│  ROSALIND        Yes, one, and in this manner. He was to imagine me         │
+│          his love, his mistress; and I set him every day to                 │
+│          woo me: at which time would I, being but a moonish                 │
+│          youth, grieve, be effeminate, changeable, longing                  │
+│          and liking, proud, fantastical, apish, shallow,                    │
+│          inconstant, full of tears, full of smiles, for every               │
+│          passion something and for no passion truly any                     │
+│          thing, as boys and women are for the most part                     │
+│          cattle of this colour; would now like him, now loathe              │
+│          him; then entertain him, then forswear him; now weep               │
+│          for him, then spit at him; that I drave my suitor                  │
+│          from his mad humour of love to a living humour of                  │
+│          madness; which was, to forswear the full stream of                 │
+│          the world, and to live in a nook merely monastic.                  │
+│          And thus I cured him; and this way will I take upon                │
+│          me to wash your liver as clean as a sound sheep's                  │
+│          heart, that there shall not be one spot of love in't.              │
+│                                                                             │
+│  ORLANDO I would not be cured, youth.                                       │
+│                                                                             │
+│  ROSALIND        I would cure you, if you would but call me Rosalind        │
+│          and come every day to my cote and woo me.                          │
+│                                                                             │
+│  ORLANDO Now, by the faith of my love, I will: tell me                      │
+│          where it is.                                                       │
+│                                                                             │
+│  ROSALIND        Go with me to it and I'll show it you and by the way       │
+│          you shall tell me where in the forest you live.                    │
+│          Will you go?                                                       │
+│                                                                             │
+│  ORLANDO With all my heart, good youth.                                     │
+│                                                                             │
+│  ROSALIND        Nay you must call me Rosalind. Come, sister, will you go?  │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT III                                                                    │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE III       The forest.                                                │
+│                                                                             │
+│                                                                             │
+│          [Enter TOUCHSTONE and AUDREY; JAQUES behind]                       │
+│                                                                             │
+│  TOUCHSTONE      Come apace, good Audrey: I will fetch up your              │
+│          goats, Audrey. And how, Audrey? am I the man yet?                  │
+│          doth my simple feature content you?                                │
+│                                                                             │
+│  AUDREY  Your features! Lord warrant us! what features!                     │
+│                                                                             │
+│  TOUCHSTONE      I am here with thee and thy goats, as the most             │
+│          capricious poet, honest Ovid, was among the Goths.                 │
+│                                                                             │
+│  JAQUES  [Aside]  O knowledge ill-inhabited, worse than Jove                │
+│          in a thatched house!                                               │
+│                                                                             │
+│  TOUCHSTONE      When a man's verses cannot be understood, nor a            │
+│          man's good wit seconded with the forward child                     │
+│          Understanding, it strikes a man more dead than a                   │
+│          great reckoning in a little room. Truly, I would                   │
+│          the gods had made thee poetical.                                   │
+│                                                                             │
+│  AUDREY  I do not know what 'poetical' is: is it honest in                  │
+│          deed and word? is it a true thing?                                 │
+│                                                                             │
+│  TOUCHSTONE      No, truly; for the truest poetry is the most               │
+│          feigning; and lovers are given to poetry, and what                 │
+│          they swear in poetry may be said as lovers they do feign.          │
+│                                                                             │
+│  AUDREY  Do you wish then that the gods had made me poetical?               │
+│                                                                             │
+│  TOUCHSTONE      I do, truly; for thou swearest to me thou art              │
+│          honest: now, if thou wert a poet, I might have some                │
+│          hope thou didst feign.                                             │
+│                                                                             │
+│  AUDREY  Would you not have me honest?                                      │
+│                                                                             │
+│  TOUCHSTONE      No, truly, unless thou wert hard-favoured; for             │
+│          honesty coupled to beauty is to have honey a sauce to sugar.       │
+│                                                                             │
+│  JAQUES  [Aside]  A material fool!                                          │
+│                                                                             │
+│  AUDREY   Well, I am not fair; and therefore I pray the gods                │
+│          make me honest.                                                    │
+│                                                                             │
+│  TOUCHSTONE      Truly, and to cast away honesty upon a foul slut           │
+│          were to put good meat into an unclean dish.                        │
+│                                                                             │
+│  AUDREY  I am not a slut, though I thank the gods I am foul.                │
+│                                                                             │
+│  TOUCHSTONE      Well, praised be the gods for thy foulness!                │
+│          sluttishness may come hereafter. But be it as it may               │
+│          be, I will marry thee, and to that end I have been                 │
+│          with Sir Oliver Martext, the vicar of the next                     │
+│          village, who hath promised to meet me in this place                │
+│          of the forest and to couple us.                                    │
+│                                                                             │
+│  JAQUES  [Aside]  I would fain see this meeting.                            │
+│                                                                             │
+│  AUDREY  Well, the gods give us joy!                                        │
+│                                                                             │
+│  TOUCHSTONE      Amen. A man may, if he were of a fearful heart,            │
+│          stagger in this attempt; for here we have no temple                │
+│          but the wood, no assembly but horn-beasts. But what                │
+│          though? Courage! As horns are odious, they are                     │
+│          necessary. It is said, 'many a man knows no end of                 │
+│          his goods:' right; many a man has good horns, and                  │
+│          knows no end of them. Well, that is the dowry of                   │
+│          his wife; 'tis none of his own getting. Horns?                     │
+│          Even so. Poor men alone? No, no; the noblest deer                  │
+│          hath them as huge as the rascal. Is the single man                 │
+│          therefore blessed? No: as a walled town is more                    │
+│          worthier than a village, so is the forehead of a                   │
+│          married man more honourable than the bare brow of a                │
+│          bachelor; and by how much defence is better than no                │
+│          skill, by so much is a horn more precious than to                  │
+│          want. Here comes Sir Oliver.                                       │
+│                                                                             │
+│          [Enter SIR OLIVER MARTEXT]                                         │
+│                                                                             │
+│          Sir Oliver Martext, you are well met: will you                     │
+│          dispatch us here under this tree, or shall we go                   │
+│          with you to your chapel?                                           │
+│                                                                             │
+│  SIR OLIVER MARTEXT      Is there none here to give the woman?              │
+│                                                                             │
+│  TOUCHSTONE      I will not take her on gift of any man.                    │
+│                                                                             │
+│  SIR OLIVER MARTEXT      Truly, she must be given, or the marriage is not   │
+│  lawful.                                                                    │
+│                                                                             │
+│  JAQUES  [Advancing]                                                        │
+│                                                                             │
+│          Proceed, proceed        I'll give her.                             │
+│                                                                             │
+│  TOUCHSTONE      Good even, good Master What-ye-call't: how do you,         │
+│          sir? You are very well met: God 'ild you for your                  │
+│          last company: I am very glad to see you: even a                    │
+│          toy in hand here, sir: nay, pray be covered.                       │
+│                                                                             │
+│  JAQUES  Will you be married, motley?                                       │
+│                                                                             │
+│  TOUCHSTONE      As the ox hath his bow, sir, the horse his curb and        │
+│          the falcon her bells, so man hath his desires; and                 │
+│          as pigeons bill, so wedlock would be nibbling.                     │
+│                                                                             │
+│  JAQUES  And will you, being a man of your breeding, be                     │
+│          married under a bush                                               │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool list_allowed_directories with arguments: {}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool list_allowed_directories took: 5.316737s
+🚀 Crew: crew
+└── 📋 Task: 6da93d23-d441-4037-9386-5b1824d85238
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    └── 🔧 Used list_allowed_directories (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Action: list_allowed_directories                                  │
+│                                                                             │
+│  Using Tool: list_allowed_directories                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{}"                                                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  Allowed directories:                                                       │
+│  /C/Users/Noah/Documents/sink                                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool search_files_content with arguments: {"path":"/C/Users/Noah/Documents/sink","pattern":"*.txt","query":"married under a bush"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool search_files_content took: 461.5428ms
+🚀 Crew: crew
+└── 📋 Task: 6da93d23-d441-4037-9386-5b1824d85238
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    ├── 🔧 Used list_allowed_directories (1)
+    └── 🔧 Used search_files_content (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The task is to find the exact immediate continuation of  │
+│  the provided text prefix. The prefix appears to be from a play,            │
+│  specifically "As You Like It" by William Shakespeare, given the character  │
+│  names (ORLANDO, ROSALIND, TOUCHSTONE, AUDREY, JAQUES, SIR OLIVER MARTEXT)  │
+│  and the style of dialogue.                                                 │
+│  I need to find the text that immediately follows "under a bush" in the     │
+│  play "As You Like It". I will use the `search_files_content` tool to look  │
+│  for this phrase within the allowed directory                               │
+│  `/C/Users/Noah/Documents/sink`. I will search for files with a `.txt` or   │
+│  similar extension, assuming the play text might be stored in such a        │
+│  format. Since I don't know the exact filename, I'll use a wildcard         │
+│  pattern.                                                                   │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\", \"pattern\": \"*.txt\",      │
+│  \"query\": \"married under a bush\"}"                                      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  /C/Users/Noah/Documents/sink/cantrbry/asyoulik.txt                         │
+│    2475:1: married under a bush like a beggar? Get you to                   │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 6da93d23-d441-4037-9386-5b1824d85238
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    ├── 🔧 Used list_allowed_directories (1)
+    └── 🔧 Used search_files_content (1)┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│  like a beggar? Get you to church, and have a good priest that can tell     │
+│  you what marriage is: this fellow will but join you together as they join  │
+│  wainscot; then one of you will prove a shrunk panel, and, like green       │
+│  timber, warp, warp.                                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 6da93d23-d441-4037-9386-5b1824d85238
+    Assigned to: Predictive Compression Intelligence
+    Status: ✅ Completed
+    ├── ✅ Reasoning Completed (Not Ready)
+    ├── 🔧 Used list_allowed_directories (1)
+    └── 🔧 Used search_files_content (1)┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: 6da93d23-d441-4037-9386-5b1824d85238                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 4d704192-9ccd-4c54-9a8d-32f5c7122dc8                                   │
+│  Tool Args:                                                                 │
+│  Final Output: like a beggar? Get you to church, and have a good priest     │
+│  that can tell you what marriage is: this fellow will but join you          │
+│  together as they join wainscot; then one of you will prove a shrunk        │
+│  panel, and, like green timber, warp, warp.                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+> Stop watching for updates
+AGENT_RESULT_JSON:{"final_text": "like a beggar? Get you to church, and have a good priest that can tell you what marriage is: this fellow will but join you together as they join wainscot; then one of you will prove a shrunk panel, and, like green timber, warp, warp.", "duration_ms": 28509}
+like a beggar? Get you to church, and have a good priest that can tell you what marriage is: this fellow will but join you together as they join wainscot; then one of you will prove a shrunk panel, and, like green timber, warp, warp.
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()

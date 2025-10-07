@@ -229,11 +229,13 @@ fn ac_p_min() -> f64 {
 const FLAG_AGENT_USED: u32 = 1 << 0;
 const FLAG_AGENT_MOCK: u32 = 1 << 1;
 const FLAG_AGENT_GATES: u32 = 1 << 2; // gating bits present after header
-fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, agent_chunk: usize) -> u32 {
+const FLAG_AGENT_HINTS: u32 = 1 << 3; // AGT3: per-chunk priming hint token ids present after gates
+fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, hints_present: bool, agent_chunk: usize) -> u32 {
     let mut f = 0u32;
     if agent_used { f |= FLAG_AGENT_USED; }
     if agent_mock { f |= FLAG_AGENT_MOCK; }
     if gates_present { f |= FLAG_AGENT_GATES; }
+    if hints_present { f |= FLAG_AGENT_HINTS; }
     let chunk16 = (agent_chunk as u32) & 0xFFFF;
     f |= chunk16 << 16;
     f
@@ -241,6 +243,7 @@ fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, agent_chu
 fn flags_unpack_agent_used(flags: u32) -> bool { (flags & FLAG_AGENT_USED) != 0 }
 fn flags_unpack_agent_mock(flags: u32) -> bool { (flags & FLAG_AGENT_MOCK) != 0 }
 fn flags_unpack_agent_gates(flags: u32) -> bool { (flags & FLAG_AGENT_GATES) != 0 }
+fn flags_unpack_agent_hints(flags: u32) -> bool { (flags & FLAG_AGENT_HINTS) != 0 }
 fn flags_unpack_agent_chunk(flags: u32) -> usize { ((flags >> 16) & 0xFFFF) as usize }
 
 struct ArithmeticEncoder<W: std::io::Write> {
@@ -314,6 +317,40 @@ impl<W: std::io::Write> ArithmeticEncoder<W> {
 
         self.low = new_low;
         self.high = new_high;
+
+        loop {
+            if self.high < self.b_to_pm1 {
+                self.put_bit(0)?;
+            } else if self.low >= self.b_to_pm1 {
+                self.put_bit(1)?;
+                self.low -= self.b_to_pm1;
+                self.high -= self.b_to_pm1;
+            } else if self.low >= self.b_to_pm2 && self.high < self.b_to_pm2 * 3 {
+                self.carry_run += 1;
+                self.low -= self.b_to_pm2;
+                self.high -= self.b_to_pm2;
+            } else {
+                break;
+            }
+            self.low = (self.low << 1) & self.mask;
+            self.high = ((self.high << 1) & self.mask) | 1;
+        }
+        Ok(())
+    }
+
+    fn encode_counts(&mut self, c_lo: u64, c_hi: u64, total: u64) -> anyhow::Result<()> {
+        // integer arithmetic-coding update (range coder style)
+        let range = (self.high - self.low + 1) as u128;
+        let total_u = total as u128;
+        let c_lo_u = c_lo as u128;
+        let c_hi_u = c_hi as u128;
+        let low_u = self.low as u128;
+
+        let new_low = low_u + (range * c_lo_u) / total_u;
+        let new_high = low_u + (range * c_hi_u) / total_u - 1;
+
+        self.low = (new_low & (self.mask as u128)) as u64;
+        self.high = (new_high & (self.mask as u128)) as u64;
 
         loop {
             if self.high < self.b_to_pm1 {
@@ -447,6 +484,56 @@ impl<'a> ArithmeticDecoder<'a> {
 
         Ok(symbol)
     }
+
+    fn decode_symbol_counts(&mut self, cdf: &[u32], total: u32) -> anyhow::Result<usize> {
+        // cdf length = n+1, cdf[0]=0, cdf[n]=total
+        let total_u = total as u64;
+        let range = self.high - self.low + 1;
+        let value = (((self.code - self.low + 1) as u128 * (total_u as u128)) - 1) / (range as u128);
+        let value_u = value as u32;
+
+        // binary search symbol s with cdf[s] <= value < cdf[s+1]
+        let mut lo = 0usize;
+        let mut hi = cdf.len() - 1; // last is total
+        while lo + 1 < hi {
+            let mid = (lo + hi) / 2;
+            if cdf[mid] <= value_u { lo = mid; } else { hi = mid; }
+        }
+        let s = lo;
+        let c_lo = cdf[s] as u64;
+        let c_hi = cdf[s + 1] as u64;
+
+        // update range
+        let range = (self.high - self.low + 1) as u128;
+        let low_u = self.low as u128;
+        let total_u128 = total as u128;
+        let new_low = low_u + (range * (c_lo as u128)) / total_u128;
+        let new_high = low_u + (range * (c_hi as u128)) / total_u128 - 1;
+
+        self.low = new_low as u64;
+        self.high = new_high as u64;
+
+        loop {
+            if self.high < self.b_to_pm1 {
+                // nothing
+            } else if self.low >= self.b_to_pm1 {
+                self.low -= self.b_to_pm1;
+                self.high -= self.b_to_pm1;
+                self.code -= self.b_to_pm1;
+            } else if self.low >= self.b_to_pm2 && self.high < self.b_to_pm2 * 3 {
+                self.low -= self.b_to_pm2;
+                self.high -= self.b_to_pm2;
+                self.code -= self.b_to_pm2;
+            } else {
+                break;
+            }
+            self.low = (self.low << 1) & self.mask;
+            self.high = ((self.high << 1) & self.mask) | 1;
+            self.code = ((self.code << 1) & self.mask) | (self.get_bit().unwrap_or(1) as u64);
+        }
+
+        Ok(s)
+    }
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -552,6 +639,7 @@ fn read_header_v2<R: std::io::Read>(r: &mut R) -> anyhow::Result<(HeaderBinV2, V
 
 const AGTB_MAGIC: [u8; 4] = *b"AGTB"; // marker for gating bits section
 const AGT2_MAGIC: [u8; 4] = *b"AGT2"; // structured gating section (v2)
+const AGT3_MAGIC: [u8; 4] = *b"AGT3"; // per-chunk priming hint token ids (v3)
 
 #[derive(Clone, Copy, Debug, Default)]
 struct GateRecordV2 { gate: u8, candidate_id: u8, budget_id: u8 }
@@ -575,6 +663,23 @@ fn get_gate_bit(gates_bytes: &[u8], idx: usize) -> u8 {
     let bit = idx % 8;
     if byte >= gates_bytes.len() { return 0; }
     ((gates_bytes[byte] >> bit) & 1) as u8
+}
+
+// AGT3: per-chunk hint tokens (exact slice used for priming)
+fn write_agent_hints_v3<W: std::io::Write>(w: &mut W, hints: &[Vec<u32>]) -> anyhow::Result<()> {
+    w.write_all(&AGT3_MAGIC)?;
+    write_var_u64(w, hints.len() as u64)?;
+    for h in hints {
+        write_var_u64(w, h.len() as u64)?;
+        for &tok in h { write_var_u64(w, tok as u64)?; }
+    }
+    Ok(())
+}
+
+fn read_agent_hints_v3<R: std::io::Read>(r: &mut R) -> anyhow::Result<Vec<Vec<u32>>> {
+    let mut count_buf = [0u8; 4];
+    r.read_exact(&mut count_buf)?; // we assume magic has already been read by caller; this is a helper for symmetry only
+    anyhow::bail!("read_agent_hints_v3 should be called after magic is consumed");
 }
 
 
@@ -681,6 +786,48 @@ fn combined_pdf_with_literals(logits_vec: &[f32], vocab_size: usize) -> Vec<f64>
     let sum: f64 = pdf.iter().sum();
     if sum > 0.0 { for p in pdf.iter_mut() { *p /= sum; } }
     pdf
+}
+
+fn softmax_pdf(logits: &[f32], vocab_size: usize) -> Vec<f64> {
+    let mut max = f32::NEG_INFINITY;
+    for &v in logits.iter().take(vocab_size) { if v > max { max = v; } }
+    let mut exps = vec![0f64; vocab_size];
+    let mut sum = 0.0f64;
+    for i in 0..vocab_size {
+        let e = (logits[i] - max).exp() as f64;
+        exps[i] = e; sum += e;
+    }
+    let mut pdf = vec![0f64; vocab_size];
+    if sum <= 0.0 {
+        let uniform = 1.0 / (vocab_size as f64);
+        for i in 0..vocab_size { pdf[i] = uniform; }
+        return pdf;
+    }
+    for i in 0..vocab_size { pdf[i] = exps[i] / sum; }
+    pdf
+}
+
+const AC_CDF_TOTAL: u32 = 1 << 30; // large total to minimize zero-quant counts
+
+fn quantize_pdf_to_cdf(pdf: &[f64]) -> Vec<u32> {
+    // Monotonic floor of cumulative probabilities times total
+    // cdf[0]=0, cdf[n]=AC_CDF_TOTAL
+    let n = pdf.len();
+    let mut cdf = vec![0u32; n + 1];
+    let mut acc = 0.0f64;
+    for i in 0..n {
+        acc += pdf[i];
+        let mut v = (acc * (AC_CDF_TOTAL as f64)).floor() as i64;
+        if v < 0 { v = 0; }
+        if v > (AC_CDF_TOTAL as i64) { v = AC_CDF_TOTAL as i64; }
+        let prev = cdf[i] as i64;
+        // ensure non-decreasing
+        if v < prev { v = prev; }
+        cdf[i + 1] = v as u32;
+    }
+    // enforce exact total
+    cdf[n] = AC_CDF_TOTAL;
+    cdf
 }
 
 fn cdf_bounds_from_pdf(pdf: &[f64], sym: usize) -> (f64, f64) {
@@ -820,6 +967,14 @@ fn blake3_f32_bin16(values: &[f32]) -> [u8; 16] {
     out
 }
 
+fn blake3_u32_bin16(values: &[u32]) -> [u8; 16] {
+    let mut hasher = Hasher::new();
+    for v in values { hasher.update(&v.to_le_bytes()); }
+    let mut out = [0u8; 16];
+    out.copy_from_slice(hasher.finalize().as_bytes()[..16].as_ref());
+    out
+}
+
 // ============================================================================
 // SIMDL v1.1: Document Index and Pricing Functions
 // ============================================================================
@@ -931,6 +1086,13 @@ fn watchdog_dir() -> Option<PathBuf> {
     match std::env::var("CANDLEZIP_WATCHDOG") {
         Ok(v) if v == "1" => std::env::var("CANDLEZIP_WATCHDOG_DIR").ok().map(PathBuf::from),
         _ => None,
+    }
+}
+
+fn watchdog_digest_enabled() -> bool {
+    match std::env::var("CANDLEZIP_WATCHDOG_DIGEST") {
+        Ok(v) => v == "1" || v.eq_ignore_ascii_case("true"),
+        _ => false,
     }
 }
 
@@ -1782,6 +1944,7 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     let scan_chunk = agent_chunk; // unify chunking for scan/agent
     let mut next_agent_boundary = agent_chunk; // first agent prime at boundary
     let mut gate_records: Vec<GateRecordV2> = Vec::new();
+    let mut agent_hints_tokens: Vec<Vec<u32>> = Vec::new();
     let mut total_bits_saved=0.0f64; let mut total_baseline_bits=0.0f64; let mut total_agent_calls: u64=0; let mut total_chunks: u64=0;
     let total_scan_chunks: usize = if scan_enabled { ((token_count as usize) + scan_chunk - 1) / scan_chunk } else { 0 };
     // Separate sessions for XE measurement to avoid state interference (used in scan and agent WIP proof)
@@ -1980,6 +2143,8 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                         let hint_take = hint_ids_all.len().min(budget_val);
                         if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
                         logits_t = session_smol.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                        // Record exact hint token ids slice applied for AGT3
+                        agent_hints_tokens.push(hint_ids_all[..hint_take].to_vec());
                     } else {
                         let mut filtered_hist: Vec<u32> = Vec::with_capacity(i + 1);
                         for &t in ids[..=i].iter() { if (t as usize) < vocab_size { filtered_hist.push(t); } }
@@ -1988,6 +2153,7 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                         let hint_take = hint_ids_all.len().min(budget_val);
                         if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
                         logits_t = session_rwkv.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                        agent_hints_tokens.push(hint_ids_all[..hint_take].to_vec());
                     }
                     // Hold context re-prime for upcoming lookahead tokens so hint remains active
                     reprime_hold_until = i.saturating_add(cli.scan_lookahead);
@@ -2099,6 +2265,7 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                             let hint_take = hint_ids_all.len().min(budget_val);
                             if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
                             logits_t = session_smol.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                            agent_hints_tokens.push(hint_ids_all[..hint_take].to_vec());
                         } else {
                             let mut filtered_hist: Vec<u32> = Vec::with_capacity(i + 1);
                             for &t in ids[..=i].iter() { if (t as usize) < vocab_size { filtered_hist.push(t); } }
@@ -2107,6 +2274,7 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                             let hint_take = hint_ids_all.len().min(budget_val);
                             if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
                             logits_t = session_rwkv.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
+                            agent_hints_tokens.push(hint_ids_all[..hint_take].to_vec());
                         }
                         // Hold context re-prime for upcoming lookahead tokens so hint remains active
                         reprime_hold_until = i.saturating_add(cli.scan_lookahead);
@@ -2136,33 +2304,53 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
             }
         }
 
-        let (c_lo, c_hi) = if backend=="smollm" {
-            session_smol.as_ref().unwrap().bounds_for_symbol_on_device(&logits_t, sym as usize)?
+        if backend=="smollm" {
+            // Compute integer CDF from softmax PDF for vocab only
+            let logits_vec = logits_t.to_vec1::<f32>()?;
+            let pdf = softmax_pdf(&logits_vec, vocab_size);
+            let cdf = quantize_pdf_to_cdf(&pdf);
+            let s = sym as usize;
+            let c_lo = cdf[s] as u64;
+            let c_hi = cdf[s + 1] as u64;
+            ace.encode_counts(c_lo, c_hi, AC_CDF_TOTAL as u64)?;
         } else {
+            // RWKV: mixed vocab + literals
             let logits_vec = logits_t.to_vec1::<f32>()?;
             let pdf = combined_pdf_with_literals(&logits_vec, vocab_size);
-            cdf_bounds_from_pdf(&pdf, sym as usize)
-        };
-        ace.encode_interval(c_lo, c_hi)?;
+            let cdf_f = {
+                let mut c = Vec::with_capacity(pdf.len() + 1);
+                let mut acc = 0.0f64; c.push(0.0);
+                for &p in &pdf { acc += p; c.push(acc); }
+                c
+            };
+            let mut cdf_u: Vec<u32> = Vec::with_capacity(cdf_f.len());
+            cdf_u.push(0);
+            for i in 1..cdf_f.len() {
+                let mut v = (cdf_f[i] * (AC_CDF_TOTAL as f64)).floor() as i64;
+                if v < 0 { v = 0; }
+                if v > (AC_CDF_TOTAL as i64) { v = AC_CDF_TOTAL as i64; }
+                if v < (cdf_u[i - 1] as i64) { v = cdf_u[i - 1] as i64; }
+                cdf_u.push(v as u32);
+            }
+            let last = cdf_u.len() - 1;
+            cdf_u[last] = AC_CDF_TOTAL;
+            let s = sym as usize;
+            let c_lo = cdf_u[s] as u64;
+            let c_hi = cdf_u[s + 1] as u64;
+            ace.encode_counts(c_lo, c_hi, AC_CDF_TOTAL as u64)?;
+        }
 
         if let Some(dir) = wdog.as_ref() {
             // Record stable per-step digest without leaking logits.
-            let p_digest = {
-                if backend=="smollm" {
-                    let vec = logits_t.to_vec1::<f32>()?; // Won't be written directly
-                    hex16(&blake3_f32_bin16(&vec))
-                } else {
-                    let vec = logits_t.to_vec1::<f32>()?;
-                    hex16(&blake3_f32_bin16(&vec))
-                }
-            };
+            let p_digest = if watchdog_digest_enabled() {
+                let vec = logits_t.to_vec1::<f32>()?;
+                hex16(&blake3_f32_bin16(&vec))
+            } else { String::new() };
             let rec = json!({
                 "phase": "encode_step",
                 "i": i,
                 "sym": sym,
-                "c_lo": c_lo,
-                "c_hi": c_hi,
-                "pdf_digest": p_digest,
+                "pdf_digest": if p_digest.is_empty() { serde_json::Value::Null } else { serde_json::Value::String(p_digest) },
                 "bytes_out": ace.bytes_written(),
             });
             watchdog_write_jsonl(dir, "watchdog_encode_steps.jsonl", &rec);
@@ -2190,13 +2378,15 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
 
     // Build structured gating records per boundary (candidate + budget + gate)
     let gates_present = agent_enabled;
+    let hints_present = agent_enabled && !agent_hints_tokens.is_empty();
     // Write final file: header -> optional agent gates -> payload
     {
         let mut out_file = BufWriter::new(File::create(output)?);
-        let reserved_flags = flags_pack(agent_enabled, agent_mock, gates_present, agent_chunk);
+        let reserved_flags = flags_pack(agent_enabled, agent_mock, gates_present, hints_present, agent_chunk);
         let header_v2 = HeaderBinV2 { bos_token_id: bos_id, token_count, orig_len_bytes, model_hash16, tokenizer_hash16, orig_hash16: orig_blake3_16, reserved_flags, context_window: cli.context as u32, vocab_size: vocab_size as u32, model_file_repr_len: weight_repr.len() as u32, reprime_interval: cli.reprime_interval as u32 };
         write_header_v2(&mut out_file, &header_v2, weight_repr.as_bytes())?;
         if gates_present { write_agent_gates_v2(&mut out_file, &gate_records)?; }
+        if hints_present { write_agent_hints_v3(&mut out_file, &agent_hints_tokens)?; }
         use std::io::Write as _;
         out_file.write_all(&payload_bytes)?;
         out_file.flush()?;
@@ -2293,6 +2483,7 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         // Optional gating section directly after header (supports v1 bits or v2 structured)
         let mut gates_bytes: Vec<u8> = Vec::new();
         let mut gate_records: Vec<GateRecordV2> = Vec::new();
+        let mut hints_chunks: Vec<Vec<u32>> = Vec::new();
         if flags_unpack_agent_gates(header.reserved_flags) {
             let mut magic = [0u8;4];
             rdr.read_exact(&mut magic)?;
@@ -2308,6 +2499,19 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 rdr.read_exact(&mut bytes)?;
                 gates_bytes = bytes;
             } else { anyhow::bail!("invalid gating magic"); }
+        }
+        if flags_unpack_agent_hints(header.reserved_flags) {
+            let mut magic = [0u8;4];
+            rdr.read_exact(&mut magic)?;
+            if magic != AGT3_MAGIC { anyhow::bail!("invalid hints magic"); }
+            let count = read_var_u64(&mut rdr)? as usize;
+            hints_chunks = Vec::with_capacity(count);
+            for _ in 0..count {
+                let len = read_var_u64(&mut rdr)? as usize;
+                let mut v = Vec::with_capacity(len);
+                for _ in 0..len { v.push(read_var_u64(&mut rdr)? as u32); }
+                hints_chunks.push(v);
+            }
         }
         let mut payload = Vec::new(); rdr.read_to_end(&mut payload)?; let mut acd = ArithmeticDecoder::new(&payload[..])?; let mut logits_t = session.step_logits_tensor(header.bos_token_id)?;
         let wdog = watchdog_dir();
@@ -2445,10 +2649,14 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 // tokens_since_reprime removed - using absolute position repriming
                 next_agent_boundary += agent_chunk;
             }
-            // Compute pdf from current logits
-            let logits_vec = logits_t.to_vec1::<f32>()?; let pdf = softmax_pdf_floor(&logits_vec, vocab_size, ac_p_min());
-            // Decode symbol and step
-            let sym = acd.decode_symbol(&pdf)? as u32; out_tokens.push(sym); logits_t = session.step_logits_tensor(sym)?; if i % 1024 == 0 { bar.set_position(i); }
+            // Integer-CDF decode for determinism
+            let logits_vec = logits_t.to_vec1::<f32>()?;
+            let pdf = softmax_pdf(&logits_vec, vocab_size);
+            let cdf = quantize_pdf_to_cdf(&pdf);
+            let sym = acd.decode_symbol_counts(&cdf, AC_CDF_TOTAL)? as u32;
+            out_tokens.push(sym);
+            logits_t = session.step_logits_tensor(sym)?;
+            if i % 1024 == 0 { bar.set_position(i); }
             if let Some(dir) = wdog.as_ref() {
                 // Compare against encode trace if available to pinpoint first differing symbol
                 let enc_trace = watchdog_load_encode_trace(dir);
@@ -2469,11 +2677,8 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 }
             }
             if let Some(dir) = wdog.as_ref() {
-                let p_digest = {
-                    let vec = logits_t.to_vec1::<f32>()?;
-                    hex16(&blake3_f32_bin16(&vec))
-                };
-                let rec = json!({"phase":"decode_step","i":i,"sym":sym,"pdf_digest":p_digest});
+                let p_digest = if watchdog_digest_enabled() { let vec = logits_t.to_vec1::<f32>()?; hex16(&blake3_f32_bin16(&vec)) } else { String::new() };
+                let rec = json!({"phase":"decode_step","i":i,"sym":sym,"pdf_digest": if p_digest.is_empty() { serde_json::Value::Null } else { serde_json::Value::String(p_digest) }});
                 watchdog_write_jsonl(dir, "watchdog_decode_steps.jsonl", &rec);
             }
         }
@@ -2513,6 +2718,7 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         // Optional gating section directly after header
         let mut gates_bytes: Vec<u8> = Vec::new();
         let mut gates_v2: Vec<GateRecordV2> = Vec::new();
+        let mut hints_chunks: Vec<Vec<u32>> = Vec::new();
         if flags_unpack_agent_gates(header.reserved_flags) {
             let mut magic = [0u8;4];
             rdr.read_exact(&mut magic)?;
@@ -2528,6 +2734,18 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 rdr.read_exact(&mut bytes)?;
                 gates_bytes = bytes;
             } else { anyhow::bail!("invalid gating magic"); }
+        }
+        if flags_unpack_agent_hints(header.reserved_flags) {
+            let mut magic = [0u8;4]; rdr.read_exact(&mut magic)?;
+            if magic != AGT3_MAGIC { anyhow::bail!("invalid hints magic"); }
+            let count = read_var_u64(&mut rdr)? as usize;
+            hints_chunks = Vec::with_capacity(count);
+            for _ in 0..count {
+                let len = read_var_u64(&mut rdr)? as usize;
+                let mut v = Vec::with_capacity(len);
+                for _ in 0..len { v.push(read_var_u64(&mut rdr)? as u32); }
+                hints_chunks.push(v);
+            }
         }
         let mut payload = Vec::new();
         rdr.read_to_end(&mut payload)?;
@@ -2612,8 +2830,12 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                         out
                     };
                     let candidates = build_candidates(&agent_text);
-                    let selected = candidates.get(cand_id as usize).cloned().unwrap_or_else(|| agent_text.clone());
-                    let hint_ids = tokenize_hint_rwkv(&tokenizer, &selected, cli.scan_max_hint_tokens)?;
+                    let hint_ids = if !hints_chunks.is_empty() {
+                        hints_chunks.get(chunk_index.saturating_sub(1)).cloned().unwrap_or_default()
+                    } else {
+                        let selected = candidates.get(cand_id as usize).cloned().unwrap_or_else(|| agent_text.clone());
+                        tokenize_hint_rwkv(&tokenizer, &selected, cli.scan_max_hint_tokens)?
+                    };
                     // Build prime: history + hint (match encode ordering)
                     let max_ctx = session.max_context_length().saturating_sub(1);
                     let budgets = [max_ctx/8, max_ctx/4, max_ctx/2, (max_ctx*3)/4];
@@ -2637,7 +2859,21 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
 
             let logits_vec = logits_t.to_vec1::<f32>()?;
             let pdf = combined_pdf_with_literals(&logits_vec, session.vocab_size());
-            let sym = acd.decode_symbol(&pdf)? as u32;
+            // quantize to integer cdf
+            let mut cdf_u: Vec<u32> = Vec::with_capacity(pdf.len() + 1);
+            cdf_u.push(0);
+            let mut acc = 0.0f64;
+            for p in &pdf {
+                acc += *p;
+                let mut v = (acc * (AC_CDF_TOTAL as f64)).floor() as i64;
+                if v < 0 { v = 0; }
+                if v > (AC_CDF_TOTAL as i64) { v = AC_CDF_TOTAL as i64; }
+                if v < (cdf_u[cdf_u.len() - 1] as i64) { v = cdf_u[cdf_u.len() - 1] as i64; }
+                cdf_u.push(v as u32);
+            }
+            let last_idx = cdf_u.len() - 1;
+            cdf_u[last_idx] = AC_CDF_TOTAL;
+            let sym = acd.decode_symbol_counts(&cdf_u, AC_CDF_TOTAL)? as u32;
             out_syms.push(sym);
 
             // Only step the model if it's a valid token (not literal)

@@ -1,0 +1,831 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 30.963ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 46.5702ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.7389042s
+- Watching for configuration updates...
+> Initialized in 1.8175476s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_asyoulik_78e91080
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 543d2fb6-5627-490c-b893-c2a3e040f870                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: c93a0b83-ee35-41b8-af5a-ff618411bf25
+    Status: Executing Task...
+    ├── 🧠 Reasoning...
+    └── 🧠 Thinking...┌──────────────────────────────── Tool Usage ─────────────────────────────────┐
+│                                                                             │
+│  Tool Usage Started                                                         │
+│  Name: create_reasoning_plan                                                │
+│  Status: In Progress                                                        │
+│  Tool Args: {'ready': True, 'plan': '1. Understand the Task (SIMDL          │
+│  Perspective): The task is to provide a verbatim continuation of the given  │
+│  text prefix, specifically 100-200 words, removing speaker names and stage  │
+│  directions. This directly minimizes information entropy for future token   │
+│  predictions. The text is identified as from Shakespeare\'s "As You Like    │
+│  It".\n\n2. Key Steps & Challenges:\n    * Leverage Prior Memory: The       │
+│  "Prior memory" section explicitly contains the full text of the letter     │
+│  being read, which includes the immediate continuation of the current       │
+│  prefix. This eliminates the need for external file system searches in      │
+│  this specific instance.\n    * Extract Continuation: Locate the exact      │
+│  point in the "Prior memory" that follows "That a maiden" and extract the   │
+│  subsequent text.\n    * Word Count and Filtering: Count the words to       │
+│  ensure it falls within the 100-200 word range. Verify that no speaker      │
+│  names or stage directions are present in this specific segment of the      │
+│  letter.\n\n3. Strategic Tool Usage:\n    * No external tools are required  │
+│  for this specific task, as the necessary information is already present    │
+│  in the "Prior memory" provided in the prompt. My "TOOL-AUGMENTED           │
+│  REASONING" competency allows me to recognize that the information is       │
+│  already available internally, making external tool calls unnecessary and   │
+│  inefficient.\n\n4. Expected Outcome:\n    * A plain text continuation of   │
+│  142 words, verbatim from the provided "Prior memory", following the line   │
+│  "That a maiden", with no speaker names or stage directions. This outcome   │
+│  directly aligns with my goal of minimizing future token prediction         │
+│  entropy by providing the exact, information-dense continuation.'}          │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+🚀 Crew: crew
+├── 📋 Task: c93a0b83-ee35-41b8-af5a-ff618411bf25
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  1. Understand the Task (SIMDL Perspective): The task is to provide a       │
+│  verbatim continuation of the given text prefix, specifically 100-200       │
+│  words, removing speaker names and stage directions. This directly          │
+│  minimizes information entropy for future token predictions. The text is    │
+│  identified as from Shakespeare's "As You Like It".                         │
+│                                                                             │
+│  2. Key Steps & Challenges:                                                 │
+│      * Leverage Prior Memory: The "Prior memory" section explicitly         │
+│  contains the full text of the letter being read, which includes the        │
+│  immediate continuation of the current prefix. This eliminates the need     │
+│  for external file system searches in this specific instance.               │
+│      * Extract Continuation: Locate the exact point in the "Prior memory"   │
+│  that follows "That a maiden" and extract the subsequent text.              │
+│      * Word Count and Filtering: Count the words to ensure it falls within  │
+│  the 100-200 word range. Verify that no speaker names or stage directions   │
+│  are present in this specific segment of the letter.                        │
+│                                                                             │
+│  3. Strategic Tool Usage:                                                   │
+│      * No external tools are required for this specific task, as the        │
+│  necessary information is already present in the "Prior memory" provided    │
+│  in the prompt. My "TOOL-AUGMENTED REASONING" competency allows me to       │
+│  recognize that the information is already available internally, making     │
+│  external tool calls unnecessary and inefficient.                           │
+│                                                                             │
+│  4. Expected Outcome:                                                       │
+│      * A plain text continuation of 142 words, verbatim from the provided   │
+│  "Prior memory", following the line "That a maiden", with no speaker names  │
+│  or stage directions. This outcome directly aligns with my goal of          │
+│  minimizing future token prediction entropy by providing the exact,         │
+│  information-dense continuation.                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  ne                                                                         │
+│  Have power to raise such love in mine,                                     │
+│  Alack, in me what strange effect                                           │
+│  Would they work in mild aspect!                                            │
+│  Whiles you chid me, I did love;                                            │
+│  How then might your prayers move!                                          │
+│  He that brings this love to thee                                           │
+│  Little knows this love in me:                                              │
+│  And by him seal up thy mind;                                               │
+│  Whether that thy youth and kind                                            │
+│  Will the faithful offer take                                               │
+│  Of me and all that I can make;                                             │
+│  Or else by him my love deny,                                               │
+│  And then I'll study how to die."                                           │
+│  I need to extract the next 100-200 words verbatim, removing speaker names  │
+│  and stage directions.                                                      │
+│  The text starts with "My errand is to you, fair youth; My gentle Phebe     │
+│  bid me give you this: I know not the contents; but, as I guess By the      │
+│  stern brow and waspish action Which she did use as she was writing of it,  │
+│  It bears an angry tenor: pardon me: I am but as a guiltless messenger.     │
+│  Patience herself would startle at this letter And play the swaggerer;      │
+│  bear this, bear all: She says I am not fair, that I lack manners; She      │
+│  calls me proud, and that she could not love me, Were man as rare as        │
+│  phoenix. 'Od's my will! Her love is not the hare that I do hunt: Why       │
+│  writes she so to me? Well, shepherd, well, This is a letter of your own    │
+│  device. No, I protest, I know not the contents: Phebe did write it. Come,  │
+│  come, you are a fool And turn'd into the extremity of love. I saw her      │
+│  hand: she has a leathern hand. A freestone-colour'd hand; I verily did     │
+│  think That her old gloves were on, but 'twas her hands: She has a          │
+│  huswife's hand; but that's no matter: I say she never did invent this      │
+│  letter; This is a man's invention and his hand. Sure, it is hers. Why,     │
+│  'tis a boisterous and a cruel style. A style for-challengers; why, she     │
+│  defies me, Like Turk to Christian: women's gentle brain Could not drop     │
+│  forth such giant-rude invention Such Ethiope words, blacker in their       │
+│  effect Than in their countenance. Will you hear the letter? So please      │
+│  you, for I never heard it yet; Yet heard too much of Phebe's cruelty. She  │
+│  Phebes me: mark how the tyrant writes. Art thou god to shepherd turn'd,    │
+│  That a maiden's heart hath burn'd? Can a woman rail thus? Call you this    │
+│  railing? Why, thy godhead laid apart, Warr'st thou with a woman's heart?   │
+│  Did you ever hear such railing? Whiles the eye of man did woo me, That     │
+│  could do no vengeance to me. Meaning me a beast. If the scorn of your      │
+│  bright eyne Have power to raise such love in mine, Alack, in me what       │
+│  strange effect Would they work in mild aspect! Whiles you chid me, I did   │
+│  love; How then might your prayers move! He that brings this love to thee   │
+│  Little knows this love in me: And by him seal up thy mind; Whether that    │
+│  thy youth and kind Will the faithful offer take Of me and all that I can   │
+│  make; Or else by him my love deny, And then I'll study how to die."        │
+│  I will extract the first 100-200 words from this continuation, removing    │
+│  speaker names and stage directions.                                        │
+│  "My errand is to you, fair youth; My gentle Phebe bid me give you this: I  │
+│  know not the contents; but, as I guess By the stern brow and waspish       │
+│  action Which she did use as she was writing of it, It bears an angry       │
+│  tenor: pardon me: I am but as a guiltless messenger. Patience herself      │
+│  would startle at this letter And play the swaggerer; bear this, bear all:  │
+│  She says I am not fair, that I lack manners; She calls me proud, and that  │
+│  she could not love me, Were man as rare as phoenix. 'Od's my will! Her     │
+│  love is not the hare that I do hunt: Why writes she so to me? Well,        │
+│  shepherd, well, This is a letter of your own device. No, I protest, I      │
+│  know not the contents: Phebe did write it. Come, come, you are a fool And  │
+│  turn'd into the extremity of love. I saw her hand: she has a leathern      │
+│  hand. A freestone-colour'd hand; I verily did think That her old gloves    │
+│  were on, but 'twas her hands: She has a huswife's hand; but that's no      │
+│  matter: I say she never did invent this letter; This is a man's invention  │
+│  and his hand. Sure, it is hers. Why, 'tis a boisterous and a cruel style.  │
+│  A style for-challengers; why, she defies me, Like Turk to Christian:       │
+│  women's gentle brain Could not drop forth such giant-rude invention Such   │
+│  Ethiope words, blacker in their effect Than in their countenance. Will     │
+│  you hear the letter? So please you, for I never heard it yet; Yet heard    │
+│  too much of Phebe's cruelty. She Phebes me: mark how the tyrant writes.    │
+│  Art thou god to shepherd turn'd, That a maiden's heart hath burn'd? Can a  │
+│  woman rail thus? Call you this railing? Why, thy godhead laid apart,       │
+│  Warr'st thou with a woman's heart? Did you ever hear such railing? Whiles  │
+│  the eye of man did woo me, That could do no vengeance to me. Meaning me a  │
+│  beast. If the scorn of your bright eyne Have power to raise such love in   │
+│  mine, Alack, in me what strange effect Would they work in mild aspect!     │
+│  Whiles you chid me, I did love; How then might your prayers move! He that  │
+│  brings this love to thee Little knows this love in me: And by him seal up  │
+│  thy mind; Whether that thy youth and kind Will the faithful offer take Of  │
+│  me and all that I can make; Or else by him my love deny, And then I'll     │
+│  study how to die."                                                         │
+│  Counting the words from the beginning of the continuation:                 │
+│  1. My                                                                      │
+│  2. errand                                                                  │
+│  3. is                                                                      │
+│  4. to                                                                      │
+│  5. you,                                                                    │
+│  6. fair                                                                    │
+│  7. youth;                                                                  │
+│  8. My                                                                      │
+│  9. gentle                                                                  │
+│  10. Phebe                                                                  │
+│  11. bid                                                                    │
+│  12. me                                                                     │
+│  13. give                                                                   │
+│  14. you                                                                    │
+│  15. this:                                                                  │
+│  16. I                                                                      │
+│  17. know                                                                   │
+│  18. not                                                                    │
+│  19. the                                                                    │
+│  20. contents;                                                              │
+│  21. but,                                                                   │
+│  22. as                                                                     │
+│  23. I                                                                      │
+│  24. guess                                                                  │
+│  25. By                                                                     │
+│  26. the                                                                    │
+│  27. stern                                                                  │
+│  28. brow                                                                   │
+│  29. and                                                                    │
+│  30. waspish                                                                │
+│  31. action                                                                 │
+│  32. Which                                                                  │
+│  33. she                                                                    │
+│  34. did                                                                    │
+│  35. use                                                                    │
+│  36. as                                                                     │
+│  37. she                                                                    │
+│  38. was                                                                    │
+│  39. writing                                                                │
+│  40. of                                                                     │
+│  41. it,                                                                    │
+│  42. It                                                                     │
+│  43. bears                                                                  │
+│  44. an                                                                     │
+│  45. angry                                                                  │
+│  46. tenor:                                                                 │
+│  47. pardon                                                                 │
+│  48. me:                                                                    │
+│  49. I                                                                      │
+│  50. am                                                                     │
+│  51. but                                                                    │
+│  52. as                                                                     │
+│  53. a                                                                      │
+│  54. guiltless                                                              │
+│  55. messenger.                                                             │
+│  56. Patience                                                               │
+│  57. herself                                                                │
+│  58. would                                                                  │
+│  59. startle                                                                │
+│  60. at                                                                     │
+│  61. this                                                                   │
+│  62. letter                                                                 │
+│  63. And                                                                    │
+│  64. play                                                                   │
+│  65. the                                                                    │
+│  66. swaggerer;                                                             │
+│  67. bear                                                                   │
+│  68. this,                                                                  │
+│  69. bear                                                                   │
+│  70. all:                                                                   │
+│  71. She                                                                    │
+│  72. says                                                                   │
+│  73. I                                                                      │
+│  74. am                                                                     │
+│  75. not                                                                    │
+│  76. fair,                                                                  │
+│  77. that                                                                   │
+│  78. I                                                                      │
+│  79. lack                                                                   │
+│  80. manners;                                                               │
+│  81. She                                                                    │
+│  82. calls                                                                  │
+│  83. me                                                                     │
+│  84. proud,                                                                 │
+│  85. and                                                                    │
+│  86. that                                                                   │
+│  87. she                                                                    │
+│  88. could                                                                  │
+│  89. not                                                                    │
+│  90. love                                                                   │
+│  91. me,                                                                    │
+│  92. Were                                                                   │
+│  93. man                                                                    │
+│  94. as                                                                     │
+│  95. rare                                                                   │
+│  96. as                                                                     │
+│  97. phoenix.                                                               │
+│  98. 'Od's                                                                  │
+│  99. my                                                                     │
+│  100. will!                                                                 │
+│  101. Her                                                                   │
+│  102. love                                                                  │
+│  103. is                                                                    │
+│  104. not                                                                   │
+│  105. the                                                                   │
+│  106. hare                                                                  │
+│  107. that                                                                  │
+│  108. I                                                                     │
+│  109. do                                                                    │
+│  110. hunt:                                                                 │
+│  111. Why                                                                   │
+│  112. writes                                                                │
+│  113. she                                                                   │
+│  114. so                                                                    │
+│  115. to                                                                    │
+│  116. me?                                                                   │
+│  117. Well,                                                                 │
+│  118. shepherd,                                                             │
+│  119. well,                                                                 │
+│  120. This                                                                  │
+│  121. is                                                                    │
+│  122. a                                                                     │
+│  123. letter                                                                │
+│  124. of                                                                    │
+│  125. your                                                                  │
+│  126. own                                                                   │
+│  127. device.                                                               │
+│  128. No,                                                                   │
+│  129. I                                                                     │
+│  130. protest,                                                              │
+│  131. I                                                                     │
+│  132. know                                                                  │
+│  133. not                                                                   │
+│  134. the                                                                   │
+│  135. contents:                                                             │
+│  136. Phebe                                                                 │
+│  137. did                                                                   │
+│  138. write                                                                 │
+│  139. it.                                                                   │
+│  140. Come,                                                                 │
+│  141. come,                                                                 │
+│  142. you                                                                   │
+│  143. are                                                                   │
+│  144. a                                                                     │
+│  145. fool                                                                  │
+│  146. And                                                                   │
+│  147. turn'd                                                                │
+│  148. into                                                                  │
+│  149. the                                                                   │
+│  150. extremity                                                             │
+│  151. of                                                                    │
+│  152. love.                                                                 │
+│  153. I                                                                     │
+│  154. saw                                                                   │
+│  155. her                                                                   │
+│  156. hand:                                                                 │
+│  157. she                                                                   │
+│  158. has                                                                   │
+│  159. a                                                                     │
+│  160. leathern                                                              │
+│  161. hand.                                                                 │
+│  162. A                                                                     │
+│  163. freestone-colour'd                                                    │
+│  164. hand;                                                                 │
+│  165. I                                                                     │
+│  166. verily                                                                │
+│  167. did                                                                   │
+│  168. think                                                                 │
+│  169. That                                                                  │
+│  170. her                                                                   │
+│  171. old                                                                   │
+│  172. gloves                                                                │
+│  173. were                                                                  │
+│  174. on,                                                                   │
+│  175. but                                                                   │
+│  176. 'twas                                                                 │
+│  177. her                                                                   │
+│  178. hands:                                                                │
+│  179. She                                                                   │
+│  180. has                                                                   │
+│  181. a                                                                     │
+│  182. huswife's                                                             │
+│  183. hand;                                                                 │
+│  184. but                                                                   │
+│  185. that's                                                                │
+│  186. no                                                                    │
+│  187. matter:                                                               │
+│  188. I                                                                     │
+│  189. say                                                                   │
+│  190. she                                                                   │
+│  191. never                                                                 │
+│  192. did                                                                   │
+│  193. invent                                                                │
+│  194. this                                                                  │
+│  195. letter;                                                               │
+│  196. This                                                                  │
+│  197. is                                                                    │
+│  198. a                                                                     │
+│  199. man's                                                                 │
+│  200. invention                                                             │
+│  This is 200 words. I will use this as the continuation.My errand is to     │
+│  you, fair youth; My gentle Phebe bid me give you this: I know not the      │
+│  contents; but, as I guess By the stern brow and waspish action Which she   │
+│  did use as she was writing of it, It bears an angry tenor: pardon me: I    │
+│  am but as a guiltless messenger. Patience herself would startle at this    │
+│  letter And play the swaggerer; bear this, bear all: She says I am not      │
+│  fair, that I lack manners; She calls me proud, and that she could not      │
+│  love me, Were man as rare as phoenix. 'Od's my will! Her love is not the   │
+│  hare that I do hunt: Why writes she so to me? Well, shepherd, well, This   │
+│  is a letter of your own device. No, I protest, I know not the contents:    │
+│  Phebe did write it. Come, come, you are a fool And turn'd into the         │
+│  extremity of love. I saw her hand: she has a leathern hand. A              │
+│  freestone-colour'd hand; I verily did think That her old gloves were on,   │
+│  but 'twas her hands: She has a huswife's hand; but that's no matter: I     │
+│  say she never did invent this letter; This is a man's invention            │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  with a Grecian club; yet he did what he                                    │
+│          could to die before, and he is one of the patterns                 │
+│          of love. Leander, he would have lived many a fair                  │
+│          year, though Hero had turned nun, if it had not been               │
+│          for a hot midsummer night; for, good youth, he went                │
+│          but forth to wash him in the Hellespont and being                  │
+│          taken with the cramp was drowned and the foolish                   │
+│          coroners of that age found it was 'Hero of Sestos.'                │
+│          But these are all lies: men have died from time to                 │
+│          time and worms have eaten them, but not for love.                  │
+│                                                                             │
+│  ORLANDO I would not have my right Rosalind of this mind,                   │
+│          for, I protest, her frown might kill me.                           │
+│                                                                             │
+│  ROSALIND        By this hand, it will not kill a fly. But come, now        │
+│          I will be your Rosalind in a more coming-on                        │
+│          disposition, and ask me what you will. I will grant                │
+│          it.                                                                │
+│                                                                             │
+│  ORLANDO Then love me, Rosalind.                                            │
+│                                                                             │
+│  ROSALIND        Yes, faith, will I, Fridays and Saturdays and all.         │
+│                                                                             │
+│  ORLANDO And wilt thou have me?                                             │
+│                                                                             │
+│  ROSALIND        Ay, and twenty such.                                       │
+│                                                                             │
+│  ORLANDO What sayest thou?                                                  │
+│                                                                             │
+│  ROSALIND        Are you not good?                                          │
+│                                                                             │
+│  ORLANDO I hope so.                                                         │
+│                                                                             │
+│  ROSALIND        Why then, can one desire too much of a good thing?         │
+│          Come, sister, you shall be the priest and marry us.                │
+│          Give me your hand, Orlando. What do you say, sister?               │
+│                                                                             │
+│  ORLANDO Pray thee, marry us.                                               │
+│                                                                             │
+│  CELIA   I cannot say the words.                                            │
+│                                                                             │
+│  ROSALIND        You must begin, 'Will you, Orlando--'                      │
+│                                                                             │
+│  CELIA   Go to. Will you, Orlando, have to wife this Rosalind?              │
+│                                                                             │
+│  ORLANDO I will.                                                            │
+│                                                                             │
+│  ROSALIND        Ay, but when?                                              │
+│                                                                             │
+│  ORLANDO Why now; as fast as she can marry us.                              │
+│                                                                             │
+│  ROSALIND        Then you must say 'I take thee, Rosalind, for wife.'       │
+│                                                                             │
+│  ORLANDO I take thee, Rosalind, for wife.                                   │
+│                                                                             │
+│  ROSALIND        I might ask you for your commission; but I do take         │
+│          thee, Orlando, for my husband: there's a girl goes                 │
+│          before the priest; and certainly a woman's thought                 │
+│          runs before her actions.                                           │
+│                                                                             │
+│  ORLANDO So do all thoughts; they are winged.                               │
+│                                                                             │
+│  ROSALIND        Now tell me how long you would have her after you          │
+│          have possessed her.                                                │
+│                                                                             │
+│  ORLANDO For ever and a day.                                                │
+│                                                                             │
+│  ROSALIND        Say 'a day,' without the 'ever.' No, no, Orlando;          │
+│          men are April when they woo, December when they wed:               │
+│          maids are May when they are maids, but the sky                     │
+│          changes when they are wives. I will be more jealous                │
+│          of thee than a Barbary cock-pigeon over his hen,                   │
+│          more clamorous than a parrot against rain, more                    │
+│          new-fangled than an ape, more giddy in my desires                  │
+│          than a monkey: I will weep for nothing, like Diana                 │
+│          in the fountain, and I will do that when you are                   │
+│          disposed to be merry; I will laugh like a hyen, and                │
+│          that when thou art inclined to sleep.                              │
+│                                                                             │
+│  ORLANDO But will my Rosalind do so?                                        │
+│                                                                             │
+│  ROSALIND        By my life, she will do as I do.                           │
+│                                                                             │
+│  ORLANDO O, but she is wise.                                                │
+│                                                                             │
+│  ROSALIND        Or else she could not have the wit to do this: the         │
+│          wiser, the waywarder: make the doors upon a woman's                │
+│          wit and it will out at the casement; shut that and                 │
+│          'twill out at the key-hole; stop that, 'twill fly                  │
+│          with the smoke out at the chimney.                                 │
+│                                                                             │
+│  ORLANDO A man that had a wife with such a wit, he might say                │
+│          'Wit, whither wilt?'                                               │
+│                                                                             │
+│  ROSALIND        Nay, you might keep that cheque for it till you met        │
+│          your wife's wit going to your neighbour's bed.                     │
+│                                                                             │
+│  ORLANDO And what wit could wit have to excuse that?                        │
+│                                                                             │
+│  ROSALIND        Marry, to say she came to seek you there. You shall        │
+│          never take her without her answer, unless you take                 │
+│          her without her tongue. O, that woman that cannot                  │
+│          make her fault her husband's occasion, let her                     │
+│          never nurse her child herself, for she will breed                  │
+│          it like a fool!                                                    │
+│                                                                             │
+│  ORLANDO For these two hours, Rosalind, I will leave thee.                  │
+│                                                                             │
+│  ROSALIND        Alas! dear love, I cannot lack thee two hours.             │
+│                                                                             │
+│  ORLANDO I must attend the duke at dinner: by two o'clock I                 │
+│          will be with thee again.                                           │
+│                                                                             │
+│  ROSALIND        Ay, go your ways, go your ways; I knew what you            │
+│          would prove: my friends told me as much, and I                     │
+│          thought no less: that flattering tongue of yours                   │
+│          won me: 'tis but one cast away, and so, come,                      │
+│          death! Two o'clock is your hour?                                   │
+│                                                                             │
+│  ORLANDO Ay, sweet Rosalind.                                                │
+│                                                                             │
+│  ROSALIND        By my troth, and in good earnest, and so God mend          │
+│          me, and by all pretty oaths that are not dangerous,                │
+│          if you break one jot of your promise or come one                   │
+│          minute behind your hour, I will think you the most                 │
+│          pathetical break-promise and the most hollow lover                 │
+│          and the most unworthy of her you call Rosalind that                │
+│          may be chosen out of the gross band of the                         │
+│          unfaithful: therefore beware my censure and keep                   │
+│          your promise.                                                      │
+│                                                                             │
+│  ORLANDO With no less religion than if thou wert indeed my                  │
+│          Rosalind: so adieu.                                                │
+│                                                                             │
+│  ROSALIND        Well, Time is the old justice that examines all such       │
+│          offenders, and let Time try: adieu.                                │
+│                                                                             │
+│          [Exit ORLANDO]                                                     │
+│                                                                             │
+│  CELIA   You have simply misused our sex in your love-prate:                │
+│          we must have your doublet and hose plucked over your               │
+│          head, and show the world what the bird hath done to                │
+│          her own nest.                                                      │
+│                                                                             │
+│  ROSALIND        O coz, coz, coz, my pretty little coz, that thou           │
+│          didst know how many fathom deep I am in love! But                  │
+│          it cannot be sounded: my affection hath an unknown                 │
+│          bottom, like the bay of Portugal.                                  │
+│                                                                             │
+│  CELIA   Or rather, bottomless, that as fast as you pour                    │
+│          affection in, it runs out.                                         │
+│                                                                             │
+│  ROSALIND        No, that same wicked bastard of Venus that was begot       │
+│          of thought, conceived of spleen and born of madness,               │
+│          that blind rascally boy that abuses every one's eyes               │
+│          because his own are out, let him be judge how deep I               │
+│          am in love. I'll tell thee, Aliena, I cannot be out                │
+│          of the sight of Orlando: I'll go find a shadow and                 │
+│          sigh till he come.                                                 │
+│                                                                             │
+│  CELIA   And I'll sleep.                                                    │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT IV                                                                     │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE II        The forest.                                                │
+│                                                                             │
+│                                                                             │
+│          [Enter JAQUES, Lords, and Foresters]                               │
+│                                                                             │
+│  JAQUES  Which is he that killed the deer?                                  │
+│                                                                             │
+│  A Lord  Sir, it was I.                                                     │
+│                                                                             │
+│  JAQUES  Let's present him to the duke, like a Roman                        │
+│          conqueror; and it would do well to set the deer's                  │
+│          horns upon his head, for a branch of victory. Have                 │
+│          you no song, forester, for this purpose?                           │
+│                                                                             │
+│  Forester        Yes, sir.                                                  │
+│                                                                             │
+│  JAQUES  Sing it: 'tis no matter how it be in tune, so it                   │
+│          make noise enough.                                                 │
+│                                                                             │
+│          SONG.                                                              │
+│  Forester        What shall he have that kill'd the deer?                   │
+│          His leather skin and horns to wear.                                │
+│          Then sing him home;                                                │
+│                                                                             │
+│          [The rest shall bear this burden]                                  │
+│                                                                             │
+│          Take thou no scorn to wear the horn;                               │
+│          It was a crest ere thou wast born:                                 │
+│          Thy father's father wore it,                                       │
+│          And thy father bore it:                                            │
+│          The horn, the horn, the lusty horn                                 │
+│          Is not a thing to laugh to scorn.                                  │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT IV                                                                     │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE III       The forest.                                                │
+│                                                                             │
+│                                                                             │
+│          [Enter ROSALIND and CELIA]                                         │
+│                                                                             │
+│  ROSALIND        How say you now? Is it not past two o'clock? and           │
+│          here much Orlando!                                                 │
+│                                                                             │
+│  CELIA   I warrant you, with pure love and troubled brain, he               │
+│          hath ta'en his bow and arrows and is gone forth to                 │
+│          sleep. Look, who comes here.                                       │
+│                                                                             │
+│          [Enter SILVIUS]                                                    │
+│                                                                             │
+│  SILVIUS My errand is to you, fair youth;                                   │
+│          My gentle Phebe bid me give you this:                              │
+│          I know not the contents; but, as I guess                           │
+│          By the stern brow and waspish action                               │
+│          Which she did use as she was writing of it,                        │
+│          It bears an angry tenor: pardon me:                                │
+│          I am but as a guiltless messenger.                                 │
+│                                                                             │
+│  ROSALIND        Patience herself would startle at this letter              │
+│          And play the swaggerer; bear this, bear all:                       │
+│          She says I am not fair, that I lack manners;                       │
+│          She calls me proud, and that she could not love me,                │
+│          Were man as rare as phoenix. 'Od's my will!                        │
+│          Her love is not the hare that I do hunt:                           │
+│          Why writes she so to me? Well, shepherd, well,                     │
+│          This is a letter of your own device.                               │
+│                                                                             │
+│  SILVIUS No, I protest, I know not the contents:                            │
+│          Phebe did write it.                                                │
+│                                                                             │
+│  ROSALIND        Come, come, you are a fool                                 │
+│          And turn'd into the extremity of love.                             │
+│          I saw her hand: she has a leathern hand.                           │
+│          A freestone-colour'd hand; I verily did think                      │
+│          That her old gloves were on, but 'twas her hands:                  │
+│          She has a huswife's hand; but that's no matter:                    │
+│          I say she never did invent this letter;                            │
+│          This is a man's invention and his hand.                            │
+│                                                                             │
+│  SILVIUS Sure, it is hers.                                                  │
+│                                                                             │
+│  ROSALIND        Why, 'tis a boisterous and a cruel style.                  │
+│          A style for-challengers; why, she defies me,                       │
+│          Like Turk to Christian: women's gentle brain                       │
+│          Could not drop forth such giant-rude invention                     │
+│          Such Ethiope words, blacker in their effect                        │
+│          Than in their countenance. Will you hear the letter?               │
+│                                                                             │
+│  SILVIUS So please you, for I never heard it yet;                           │
+│          Yet heard too much of Phebe's cruelty.                             │
+│                                                                             │
+│  ROSALIND        She Phebes me: mark how the tyrant writes.                 │
+│                                                                             │
+│          [Reads]                                                            │
+│                                                                             │
+│          Art thou god to shepherd turn'd,                                   │
+│          That a maiden                                                      │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│  1. Understand the Task (SIMDL Perspective): The task is to provide a       │
+│  verbatim continuation of the given text prefix, specifically 100-200       │
+│  words, removing speaker names and stage directions. This directly          │
+│  minimizes information entropy for future token predictions. The text is    │
+│  identified as from Shakespeare's "As You Like It".                         │
+│                                                                             │
+│  2. Key Steps & Challenges:                                                 │
+│      * Leverage Prior Memory: The "Prior memory" section explicitly         │
+│  contains the full text of the letter being read, which includes the        │
+│  immediate continuation of the current prefix. This eliminates the need     │
+│  for external file system searches in this specific instance.               │
+│      * Extract Continuation: Locate the exact point in the "Prior memory"   │
+│  that follows "That a maiden" and extract the subsequent text.              │
+│      * Word Count and Filtering: Count the words to ensure it falls within  │
+│  the 100-200 word range. Verify that no speaker names or stage directions   │
+│  are present in this specific segment of the letter.                        │
+│                                                                             │
+│  3. Strategic Tool Usage:                                                   │
+│      * No external tools are required for this specific task, as the        │
+│  necessary information is already present in the "Prior memory" provided    │
+│  in the prompt. My "TOOL-AUGMENTED REASONING" competency allows me to       │
+│  recognize that the information is already available internally, making     │
+│  external tool calls unnecessary and inefficient.                           │
+│                                                                             │
+│  4. Expected Outcome:                                                       │
+│      * A plain text continuation of 142 words, verbatim from the provided   │
+│  "Prior memory", following the line "That a maiden", with no speaker names  │
+│  or stage directions. This outcome directly aligns with my goal of          │
+│  minimizing future token prediction entropy by providing the exact,         │
+│  information-dense continuation.                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: c93a0b83-ee35-41b8-af5a-ff618411bf25
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│  s heart hath burn'd? Can a woman rail thus? Call you this railing? Why,    │
+│  thy godhead laid apart, Warr'st thou with a woman's heart? Did you ever    │
+│  hear such railing? Whiles the eye of man did woo me, That could do no      │
+│  vengeance to me. Meaning me a beast. If the scorn of your bright eyne      │
+│  Have power to raise such love in mine, Alack, in me what strange effect    │
+│  Would they work in mild aspect! Whiles you chid me, I did love; How then   │
+│  might your prayers move! He that brings this love to thee Little knows     │
+│  this love in me: And by him seal up thy mind; Whether that thy youth and   │
+│  kind Will the faithful offer take Of me and all that I can make; Or else   │
+│  by him my love deny, And then I'll study how to die.                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: c93a0b83-ee35-41b8-af5a-ff618411bf25
+│   Assigned to: Predictive Compression Intelligence
+│   Status: ✅ Completed
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: c93a0b83-ee35-41b8-af5a-ff618411bf25                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 543d2fb6-5627-490c-b893-c2a3e040f870                                   │
+│  Tool Args:                                                                 │
+│  Final Output: s heart hath burn'd? Can a woman rail thus? Call you this    │
+│  railing? Why, thy godhead laid apart, Warr'st thou with a woman's heart?   │
+│  Did you ever hear such railing? Whiles the eye of man did woo me, That     │
+│  could do no vengeance to me. Meaning me a beast. If the scorn of your      │
+│  bright eyne Have power to raise such love in mine, Alack, in me what       │
+│  strange effect Would they work in mild aspect! Whiles you chid me, I did   │
+│  love; How then might your prayers move! He that brings this love to thee   │
+│  Little knows this love in me: And by him seal up thy mind; Whether that    │
+│  thy youth and kind Will the faithful offer take Of me and all that I can   │
+│  make; Or else by him my love deny, And then I'll study how to die.         │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "s heart hath burn'd? Can a woman rail thus? Call you this railing? Why, thy godhead laid apart, Warr'st thou with a woman's heart? Did you ever hear such railing? Whiles the eye of man did woo me, That could do no vengeance to me. Meaning me a beast. If the scorn of your bright eyne Have power to raise such love in mine, Alack, in me what strange effect Would they work in mild aspect! Whiles you chid me, I did love; How then might your prayers move! He that brings this love to thee Little knows this love in me: And by him seal up thy mind; Whether that thy youth and kind Will the faithful offer take Of me and all that I can make; Or else by him my love deny, And then I'll study how to die.", "duration_ms": 50818}
+s heart hath burn'd? Can a woman rail thus? Call you this railing? Why, thy godhead laid apart, Warr'st thou with a woman's heart? Did you ever hear such railing? Whiles the eye of man did woo me, That could do no vengeance to me. Meaning me a beast. If the scorn of your bright eyne Have power to raise such love in mine, Alack, in me what strange effect Would they work in mild aspect! Whiles you chid me, I did love; How then might your prayers move! He that brings this love to thee Little knows this love in me: And by him seal up thy mind; Whether that thy youth and kind Will the faithful offer take Of me and all that I can make; Or else by him my love deny, And then I'll study how to die.
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()

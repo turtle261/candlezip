@@ -23,7 +23,10 @@ from crewai_tools import MCPServerAdapter
 from dotenv import load_dotenv, find_dotenv
 from mcp import StdioServerParameters
 import time
+from crewai_tools import WebsiteSearchTool
 
+# Example of initiating tool that agents can use 
+# to search across any discovered websites
 # * Enforce deterministic runtime environment
 os.environ.setdefault("PYTHONHASHSEED", "0")
 os.environ.setdefault("TZ", "UTC")
@@ -235,7 +238,7 @@ def load_mcp_servers(config_path: str = "mcp_config.json") -> List[StdioServerPa
         print(f"Warning: Failed to load MCP config: {e}")
         return []
 
-def build_embedder_config() -> dict:
+def build_embedder_config() -> dict: # remove for nomem
     """Build Google embedder config after environment is loaded.
     
     Returns:
@@ -250,6 +253,7 @@ def build_embedder_config() -> dict:
         "config": {
             "model": model_name,
             "task_type": "retrieval_document",
+            "api_key_env_var": "GOOGLE_API_KEY",
             "api_key": google_api_key,
         },
     }
@@ -267,21 +271,39 @@ def create_agent(task_description: str, max_steps: int, embedder_config: dict) -
         Configured CrewAI agent with long-term memory enabled
     """
     # Configure Gemini LLM
-    #For regular:
+    import json
+
+    file_path = 'vertcred.json'
+
+    # Load the JSON file
+    with open(file_path, 'r') as file:
+        vertex_credentials = json.load(file)
+
+    # Convert the credentials to a JSON string
+    vertex_credentials_json = json.dumps(vertex_credentials)
+    gEmbed = build_embedder_config()
+        #For regular:
     llm = LLM(
         model="gemini/gemini-2.5-flash", # Do not change this.
+        include_reasoning=True,
+        reasoning_effort="high",
         temperature=0.0,
         seed=42,
         top_p=0.95,
+        #vertex_credentials=vertex_credentials_json
+
     )
     # For reasoning:
     llm2 = LLM(
         model="gemini/gemini-2.5-pro", # Do not change this.
         temperature=0.0,
+        include_reasoning=True,
+        reasoning_effort="medium",
         seed=42,
         top_p=0.95,
+        #vertex_credentials=vertex_credentials_json
     )
-   
+    llm3=llm
     return Agent(
         role="Predictive Compression Intelligence",
         goal="Minimize future token prediction entropy by providing maximally informative context through strategic tool usage and learned patterns",
@@ -295,25 +317,28 @@ def create_agent(task_description: str, max_steps: int, embedder_config: dict) -
             "\n- PATTERN SYNTHESIS: You identify salient features in text prefixes (domains, entities, structural markers) that signal retrievable content or predictable continuations"
             "\n\nOperational Strategy:"
             "\n- Analyze the provided text prefix to infer domain, authorship, structural patterns, and likely source material"
-            "\n- Query external knowledge sources to locate exact matching content or highly relevant contextual material"
+            "\n- Query external knowledge sources to locate exact matching content or highly relevant contextual material, or predictive information."
             "\n- When exact sources are identified, extract verbatim continuations; otherwise synthesize high-confidence predictions from available context"
             "\n- Prioritize information-dense elements: technical terminology, proper nouns, numerical data, domain-specific jargon, and structural markers"
             "\n- Include natural surrounding text to preserve authentic linguistic flow and token-level predictability"
             "\n\nPerformance Criterion: Your output is evaluated by measuring cross-entropy reduction over future token predictions. "
             "Successful hints provide precise, context-rich information that allows the language model to assign higher probability mass to the actual upcoming tokens, "
-            "thereby reducing the expected description length under arithmetic coding."
+            "thereby reducing the expected description length under arithmetic coding. You understand that ALL tools that you currently have access to are counted as external sources, and that you should use any tools at your disposal to do tasks. You will need to think very hard about how your toolset may be able to get the information you need, and get that information efficiently. YOU ONLY have access to this directory through your tools: /C/Users/Noah/Documents/sink ONLY. Start by analyzing the directory and then use the tools correctly to solve the task."
         ),
         llm=llm,
-        memory=True,  # Enable CrewAI's built-in long-term memory
+        memory=False,
         reasoning=True,
         planning=True,
-        max_reasoning_attempts=max_steps,
+        max_reasoning_attempts=2,
+        max_planning_attempts=2,
         verbose=True,
         allow_delegation=False,
-        max_iter=max_steps,
+        max_iter=2*max_steps,
         reasoning_llm=llm2,
         planning_llm=llm2,
-        max_rpm=8,
+        function_calling_llm=llm3,
+        max_rpm=30,
+        max_retry_attempts=2,
     )
 
 
@@ -336,10 +361,8 @@ def run_agent(task_description: str, mcp_config_path: str, max_steps: int) -> st
     collection_name = setup_file_specific_memory(input_file_path)
     print(f"[Memory] Using collection: {collection_name}")
     
-    # Build embedder configuration AFTER env is loaded
-    embedder_config = build_embedder_config()
-    if not embedder_config.get("config", {}).get("api_key"):
-        print("Warning: Missing Google API key for embeddings. Memory may not function optimally.")
+    # Disable embedder/memory entirely in no-memory agent
+    embedder_config = None
     
     # Set up CrewAI storage directory to be inside the run's scan directory (same dir as proof.csv)
     # Respect CANDLEZIP_WATCHDOG_DIR when present; otherwise fall back to local ./agent_memory
@@ -352,11 +375,8 @@ def run_agent(task_description: str, mcp_config_path: str, max_steps: int) -> st
     # Create agent with memory enabled
     agent = create_agent(task_description, max_steps, embedder_config)
     
-    # Load learning context from previous chunks  
-    learning_context = load_learning_context(input_file_path, chunk_index)
-    
-    # Create enhanced task description with learning context
-    enhanced_task_description = task_description + learning_context
+    # No cross-chunk memory: use task description only
+    enhanced_task_description = task_description
     
     # Disable learning callback: learning entries are written from Rust after gating to ensure exact alignment
     task_callback = None
@@ -383,13 +403,15 @@ def run_agent(task_description: str, mcp_config_path: str, max_steps: int) -> st
                 else:
                     print("[MCP] Warning: No tools available from MCP servers")
                 
+                #webtool = WebsiteSearchTool(embedder=embedder_config)
+                #gent.tools.append(webtool)
                 crew = Crew(
                     agents=[agent],
                     tasks=[task],
                     process=Process.sequential,
                     verbose=True,
-                    memory=True,  # Enable memory for learning
-                    embedder=embedder_config,
+                    memory=False,
+                    embedder=None,
                     task_callback=task_callback  # Add learning callback
                 )
                 t0 = _now_ms()
@@ -402,14 +424,13 @@ def run_agent(task_description: str, mcp_config_path: str, max_steps: int) -> st
             print(f"Warning: Running without MCP due to configuration/runtime error: {e}")
             # Fall through to run without MCP tools
     
-    # Run without MCP tools but still with memory enabled
+    # Run without MCP tools, no memory
     crew = Crew(
         agents=[agent],
         tasks=[task],
         process=Process.sequential,
         verbose=True,
-        memory=True,  # Enable memory for learning
-        embedder=embedder_config,
+        memory=False,
         task_callback=task_callback  # Add learning callback
     )
     t0 = _now_ms()
@@ -456,7 +477,7 @@ def main() -> int:
     parser.add_argument(
         "--max-steps",
         type=int,
-        default=7,
+        default=15,
         help="Maximum reasoning/tool steps for the agent"
     )
     

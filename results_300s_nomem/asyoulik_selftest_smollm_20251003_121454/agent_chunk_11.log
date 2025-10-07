@@ -1,0 +1,660 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 29.3225ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 39.7677ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.6483544s
+- Watching for configuration updates...
+> Initialized in 1.7184509s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_asyoulik_78e91080
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 4ff46c4d-7a61-4c78-b812-be41576fa25a                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 8a909516-2e9f-44d0-b832-3299a6c4fef7
+    Status: Executing Task...
+    └── ✅ Reasoning Completed (Not Ready)┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  3) and (24) thou (25) must (26) look (27) pale (28) and (29) wonder (30).  │
+│  I (31) am (32) heartily (33) glad (34) I (35) came (36) hither (37) to     │
+│  (38) you (39). If (40) he (41) come (42) to-morrow (43), I'll (44) give    │
+│  (45) him (46) his (47) payment (48): if (49) ever (50) he (51) go (52)     │
+│  alone (53) again (54), I'll (55) never (56) wrestle (57) for (58) prize    │
+│  (59) more (60): and (61) so (62) God (63) keep (64) your (65) worship      │
+│  (66)! Farewell (67), good (68) Charles (69). Now (70) will (71) I (72)     │
+│  stir (73) this (74) gamester (75): I (76) hope (77) I (78) shall (79) see  │
+│  (80) an (81) end (82) of (83) him (84); for (85) my (86) soul (87), yet    │
+│  (88) I (89) know (90) not (91) why (92), hates (93) nothing (94) more      │
+│  (95) than (96) he (97). Yet (98) he's (99) gentle (100), never (101)       │
+│  schooled (102) and (103) yet (104) learned (105), full (106) of (107)      │
+│  noble (108) device (109), of (110) all (111) sorts (112) enchantingly      │
+│  (113) beloved (114), and (115) indeed (116) so (117) much (118) in (119)   │
+│  the (120) heart (121) of (122) the (123) world (124), and (125)            │
+│  especially (126) of (127) my (128) own (129) people (130), who (131) best  │
+│  (132) know (133) him (134), that (135) I (136) am (137) altogether (138)   │
+│  misprised (139): but (140) it (141) shall (142) not (143) be (144) so      │
+│  (145) long (146); this (147) wrestler (148) shall (149) clear (150) all    │
+│  (151). Nothing (152) remains (153) but (154) that (155) I (156) kindle     │
+│  (157) the (158) boy (159) with (160) the (161) old (162) and (163)         │
+│  humorous (164) knights (165), and (166) after (167) some (168) remove      │
+│  (169), to (170) try (171) if (172) you (173) can (174) bring (175) him     │
+│  (176) to (177) the (178) new (179) court (180).                            │
+│  The word count is 180 words, which is within the 100-200 word range. I     │
+│  will now provide the plain text continuation.day living. I speak but       │
+│  brotherly of him; but should I anatomize him to thee as he is, I must      │
+│  blush and weep and thou must look pale and wonder.                         │
+│  CHARLES I am heartily glad I came hither to you. If he come to-morrow,     │
+│  I'll give him his payment: if ever he go alone again, I'll never wrestle   │
+│  for prize more: and so God keep your worship!                              │
+│  OLIVER  Farewell, good Charles.                                            │
+│  [Exit CHARLES]                                                             │
+│  Now will I stir this gamester: I hope I shall see an end of him; for my    │
+│  soul, yet I know not why, hates nothing more than he. Yet he's gentle,     │
+│  never schooled and yet learned, full of noble device, of all sorts         │
+│  enchantingly beloved, and indeed so much in the heart of the world, and    │
+│  especially of my own people, who best know him, that I am altogether       │
+│  misprised: but it shall not be so long; this wrestler shall clear all.     │
+│  Nothing remains but that I kindle the boy with the old and humorous        │
+│  knights, and after some remove, to try if you can bring him to the new     │
+│  court.                                                                     │
+│                                                                             │
+│  # chunk:7                                                                  │
+│  were good pancakes and swore by his honour the                             │
+│  mustard was naught: now I'll stand to it, the                              │
+│  pancakes were naught and the mustard was good, and                         │
+│  yet was not the knight forsworn.                                           │
+│  Let's reconstruct the full sentence and then count the words.              │
+│  The prefix ends with: "Nature's; who perceiv"                              │
+│  The continuation starts with: "eth our natural wits too dull to reason of  │
+│  such goddesses and hath sent this natural for our whetstone; for always    │
+│  the dulness of the fool is the whetstone of the wits. How now, wit!        │
+│  whither wander you?                                                        │
+│  TOUCHSTONE Mistress, you must come away to your father.                    │
+│  CELIA Were you made the messenger?                                         │
+│  TOUCHSTONE No, by mine honour, but I was bid to come for you.              │
+│  ROSALIND Where learned you that oath, fool?                                │
+│  TOUCHSTONE Of a certain knight that swore by his honour they were good     │
+│  pancakes and swore by his honour the mustard was naught: now I'll stand    │
+│  to it, the pancakes were naught and the mustard was good, and yet was not  │
+│  the knight forsworn."                                                      │
+│  Now, I will count the words from "eth our natural wits too dull" to        │
+│  ensure it's within the 100-200 word range.                                 │
+│  1. eth (completes "perceiveth")                                            │
+│  2. our                                                                     │
+│  3. natural                                                                 │
+│  4. wits                                                                    │
+│  5. too                                                                     │
+│  6. dull                                                                    │
+│  7. to                                                                      │
+│  8. reason                                                                  │
+│  9. of                                                                      │
+│  10. such                                                                   │
+│  11. goddesses                                                              │
+│  12. and                                                                    │
+│  13. hath                                                                   │
+│  14. sent                                                                   │
+│  15. this                                                                   │
+│  16. natural                                                                │
+│  17. for                                                                    │
+│  18. our                                                                    │
+│  19. whetstone;                                                             │
+│  20. for                                                                    │
+│  21. always                                                                 │
+│  22. the                                                                    │
+│  23. dulness                                                                │
+│  24. of                                                                     │
+│  25. the                                                                    │
+│  26. fool                                                                   │
+│  27. is                                                                     │
+│  28. the                                                                    │
+│  29. whetstone                                                              │
+│  30. of                                                                     │
+│  31. the                                                                    │
+│  32. wits.                                                                  │
+│  33. How                                                                    │
+│  34. now,                                                                   │
+│  35. wit!                                                                   │
+│  36. whither                                                                │
+│  37. wander                                                                 │
+│  38. you?                                                                   │
+│  39. TOUCHSTONE                                                             │
+│  40. Mistress,                                                              │
+│  41. you                                                                    │
+│  42. must                                                                   │
+│  43. come                                                                   │
+│  44. away                                                                   │
+│  45. to                                                                     │
+│  46. your                                                                   │
+│  47. father.                                                                │
+│  48. CELIA                                                                  │
+│  49. Were                                                                   │
+│  50. you                                                                    │
+│  51. made                                                                   │
+│  52. the                                                                    │
+│  53. messenger?                                                             │
+│  54. TOUCHSTONE                                                             │
+│  55. No,                                                                    │
+│  56. by                                                                     │
+│  57. mine                                                                   │
+│  58. honour,                                                                │
+│  59. but                                                                    │
+│  60. I                                                                      │
+│  61. was                                                                    │
+│  62. bid                                                                    │
+│  63. to                                                                     │
+│  64. come                                                                   │
+│  65. for                                                                    │
+│  66. you.                                                                   │
+│  67. ROSALIND                                                               │
+│  68. Where                                                                  │
+│  69. learned                                                                │
+│  70. you                                                                    │
+│  71. that                                                                   │
+│  72. oath,                                                                  │
+│  73. fool?                                                                  │
+│  74. TOUCHSTONE                                                             │
+│  75. Of                                                                     │
+│  76. a                                                                      │
+│  77. certain                                                                │
+│  78. knight                                                                 │
+│  79. that                                                                   │
+│  80. swore                                                                  │
+│  81. by                                                                     │
+│  82. his                                                                    │
+│  83. honour                                                                 │
+│  84. they                                                                   │
+│  85. were                                                                   │
+│  86. good                                                                   │
+│  87. pancakes                                                               │
+│  88. and                                                                    │
+│  89. swore                                                                  │
+│  90. by                                                                     │
+│  91. his                                                                    │
+│  92. honour                                                                 │
+│  93. the                                                                    │
+│  94. mustard                                                                │
+│  95. was                                                                    │
+│  96. naught:                                                                │
+│  97. now                                                                    │
+│  98. I'll                                                                   │
+│  99. stand                                                                  │
+│  100. to                                                                    │
+│  101. it,                                                                   │
+│  102. the                                                                   │
+│  103. pancakes                                                              │
+│  104. were                                                                  │
+│  105. naught                                                                │
+│  106. and                                                                   │
+│  107. the                                                                   │
+│  108. mustard                                                               │
+│  109. was                                                                   │
+│  110. good,                                                                 │
+│  111. and                                                                   │
+│  112. yet                                                                   │
+│  113. was                                                                   │
+│  114. not                                                                   │
+│  115. the                                                                   │
+│  116. knight                                                                │
+│  117. forsworn.                                                             │
+│  The word count is 117 words, which is within the 100-200 word range. I     │
+│  will now provide the plain text continuation.eth our natural wits too      │
+│  dull to reason of such goddesses and hath sent this natural for our        │
+│  whetstone; for always the dulness of the fool is the whetstone of the      │
+│  wits. How now, wit! whither wander you?                                    │
+│  TOUCHSTONE      Mistress, you must come away to your father.               │
+│  CELIA   Were you made the messenger?                                       │
+│  TOUCHSTONE      No, by mine honour, but I was bid to come for you.         │
+│  ROSALIND        Where learned you that oath, fool?                         │
+│  TOUCHSTONE      Of a certain knight that swore by his honour they were     │
+│  good pancakes and swore by his honour the mustard was naught: now I'll     │
+│  stand to it, the pancakes were naught and the mustard was good, and yet    │
+│  was not the knight forsworn.                                               │
+│                                                                             │
+│  # chunk:8                                                                  │
+│  fools have was silenced, the little foolery that wise men have makes a     │
+│  great show. Here comes Monsieur Le Beau.                                   │
+│  ROSALIND        With his mouth full of news.                               │
+│  CELIA   Which he will put on us, as pigeons feed their young.              │
+│  ROSALIND        Then shall we be news-crammed.                             │
+│  CELIA   All the better; we shall be the more marketable.                   │
+│  [Enter LE BEAU]                                                            │
+│  Bon jour, Monsieur Le Beau: what's the news?                               │
+│  LE BEAU Fair princess, you have lost much good sport.                      │
+│  CELIA   Sport! of what colour?                                             │
+│  LE BEAU What colour, madam! how shall I answer you?                        │
+│  ROSALIND        As wit and fortune will.                                   │
+│  TOUCHSTONE      Or as the Destinies decree.                                │
+│  CELIA   Well said: that was laid on with a trowel.                         │
+│  TOUCHSTONE      Nay, if I keep not my rank,--                              │
+│  ROSALIND        Thou losest thy old smell.                                 │
+│  LE BEAU You amaze me, ladies: I would have told you of good                │
+│  wrestling, which you have lost the sight of.                               │
+│  ROSALIND        You tell us the manner of the wrestling.                   │
+│                                                                             │
+│  # chunk:9                                                                  │
+│  The prefix ends with:                                                      │
+│  "ROSALIND You tell us the manner of the wrestling."                        │
+│  I will find this exact string in the `file_content` and then extract the   │
+│  subsequent text. I need to be careful about leading/trailing whitespace    │
+│  and line breaks. The extracted text should be between 100 and 200 words.   │
+│  Let's define the prefix for searching:                                     │
+│  `prefix_end = "ROSALIND\tYou tell us the manner of the wrestling."`        │
+│  I will find the index of this string in the `file_content` and then take   │
+│  the text after it. I will then clean up any leading/trailing whitespace    │
+│  and count the words.LE BEAU    I will tell you the beginning; and, if it   │
+│  please                                                                     │
+│  your ladyships, you may see the end; for the best is                       │
+│  yet to do; and here, where you are, they are coming                        │
+│  to perform it.                                                             │
+│  CELIA   Well, the beginning, that is dead and buried.                      │
+│  LE BEAU There comes an old man and his three sons,--                       │
+│  CELIA   I could match this beginning with an old tale.                     │
+│  LE BEAU Three proper young men, of excellent growth and presence.          │
+│  ROSALIND        With bills on their necks, 'Be it known unto all men       │
+│  by these presents.'                                                        │
+│  LE BEAU The eldest of the three wrestled with Charles, the                 │
+│  duke's wrestler; which Charles in a moment threw him                       │
+│  and broke three of his ribs, that there is little                          │
+│  hope of life in him: so he served the second, and                          │
+│  so the third. Yonder they lie; the poor old man,                           │
+│  their father, making such pitiful dole over them                           │
+│  that all the beholders take his part with weeping.                         │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  d, truly, when he dies, thou shalt                                         │
+│          be his heir, for what he hath taken away from thy                  │
+│          father perforce, I will render thee again in                       │
+│          affection; by mine honour, I will; and when I break                │
+│          that oath, let me turn monster: therefore, my                      │
+│          sweet Rose, my dear Rose, be merry.                                │
+│                                                                             │
+│  ROSALIND        From henceforth I will, coz, and devise sports. Let        │
+│          me see; what think you of falling in love?                         │
+│                                                                             │
+│  CELIA   Marry, I prithee, do, to make sport withal: but                    │
+│          love no man in good earnest; nor no further in sport               │
+│          neither than with safety of a pure blush thou mayst                │
+│          in honour come off again.                                          │
+│                                                                             │
+│  ROSALIND        What shall be our sport, then?                             │
+│                                                                             │
+│  CELIA   Let us sit and mock the good housewife Fortune from                │
+│          her wheel, that her gifts may henceforth be bestowed equally.      │
+│                                                                             │
+│  ROSALIND        I would we could do so, for her benefits are               │
+│          mightily misplaced, and the bountiful blind woman                  │
+│          doth most mistake in her gifts to women.                           │
+│                                                                             │
+│  CELIA   'Tis true; for those that she makes fair she scarce                │
+│          makes honest, and those that she makes honest she                  │
+│          makes very ill-favouredly.                                         │
+│                                                                             │
+│  ROSALIND        Nay, now thou goest from Fortune's office to               │
+│          Nature's: Fortune reigns in gifts of the world,                    │
+│          not in the lineaments of Nature.                                   │
+│                                                                             │
+│          [Enter TOUCHSTONE]                                                 │
+│                                                                             │
+│  CELIA   No? when Nature hath made a fair creature, may she                 │
+│          not by Fortune fall into the fire? Though Nature                   │
+│          hath given us wit to flout at Fortune, hath not                    │
+│          Fortune sent in this fool to cut off the argument?                 │
+│                                                                             │
+│  ROSALIND        Indeed, there is Fortune too hard for Nature, when         │
+│          Fortune makes Nature's natural the cutter-off of                   │
+│          Nature's wit.                                                      │
+│                                                                             │
+│  CELIA   Peradventure this is not Fortune's work neither, but               │
+│          Nature's; who perceiveth our natural wits too dull                 │
+│          to reason of such goddesses and hath sent this                     │
+│          natural for our whetstone; for always the dulness of               │
+│          the fool is the whetstone of the wits. How now,                    │
+│          wit! whither wander you?                                           │
+│                                                                             │
+│  TOUCHSTONE      Mistress, you must come away to your father.               │
+│                                                                             │
+│  CELIA   Were you made the messenger?                                       │
+│                                                                             │
+│  TOUCHSTONE      No, by mine honour, but I was bid to come for you.         │
+│                                                                             │
+│  ROSALIND        Where learned you that oath, fool?                         │
+│                                                                             │
+│  TOUCHSTONE      Of a certain knight that swore by his honour they          │
+│          were good pancakes and swore by his honour the                     │
+│          mustard was naught: now I'll stand to it, the                      │
+│          pancakes were naught and the mustard was good, and                 │
+│          yet was not the knight forsworn.                                   │
+│                                                                             │
+│  CELIA   How prove you that, in the great heap of your                      │
+│          knowledge?                                                         │
+│                                                                             │
+│  ROSALIND        Ay, marry, now unmuzzle your wisdom.                       │
+│                                                                             │
+│  TOUCHSTONE      Stand you both forth now: stroke your chins, and           │
+│          swear by your beards that I am a knave.                            │
+│                                                                             │
+│  CELIA   By our beards, if we had them, thou art.                           │
+│                                                                             │
+│  TOUCHSTONE      By my knavery, if I had it, then I were; but if you        │
+│          swear by that that is not, you are not forsworn: no                │
+│          more was this knight swearing by his honour, for he                │
+│          never had any; or if he had, he had sworn it away                  │
+│          before ever he saw those pancakes or that mustard.                 │
+│                                                                             │
+│  CELIA   Prithee, who is't that thou meanest?                               │
+│                                                                             │
+│  TOUCHSTONE      One that old Frederick, your father, loves.                │
+│                                                                             │
+│  CELIA   My father's love is enough to honour him: enough!                  │
+│          speak no more of him; you'll be whipped for taxation               │
+│          one of these days.                                                 │
+│                                                                             │
+│  TOUCHSTONE      The more pity, that fools may not speak wisely what        │
+│          wise men do foolishly.                                             │
+│                                                                             │
+│  CELIA   By my troth, thou sayest true; for since the little                │
+│          wit that fools have was silenced, the little foolery               │
+│          that wise men have makes a great show. Here comes                  │
+│          Monsieur Le Beau.                                                  │
+│                                                                             │
+│  ROSALIND        With his mouth full of news.                               │
+│                                                                             │
+│  CELIA   Which he will put on us, as pigeons feed their young.              │
+│                                                                             │
+│  ROSALIND        Then shall we be news-crammed.                             │
+│                                                                             │
+│  CELIA   All the better; we shall be the more marketable.                   │
+│                                                                             │
+│          [Enter LE BEAU]                                                    │
+│                                                                             │
+│          Bon jour, Monsieur Le Beau: what's the news?                       │
+│                                                                             │
+│  LE BEAU Fair princess, you have lost much good sport.                      │
+│                                                                             │
+│  CELIA   Sport! of what colour?                                             │
+│                                                                             │
+│  LE BEAU What colour, madam! how shall I answer you?                        │
+│                                                                             │
+│  ROSALIND        As wit and fortune will.                                   │
+│                                                                             │
+│  TOUCHSTONE      Or as the Destinies decree.                                │
+│                                                                             │
+│  CELIA   Well said: that was laid on with a trowel.                         │
+│                                                                             │
+│  TOUCHSTONE      Nay, if I keep not my rank,--                              │
+│                                                                             │
+│  ROSALIND        Thou losest thy old smell.                                 │
+│                                                                             │
+│  LE BEAU You amaze me, ladies: I would have told you of good                │
+│          wrestling, which you have lost the sight of.                       │
+│                                                                             │
+│  ROSALIND        You tell us the manner of the wrestling.                   │
+│                                                                             │
+│  LE BEAU I will tell you the beginning; and, if it please                   │
+│          your ladyships, you may see the end; for the best is               │
+│          yet to do; and here, where you are, they are coming                │
+│          to perform it.                                                     │
+│                                                                             │
+│  CELIA   Well, the beginning, that is dead and buried.                      │
+│                                                                             │
+│  LE BEAU There comes an old man and his three sons,--                       │
+│                                                                             │
+│  CELIA   I could match this beginning with an old tale.                     │
+│                                                                             │
+│  LE BEAU Three proper young men, of excellent growth and presence.          │
+│                                                                             │
+│  ROSALIND        With bills on their necks, 'Be it known unto all men       │
+│          by these presents.'                                                │
+│                                                                             │
+│  LE BEAU The eldest of the three wrestled with Charles, the                 │
+│          duke's wrestler; which Charles in a moment threw him               │
+│          and broke three of his ribs, that there is little                  │
+│          hope of life in him: so he served the second, and                  │
+│          so the third. Yonder they lie; the poor old man,                   │
+│          their father, making such pitiful dole over them                   │
+│          that all the beholders take his part with weeping.                 │
+│                                                                             │
+│  ROSALIND        Alas!                                                      │
+│                                                                             │
+│  TOUCHSTONE      But what is the sport, monsieur, that the ladies           │
+│          have lost?                                                         │
+│                                                                             │
+│  LE BEAU Why, this that I speak of.                                         │
+│                                                                             │
+│  TOUCHSTONE      Thus men may grow wiser every day: it is the first         │
+│          time that ever I heard breaking of ribs was sport                  │
+│          for ladies.                                                        │
+│                                                                             │
+│  CELIA   Or I, I promise thee.                                              │
+│                                                                             │
+│  ROSALIND        But is there any else longs to see this broken music       │
+│          in his sides? is there yet another dotes upon                      │
+│          rib-breaking? Shall we see this wrestling, cousin?                 │
+│                                                                             │
+│  LE BEAU You must, if you stay here; for here is the place                  │
+│          appointed for the wrestling, and they are ready to                 │
+│          perform it.                                                        │
+│                                                                             │
+│  CELIA   Yonder, sure, they are coming: let us now stay and see it.         │
+│                                                                             │
+│          [Flourish. Enter DUKE FREDERICK, Lords, ORLANDO,                   │
+│          CHARLES, and Attendants]                                           │
+│                                                                             │
+│  DUKE FREDERICK  Come on: since the youth will not be entreated, his        │
+│          own peril on his forwardness.                                      │
+│                                                                             │
+│  ROSALIND        Is yonder the man?                                         │
+│                                                                             │
+│  LE BEAU Even he, madam.                                                    │
+│                                                                             │
+│  CELIA   Alas, he is too young! yet he looks successfully.                  │
+│                                                                             │
+│  DUKE FREDERICK  How now, daughter and cousin! are you crept hither         │
+│          to see the wrestling?                                              │
+│                                                                             │
+│  ROSALIND        Ay, my liege, so please you give us leave.                 │
+│                                                                             │
+│  DUKE FREDERICK  You will take little delight in it, I can tell you;        │
+│          there is such odds in the man. In pity of the                      │
+│          challenger's youth I would fain dissuade him, but he               │
+│          will not be entreated. Speak to him, ladies; see if                │
+│          you can move him.                                                  │
+│                                                                             │
+│  CELIA   Call him hither, good Monsieur Le Beau.                            │
+│                                                                             │
+│  DUKE FREDERICK  Do so: I'll not be by.                                     │
+│                                                                             │
+│  LE BEAU Monsieur the challenger, the princesses call for you.              │
+│                                                                             │
+│  ORLANDO I attend them with all respect and duty.                           │
+│                                                                             │
+│  ROSALIND        Young man, have you challenged Charles the wrestler?       │
+│                                                                             │
+│  ORLANDO No, fair princess; he is the general challenger: I                 │
+│          come but in, as others do, to try with him the                     │
+│          strength of my youth.                                              │
+│                                                                             │
+│  CELIA   Young gentleman, your spirits are too bold for your                │
+│          years. You have seen cruel proof of this man's                     │
+│          strength: if you saw yourself with your eyes or                    │
+│          knew yourself with your judgment, the fear of your                 │
+│          adventure would counsel you to a more equal                        │
+│          enterprise. We pray you, for your own sake, to                     │
+│          embrace your own safety and give over this attempt.                │
+│                                                                             │
+│  ROSALIND        Do, young sir; your reputation shall not therefore         │
+│          be misprised: we will make it our suit to the duke                 │
+│          that the wrestling might not go forward.                           │
+│                                                                             │
+│  ORLANDO I beseech you, punish me not with your hard                        │
+│          thoughts; wherein I confess me much guilty, to deny                │
+│          so fair and excellent ladies any thing. But let                    │
+│          your fair eyes and gentle wishes go with me to my                  │
+│          trial: wherein if I be foiled, there is but one                    │
+│          shamed that was never gracious; if killed, but one                 │
+│          dead that was willing to be so: I shall do my                      │
+│          friends no wrong, for I have none to lament me, the                │
+│          world no injury, for in it I have nothing; only in                 │
+│          the world I fill up a place, which may be better                   │
+│          supplied when I have made it empty.                                │
+│                                                                             │
+│  ROSALIND        The little strength that I have, I would it were with      │
+│  you.                                                                       │
+│                                                                             │
+│  CELIA   And mine, to eke out hers.                                         │
+│                                                                             │
+│  ROSALIND        Fare you well: pray heaven I be deceived in you!           │
+│                                                                             │
+│  CELIA   Your heart's desires be with you!                                  │
+│                                                                             │
+│  CHARLES Come, where is this young gallant that is so                       │
+│          desirous to lie with his mother earth?                             │
+│                                                                             │
+│  ORLANDO Ready, sir; but his will hath in it a more                         │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool search_files_content with arguments: {"is_regex":true,"path":"/C/Users/Noah/Documents/sink","pattern":"*.txt","query":"ORLANDO\\tReady, sir; but his will hath in it a more"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool search_files_content took: 480.6496ms
+🚀 Crew: crew
+└── 📋 Task: 8a909516-2e9f-44d0-b832-3299a6c4fef7
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    └── 🔧 Used search_files_content (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Action: search_files_content                                      │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\", \"pattern\": \"*.txt\",      │
+│  \"query\": \"ORLANDO\\\\tReady, sir; but his will hath in it a more\",     │
+│  \"is_regex\": true}"                                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  /C/Users/Noah/Documents/sink/cantrbry/asyoulik.txt                         │
+│    584:0: ORLANDO        Ready, sir; but his will hath in it a more modest  │
+│  working.                                                                   │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 8a909516-2e9f-44d0-b832-3299a6c4fef7
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    └── 🔧 Used search_files_content (1)┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│  modest working.                                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 8a909516-2e9f-44d0-b832-3299a6c4fef7
+    Assigned to: Predictive Compression Intelligence
+    Status: ✅ Completed
+    ├── ✅ Reasoning Completed (Not Ready)
+    └── 🔧 Used search_files_content (1)┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: 8a909516-2e9f-44d0-b832-3299a6c4fef7                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 4ff46c4d-7a61-4c78-b812-be41576fa25a                                   │
+│  Tool Args:                                                                 │
+│  Final Output: modest working.                                              │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+> Stop watching for updates
+AGENT_RESULT_JSON:{"final_text": "modest working.", "duration_ms": 22924}
+modest working.
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()

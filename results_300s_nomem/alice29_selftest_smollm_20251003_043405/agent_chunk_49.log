@@ -1,0 +1,645 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 29.532ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 46.0086ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.7558195s
+- Watching for configuration updates...
+> Initialized in 1.8329161s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_alice29_cfc6fc73
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: da566255-b7da-45fe-8a09-493e7f40c987                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 1902a93f-f478-4a23-9086-6a769d1dfdb6
+    Status: Executing Task...
+    └── ✅ Reasoning Completed (Not Ready)┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  ve the strange creatures of her little                                     │
+│  sister's dream.                                                            │
+│  The long grass rustled at her feet as the White Rabbit hurried             │
+│  by--the frightened Mouse splashed his way through the                      │
+│  neighbouring pool--she could hear the rattle of the teacups as             │
+│  the March Hare and his friends shared their never-ending meal,             │
+│  and the shrill voice of the Queen ordering off her unfortunate             │
+│  guests to execution--once more the pig-baby was sneezing on the            │
+│  Duchess's knee, while plates and dishes crashed around it--once            │
+│  more the shriek of the Gryphon, the squeaking of the Lizard's              │
+│  slate-pencil, and the choking of the suppressed guinea-pigs,               │
+│  filled the air, mixed up with the distant sobs of the miserable            │
+│  Mock Turtle.                                                               │
+│  So she sat on, with closed eyes, and half believed herself in              │
+│  Wonderland, though she knew she had but to open them again, and            │
+│  all would change to dull reality--the grass would be only                  │
+│  rustling in the wind, and the pool rippling to the waving of the           │
+│  reeds--the rattling teacups would change to tinkling sheep-                │
+│  bells, and the Queen's shrill cries to the voice of the shepherd           │
+│  boy--and the sneeze of the baby, the shriek of the Gryphon, and            │
+│  all thy other queer noises, would change (she knew) to the                 │
+│  confused clamour of the busy farm-yard--while the lowing of the            │
+│  cattle in the distance would take the place of the Mock Turtle's           │
+│  heavy sobs.                                                                │
+│  Lastly, she pictured to herself how this same little sister of             │
+│  hers would, in the after-time, be herself a grown woman; and how           │
+│  she would keep, through all her riper years, the simple and                │
+│  loving heart of her childhood:  and how she would gather about             │
+│  her other little children, and make THEIR eyes bright and eager            │
+│  with many a strange tale, perhaps even with the dream of                   │
+│  Wonderland of long ago:  and how she would feel with all their             │
+│  simple sorrows, and find a pleasure in all their simple joys,              │
+│  remembering her own child-life, and the happy summer days.                 │
+│  THE END                                                                    │
+│                                                                             │
+│  # chunk:43                                                                 │
+│  yet?' the Hatter said, turning to                                          │
+│  Alice again.                                                               │
+│  `No, I give it up,' Alice replied:  `what's the answer?'                   │
+│  `I haven't the slightest idea,' said the Hatter.                           │
+│  `Nor I,' said the March Hare.                                              │
+│  Alice sighed wearily.  `I think you might do something better              │
+│  with the time,' she said, `than wasting it in asking riddles that          │
+│  have no answers.'                                                          │
+│  `If you knew Time as well as I do,' said the Hatter, `you                  │
+│  wouldn't talk about wasting IT.  It's HIM.'                                │
+│  `I don't know what you mean,' said Alice.                                  │
+│  `Of course you don't!' the Hatter said, tossing his head                   │
+│  contemptuously.  `I dare say you never even spoke to Time!'                │
+│  `Perhaps not,' Alice cautiously replied:  `but I know I have to            │
+│  beat time when I learn music.'                                             │
+│  `Ah! that accounts for it,' said the Hatter.  `He won't stand              │
+│  beating.  Now, if you only kept on good terms with him, he'd do            │
+│  almost anything you liked with the clock.  For instance, suppose           │
+│  it were nine o'clock in the morning, just time to begin lessons:           │
+│  you'd only have to whisper a hint to Time, and round goes the              │
+│  clock in a twinkling!  Half-past one, time for dinner!'                    │
+│                                                                             │
+│  # chunk:44                                                                 │
+│  The prefix ends with:                                                      │
+│  `and I had to sing`                                                        │
+│  `            "Twinkle, twinkle, little bat!                                │
+│  How I wonder`                                                              │
+│  I will search for this exact string in the `alice29.txt` content I just    │
+│  read.                                                                      │
+│  The content I read contains:                                               │
+│  `            "Twinkle, twinkle, little bat!                                │
+│  How I wonder what you're at!"`                                             │
+│  So the immediate continuation is " what you're at!" followed by the next   │
+│  sentence.                                                                  │
+│  Let me extract the text starting from " what you're at!" and aim for       │
+│  100-200 words.                                                             │
+│  The relevant section from the `read_text_file` output is:                  │
+│  The prefix ends with:                                                      │
+│  `and I had to sing                                                         │
+│  "Twinkle, twinkle, little bat!                                             │
+│  How I wonder`                                                              │
+│  The immediate continuation is:                                             │
+│  ` what you're at!"                                                         │
+│  You know the song, perhaps?'                                               │
+│  `I've heard something like it,' said Alice.                                │
+│  `It goes on, you know,' the Hatter continued, `in this way:--              │
+│  "Up above the world you fly,                                               │
+│  Like a tea-tray in the sky.                                                │
+│  Twinkle, twinkle--"'                                                       │
+│  Here the Dormouse shook itself, and began singing in its sleep             │
+│  `Twinkle, twinkle, twinkle, twinkle--' and went on so long that            │
+│  they had to pinch it to make it stop.                                      │
+│  `Well, I'd hardly finished the first verse,' said the Hatter,              │
+│  `when the Queen jumped up and bawled out, "He's murdering the              │
+│  time!  Off with his head!"'                                                │
+│  `How dreadfully savage!' exclaimed Alice.                                  │
+│  `And ever since that,' the Hatter went on in a mournful tone,              │
+│  `he won't do a thing I ask!  It's always six o'clock now.'                 │
+│  A bright idea came into Alice's head.  `Is that the reason so              │
+│  many tea-things are put out here?' she asked.                              │
+│  `Yes, that's it,' said the Hatter with a sigh:  `it's always               │
+│  tea-time, and we've no time to wash the things between whiles.'            │
+│  `Then you keep moving round, I suppose?' said Alice.                       │
+│  `Exactly so,' said the Hatter:  `as the things get used up.'               │
+│  `But what happens when you come to the beginning again?' Alice             │
+│  ventured to ask.                                                           │
+│  `Suppose we change the subject,' the March Hare interrupted,               │
+│  yawning.  `I'm getting tired of this.  I vote the young lady               │
+│  tells us a story.'`                                                        │
+│  This continuation is well within the 100-200 word range and is verbatim.   │
+│  what you're at!"                                                           │
+│  You know the song, perhaps?'                                               │
+│  `I've heard something like it,' said Alice.                                │
+│  `It goes on, you know,' the Hatter continued, `in this way:--              │
+│  "Up above the world you fly,                                               │
+│  Like a tea-tray in the sky.                                                │
+│  Twinkle, twinkle--"'                                                       │
+│  Here the Dormouse shook itself, and began singing in its sleep             │
+│  `Twinkle, twinkle, twinkle, twinkle--' and went on so long that            │
+│  they had to pinch it to make it stop.                                      │
+│  `Well, I'd hardly finished the first verse,' said the Hatter,              │
+│  `when the Queen jumped up and bawled out, "He's murdering the              │
+│  time! Off with his head!"'                                                 │
+│  `How dreadfully savage!' exclaimed Alice.                                  │
+│  `And ever since that,' the Hatter went on in a mournful tone,              │
+│  `he won't do a thing I ask! It's always six o'clock now.'                  │
+│  A bright idea came into Alice's head. `Is that the reason so               │
+│  many tea-things are put out here?' she asked.                              │
+│  `Yes, that's it,' said the Hatter with a sigh: `it's always                │
+│  tea-time, and we've no time to wash the things between whiles.'            │
+│  `Then you keep moving round, I suppose?' said Alice.                       │
+│  `Exactly so,' said the Hatter: `as the things get used up.'                │
+│  `But what happens when you come to the beginning again?' Alice             │
+│  ventured to ask.                                                           │
+│  `Suppose we change the subject,' the March Hare interrupted,               │
+│  yawning. `I'm getting tired of this. I vote the young lady                 │
+│  tells us a story.'                                                         │
+│                                                                             │
+│  # chunk:48                                                                 │
+│  rose-tree stood near the entrance of the garden: the                       │
+│  roses growing on it were white, but there were three gardeners at          │
+│  it, busily painting them red. Alice thought this a very curious            │
+│  thing, and she went nearer to watch them, and just as she came up          │
+│  to them she heard one of them say, `Look out now, Five! Don't go           │
+│  splashing paint over me like that!'                                        │
+│  `I couldn't help it,' said Five, in a sulky tone; `Seven jogged            │
+│  my elbow.'                                                                 │
+│  On which Seven looked up and said, `That's right, Five! Always             │
+│  lay the blame on others!'                                                  │
+│  `YOU'D better not talk!' said Five. `I heard the Queen say only            │
+│  yesterday you deserved to be beheaded!'                                    │
+│  `What for?' said the one who had spoken first.                             │
+│  `That's none of YOUR business, Two!' said Seven.                           │
+│  `Yes, it IS his business!' said Five, `and I'll tell him--it               │
+│  was for bringing the cook tulip-roots instead of onions.'                  │
+│  Seven flung down his brush, and had just begun `Well, of all               │
+│  the unjust things--' when his eye chanced to fall upon Alice, as           │
+│  she stood watching them, and he checked himself suddenly: the              │
+│  others looked round also, and all of them bowed low.                       │
+│  `Would you tell me,' said Alice, a little timidly, `why you are            │
+│  painting those roses?'                                                     │
+│  Five and Seven said nothing, but looked at Two. Two began in a             │
+│  low voice, `Why the fact is, you see, Miss, this here ought to             │
+│  have been a RED rose-tree, and we put a white one in by mistake;           │
+│  and if the Queen was to find it out, we should all have our heads          │
+│  cut off, you know. So you see, Miss, we're doing our best, afore           │
+│  she comes, to--' At this moment Five, who had been anxiously               │
+│  looking across the garden, called out `The Queen! The Queen!'              │
+│  and the three gardeners instantly threw themselves flat upon               │
+│  their faces. There was a sound of many footsteps, and Alice                │
+│  looked round, eager to see the Queen.                                      │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│   things between whiles.'                                                   │
+│                                                                             │
+│    `Then you keep moving round, I suppose?' said Alice.                     │
+│                                                                             │
+│    `Exactly so,' said the Hatter:  `as the things get used up.'             │
+│                                                                             │
+│    `But what happens when you come to the beginning again?' Alice           │
+│  ventured to ask.                                                           │
+│                                                                             │
+│    `Suppose we change the subject,' the March Hare interrupted,             │
+│  yawning.  `I'm getting tired of this.  I vote the young lady               │
+│  tells us a story.'                                                         │
+│                                                                             │
+│    `I'm afraid I don't know one,' said Alice, rather alarmed at             │
+│  the proposal.                                                              │
+│                                                                             │
+│    `Then the Dormouse shall!' they both cried.  `Wake up,                   │
+│  Dormouse!'  And they pinched it on both sides at once.                     │
+│                                                                             │
+│    The Dormouse slowly opened his eyes.  `I wasn't asleep,' he              │
+│  said in a hoarse, feeble voice:  `I heard every word you fellows           │
+│  were saying.'                                                              │
+│                                                                             │
+│    `Tell us a story!' said the March Hare.                                  │
+│                                                                             │
+│    `Yes, please do!' pleaded Alice.                                         │
+│                                                                             │
+│    `And be quick about it,' added the Hatter, `or you'll be asleep          │
+│  again before it's done.'                                                   │
+│                                                                             │
+│    `Once upon a time there were three little sisters,' the                  │
+│  Dormouse began in a great hurry; `and their names were Elsie,              │
+│  Lacie, and Tillie; and they lived at the bottom of a well--'               │
+│                                                                             │
+│    `What did they live on?' said Alice, who always took a great             │
+│  interest in questions of eating and drinking.                              │
+│                                                                             │
+│    `They lived on treacle,' said the Dormouse, after thinking a             │
+│  minute or two.                                                             │
+│                                                                             │
+│    `They couldn't have done that, you know,' Alice gently                   │
+│  remarked; `they'd have been ill.'                                          │
+│                                                                             │
+│    `So they were,' said the Dormouse; `VERY ill.'                           │
+│                                                                             │
+│    Alice tried to fancy to herself what such an extraordinary ways          │
+│  of living would be like, but it puzzled her too much, so she went          │
+│  on:  `But why did they live at the bottom of a well?'                      │
+│                                                                             │
+│    `Take some more tea,' the March Hare said to Alice, very                 │
+│  earnestly.                                                                 │
+│                                                                             │
+│    `I've had nothing yet,' Alice replied in an offended tone, `so           │
+│  I can't take more.'                                                        │
+│                                                                             │
+│    `You mean you can't take LESS,' said the Hatter:  `it's very             │
+│  easy to take MORE than nothing.'                                           │
+│                                                                             │
+│    `Nobody asked YOUR opinion,' said Alice.                                 │
+│                                                                             │
+│    `Who's making personal remarks now?' the Hatter asked                    │
+│  triumphantly.                                                              │
+│                                                                             │
+│    Alice did not quite know what to say to this:  so she helped             │
+│  herself to some tea and bread-and-butter, and then turned to the           │
+│  Dormouse, and repeated her question.  `Why did they live at the            │
+│  bottom of a well?'                                                         │
+│                                                                             │
+│    The Dormouse again took a minute or two to think about it, and           │
+│  then said, `It was a treacle-well.'                                        │
+│                                                                             │
+│    `There's no such thing!'  Alice was beginning very angrily, but          │
+│  the Hatter and the March Hare went `Sh! sh!' and the Dormouse              │
+│  sulkily remarked, `If you can't be civil, you'd better finish the          │
+│  story for yourself.'                                                       │
+│                                                                             │
+│    `No, please go on!' Alice said very humbly; `I won't interrupt           │
+│  again.  I dare say there may be ONE.'                                      │
+│                                                                             │
+│    `One, indeed!' said the Dormouse indignantly.  However, he               │
+│  consented to go on.  `And so these three little sisters--they              │
+│  were learning to draw, you know--'                                         │
+│                                                                             │
+│    `What did they draw?' said Alice, quite forgetting her promise.          │
+│                                                                             │
+│    `Treacle,' said the Dormouse, without considering at all this            │
+│  time.                                                                      │
+│                                                                             │
+│    `I want a clean cup,' interrupted the Hatter:  `let's all move           │
+│  one place on.'                                                             │
+│                                                                             │
+│    He moved on as he spoke, and the Dormouse followed him:  the             │
+│  March Hare moved into the Dormouse's place, and Alice rather               │
+│  unwillingly took the place of the March Hare.  The Hatter was the          │
+│  only one who got any advantage from the change:  and Alice was a           │
+│  good deal worse off than before, as the March Hare had just upset          │
+│  the milk-jug into his plate.                                               │
+│                                                                             │
+│    Alice did not wish to offend the Dormouse again, so she began            │
+│  very cautiously:  `But I don't understand.  Where did they draw            │
+│  the treacle from?'                                                         │
+│                                                                             │
+│    `You can draw water out of a water-well,' said the Hatter; `so           │
+│  I should think you could draw treacle out of a treacle-well--eh,           │
+│  stupid?'                                                                   │
+│                                                                             │
+│    `But they were IN the well,' Alice said to the Dormouse, not             │
+│  choosing to notice this last remark.                                       │
+│                                                                             │
+│    `Of course they were', said the Dormouse; `--well in.'                   │
+│                                                                             │
+│    This answer so confused poor Alice, that she let the Dormouse            │
+│  go on for some time without interrupting it.                               │
+│                                                                             │
+│    `They were learning to draw,' the Dormouse went on, yawning and          │
+│  rubbing its eyes, for it was getting very sleepy; `and they drew           │
+│  all manner of things--everything that begins with an M--'                  │
+│                                                                             │
+│    `Why with an M?' said Alice.                                             │
+│                                                                             │
+│    `Why not?' said the March Hare.                                          │
+│                                                                             │
+│    Alice was silent.                                                        │
+│                                                                             │
+│    The Dormouse had closed its eyes by this time, and was going             │
+│  off into a doze; but, on being pinched by the Hatter, it woke up           │
+│  again with a little shriek, and went on:  `--that begins with an           │
+│  M, such as mouse-traps, and the moon, and memory, and muchness--           │
+│  you know you say things are "much of a muchness"--did you ever             │
+│  see such a thing as a drawing of a muchness?'                              │
+│                                                                             │
+│    `Really, now you ask me,' said Alice, very much confused, `I             │
+│  don't think--'                                                             │
+│                                                                             │
+│    `Then you shouldn't talk,' said the Hatter.                              │
+│                                                                             │
+│    This piece of rudeness was more than Alice could bear:  she got          │
+│  up in great disgust, and walked off; the Dormouse fell asleep              │
+│  instantly, and neither of the others took the least notice of her          │
+│  going, though she looked back once or twice, half hoping that              │
+│  they would call after her:  the last time she saw them, they were          │
+│  trying to put the Dormouse into the teapot.                                │
+│                                                                             │
+│    `At any rate I'll never go THERE again!' said Alice as she               │
+│  picked her way through the wood.  `It's the stupidest tea-party I          │
+│  ever was at in all my life!'                                               │
+│                                                                             │
+│    Just as she said this, she noticed that one of the trees had a           │
+│  door leading right into it.  `That's very curious!' she thought.           │
+│  `But everything's curious today.  I think I may as well go in at           │
+│  once.'  And in she went.                                                   │
+│                                                                             │
+│    Once more she found herself in the long hall, and close to the           │
+│  little glass table.  `Now, I'll manage better this time,' she              │
+│  said to herself, and began by taking the little golden key, and            │
+│  unlocking the door that led into the garden.  Then she went to             │
+│  work nibbling at the mushroom (she had kept a piece of it in her           │
+│  pocked) till she was about a foot high:  then she walked down the          │
+│  little passage:  and THEN--she found herself at last in the                │
+│  beautiful garden, among the bright flower-beds and the cool                │
+│  fountains.                                                                 │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                            CHAPTER VIII                                     │
+│                                                                             │
+│                     The Queen's Croquet-Ground                              │
+│                                                                             │
+│                                                                             │
+│    A large rose-tree stood near the entrance of the garden:  the            │
+│  roses growing on it were white, but there were three gardeners at          │
+│  it, busily painting them red.  Alice thought this a very curious           │
+│  thing, and she went nearer to watch them, and just as she came up          │
+│  to them she heard one of them say, `Look out now, Five!  Don't go          │
+│  splashing paint over me like that!'                                        │
+│                                                                             │
+│    `I couldn't help it,' said Five, in a sulky tone; `Seven jogged          │
+│  my elbow.'                                                                 │
+│                                                                             │
+│    On which Seven looked up and said, `That's right, Five!  Always          │
+│  lay the blame on others!'                                                  │
+│                                                                             │
+│    `YOU'D better not talk!' said Five.  `I heard the Queen say only         │
+│  yesterday you deserved to be beheaded!'                                    │
+│                                                                             │
+│    `What for?' said the one who had spoken first.                           │
+│                                                                             │
+│    `That's none of YOUR business, Two!' said Seven.                         │
+│                                                                             │
+│    `Yes, it IS his business!' said Five, `and I'll tell him--it             │
+│  was for bringing the cook tulip-roots instead of onions.'                  │
+│                                                                             │
+│    Seven flung down his brush, and had just begun `Well, of all             │
+│  the unjust things--' when his eye chanced to fall upon Alice, as           │
+│  she stood watching them, and he checked himself suddenly:  the             │
+│  others looked round also, and all of them bowed low.                       │
+│                                                                             │
+│    `Would you tell me,' said Alice, a little timidly, `why you are          │
+│  painting those roses?'                                                     │
+│                                                                             │
+│    Five and Seven said nothing, but looked at Two.  Two began in a          │
+│  low voice, `Why the fact is, you see, Miss, this here ought to             │
+│  have been a RED rose-tree, and we put a white one in by mistake;           │
+│  and if the Queen was to find it out, we should all have our heads          │
+│  cut off, you know.  So you see, Miss, we're doing our best, afore          │
+│  she comes, to--'  At this moment Five, who had been anxiously              │
+│  looking across the garden, called out `The Queen!  The Queen!'             │
+│  and the three gardeners instantly threw themselves flat upon               │
+│  their faces.  There was a sound of many footsteps, and Alice               │
+│  looked round, eager to see                                                 │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool directory_tree with arguments: {"path":"/C/Users/Noah/Documents/sink"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool directory_tree took: 421.7736ms
+🚀 Crew: crew
+└── 📋 Task: 1902a93f-f478-4a23-9086-6a769d1dfdb6
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    └── 🔧 Used directory_tree (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Action: directory_tree                                            │
+│                                                                             │
+│  Using Tool: directory_tree                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\"}"                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  [                                                                          │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "alice29.txt",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "asyoulik.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "cp.html",                                                 │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "fields.c",                                                │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "grammar.lsp",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "lcet10.txt",                                              │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "plrabn12.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "xargs.1",                                                 │
+│          "type": "file"                                                     │
+│        }                                                                    │
+│      ],                                                                     │
+│      "name": "cantrbry",                                                    │
+│      "type": "directory"                                                    │
+│    },                                                                       │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "enwik8_128kb_0",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_1",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_10",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_11",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_12",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_13",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_14",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_15",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_16",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_17",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_18",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_19",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_2",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_20",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_21",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_22",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_23",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_3",                                          │
+│          "type": "fil...                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool search_files_content with arguments: {"path":"/C/Users/Noah/Documents/sink/cantrbry","pattern":"alice29.txt","query":"eager to see"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool search_files_content took: 5.3379093s
+🚀 Crew: crew
+└── 📋 Task: 1902a93f-f478-4a23-9086-6a769d1dfdb6
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    ├── 🔧 Used directory_tree (1)
+    └── 🔧 Used search_files_content (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The prefix is from "Alice's Adventures in Wonderland".   │
+│  I have previously identified `alice29.txt` in the `cantrbry` directory as  │
+│  the source for this text. I need to find the exact continuation of the     │
+│  provided prefix. The prefix ends with "eager to see". I will search for    │
+│  this string in `alice29.txt` and then extract the following 100-200        │
+│  words.                                                                     │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/cantrbry\", \"pattern\":        │
+│  \"alice29.txt\", \"query\": \"eager to see\"}"                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  /C/Users/Noah/Documents/sink/cantrbry/alice29.txt                          │
+│    2080:14: looked round, eager to see the Queen.                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+

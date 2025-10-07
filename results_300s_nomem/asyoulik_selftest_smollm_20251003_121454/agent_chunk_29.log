@@ -1,0 +1,1764 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 27.2538ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 45.4125ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.7028637s
+- Watching for configuration updates...
+> Initialized in 1.7780461s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_asyoulik_78e91080
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 5f507cf5-0af7-4dfc-a4a1-a6c7ae2efbb7                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 938ce8ff-9b09-4f91-a1da-d0e76c88c89e
+    Status: Executing Task...
+    └── ✅ Reasoning Completed (Not Ready)┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  uredly the thing is to be sold: Go with me: if you like upon report The    │
+│  soil, the profit and this kind of life, I will your very faithful feeder   │
+│  be And buy it with your gold right suddenly. [Exeunt]"                     │
+│  I need to extract 100-200 words. I will start from "ILVIUS O, thou didst   │
+│  then ne'er love so heartily!" and count. I will exclude speaker names and  │
+│  stage directions.                                                          │
+│  1. ILVIUS                                                                  │
+│  2. O,                                                                      │
+│  3. thou                                                                    │
+│  4. didst                                                                   │
+│  5. then                                                                    │
+│  6. ne'er                                                                   │
+│  7. love                                                                    │
+│  8. so                                                                      │
+│  9. heartily!                                                               │
+│  10. If                                                                     │
+│  11. thou                                                                   │
+│  12. remember'st                                                            │
+│  13. not                                                                    │
+│  14. the                                                                    │
+│  15. slightest                                                              │
+│  16. folly                                                                  │
+│  17. That                                                                   │
+│  18. ever                                                                   │
+│  19. love                                                                   │
+│  20. did                                                                    │
+│  21. make                                                                   │
+│  22. thee                                                                   │
+│  23. run                                                                    │
+│  24. into,                                                                  │
+│  25. Thou                                                                   │
+│  26. hast                                                                   │
+│  27. not                                                                    │
+│  28. loved:                                                                 │
+│  29. Or                                                                     │
+│  30. if                                                                     │
+│  31. thou                                                                   │
+│  32. hast                                                                   │
+│  33. not                                                                    │
+│  34. sat                                                                    │
+│  35. as                                                                     │
+│  36. I                                                                      │
+│  37. do                                                                     │
+│  38. now,                                                                   │
+│  39. Wearying                                                               │
+│  40. thy                                                                    │
+│  41. hearer                                                                 │
+│  42. in                                                                     │
+│  43. thy                                                                    │
+│  44. mistress'                                                              │
+│  45. praise,                                                                │
+│  46. Thou                                                                   │
+│  47. hast                                                                   │
+│  48. not                                                                    │
+│  49. loved:                                                                 │
+│  50. Or                                                                     │
+│  51. if                                                                     │
+│  52. thou                                                                   │
+│  53. hast                                                                   │
+│  54. not                                                                    │
+│  55. broke                                                                  │
+│  56. from                                                                   │
+│  57. company                                                                │
+│  58. Abruptly,                                                              │
+│  59. as                                                                     │
+│  60. my                                                                     │
+│  61. passion                                                                │
+│  62. now                                                                    │
+│  63. makes                                                                  │
+│  64. me,                                                                    │
+│  65. Thou                                                                   │
+│  66. hast                                                                   │
+│  67. not                                                                    │
+│  68. loved.                                                                 │
+│  69. O                                                                      │
+│  70. Phebe,                                                                 │
+│  71. Phebe,                                                                 │
+│  72. Phebe!                                                                 │
+│  73. Alas,                                                                  │
+│  74. poor                                                                   │
+│  75. shepherd!                                                              │
+│  76. searching                                                              │
+│  77. of                                                                     │
+│  78. thy                                                                    │
+│  79. wound,                                                                 │
+│  80. I                                                                      │
+│  81. have                                                                   │
+│  82. by                                                                     │
+│  83. hard                                                                   │
+│  84. adventure                                                              │
+│  85. found                                                                  │
+│  86. mine                                                                   │
+│  87. own.                                                                   │
+│  88. And                                                                    │
+│  89. I                                                                      │
+│  90. mine.                                                                  │
+│  91. I                                                                      │
+│  92. remember,                                                              │
+│  93. when                                                                   │
+│  94. I                                                                      │
+│  95. was                                                                    │
+│  96. in                                                                     │
+│  97. love                                                                   │
+│  98. I                                                                      │
+│  99. broke                                                                  │
+│  100. my                                                                    │
+│  101. sword                                                                 │
+│  102. upon                                                                  │
+│  103. a                                                                     │
+│  104. stone                                                                 │
+│  105. and                                                                   │
+│  106. bid                                                                   │
+│  107. him                                                                   │
+│  108. take                                                                  │
+│  109. that                                                                  │
+│  110. for                                                                   │
+│  111. coming                                                                │
+│  112. a-night                                                               │
+│  113. to                                                                    │
+│  114. Jane                                                                  │
+│  115. Smile;                                                                │
+│  116. and                                                                   │
+│  117. I                                                                     │
+│  118. remember                                                              │
+│  119. the                                                                   │
+│  120. kissing                                                               │
+│  121. of                                                                    │
+│  122. her                                                                   │
+│  123. batlet                                                                │
+│  124. and                                                                   │
+│  125. the                                                                   │
+│  126. cow's                                                                 │
+│  127. dugs                                                                  │
+│  128. that                                                                  │
+│  129. her                                                                   │
+│  130. pretty                                                                │
+│  131. chopt                                                                 │
+│  132. hands                                                                 │
+│  133. had                                                                   │
+│  134. milked;                                                               │
+│  135. and                                                                   │
+│  136. I                                                                     │
+│  137. remember                                                              │
+│  138. the                                                                   │
+│  139. wooing                                                                │
+│  140. of                                                                    │
+│  141. a                                                                     │
+│  142. peascod                                                               │
+│  143. instead                                                               │
+│  144. of                                                                    │
+│  145. her,                                                                  │
+│  146. from                                                                  │
+│  147. whom                                                                  │
+│  148. I                                                                     │
+│  149. took                                                                  │
+│  150. two                                                                   │
+│  151. cods                                                                  │
+│  152. and,                                                                  │
+│  153. giving                                                                │
+│  154. her                                                                   │
+│  155. them                                                                  │
+│  156. again,                                                                │
+│  157. said                                                                  │
+│  158. with                                                                  │
+│  159. weeping                                                               │
+│  160. tears                                                                 │
+│  161. 'Wear                                                                 │
+│  162. these                                                                 │
+│  163. for                                                                   │
+│  164. my                                                                    │
+│  165. sake.'                                                                │
+│  166. We                                                                    │
+│  167. that                                                                  │
+│  168. are                                                                   │
+│  169. true                                                                  │
+│  170. lovers                                                                │
+│  171. run                                                                   │
+│  172. into                                                                  │
+│  173. strange                                                               │
+│  174. capers;                                                               │
+│  175. but                                                                   │
+│  176. as                                                                    │
+│  177. all                                                                   │
+│  178. is                                                                    │
+│  179. mortal                                                                │
+│  180. in                                                                    │
+│  181. nature,                                                               │
+│  182. so                                                                    │
+│  183. is                                                                    │
+│  184. all                                                                   │
+│  185. nature                                                                │
+│  186. in                                                                    │
+│  187. love                                                                  │
+│  188. mortal                                                                │
+│  189. in                                                                    │
+│  190. folly.                                                                │
+│  191. Thou                                                                  │
+│  192. speakest                                                              │
+│  193. wiser                                                                 │
+│  194. than                                                                  │
+│  195. thou                                                                  │
+│  196. art                                                                   │
+│  197. ware                                                                  │
+│  198. of.                                                                   │
+│  199. Nay,                                                                  │
+│  200. I                                                                     │
+│  201. shall                                                                 │
+│  202. ne'er                                                                 │
+│  203. be                                                                    │
+│  204. ware                                                                  │
+│  205. of                                                                    │
+│  206. mine                                                                  │
+│  207. own                                                                   │
+│  208. wit                                                                   │
+│  209. till                                                                  │
+│  210. I                                                                     │
+│  211. break                                                                 │
+│  212. my                                                                    │
+│  213. shins                                                                 │
+│  214. against                                                               │
+│  215. it.                                                                   │
+│  This is 215 words, which is slightly over the 200-word limit. I will trim  │
+│  it to be within the 100-200 word range. I will stop at "mortal in folly."  │
+│  which is word 190.                                                         │
+│  The continuation will be:                                                  │
+│  "ILVIUS O, thou didst then ne'er love so heartily! If thou remember'st     │
+│  not the slightest folly That ever love did make thee run into, Thou hast   │
+│  not loved: Or if thou hast not sat as I do now, Wearying thy hearer in     │
+│  thy mistress' praise, Thou hast not loved: Or if thou hast not broke from  │
+│  company Abruptly, as my passion now makes me, Thou hast not loved. O       │
+│  Phebe, Phebe, Phebe! Alas, poor shepherd! searching of thy wound, I have   │
+│  by hard adventure found mine own. And I mine. I remember, when I was in    │
+│  love I broke my sword upon a stone and bid him take that for coming        │
+│  a-night to Jane Smile; and I remember the kissing of her batlet and the    │
+│  cow's dugs that her pretty chopt hands had milked; and I remember the      │
+│  wooing of a peascod instead of her, from whom I took two cods and, giving  │
+│  her them again, said with weeping tears 'Wear these for my sake.' We that  │
+│  are true lovers run into strange capers; but as all is mortal in nature,   │
+│  so is all nature in love mortal in folly."                                 │
+│  This is 190 words.ILVIUS O, thou didst then ne'er love so heartily! If     │
+│  thou remember'st not the slightest folly That ever love did make thee run  │
+│  into, Thou hast not loved: Or if thou hast not sat as I do now, Wearying   │
+│  thy hearer in thy mistress' praise, Thou hast not loved: Or if thou hast   │
+│  not broke from company Abruptly, as my passion now makes me, Thou hast     │
+│  not loved. O Phebe, Phebe, Phebe! Alas, poor shepherd! searching of thy    │
+│  wound, I have by hard adventure found mine own. And I mine. I remember,    │
+│  when I was in love I broke my sword upon a stone and bid him take that     │
+│  for coming a-night to Jane Smile; and I remember the kissing of her        │
+│  batlet and the cow's dugs that her pretty chopt hands had milked; and I    │
+│  remember the wooing of a peascod instead of her, from whom I took two      │
+│  cods and, giving her them again, said with weeping tears 'Wear these for   │
+│  my sake.' We that are true lovers run into strange capers; but as all is   │
+│  mortal in nature, so is all nature in love mortal in folly.                │
+│                                                                             │
+│  # chunk:25                                                                 │
+│  I will manually locate the prefix in the provided text and then carefully  │
+│  extract the continuation.                                                  │
+│  The prefix ends with "Unt". The full line is "Unto the sweet bird's        │
+│  throat,".                                                                  │
+│  Here's the relevant section from the file:                                 │
+│  Now, I will extract the continuation, starting from "o the sweet bird's    │
+│  throat," and count the words, excluding speaker names and stage            │
+│  directions.                                                                │
+│  1.  o                                                                      │
+│  2.  the                                                                    │
+│  3.  sweet                                                                  │
+│  4.  bird's                                                                 │
+│  5.  throat,                                                                │
+│  6.  Come                                                                   │
+│  7.  hither,                                                                │
+│  8.  come                                                                   │
+│  9.  hither,                                                                │
+│  10. come                                                                   │
+│  11. hither:                                                                │
+│  12. Here                                                                   │
+│  13. shall                                                                  │
+│  14. he                                                                     │
+│  15. see                                                                    │
+│  16. No                                                                     │
+│  17. enemy                                                                  │
+│  18. But                                                                    │
+│  19. winter                                                                 │
+│  20. and                                                                    │
+│  21. rough                                                                  │
+│  22. weather.                                                               │
+│  23. More,                                                                  │
+│  24. more,                                                                  │
+│  25. I                                                                      │
+│  26. prithee,                                                               │
+│  27. more.                                                                  │
+│  28. It                                                                     │
+│  29. will                                                                   │
+│  30. make                                                                   │
+│  31. you                                                                    │
+│  32. melancholy,                                                            │
+│  33. Monsieur                                                               │
+│  34. Jaques.                                                                │
+│  35. I                                                                      │
+│  36. thank                                                                  │
+│  37. it.                                                                    │
+│  38. More,                                                                  │
+│  39. I                                                                      │
+│  40. prithee,                                                               │
+│  41. more.                                                                  │
+│  42. I                                                                      │
+│  43. can                                                                    │
+│  44. suck                                                                   │
+│  45. melancholy                                                             │
+│  46. out                                                                    │
+│  47. of                                                                     │
+│  48. a                                                                      │
+│  49. song,                                                                  │
+│  50. as                                                                     │
+│  51. a                                                                      │
+│  52. weasel                                                                 │
+│  53. sucks                                                                  │
+│  54. eggs.                                                                  │
+│  55. More,                                                                  │
+│  56. I                                                                      │
+│  57. prithee,                                                               │
+│  58. more.                                                                  │
+│  59. My                                                                     │
+│  60. voice                                                                  │
+│  61. is                                                                     │
+│  62. ragged:                                                                │
+│  63. I                                                                      │
+│  64. know                                                                   │
+│  65. I                                                                      │
+│  66. cannot                                                                 │
+│  67. please                                                                 │
+│  68. you.                                                                   │
+│  69. I                                                                      │
+│  70. do                                                                     │
+│  71. not                                                                    │
+│  72. desire                                                                 │
+│  73. you                                                                    │
+│  74. to                                                                     │
+│  75. please                                                                 │
+│  76. me;                                                                    │
+│  77. I                                                                      │
+│  78. do                                                                     │
+│  79. desire                                                                 │
+│  80. you                                                                    │
+│  81. to                                                                     │
+│  82. sing.                                                                  │
+│  83. Come,                                                                  │
+│  84. more;                                                                  │
+│  85. another                                                                │
+│  86. stanzo:                                                                │
+│  87. call                                                                   │
+│  88. you                                                                    │
+│  89. 'em                                                                    │
+│  90. stanzos?                                                               │
+│  91. What                                                                   │
+│  92. you                                                                    │
+│  93. will,                                                                  │
+│  94. Monsieur                                                               │
+│  95. Jaques.                                                                │
+│  96. Nay,                                                                   │
+│  97. I                                                                      │
+│  98. care                                                                   │
+│  99. not                                                                    │
+│  100. for                                                                   │
+│  101. their                                                                 │
+│  102. names;                                                                │
+│  103. they                                                                  │
+│  104. owe                                                                   │
+│  105. me                                                                    │
+│  106. nothing.                                                              │
+│  107. Will                                                                  │
+│  108. you                                                                   │
+│  109. sing?                                                                 │
+│  110. More                                                                  │
+│  111. at                                                                    │
+│  112. your                                                                  │
+│  113. request                                                               │
+│  114. than                                                                  │
+│  115. to                                                                    │
+│  116. please                                                                │
+│  117. myself.                                                               │
+│  118. Well                                                                  │
+│  119. then,                                                                 │
+│  120. if                                                                    │
+│  121. ever                                                                  │
+│  122. I                                                                     │
+│  123. thank                                                                 │
+│  124. any                                                                   │
+│  125. man,                                                                  │
+│  126. I'll                                                                  │
+│  127. thank                                                                 │
+│  128. you;                                                                  │
+│  129. but                                                                   │
+│  130. that                                                                  │
+│  131. they                                                                  │
+│  132. call                                                                  │
+│  133. compliment                                                            │
+│  134. is                                                                    │
+│  135. like                                                                  │
+│  136. the                                                                   │
+│  137. encounter                                                             │
+│  138. of                                                                    │
+│  139. two                                                                   │
+│  140. dog-apes,                                                             │
+│  141. and                                                                   │
+│  142. when                                                                  │
+│  143. a                                                                     │
+│  144. man                                                                   │
+│  145. thanks                                                                │
+│  146. me                                                                    │
+│  147. heartily,                                                             │
+│  148. methinks                                                              │
+│  149. I                                                                     │
+│  150. have                                                                  │
+│  151. given                                                                 │
+│  152. him                                                                   │
+│  153. a                                                                     │
+│  154. penny                                                                 │
+│  155. and                                                                   │
+│  156. he                                                                    │
+│  157. renders                                                               │
+│  158. me                                                                    │
+│  159. the                                                                   │
+│  160. beggarly                                                              │
+│  161. thanks.                                                               │
+│  162. Come,                                                                 │
+│  163. sing;                                                                 │
+│  164. and                                                                   │
+│  165. you                                                                   │
+│  166. that                                                                  │
+│  167. will                                                                  │
+│  168. not,                                                                  │
+│  169. hold                                                                  │
+│  170. your                                                                  │
+│  171. tongues.                                                              │
+│  172. Well,                                                                 │
+│  173. I'll                                                                  │
+│  174. end                                                                   │
+│  175. the                                                                   │
+│  176. song.                                                                 │
+│  177. Sirs,                                                                 │
+│  178. cover                                                                 │
+│  179. the                                                                   │
+│  180. while;                                                                │
+│  181. the                                                                   │
+│  182. duke                                                                  │
+│  183. will                                                                  │
+│  184. drink                                                                 │
+│  185. under                                                                 │
+│  186. this                                                                  │
+│  187. tree.                                                                 │
+│  188. He                                                                    │
+│  189. hath                                                                  │
+│  190. been                                                                  │
+│  191. all                                                                   │
+│  192. this                                                                  │
+│  193. day                                                                   │
+│  194. to                                                                    │
+│  195. look                                                                  │
+│  196. you.                                                                  │
+│  This is 196 words, which is within the 100-200 word range. I will use      │
+│  this as the final answer.to the sweet bird's throat, Come hither, come     │
+│  hither, come hither: Here shall he see No enemy But winter and rough       │
+│  weather. More, more, I prithee, more. It will make you melancholy,         │
+│  Monsieur Jaques. I thank it. More, I prithee, more. I can suck melancholy  │
+│  out of a song, as a weasel sucks eggs. More, I prithee, more. My voice is  │
+│  ragged: I know I cannot please you. I do not desire you to please me; I    │
+│  do desire you to sing. Come, more; another stanzo: call you 'em stanzos?   │
+│  What you will, Monsieur Jaques. Nay, I care not for their names; they owe  │
+│  me nothing. Will you sing? More at your request than to please myself.     │
+│  Well then, if ever I thank any man, I'll thank you; but that they call     │
+│  compliment is like the encounter of two dog-apes, and when a man thanks    │
+│  me heartily, methinks I have given him a penny and he renders me the       │
+│  beggarly thanks. Come, sing; and you that will not, hold your tongues.     │
+│  Well, I'll end the song. Sirs, cover the while; the duke will drink under  │
+│  this tree. He hath been all this day to look you.                          │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  eace, fool: he's not thy kinsman.                                          │
+│                                                                             │
+│  CORIN   Who calls?                                                         │
+│                                                                             │
+│  TOUCHSTONE      Your betters, sir.                                         │
+│                                                                             │
+│  CORIN                     Else are they very wretched.                     │
+│                                                                             │
+│  ROSALIND        Peace, I say. Good even to you, friend.                    │
+│                                                                             │
+│  CORIN   And to you, gentle sir, and to you all.                            │
+│                                                                             │
+│  ROSALIND        I prithee, shepherd, if that love or gold                  │
+│          Can in this desert place buy entertainment,                        │
+│          Bring us where we may rest ourselves and feed:                     │
+│          Here's a young maid with travel much oppress'd                     │
+│          And faints for succor.                                             │
+│                                                                             │
+│  CORIN   Fair sir, I pity her                                               │
+│          And wish, for her sake more than for mine own,                     │
+│          My fortunes were more able to relieve her;                         │
+│          But I am shepherd to another man                                   │
+│          And do not shear the fleeces that I graze:                         │
+│          My master is of churlish disposition                               │
+│          And little recks to find the way to heaven                         │
+│          By doing deeds of hospitality:                                     │
+│          Besides, his cote, his flocks and bounds of feed                   │
+│          Are now on sale, and at our sheepcote now,                         │
+│          By reason of his absence, there is nothing                         │
+│          That you will feed on; but what is, come see.                      │
+│          And in my voice most welcome shall you be.                         │
+│                                                                             │
+│  ROSALIND        What is he that shall buy his flock and pasture?           │
+│                                                                             │
+│  CORIN   That young swain that you saw here but erewhile,                   │
+│          That little cares for buying any thing.                            │
+│                                                                             │
+│  ROSALIND        I pray thee, if it stand with honesty,                     │
+│          Buy thou the cottage, pasture and the flock,                       │
+│          And thou shalt have to pay for it of us.                           │
+│                                                                             │
+│  CELIA   And we will mend thy wages. I like this place.                     │
+│          And willingly could waste my time in it.                           │
+│                                                                             │
+│  CORIN   Assuredly the thing is to be sold:                                 │
+│          Go with me: if you like upon report                                │
+│          The soil, the profit and this kind of life,                        │
+│          I will your very faithful feeder be                                │
+│          And buy it with your gold right suddenly.                          │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT II                                                                     │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE V The Forest.                                                        │
+│                                                                             │
+│                                                                             │
+│          [Enter AMIENS, JAQUES, and others]                                 │
+│                                                                             │
+│          SONG.                                                              │
+│  AMIENS  Under the greenwood tree                                           │
+│          Who loves to lie with me,                                          │
+│          And turn his merry note                                            │
+│          Unto the sweet bird's throat,                                      │
+│          Come hither, come hither, come hither:                             │
+│          Here shall he see No enemy                                         │
+│          But winter and rough weather.                                      │
+│                                                                             │
+│  JAQUES  More, more, I prithee, more.                                       │
+│                                                                             │
+│  AMIENS  It will make you melancholy, Monsieur Jaques.                      │
+│                                                                             │
+│  JAQUES  I thank it. More, I prithee, more. I can suck                      │
+│          melancholy out of a song, as a weasel sucks eggs.                  │
+│          More, I prithee, more.                                             │
+│                                                                             │
+│  AMIENS  My voice is ragged: I know I cannot please you.                    │
+│                                                                             │
+│  JAQUES  I do not desire you to please me; I do desire you to               │
+│          sing. Come, more; another stanzo: call you 'em stanzos?            │
+│                                                                             │
+│  AMIENS  What you will, Monsieur Jaques.                                    │
+│                                                                             │
+│  JAQUES  Nay, I care not for their names; they owe me                       │
+│          nothing. Will you sing?                                            │
+│                                                                             │
+│  AMIENS  More at your request than to please myself.                        │
+│                                                                             │
+│  JAQUES  Well then, if ever I thank any man, I'll thank you;                │
+│          but that they call compliment is like the encounter                │
+│          of two dog-apes, and when a man thanks me heartily,                │
+│          methinks I have given him a penny and he renders me                │
+│          the beggarly thanks. Come, sing; and you that will                 │
+│          not, hold your tongues.                                            │
+│                                                                             │
+│  AMIENS  Well, I'll end the song. Sirs, cover the while; the                │
+│          duke will drink under this tree. He hath been all                  │
+│          this day to look you.                                              │
+│                                                                             │
+│  JAQUES  And I have been all this day to avoid him. He is                   │
+│          too disputable for my company: I think of as many                  │
+│          matters as he, but I give heaven thanks and make no                │
+│          boast of them. Come, warble, come.                                 │
+│                                                                             │
+│          SONG.                                                              │
+│          Who doth ambition shun                                             │
+│                                                                             │
+│          [All together here]                                                │
+│                                                                             │
+│          And loves to live i' the sun,                                      │
+│          Seeking the food he eats                                           │
+│          And pleased with what he gets,                                     │
+│          Come hither, come hither, come hither:                             │
+│          Here shall he see No enemy                                         │
+│          But winter and rough weather.                                      │
+│                                                                             │
+│  JAQUES  I'll give you a verse to this note that I made                     │
+│          yesterday in despite of my invention.                              │
+│                                                                             │
+│  AMIENS  And I'll sing it.                                                  │
+│                                                                             │
+│  JAQUES  Thus it goes:--                                                    │
+│                                                                             │
+│          If it do come to pass                                              │
+│          That any man turn ass,                                             │
+│          Leaving his wealth and ease,                                       │
+│          A stubborn will to please,                                         │
+│          Ducdame, ducdame, ducdame:                                         │
+│          Here shall he see                                                  │
+│          Gross fools as he,                                                 │
+│          An if he will come to me.                                          │
+│                                                                             │
+│  AMIENS  What's that 'ducdame'?                                             │
+│                                                                             │
+│  JAQUES  'Tis a Greek invocation, to call fools into a                      │
+│          circle. I'll go sleep, if I can; if I cannot, I'll                 │
+│          rail against all the first-born of Egypt.                          │
+│                                                                             │
+│  AMIENS  And I'll go seek the duke: his banquet is prepared.                │
+│                                                                             │
+│          [Exeunt severally]                                                 │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT II                                                                     │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE VI        The forest.                                                │
+│                                                                             │
+│                                                                             │
+│          [Enter ORLANDO and ADAM]                                           │
+│                                                                             │
+│  ADAM    Dear master, I can go no further. O, I die for food!               │
+│          Here lie I down, and measure out my grave. Farewell,               │
+│          kind master.                                                       │
+│                                                                             │
+│  ORLANDO Why, how now, Adam! no greater heart in thee? Live                 │
+│          a little; comfort a little; cheer thyself a little.                │
+│          If this uncouth forest yield any thing savage, I                   │
+│          will either be food for it or bring it for food to                 │
+│          thee. Thy conceit is nearer death than thy powers.                 │
+│          For my sake be comfortable; hold death awhile at                   │
+│          the arm's end: I will here be with thee presently;                 │
+│          and if I bring thee not something to eat, I will                   │
+│          give thee leave to die: but if thou diest before I                 │
+│          come, thou art a mocker of my labour. Well said!                   │
+│          thou lookest cheerly, and I'll be with thee quickly.               │
+│          Yet thou liest in the bleak air: come, I will bear                 │
+│          thee to some shelter; and thou shalt not die for                   │
+│          lack of a dinner, if there live any thing in this                  │
+│          desert. Cheerly, good Adam!                                        │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT II                                                                     │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE VII       The forest.                                                │
+│                                                                             │
+│                                                                             │
+│          [A table set out. Enter DUKE SENIOR, AMIENS, and                   │
+│          Lords like outlaws]                                                │
+│                                                                             │
+│  DUKE SENIOR     I think he be transform'd into a beast;                    │
+│          For I can no where find him like a man.                            │
+│                                                                             │
+│  First Lord      My lord, he is but even now gone hence:                    │
+│          Here was he merry, hearing of a song.                              │
+│                                                                             │
+│  DUKE SENIOR     If he, compact of jars, grow musical,                      │
+│          We shall have shortly discord in the spheres.                      │
+│          Go, seek him: tell him I would speak with him.                     │
+│                                                                             │
+│          [Enter JAQUES]                                                     │
+│                                                                             │
+│  First Lord      He saves my labour by his own approach.                    │
+│                                                                             │
+│  DUKE SENIOR     Why, how now, monsieur! what a life is this,               │
+│          That your poor friends must woo your company?                      │
+│          What, you look merrily!                                            │
+│                                                                             │
+│  JAQUES  A fool, a fool! I met a fool i' the forest,                        │
+│          A motley fool; a miserable world!                                  │
+│          As I do live by food, I met a fool                                 │
+│          Who laid him down and bask'd him in the sun,                       │
+│          And rail'd on Lady Fortune in good terms,                          │
+│          In good set terms and yet a motley fool.                           │
+│          'Good morrow, fool,' quoth I. 'No, sir,' quoth he,                 │
+│          'Call me not fool till heaven hath sent me fortune:'               │
+│          And then he drew a dial from his poke,                             │
+│          And, looking on it with lack-lustre eye,                           │
+│          Says very wisely, 'It is ten o'clock:                              │
+│          Thus we may see,' quoth he, 'how the world wags:                   │
+│          'Tis but an hour ago since it was nine,                            │
+│          And after one hour more 'twill be eleven;                          │
+│          And so, from hour to hour, we ripe and ripe,                       │
+│          And then, from hour to hour, we rot and rot;                       │
+│          And thereby hangs a tale.' When I did hear                         │
+│          The motley fool thus moral on the time,                            │
+│          My lungs began to crow like chanticleer,                           │
+│          That fools should be so deep-contemplative,                        │
+│          And I did laugh sans intermission                                  │
+│          An hour by his dial. O noble fool!                                 │
+│          A worthy fool! Motley's the only wear.                             │
+│                                                                             │
+│  DUKE SENIOR     What fool is this?                                         │
+│                                                                             │
+│  JAQUES  O worthy fool! One that hath been a courtier,                      │
+│          And says, if ladies be but young and fair,                         │
+│          They have the gift to know it: and in his brain,                   │
+│          Which is as dry as the remainder biscuit                           │
+│          After a voyage, he hath strange places cramm'd                     │
+│          With observation, the which he vents                               │
+│          In mangled forms. O that I were a fool!                            │
+│          I am ambitious for a motley coat.                                  │
+│                                                                             │
+│  DUKE SENIOR     Thou shalt have one.                                       │
+│                                                                             │
+│  JAQUES  It is my only suit;                                                │
+│          Provided that you weed your better judgments                       │
+│          Of all opinion that grows rank in them                             │
+│          That I am wise. I must have liberty                                │
+│          Withal, as large a charter as the wind,                            │
+│          To blow on whom I please; for so fools have;                       │
+│          And they that are most galled with my folly,                       │
+│          They most must laugh. And why, sir, must they so?                  │
+│          The 'why' is plain as way to parish church:                        │
+│          He that a fool doth very wisely hit                                │
+│          Doth very foolishly, although he smart,                            │
+│          Not to seem senseless of the bob: if not,                          │
+│          The wise man's folly is anatomized                                 │
+│          Even by the squandering glances of the fool.                       │
+│          Invest me in my motley; give me leave                              │
+│          To speak my mind, and I will through and through                   │
+│          Cleanse the foul body of the infected world,                       │
+│          If they will patiently receive my medicine.                        │
+│                                                                             │
+│  DUKE SENIOR     Fie on thee! I can tell what thou wouldst do.              │
+│                                                                             │
+│  JAQUES  What, for a counter, would I do but good?                          │
+│                                                                             │
+│  DUKE SENIOR     Most mischievous foul sin, in chiding sin:                 │
+│          For thou thyself hast been a libertine,                            │
+│          As sensual as the brutish sting itself;                            │
+│                                                                             │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 938ce8ff-9b09-4f91-a1da-d0e76c88c89e
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed (Not Ready)
+    └── ❌ LLM Failed┌───────────────────────────────── LLM Error ─────────────────────────────────┐
+│                                                                             │
+│  ❌ LLM Call Failed                                                         │
+│  Error: litellm.InternalServerError: litellm.InternalServerError:           │
+│  VertexAIException - {                                                      │
+│    "error": {                                                               │
+│      "code": 503,                                                           │
+│      "message": "The model is overloaded. Please try again later.",         │
+│      "status": "UNAVAILABLE"                                                │
+│    }                                                                        │
+│  }                                                                          │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 938ce8ff-9b09-4f91-a1da-d0e76c88c89e
+    Assigned to: Predictive Compression Intelligence
+    Status: ❌ Failed
+    ├── ✅ Reasoning Completed (Not Ready)
+    └── ❌ LLM Failed┌─────────────────────────────── Task Failure ────────────────────────────────┐
+│                                                                             │
+│  Task Failed                                                                │
+│  Name: 938ce8ff-9b09-4f91-a1da-d0e76c88c89e                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────── Crew Failure ────────────────────────────────┐
+│                                                                             │
+│  Crew Execution Failed                                                      │
+│  Name: crew                                                                 │
+│  ID: 5f507cf5-0af7-4dfc-a4a1-a6c7ae2efbb7                                   │
+│  Tool Args:                                                                 │
+│  Final Output:                                                              │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Warning: Running without MCP due to configuration/runtime error: litellm.InternalServerError: litellm.InternalServerError: VertexAIException - {
+  "error": {
+    "code": 503,
+    "message": "The model is overloaded. Please try again later.",
+    "status": "UNAVAILABLE"
+  }
+}
+
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: dd4679c2-6a2c-461f-8577-1fe3fb5afea9                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 938ce8ff-9b09-4f91-a1da-d0e76c88c89e
+    Status: Executing Task...┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  uredly the thing is to be sold: Go with me: if you like upon report The    │
+│  soil, the profit and this kind of life, I will your very faithful feeder   │
+│  be And buy it with your gold right suddenly. [Exeunt]"                     │
+│  I need to extract 100-200 words. I will start from "ILVIUS O, thou didst   │
+│  then ne'er love so heartily!" and count. I will exclude speaker names and  │
+│  stage directions.                                                          │
+│  1. ILVIUS                                                                  │
+│  2. O,                                                                      │
+│  3. thou                                                                    │
+│  4. didst                                                                   │
+│  5. then                                                                    │
+│  6. ne'er                                                                   │
+│  7. love                                                                    │
+│  8. so                                                                      │
+│  9. heartily!                                                               │
+│  10. If                                                                     │
+│  11. thou                                                                   │
+│  12. remember'st                                                            │
+│  13. not                                                                    │
+│  14. the                                                                    │
+│  15. slightest                                                              │
+│  16. folly                                                                  │
+│  17. That                                                                   │
+│  18. ever                                                                   │
+│  19. love                                                                   │
+│  20. did                                                                    │
+│  21. make                                                                   │
+│  22. thee                                                                   │
+│  23. run                                                                    │
+│  24. into,                                                                  │
+│  25. Thou                                                                   │
+│  26. hast                                                                   │
+│  27. not                                                                    │
+│  28. loved:                                                                 │
+│  29. Or                                                                     │
+│  30. if                                                                     │
+│  31. thou                                                                   │
+│  32. hast                                                                   │
+│  33. not                                                                    │
+│  34. sat                                                                    │
+│  35. as                                                                     │
+│  36. I                                                                      │
+│  37. do                                                                     │
+│  38. now,                                                                   │
+│  39. Wearying                                                               │
+│  40. thy                                                                    │
+│  41. hearer                                                                 │
+│  42. in                                                                     │
+│  43. thy                                                                    │
+│  44. mistress'                                                              │
+│  45. praise,                                                                │
+│  46. Thou                                                                   │
+│  47. hast                                                                   │
+│  48. not                                                                    │
+│  49. loved:                                                                 │
+│  50. Or                                                                     │
+│  51. if                                                                     │
+│  52. thou                                                                   │
+│  53. hast                                                                   │
+│  54. not                                                                    │
+│  55. broke                                                                  │
+│  56. from                                                                   │
+│  57. company                                                                │
+│  58. Abruptly,                                                              │
+│  59. as                                                                     │
+│  60. my                                                                     │
+│  61. passion                                                                │
+│  62. now                                                                    │
+│  63. makes                                                                  │
+│  64. me,                                                                    │
+│  65. Thou                                                                   │
+│  66. hast                                                                   │
+│  67. not                                                                    │
+│  68. loved.                                                                 │
+│  69. O                                                                      │
+│  70. Phebe,                                                                 │
+│  71. Phebe,                                                                 │
+│  72. Phebe!                                                                 │
+│  73. Alas,                                                                  │
+│  74. poor                                                                   │
+│  75. shepherd!                                                              │
+│  76. searching                                                              │
+│  77. of                                                                     │
+│  78. thy                                                                    │
+│  79. wound,                                                                 │
+│  80. I                                                                      │
+│  81. have                                                                   │
+│  82. by                                                                     │
+│  83. hard                                                                   │
+│  84. adventure                                                              │
+│  85. found                                                                  │
+│  86. mine                                                                   │
+│  87. own.                                                                   │
+│  88. And                                                                    │
+│  89. I                                                                      │
+│  90. mine.                                                                  │
+│  91. I                                                                      │
+│  92. remember,                                                              │
+│  93. when                                                                   │
+│  94. I                                                                      │
+│  95. was                                                                    │
+│  96. in                                                                     │
+│  97. love                                                                   │
+│  98. I                                                                      │
+│  99. broke                                                                  │
+│  100. my                                                                    │
+│  101. sword                                                                 │
+│  102. upon                                                                  │
+│  103. a                                                                     │
+│  104. stone                                                                 │
+│  105. and                                                                   │
+│  106. bid                                                                   │
+│  107. him                                                                   │
+│  108. take                                                                  │
+│  109. that                                                                  │
+│  110. for                                                                   │
+│  111. coming                                                                │
+│  112. a-night                                                               │
+│  113. to                                                                    │
+│  114. Jane                                                                  │
+│  115. Smile;                                                                │
+│  116. and                                                                   │
+│  117. I                                                                     │
+│  118. remember                                                              │
+│  119. the                                                                   │
+│  120. kissing                                                               │
+│  121. of                                                                    │
+│  122. her                                                                   │
+│  123. batlet                                                                │
+│  124. and                                                                   │
+│  125. the                                                                   │
+│  126. cow's                                                                 │
+│  127. dugs                                                                  │
+│  128. that                                                                  │
+│  129. her                                                                   │
+│  130. pretty                                                                │
+│  131. chopt                                                                 │
+│  132. hands                                                                 │
+│  133. had                                                                   │
+│  134. milked;                                                               │
+│  135. and                                                                   │
+│  136. I                                                                     │
+│  137. remember                                                              │
+│  138. the                                                                   │
+│  139. wooing                                                                │
+│  140. of                                                                    │
+│  141. a                                                                     │
+│  142. peascod                                                               │
+│  143. instead                                                               │
+│  144. of                                                                    │
+│  145. her,                                                                  │
+│  146. from                                                                  │
+│  147. whom                                                                  │
+│  148. I                                                                     │
+│  149. took                                                                  │
+│  150. two                                                                   │
+│  151. cods                                                                  │
+│  152. and,                                                                  │
+│  153. giving                                                                │
+│  154. her                                                                   │
+│  155. them                                                                  │
+│  156. again,                                                                │
+│  157. said                                                                  │
+│  158. with                                                                  │
+│  159. weeping                                                               │
+│  160. tears                                                                 │
+│  161. 'Wear                                                                 │
+│  162. these                                                                 │
+│  163. for                                                                   │
+│  164. my                                                                    │
+│  165. sake.'                                                                │
+│  166. We                                                                    │
+│  167. that                                                                  │
+│  168. are                                                                   │
+│  169. true                                                                  │
+│  170. lovers                                                                │
+│  171. run                                                                   │
+│  172. into                                                                  │
+│  173. strange                                                               │
+│  174. capers;                                                               │
+│  175. but                                                                   │
+│  176. as                                                                    │
+│  177. all                                                                   │
+│  178. is                                                                    │
+│  179. mortal                                                                │
+│  180. in                                                                    │
+│  181. nature,                                                               │
+│  182. so                                                                    │
+│  183. is                                                                    │
+│  184. all                                                                   │
+│  185. nature                                                                │
+│  186. in                                                                    │
+│  187. love                                                                  │
+│  188. mortal                                                                │
+│  189. in                                                                    │
+│  190. folly.                                                                │
+│  191. Thou                                                                  │
+│  192. speakest                                                              │
+│  193. wiser                                                                 │
+│  194. than                                                                  │
+│  195. thou                                                                  │
+│  196. art                                                                   │
+│  197. ware                                                                  │
+│  198. of.                                                                   │
+│  199. Nay,                                                                  │
+│  200. I                                                                     │
+│  201. shall                                                                 │
+│  202. ne'er                                                                 │
+│  203. be                                                                    │
+│  204. ware                                                                  │
+│  205. of                                                                    │
+│  206. mine                                                                  │
+│  207. own                                                                   │
+│  208. wit                                                                   │
+│  209. till                                                                  │
+│  210. I                                                                     │
+│  211. break                                                                 │
+│  212. my                                                                    │
+│  213. shins                                                                 │
+│  214. against                                                               │
+│  215. it.                                                                   │
+│  This is 215 words, which is slightly over the 200-word limit. I will trim  │
+│  it to be within the 100-200 word range. I will stop at "mortal in folly."  │
+│  which is word 190.                                                         │
+│  The continuation will be:                                                  │
+│  "ILVIUS O, thou didst then ne'er love so heartily! If thou remember'st     │
+│  not the slightest folly That ever love did make thee run into, Thou hast   │
+│  not loved: Or if thou hast not sat as I do now, Wearying thy hearer in     │
+│  thy mistress' praise, Thou hast not loved: Or if thou hast not broke from  │
+│  company Abruptly, as my passion now makes me, Thou hast not loved. O       │
+│  Phebe, Phebe, Phebe! Alas, poor shepherd! searching of thy wound, I have   │
+│  by hard adventure found mine own. And I mine. I remember, when I was in    │
+│  love I broke my sword upon a stone and bid him take that for coming        │
+│  a-night to Jane Smile; and I remember the kissing of her batlet and the    │
+│  cow's dugs that her pretty chopt hands had milked; and I remember the      │
+│  wooing of a peascod instead of her, from whom I took two cods and, giving  │
+│  her them again, said with weeping tears 'Wear these for my sake.' We that  │
+│  are true lovers run into strange capers; but as all is mortal in nature,   │
+│  so is all nature in love mortal in folly."                                 │
+│  This is 190 words.ILVIUS O, thou didst then ne'er love so heartily! If     │
+│  thou remember'st not the slightest folly That ever love did make thee run  │
+│  into, Thou hast not loved: Or if thou hast not sat as I do now, Wearying   │
+│  thy hearer in thy mistress' praise, Thou hast not loved: Or if thou hast   │
+│  not broke from company Abruptly, as my passion now makes me, Thou hast     │
+│  not loved. O Phebe, Phebe, Phebe! Alas, poor shepherd! searching of thy    │
+│  wound, I have by hard adventure found mine own. And I mine. I remember,    │
+│  when I was in love I broke my sword upon a stone and bid him take that     │
+│  for coming a-night to Jane Smile; and I remember the kissing of her        │
+│  batlet and the cow's dugs that her pretty chopt hands had milked; and I    │
+│  remember the wooing of a peascod instead of her, from whom I took two      │
+│  cods and, giving her them again, said with weeping tears 'Wear these for   │
+│  my sake.' We that are true lovers run into strange capers; but as all is   │
+│  mortal in nature, so is all nature in love mortal in folly.                │
+│                                                                             │
+│  # chunk:25                                                                 │
+│  I will manually locate the prefix in the provided text and then carefully  │
+│  extract the continuation.                                                  │
+│  The prefix ends with "Unt". The full line is "Unto the sweet bird's        │
+│  throat,".                                                                  │
+│  Here's the relevant section from the file:                                 │
+│  Now, I will extract the continuation, starting from "o the sweet bird's    │
+│  throat," and count the words, excluding speaker names and stage            │
+│  directions.                                                                │
+│  1.  o                                                                      │
+│  2.  the                                                                    │
+│  3.  sweet                                                                  │
+│  4.  bird's                                                                 │
+│  5.  throat,                                                                │
+│  6.  Come                                                                   │
+│  7.  hither,                                                                │
+│  8.  come                                                                   │
+│  9.  hither,                                                                │
+│  10. come                                                                   │
+│  11. hither:                                                                │
+│  12. Here                                                                   │
+│  13. shall                                                                  │
+│  14. he                                                                     │
+│  15. see                                                                    │
+│  16. No                                                                     │
+│  17. enemy                                                                  │
+│  18. But                                                                    │
+│  19. winter                                                                 │
+│  20. and                                                                    │
+│  21. rough                                                                  │
+│  22. weather.                                                               │
+│  23. More,                                                                  │
+│  24. more,                                                                  │
+│  25. I                                                                      │
+│  26. prithee,                                                               │
+│  27. more.                                                                  │
+│  28. It                                                                     │
+│  29. will                                                                   │
+│  30. make                                                                   │
+│  31. you                                                                    │
+│  32. melancholy,                                                            │
+│  33. Monsieur                                                               │
+│  34. Jaques.                                                                │
+│  35. I                                                                      │
+│  36. thank                                                                  │
+│  37. it.                                                                    │
+│  38. More,                                                                  │
+│  39. I                                                                      │
+│  40. prithee,                                                               │
+│  41. more.                                                                  │
+│  42. I                                                                      │
+│  43. can                                                                    │
+│  44. suck                                                                   │
+│  45. melancholy                                                             │
+│  46. out                                                                    │
+│  47. of                                                                     │
+│  48. a                                                                      │
+│  49. song,                                                                  │
+│  50. as                                                                     │
+│  51. a                                                                      │
+│  52. weasel                                                                 │
+│  53. sucks                                                                  │
+│  54. eggs.                                                                  │
+│  55. More,                                                                  │
+│  56. I                                                                      │
+│  57. prithee,                                                               │
+│  58. more.                                                                  │
+│  59. My                                                                     │
+│  60. voice                                                                  │
+│  61. is                                                                     │
+│  62. ragged:                                                                │
+│  63. I                                                                      │
+│  64. know                                                                   │
+│  65. I                                                                      │
+│  66. cannot                                                                 │
+│  67. please                                                                 │
+│  68. you.                                                                   │
+│  69. I                                                                      │
+│  70. do                                                                     │
+│  71. not                                                                    │
+│  72. desire                                                                 │
+│  73. you                                                                    │
+│  74. to                                                                     │
+│  75. please                                                                 │
+│  76. me;                                                                    │
+│  77. I                                                                      │
+│  78. do                                                                     │
+│  79. desire                                                                 │
+│  80. you                                                                    │
+│  81. to                                                                     │
+│  82. sing.                                                                  │
+│  83. Come,                                                                  │
+│  84. more;                                                                  │
+│  85. another                                                                │
+│  86. stanzo:                                                                │
+│  87. call                                                                   │
+│  88. you                                                                    │
+│  89. 'em                                                                    │
+│  90. stanzos?                                                               │
+│  91. What                                                                   │
+│  92. you                                                                    │
+│  93. will,                                                                  │
+│  94. Monsieur                                                               │
+│  95. Jaques.                                                                │
+│  96. Nay,                                                                   │
+│  97. I                                                                      │
+│  98. care                                                                   │
+│  99. not                                                                    │
+│  100. for                                                                   │
+│  101. their                                                                 │
+│  102. names;                                                                │
+│  103. they                                                                  │
+│  104. owe                                                                   │
+│  105. me                                                                    │
+│  106. nothing.                                                              │
+│  107. Will                                                                  │
+│  108. you                                                                   │
+│  109. sing?                                                                 │
+│  110. More                                                                  │
+│  111. at                                                                    │
+│  112. your                                                                  │
+│  113. request                                                               │
+│  114. than                                                                  │
+│  115. to                                                                    │
+│  116. please                                                                │
+│  117. myself.                                                               │
+│  118. Well                                                                  │
+│  119. then,                                                                 │
+│  120. if                                                                    │
+│  121. ever                                                                  │
+│  122. I                                                                     │
+│  123. thank                                                                 │
+│  124. any                                                                   │
+│  125. man,                                                                  │
+│  126. I'll                                                                  │
+│  127. thank                                                                 │
+│  128. you;                                                                  │
+│  129. but                                                                   │
+│  130. that                                                                  │
+│  131. they                                                                  │
+│  132. call                                                                  │
+│  133. compliment                                                            │
+│  134. is                                                                    │
+│  135. like                                                                  │
+│  136. the                                                                   │
+│  137. encounter                                                             │
+│  138. of                                                                    │
+│  139. two                                                                   │
+│  140. dog-apes,                                                             │
+│  141. and                                                                   │
+│  142. when                                                                  │
+│  143. a                                                                     │
+│  144. man                                                                   │
+│  145. thanks                                                                │
+│  146. me                                                                    │
+│  147. heartily,                                                             │
+│  148. methinks                                                              │
+│  149. I                                                                     │
+│  150. have                                                                  │
+│  151. given                                                                 │
+│  152. him                                                                   │
+│  153. a                                                                     │
+│  154. penny                                                                 │
+│  155. and                                                                   │
+│  156. he                                                                    │
+│  157. renders                                                               │
+│  158. me                                                                    │
+│  159. the                                                                   │
+│  160. beggarly                                                              │
+│  161. thanks.                                                               │
+│  162. Come,                                                                 │
+│  163. sing;                                                                 │
+│  164. and                                                                   │
+│  165. you                                                                   │
+│  166. that                                                                  │
+│  167. will                                                                  │
+│  168. not,                                                                  │
+│  169. hold                                                                  │
+│  170. your                                                                  │
+│  171. tongues.                                                              │
+│  172. Well,                                                                 │
+│  173. I'll                                                                  │
+│  174. end                                                                   │
+│  175. the                                                                   │
+│  176. song.                                                                 │
+│  177. Sirs,                                                                 │
+│  178. cover                                                                 │
+│  179. the                                                                   │
+│  180. while;                                                                │
+│  181. the                                                                   │
+│  182. duke                                                                  │
+│  183. will                                                                  │
+│  184. drink                                                                 │
+│  185. under                                                                 │
+│  186. this                                                                  │
+│  187. tree.                                                                 │
+│  188. He                                                                    │
+│  189. hath                                                                  │
+│  190. been                                                                  │
+│  191. all                                                                   │
+│  192. this                                                                  │
+│  193. day                                                                   │
+│  194. to                                                                    │
+│  195. look                                                                  │
+│  196. you.                                                                  │
+│  This is 196 words, which is within the 100-200 word range. I will use      │
+│  this as the final answer.to the sweet bird's throat, Come hither, come     │
+│  hither, come hither: Here shall he see No enemy But winter and rough       │
+│  weather. More, more, I prithee, more. It will make you melancholy,         │
+│  Monsieur Jaques. I thank it. More, I prithee, more. I can suck melancholy  │
+│  out of a song, as a weasel sucks eggs. More, I prithee, more. My voice is  │
+│  ragged: I know I cannot please you. I do not desire you to please me; I    │
+│  do desire you to sing. Come, more; another stanzo: call you 'em stanzos?   │
+│  What you will, Monsieur Jaques. Nay, I care not for their names; they owe  │
+│  me nothing. Will you sing? More at your request than to please myself.     │
+│  Well then, if ever I thank any man, I'll thank you; but that they call     │
+│  compliment is like the encounter of two dog-apes, and when a man thanks    │
+│  me heartily, methinks I have given him a penny and he renders me the       │
+│  beggarly thanks. Come, sing; and you that will not, hold your tongues.     │
+│  Well, I'll end the song. Sirs, cover the while; the duke will drink under  │
+│  this tree. He hath been all this day to look you.                          │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  eace, fool: he's not thy kinsman.                                          │
+│                                                                             │
+│  CORIN   Who calls?                                                         │
+│                                                                             │
+│  TOUCHSTONE      Your betters, sir.                                         │
+│                                                                             │
+│  CORIN                     Else are they very wretched.                     │
+│                                                                             │
+│  ROSALIND        Peace, I say. Good even to you, friend.                    │
+│                                                                             │
+│  CORIN   And to you, gentle sir, and to you all.                            │
+│                                                                             │
+│  ROSALIND        I prithee, shepherd, if that love or gold                  │
+│          Can in this desert place buy entertainment,                        │
+│          Bring us where we may rest ourselves and feed:                     │
+│          Here's a young maid with travel much oppress'd                     │
+│          And faints for succor.                                             │
+│                                                                             │
+│  CORIN   Fair sir, I pity her                                               │
+│          And wish, for her sake more than for mine own,                     │
+│          My fortunes were more able to relieve her;                         │
+│          But I am shepherd to another man                                   │
+│          And do not shear the fleeces that I graze:                         │
+│          My master is of churlish disposition                               │
+│          And little recks to find the way to heaven                         │
+│          By doing deeds of hospitality:                                     │
+│          Besides, his cote, his flocks and bounds of feed                   │
+│          Are now on sale, and at our sheepcote now,                         │
+│          By reason of his absence, there is nothing                         │
+│          That you will feed on; but what is, come see.                      │
+│          And in my voice most welcome shall you be.                         │
+│                                                                             │
+│  ROSALIND        What is he that shall buy his flock and pasture?           │
+│                                                                             │
+│  CORIN   That young swain that you saw here but erewhile,                   │
+│          That little cares for buying any thing.                            │
+│                                                                             │
+│  ROSALIND        I pray thee, if it stand with honesty,                     │
+│          Buy thou the cottage, pasture and the flock,                       │
+│          And thou shalt have to pay for it of us.                           │
+│                                                                             │
+│  CELIA   And we will mend thy wages. I like this place.                     │
+│          And willingly could waste my time in it.                           │
+│                                                                             │
+│  CORIN   Assuredly the thing is to be sold:                                 │
+│          Go with me: if you like upon report                                │
+│          The soil, the profit and this kind of life,                        │
+│          I will your very faithful feeder be                                │
+│          And buy it with your gold right suddenly.                          │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT II                                                                     │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE V The Forest.                                                        │
+│                                                                             │
+│                                                                             │
+│          [Enter AMIENS, JAQUES, and others]                                 │
+│                                                                             │
+│          SONG.                                                              │
+│  AMIENS  Under the greenwood tree                                           │
+│          Who loves to lie with me,                                          │
+│          And turn his merry note                                            │
+│          Unto the sweet bird's throat,                                      │
+│          Come hither, come hither, come hither:                             │
+│          Here shall he see No enemy                                         │
+│          But winter and rough weather.                                      │
+│                                                                             │
+│  JAQUES  More, more, I prithee, more.                                       │
+│                                                                             │
+│  AMIENS  It will make you melancholy, Monsieur Jaques.                      │
+│                                                                             │
+│  JAQUES  I thank it. More, I prithee, more. I can suck                      │
+│          melancholy out of a song, as a weasel sucks eggs.                  │
+│          More, I prithee, more.                                             │
+│                                                                             │
+│  AMIENS  My voice is ragged: I know I cannot please you.                    │
+│                                                                             │
+│  JAQUES  I do not desire you to please me; I do desire you to               │
+│          sing. Come, more; another stanzo: call you 'em stanzos?            │
+│                                                                             │
+│  AMIENS  What you will, Monsieur Jaques.                                    │
+│                                                                             │
+│  JAQUES  Nay, I care not for their names; they owe me                       │
+│          nothing. Will you sing?                                            │
+│                                                                             │
+│  AMIENS  More at your request than to please myself.                        │
+│                                                                             │
+│  JAQUES  Well then, if ever I thank any man, I'll thank you;                │
+│          but that they call compliment is like the encounter                │
+│          of two dog-apes, and when a man thanks me heartily,                │
+│          methinks I have given him a penny and he renders me                │
+│          the beggarly thanks. Come, sing; and you that will                 │
+│          not, hold your tongues.                                            │
+│                                                                             │
+│  AMIENS  Well, I'll end the song. Sirs, cover the while; the                │
+│          duke will drink under this tree. He hath been all                  │
+│          this day to look you.                                              │
+│                                                                             │
+│  JAQUES  And I have been all this day to avoid him. He is                   │
+│          too disputable for my company: I think of as many                  │
+│          matters as he, but I give heaven thanks and make no                │
+│          boast of them. Come, warble, come.                                 │
+│                                                                             │
+│          SONG.                                                              │
+│          Who doth ambition shun                                             │
+│                                                                             │
+│          [All together here]                                                │
+│                                                                             │
+│          And loves to live i' the sun,                                      │
+│          Seeking the food he eats                                           │
+│          And pleased with what he gets,                                     │
+│          Come hither, come hither, come hither:                             │
+│          Here shall he see No enemy                                         │
+│          But winter and rough weather.                                      │
+│                                                                             │
+│  JAQUES  I'll give you a verse to this note that I made                     │
+│          yesterday in despite of my invention.                              │
+│                                                                             │
+│  AMIENS  And I'll sing it.                                                  │
+│                                                                             │
+│  JAQUES  Thus it goes:--                                                    │
+│                                                                             │
+│          If it do come to pass                                              │
+│          That any man turn ass,                                             │
+│          Leaving his wealth and ease,                                       │
+│          A stubborn will to please,                                         │
+│          Ducdame, ducdame, ducdame:                                         │
+│          Here shall he see                                                  │
+│          Gross fools as he,                                                 │
+│          An if he will come to me.                                          │
+│                                                                             │
+│  AMIENS  What's that 'ducdame'?                                             │
+│                                                                             │
+│  JAQUES  'Tis a Greek invocation, to call fools into a                      │
+│          circle. I'll go sleep, if I can; if I cannot, I'll                 │
+│          rail against all the first-born of Egypt.                          │
+│                                                                             │
+│  AMIENS  And I'll go seek the duke: his banquet is prepared.                │
+│                                                                             │
+│          [Exeunt severally]                                                 │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT II                                                                     │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE VI        The forest.                                                │
+│                                                                             │
+│                                                                             │
+│          [Enter ORLANDO and ADAM]                                           │
+│                                                                             │
+│  ADAM    Dear master, I can go no further. O, I die for food!               │
+│          Here lie I down, and measure out my grave. Farewell,               │
+│          kind master.                                                       │
+│                                                                             │
+│  ORLANDO Why, how now, Adam! no greater heart in thee? Live                 │
+│          a little; comfort a little; cheer thyself a little.                │
+│          If this uncouth forest yield any thing savage, I                   │
+│          will either be food for it or bring it for food to                 │
+│          thee. Thy conceit is nearer death than thy powers.                 │
+│          For my sake be comfortable; hold death awhile at                   │
+│          the arm's end: I will here be with thee presently;                 │
+│          and if I bring thee not something to eat, I will                   │
+│          give thee leave to die: but if thou diest before I                 │
+│          come, thou art a mocker of my labour. Well said!                   │
+│          thou lookest cheerly, and I'll be with thee quickly.               │
+│          Yet thou liest in the bleak air: come, I will bear                 │
+│          thee to some shelter; and thou shalt not die for                   │
+│          lack of a dinner, if there live any thing in this                  │
+│          desert. Cheerly, good Adam!                                        │
+│                                                                             │
+│          [Exeunt]                                                           │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│          AS YOU LIKE IT                                                     │
+│                                                                             │
+│                                                                             │
+│  ACT II                                                                     │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  SCENE VII       The forest.                                                │
+│                                                                             │
+│                                                                             │
+│          [A table set out. Enter DUKE SENIOR, AMIENS, and                   │
+│          Lords like outlaws]                                                │
+│                                                                             │
+│  DUKE SENIOR     I think he be transform'd into a beast;                    │
+│          For I can no where find him like a man.                            │
+│                                                                             │
+│  First Lord      My lord, he is but even now gone hence:                    │
+│          Here was he merry, hearing of a song.                              │
+│                                                                             │
+│  DUKE SENIOR     If he, compact of jars, grow musical,                      │
+│          We shall have shortly discord in the spheres.                      │
+│          Go, seek him: tell him I would speak with him.                     │
+│                                                                             │
+│          [Enter JAQUES]                                                     │
+│                                                                             │
+│  First Lord      He saves my labour by his own approach.                    │
+│                                                                             │
+│  DUKE SENIOR     Why, how now, monsieur! what a life is this,               │
+│          That your poor friends must woo your company?                      │
+│          What, you look merrily!                                            │
+│                                                                             │
+│  JAQUES  A fool, a fool! I met a fool i' the forest,                        │
+│          A motley fool; a miserable world!                                  │
+│          As I do live by food, I met a fool                                 │
+│          Who laid him down and bask'd him in the sun,                       │
+│          And rail'd on Lady Fortune in good terms,                          │
+│          In good set terms and yet a motley fool.                           │
+│          'Good morrow, fool,' quoth I. 'No, sir,' quoth he,                 │
+│          'Call me not fool till heaven hath sent me fortune:'               │
+│          And then he drew a dial from his poke,                             │
+│          And, looking on it with lack-lustre eye,                           │
+│          Says very wisely, 'It is ten o'clock:                              │
+│          Thus we may see,' quoth he, 'how the world wags:                   │
+│          'Tis but an hour ago since it was nine,                            │
+│          And after one hour more 'twill be eleven;                          │
+│          And so, from hour to hour, we ripe and ripe,                       │
+│          And then, from hour to hour, we rot and rot;                       │
+│          And thereby hangs a tale.' When I did hear                         │
+│          The motley fool thus moral on the time,                            │
+│          My lungs began to crow like chanticleer,                           │
+│          That fools should be so deep-contemplative,                        │
+│          And I did laugh sans intermission                                  │
+│          An hour by his dial. O noble fool!                                 │
+│          A worthy fool! Motley's the only wear.                             │
+│                                                                             │
+│  DUKE SENIOR     What fool is this?                                         │
+│                                                                             │
+│  JAQUES  O worthy fool! One that hath been a courtier,                      │
+│          And says, if ladies be but young and fair,                         │
+│          They have the gift to know it: and in his brain,                   │
+│          Which is as dry as the remainder biscuit                           │
+│          After a voyage, he hath strange places cramm'd                     │
+│          With observation, the which he vents                               │
+│          In mangled forms. O that I were a fool!                            │
+│          I am ambitious for a motley coat.                                  │
+│                                                                             │
+│  DUKE SENIOR     Thou shalt have one.                                       │
+│                                                                             │
+│  JAQUES  It is my only suit;                                                │
+│          Provided that you weed your better judgments                       │
+│          Of all opinion that grows rank in them                             │
+│          That I am wise. I must have liberty                                │
+│          Withal, as large a charter as the wind,                            │
+│          To blow on whom I please; for so fools have;                       │
+│          And they that are most galled with my folly,                       │
+│          They most must laugh. And why, sir, must they so?                  │
+│          The 'why' is plain as way to parish church:                        │
+│          He that a fool doth very wisely hit                                │
+│          Doth very foolishly, although he smart,                            │
+│          Not to seem senseless of the bob: if not,                          │
+│          The wise man's folly is anatomized                                 │
+│          Even by the squandering glances of the fool.                       │
+│          Invest me in my motley; give me leave                              │
+│          To speak my mind, and I will through and through                   │
+│          Cleanse the foul body of the infected world,                       │
+│          If they will patiently receive my medicine.                        │
+│                                                                             │
+│  DUKE SENIOR     Fie on thee! I can tell what thou wouldst do.              │
+│                                                                             │
+│  JAQUES  What, for a counter, would I do but good?                          │
+│                                                                             │
+│  DUKE SENIOR     Most mischievous foul sin, in chiding sin:                 │
+│          For thou thyself hast been a libertine,                            │
+│          As sensual as the brutish sting itself;                            │
+│                                                                             │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│                                                                             │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 938ce8ff-9b09-4f91-a1da-d0e76c88c89e
+    Status: Executing Task...
+    └── ❌ LLM Failed┌───────────────────────────────── LLM Error ─────────────────────────────────┐
+│                                                                             │
+│  ❌ LLM Call Failed                                                         │
+│  Error: litellm.InternalServerError: litellm.InternalServerError:           │
+│  VertexAIException - {                                                      │
+│    "error": {                                                               │
+│      "code": 503,                                                           │
+│      "message": "The model is overloaded. Please try again later.",         │
+│      "status": "UNAVAILABLE"                                                │
+│    }                                                                        │
+│  }                                                                          │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 938ce8ff-9b09-4f91-a1da-d0e76c88c89e
+    Assigned to: Predictive Compression Intelligence
+    Status: ❌ Failed
+    └── ❌ LLM Failed┌─────────────────────────────── Task Failure ────────────────────────────────┐
+│                                                                             │
+│  Task Failed                                                                │
+│  Name: 938ce8ff-9b09-4f91-a1da-d0e76c88c89e                                 │
+Error: litellm.InternalServerError: litellm.InternalServerError: VertexAIException - {
+│  Agent: Predictive Compression Intelligence                                 │
+  "error": {
+│  Tool Args:                                                                 │
+    "code": 503,
+│                                                                             │
+    "message": "The model is overloaded. Please try again later.",
+│                                                                             │
+    "status": "UNAVAILABLE"
+└─────────────────────────────────────────────────────────────────────────────┘
+  }
+}
+
+
+┌─────────────────────────────── Crew Failure ────────────────────────────────┐
+│                                                                             │
+│  Crew Execution Failed                                                      │
+│  Name: crew                                                                 │
+│  ID: dd4679c2-6a2c-461f-8577-1fe3fb5afea9                                   │
+│  Tool Args:                                                                 │
+│  Final Output:                                                              │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
