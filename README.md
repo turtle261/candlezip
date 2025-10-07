@@ -4,6 +4,12 @@ CandleZip is an agent-in-the-loop compressor that measures the practical value o
 
 DOI: [10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 
+# Definition of Intelligence, and how do you measure it? 
+The concept of intelligence = compression is not new, and is strongly established by Mahoney. However, practical measures of intelligence were not established on this principle. 
+We use “definition” in an operational, information-theoretic sense: an agent is intelligent to the extent that,
+under decode-safety and priced side-information, its actions reduce the expected codelength of its own
+sensor/working history per unit cost. This criterion is intended as necessary-for-competence and empirically
+useful—not metaphysically sufficient—so non-adaptive dissipative systems are not by this definition considered significantly Intelligent (example: Fridge).  
 ## Overview
 
 CandleZip implements a sink-inclusive minimum description length workflow (SIMDL). The system treats tools as priced observation channels (entropy sinks) and measures the agent's effectiveness by how many bits the agent saves per unit cost. Key concepts are:
