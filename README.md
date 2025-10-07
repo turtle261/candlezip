@@ -58,4 +58,4 @@ This README and related documentation are licensed under Creative Commons Attrib
 
 CandleZip source code is licensed under GNU General Public License v3.0 (GPL-3.0).
 
-See the repository root for licensing and contribution information. For questions, open an issue or contact the maintainer listed in the repository.
+See the repository root for licensing and contribution information. For questions, open an issue, PR, or email me. 
