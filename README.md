@@ -12,7 +12,7 @@ sensor/working history per unit cost. This criterion is intended as necessary-fo
 useful—not metaphysically sufficient—so non-adaptive dissipative systems are not by this definition considered significantly Intelligent (example: Fridge).  
 
 Therefore, Intelligence can be measured by lossless compression, where reduced file size is quite literally entropy reduction(more precisely, relocation). 
-This is substrate Agnostic--human intelligence can be measured using Candlezip, by using a UI python script, rather than the LLM Agent script provided--this is WIP. 
+This is substrate Agnostic--human intelligence can be measured using Candlezip, by using a UI python script, rather than the LLM Agent script provided--this is WIP. Feel free to implement this and PR. 
 ## Overview
 
 CandleZip implements a sink-inclusive minimum description length workflow (SIMDL). The system treats tools as priced observation channels (entropy sinks) and measures the agent's effectiveness by how many bits the agent saves per unit cost. Key concepts are:
