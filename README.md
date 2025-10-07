@@ -2,7 +2,7 @@
 
 CandleZip is an agent-in-the-loop compressor that measures the practical value of tool-usage for prediction and lossless compression. It combines language models with controlled external channels (``tools'') and reports a reproducible, integer-bit audit signal describing how much side-information reduced coding length under a priced budget.
 
-DOI: 10.5281/zenodo.17282860
+DOI: [10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 
 ## Overview
 
@@ -34,7 +34,7 @@ CandleZip implements a sink-inclusive minimum description length workflow (SIMDL
 
 ```
 ## DOI:
-10.5281/zenodo.17282860
+[10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 
 ## Research and reproducibility
 
