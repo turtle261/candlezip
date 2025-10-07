@@ -48,4 +48,8 @@ These artifacts make it possible to reproduce measured compression gains, audit 
 
 ## License and contact
 
+This README and related documentation are licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
+
+CandleZip source code is licensed under GNU General Public License v3.0 (GPL-3.0).
+
 See the repository root for licensing and contribution information. For questions, open an issue or contact the maintainer listed in the repository.
