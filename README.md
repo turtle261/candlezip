@@ -10,7 +10,7 @@ DOI: [10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 
 ---
 
-## 1. Vision — Why CandleZip Exists
+## 1. Why CandleZip Exists
 
 1. **Compression as intelligence, made concrete.** CandleZip operationalizes the
    long-standing view (Mahoney, Hutter, MDL) that predictive skill equals entropy
@@ -25,19 +25,12 @@ DOI: [10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 3. **A bridge between theory and practice.** The same audit trail applies to LLMs,
    classical compressors, and humans (via a UI agent). Compression becomes a
    substrate-agnostic intelligence instrument rather than an abstract metaphor.
-
-*Approachable intuition.* If "compression = intelligence" sounds opaque, imagine
-packing a suitcase. A clever packer knows which clothes can be rolled, which need
-folding, and when to leave a bulky item at home. CandleZip is that packer for bits:
-it asks tools for help only when the extra effort frees more space than it costs.
-
 ---
 
-## 2. Operational Definition of Intelligence (Do Not Skip!)
+## 2. What is Intelligence, and how do you measure it?
 
-The concept of intelligence = compression is not new, and is strongly established by
-Mahoney. However, practical measures of intelligence had yet to be established on
-this principle.
+The concept of intelligence = compression is not new, it extends work from early information theorists, and in particular Mahoney.
+However, practical measures of intelligence **had** yet to be established on this principle. 
 
 We use “definition” in an operational, information-theoretic sense: an agent is
 intelligent to the extent that, under decode-safety and priced side-information, its
