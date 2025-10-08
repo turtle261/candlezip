@@ -2,7 +2,7 @@
 
 CandleZip exists to turn the slogan "compression = intelligence" into a falsifiable
 engineering instrument. The project frames every tool call as a priced entropy sink:
-an agent should only spend resources when those resources route uncertainty out of
+an agent should only spend resources when those resources route chaos(entropy) out of
 the data stream. The result is a research-grade benchmark that emits an integer-bit
 signal you can trust, cite, and extend.
 
