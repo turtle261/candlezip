@@ -3,8 +3,8 @@
 CandleZip exists to turn the slogan "compression = intelligence" into a falsifiable
 engineering instrument. The project frames every tool call as a priced entropy sink:
 an agent should only spend resources when those resources route chaos(entropy) out of
-the data stream. The result is a research-grade benchmark that emits an integer-bit
-signal you can trust, cite, and extend.
+the data stream. The result is a research-grade benchmark directly measures intelligence, and emits an integer-bit
+signal you can trust, cite, and extend. Measure something that compresses **everything**, and that definitionally is general intelligence!
 
 DOI: [10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 
@@ -13,10 +13,10 @@ DOI: [10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 ## 1. Why CandleZip Exists
 
 1. **Compression as intelligence, made concrete.** CandleZip operationalizes the
-   long-standing view (Mahoney, Hutter, MDL) that predictive skill equals entropy
+   long-standing view ([Mahoney](https://mattmahoney.net/dc/dce.html#Section_14), Hutter, MDL) that predictive skill equals entropy
    reduction. We expand it agentically: an intelligent policy routes entropy into
    controllable sinks (tools, retrieval corpora, code interpreters) and earns credit
-   only when the routed bits beat their price.
+   only when the routed bits beat their price. 
 2. **A small, falsifiable law.** The Unified Efficiency Principle defines intelligence
    as entropy reduced per priced resource. CandleZip instantiates that law with an
    entropy coder so that every gain is logged in whole bits, complete with
