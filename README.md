@@ -143,7 +143,7 @@ concepts are:
 
 ---
 
-## 5. Results Snapshot — 300 s Budget, No Memory Cache
+## 5. Results Snapshot — 300 s Budget, No Memory Cache - Gemini 2.5 Pro
 
 A 300 s per-run budget with no persistent memory was evaluated on Canterbury
 subsets. The table summarizes the accompanying `proof.csv` ledgers in
@@ -160,7 +160,7 @@ subsets. The table summarizes the accompanying `proof.csv` ledgers in
   released `proof.csv` logs—no illustrative placeholders.
 - **Dig deeper:** Inspect the per-chunk CSVs in `results_300s_nomem/<run>/proof.csv`
   to audit individual decisions, shipped bits, and timing.
-- **Note:** This is quite expensive--benchmarking an AI model... Feel free to submit results yourselves or offer to support it if so kind!
+- **Note:** This is quite expensive--benchmarking an AI model... Feel free to submit results yourselves or offer to support it if so kind! Secondly, we use Gemini 2.5 Pro as the reasoning LLM, and 2.5 Flash as the base LLM, in preliminary tests, this results in near-identical performance.
 
 ---
 
