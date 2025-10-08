@@ -160,6 +160,7 @@ subsets. The table summarizes the accompanying `proof.csv` ledgers in
   released `proof.csv` logs—no illustrative placeholders.
 - **Dig deeper:** Inspect the per-chunk CSVs in `results_300s_nomem/<run>/proof.csv`
   to audit individual decisions, shipped bits, and timing.
+- **Note:** This is quite expensive--benchmarking an AI model... Feel free to submit results yourselves or offer to support it if so kind!
 
 ---
 
