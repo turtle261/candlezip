@@ -13,7 +13,7 @@ DOI: [10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 ## 1. Why CandleZip Exists
 
 1. **Compression as intelligence, made concrete.** CandleZip operationalizes the
-   long-standing view ([Mahoney](https://mattmahoney.net/dc/dce.html#Section_14), Hutter, MDL) that predictive skill equals entropy
+   long-standing view ([Mahoney](https://mattmahoney.net/dc/dce.html#Section_14), [Hutter](https://www.hutter1.net/ai/uaibook.htm#oneline), MDL) that predictive skill equals entropy
    reduction. We expand it agentically: an intelligent policy routes entropy into
    controllable sinks (tools, retrieval corpora, code interpreters) and earns credit
    only when the routed bits beat their price. 
