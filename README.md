@@ -131,11 +131,11 @@ concepts are:
      --scan-agent-script agent/agent_v2.py \
      --scan_max_steps 12 \
      input.txt output.canz
-
+    # Use --reuse instead, if your Agent is deterministic. In that case, no cache is needed to decompress!
    ./target/release/candlezip.exe decompress \
      --backend smollm \
      --agent \
-     --reuse \
+     --reuse-scan-dir dir/to/compressed/run \
      --scan-agent-script agent/agent_v2.py \
      output.canz decoded.txt
    ```
