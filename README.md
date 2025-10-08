@@ -47,7 +47,7 @@ using a UI python script, rather than the LLM Agent script provided--this is WIP
 Feel free to implement this and PR.
 
 **How CandleZip measures it.**
-- We track **gross entropy reduction** **ER**: the integer-bit drop between
+- We track **gross entropy reduction.** _ER_: the integer-bit drop between
   the baseline stream and the stream conditioned on accepted hints. (Entropy Reduction=ER)
 - We subtract **shipped overhead** (gate records, hint payloads, headers) to obtain
   **net savings**. Gross and net are both published so audits can price resources
