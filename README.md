@@ -1,6 +1,6 @@
 # CandleZip: Agentic Compression for Auditable Intelligence
 
-CandleZip exists to turn the slogan "compression = intelligence" into a falsifiable
+CandleZip exists to turn the well-known statement "compression = intelligence" into a falsifiable
 engineering instrument. The project frames every tool call as a priced entropy sink:
 an agent should only spend resources when those resources route chaos(entropy) out of
 the data stream. The result is a research-grade benchmark directly measures intelligence, and emits an integer-bit
