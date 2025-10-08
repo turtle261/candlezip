@@ -187,3 +187,7 @@ CandleZip source code is licensed under GNU General Public License v3.0 (GPL-3.0
 
 See the repository root for licensing and contribution information. For questions,
 open an issue, PR, or email me.
+
+## Potential Next Steps
+- Extending to be multimodal, vision first?
+- Run RL on the information reward signal this returns to directly optimize for Intelligence in Agentic, tool using systems--multimodal too? Shatter records?
