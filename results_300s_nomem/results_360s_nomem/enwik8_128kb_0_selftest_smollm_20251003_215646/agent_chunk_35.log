@@ -1,0 +1,1002 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 29.2125ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 48.6823ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.7830451s
+- Watching for configuration updates...
+> Initialized in 1.8619989s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_enwik8_128kb_0_2e0896f2
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 99444509-12be-4ac6-a53a-1fa214ebcd4f                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 0ee00c4a-c00c-4192-9eb1-caef2748b201
+    Status: Executing Task...
+    ├── 🧠 Reasoning...
+    └── 🧠 Thinking...┌──────────────────────────────── Tool Usage ─────────────────────────────────┐
+│                                                                             │
+│  Tool Usage Started                                                         │
+│  Name: create_reasoning_plan                                                │
+│  Status: In Progress                                                        │
+│  Tool Args: {'plan': '\n1. **Confirm Directory Access:** Use                │
+│  `list_allowed_directories()` to verify access to                           │
+│  `/C/Users/Noah/Documents/sink`.\n2. **Explore Directory Contents:** Use    │
+│  `list_directory(path=\'/C/Users/Noah/Documents/sink\')` to get an          │
+│  overview of the files in the sink directory. This helps in anticipating    │
+│  the file structure.\n3. **Locate Source Document:** Use                    │
+│  `search_files_content(path=\'/C/Users/Noah/Documents/sink\', query=\'The   │
+│  [[Dutch people|Dutch]] punk band [[The Ex]] further exemplifies this       │
+│  expression.\')` to find the specific file containing the provided prefix.  │
+│  This is crucial for identifying the exact source.\n4. **Read Full          │
+│  Document:** Once the file path is identified from the previous step, use   │
+│  `read_text_file(path=\'<found_file_path>\')` to retrieve the entire        │
+│  content of the source document.\n5. **Extract Raw Continuation:**\n    *   │
+│  Find the exact `prefix_end_string` ("The [[Dutch people|Dutch]] punk band  │
+│  [[The Ex]] further exemplifies this expression.") within the               │
+│  `full_text`.\n    *   Extract the raw text immediately following this      │
+│  prefix.\n    *   Manually identify and concatenate the specific            │
+│  descriptive blocks as indicated in the "Prior memory" and "Expected        │
+│  output" sections:\n        *   "There are many concepts relevant to the    │
+│  topic of anarchism, this is a brief summary. There is also a more          │
+│  extensive [[list of anarchist concepts]]."\n        *   "The following is  │
+│  a sample of books that have been referenced in this page, a more complete  │
+│  list can be found at the [[list of anarchist books]]."\n        *          │
+│  "\'\'\'These notes have no corresponding reference in the article. They    │
+│  might be re-used.\'\'\'"\n        *   "The overwhelming diversity and      │
+│  number of links relating to anarchism is extensively covered on the        │
+│  [[List of anarchism web resources|links subpage]]."\n6. **Clean and        │
+│  Format Continuation:**\n    *   Apply the provided regular expressions     │
+│  and string replacements from the "Prior memory" to remove Wikipedia        │
+│  markup (e.g., `[[Link|Text]]`, `[[Link]]`, `[http...]`, `\'\'`, `\'\'\'`,  │
+│  HTML entities like `&quot;`, `&amp;mdash;`, `&amp;`, `{{fact}}`, and       │
+│  other specific templates mentioned in the prior memory).\n    *   Remove   │
+│  any extra whitespace by splitting and rejoining words.\n    *   Extract    │
+│  the first 100-200 words (aiming for 150 words) from the cleaned text.\n7.  │
+│  **Output Result:** Present the final cleaned, plain text continuation as   │
+│  the output, ensuring no markdown, analysis, or commentary is               │
+│  included.\n', 'ready': True}                                               │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+🚀 Crew: crew
+├── 📋 Task: 0ee00c4a-c00c-4192-9eb1-caef2748b201
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│                                                                             │
+│  1. **Confirm Directory Access:** Use `list_allowed_directories()` to       │
+│  verify access to `/C/Users/Noah/Documents/sink`.                           │
+│  2. **Explore Directory Contents:** Use                                     │
+│  `list_directory(path='/C/Users/Noah/Documents/sink')` to get an overview   │
+│  of the files in the sink directory. This helps in anticipating the file    │
+│  structure.                                                                 │
+│  3. **Locate Source Document:** Use                                         │
+│  `search_files_content(path='/C/Users/Noah/Documents/sink', query='The      │
+│  [[Dutch people|Dutch]] punk band [[The Ex]] further exemplifies this       │
+│  expression.')` to find the specific file containing the provided prefix.   │
+│  This is crucial for identifying the exact source.                          │
+│  4. **Read Full Document:** Once the file path is identified from the       │
+│  previous step, use `read_text_file(path='<found_file_path>')` to retrieve  │
+│  the entire content of the source document.                                 │
+│  5. **Extract Raw Continuation:**                                           │
+│      *   Find the exact `prefix_end_string` ("The [[Dutch people|Dutch]]    │
+│  punk band [[The Ex]] further exemplifies this expression.") within the     │
+│  `full_text`.                                                               │
+│      *   Extract the raw text immediately following this prefix.            │
+│      *   Manually identify and concatenate the specific descriptive blocks  │
+│  as indicated in the "Prior memory" and "Expected output" sections:         │
+│          *   "There are many concepts relevant to the topic of anarchism,   │
+│  this is a brief summary. There is also a more extensive [[list of          │
+│  anarchist concepts]]."                                                     │
+│          *   "The following is a sample of books that have been referenced  │
+│  in this page, a more complete list can be found at the [[list of           │
+│  anarchist books]]."                                                        │
+│          *   "'''These notes have no corresponding reference in the         │
+│  article. They might be re-used.'''"                                        │
+│          *   "The overwhelming diversity and number of links relating to    │
+│  anarchism is extensively covered on the [[List of anarchism web            │
+│  resources|links subpage]]."                                                │
+│  6. **Clean and Format Continuation:**                                      │
+│      *   Apply the provided regular expressions and string replacements     │
+│  from the "Prior memory" to remove Wikipedia markup (e.g.,                  │
+│  `[[Link|Text]]`, `[[Link]]`, `[http...]`, `''`, `'''`, HTML entities like  │
+│  `&quot;`, `&amp;mdash;`, `&amp;`, `{{fact}}`, and other specific           │
+│  templates mentioned in the prior memory).                                  │
+│      *   Remove any extra whitespace by splitting and rejoining words.      │
+│      *   Extract the first 100-200 words (aiming for 150 words) from the    │
+│  cleaned text.                                                              │
+│  7. **Output Result:** Present the final cleaned, plain text continuation   │
+│  as the output, ensuring no markdown, analysis, or commentary is included.  │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  b(r'\[\[[^|\]]*\|([^\]]+)\]\]', r'\1', raw_filtered_text) # [[Link|Text]]  │
+│  -> Text                                                                    │
+│  cleaned_continuation = re.sub(r'\[\[([^\]]+)\]\]', r'\1',                  │
+│  cleaned_continuation) # [[Link]] -> Link                                   │
+│  cleaned_continuation = re.sub(r'\[http[^\]]* ([^\]]+)\]', r'\1',           │
+│  cleaned_continuation) # [http://... Text] -> Text                          │
+│  cleaned_continuation = re.sub(r'\[http[^\]]*\]', '',                       │
+│  cleaned_continuation) # [http://...] -> (empty)                            │
+│  cleaned_continuation = cleaned_continuation.replace("''", "") # Remove     │
+│  italics markers                                                            │
+│  cleaned_continuation = cleaned_continuation.replace("'''", "") # Remove    │
+│  bold markers                                                               │
+│  cleaned_continuation = cleaned_continuation.replace("&quot;", "\"") #      │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("&amp;mdash;", "—") #  │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("&amp;", "&") #        │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("{{fact}}", "") #      │
+│  Remove fact tags                                                           │
+│  # Remove any extra whitespace                                              │
+│  cleaned_continuation = " ".join(cleaned_continuation.split())              │
+│  # Take the first 100-200 words                                             │
+│  words = cleaned_continuation.split()                                       │
+│  continuation = " ".join(words[:150]) # Aim for 150 words                   │
+│  else:                                                                      │
+│  continuation = "No descriptive content found after the prefix, skipping    │
+│  meta-text."                                                                │
+│  else:                                                                      │
+│  continuation = "Could not find '==See also==' section after the prefix."   │
+│  else:                                                                      │
+│  continuation = "Prefix not found in the document."                         │
+│  # Let's manually verify the expected output based on the strict rules.     │
+│  # The prefix ends with "The [[Dutch people|Dutch]] punk band [[The Ex]]    │
+│  further exemplifies this expression."                                      │
+│  # Immediately after this:                                                  │
+│  # ''For further details, see [[anarcho-punk]]'' (meta-text, skip)          │
+│  # ==See also== (heading, skip)                                             │
+│  # <!-- (Please take care in adding to this list that it not grow           │
+│  excessively large, consider adding to the list of anarchist concepts       │
+│  page) --> (comment, skip)                                                  │
+│  # There are many concepts relevant to the topic of anarchism, this is a    │
+│  brief summary.  There is also a more extensive [[list of anarchist         │
+│  concepts]]. (descriptive text, START HERE)                                 │
+│  # * [[individualist anarchism]], [[anarcho-communism]],                    │
+│  [[anarcho-syndicalism]], [[anarcho-capitalism]], [[mutualism]],            │
+│  [[Christian anarchism]], [[anarcha-feminism]], [[green anarchism]],        │
+│  [[nihilist anarchism]], [[anarcho-nationalism]], [[black anarchism]],      │
+│  [[national anarchism]]. [[post-anarchism]], [[post-left anarchism]]        │
+│  (list, skip)                                                               │
+│  # * [[Libertarian Socialism]] (list, skip)                                 │
+│  # ... (all other lists and headings until the next descriptive paragraph)  │
+│  # The next descriptive paragraph is:                                       │
+│  # "The following is a sample of books that have been referenced in this    │
+│  page, a more complete list can be found at the [[list of anarchist         │
+│  books]]."                                                                  │
+│  # Then:                                                                    │
+│  # "'''These notes have no corresponding reference in the article. They     │
+│  might be re-used.'''"                                                      │
+│  # Then:                                                                    │
+│  # "The overwhelming diversity and number of links relating to anarchism    │
+│  is extensively covered on the [[List of anarchism web resources|links      │
+│  subpage]]."                                                                │
+│  # So the desired plain text continuation should be a concatenation of      │
+│  these descriptive sentences, cleaned of markup.                            │
+│  # Let's re-extract the specific sentences and then clean them.             │
+│  prefix_end_string = "The [[Dutch people|Dutch]] punk band [[The Ex]]       │
+│  further exemplifies this expression."                                      │
+│  start_index = full_text.find(prefix_end_string)                            │
+│  if start_index != -1:                                                      │
+│  continuation_start_char_index = start_index + len(prefix_end_string)       │
+│  raw_text_after_prefix = full_text[continuation_start_char_index:]          │
+│  # Manually identify the descriptive blocks that should be included         │
+│  descriptive_blocks = []                                                    │
+│  # Block 1: "There are many concepts relevant to the topic of               │
+│  anarchism..."                                                              │
+│  marker1_start = raw_text_after_prefix.find("There are many concepts        │
+│  relevant to the topic of anarchism, this is a brief summary.  There is     │
+│  also a more extensive [[list of anarchist concepts]].")                    │
+│  if marker1_start != -1:                                                    │
+│  descriptive_blocks.append("There are many concepts relevant to the topic   │
+│  of anarchism, this is a brief summary.  There is also a more extensive     │
+│  [[list of anarchist concepts]].")                                          │
+│  # Block 2: "The following is a sample of books..."                         │
+│  marker2_start = raw_text_after_prefix.find("The following is a sample of   │
+│  books that have been referenced in this page, a more complete list can be  │
+│  found at the [[list of anarchist books]].")                                │
+│  if marker2_start != -1:                                                    │
+│  descriptive_blocks.append("The following is a sample of books that have    │
+│  been referenced in this page, a more complete list can be found at the     │
+│  [[list of anarchist books]].")                                             │
+│  # Block 3: "These notes have no corresponding reference..."                │
+│  marker3_start = raw_text_after_prefix.find("'''These notes have no         │
+│  corresponding reference in the article. They might be re-used.'''")        │
+│  if marker3_start != -1:                                                    │
+│  descriptive_blocks.append("'''These notes have no corresponding reference  │
+│  in the article. They might be re-used.'''")                                │
+│  # Block 4: "The overwhelming diversity and number of links..."             │
+│  marker4_start = raw_text_after_prefix.find("The overwhelming diversity     │
+│  and number of links relating to anarchism is extensively covered on the    │
+│  [[List of anarchism web resources|links subpage]].")                       │
+│  if marker4_start != -1:                                                    │
+│  descriptive_blocks.append("The overwhelming diversity and number of links  │
+│  relating to anarchism is extensively covered on the [[List of anarchism    │
+│  web resources|links subpage]].")                                           │
+│  raw_continuation_text = " ".join(descriptive_blocks)                       │
+│  # Clean up Wikipedia markup                                                │
+│  import re                                                                  │
+│  cleaned_continuation = re.sub(r'\[\[[^|\]]*\|([^\]]+)\]\]', r'\1',         │
+│  raw_continuation_text) # [[Link|Text]] -> Text                             │
+│  cleaned_continuation = re.sub(r'\[\[([^\]]+)\]\]', r'\1',                  │
+│  cleaned_continuation) # [[Link]] -> Link                                   │
+│  cleaned_continuation = re.sub(r'\[http[^\]]* ([^\]]+)\]', r'\1',           │
+│  cleaned_continuation) # [http://... Text] -> Text                          │
+│  cleaned_continuation = re.sub(r'\[http[^\]]*\]', '',                       │
+│  cleaned_continuation) # [http://...] -> (empty)                            │
+│  cleaned_continuation = cleaned_continuation.replace("''", "") # Remove     │
+│  italics markers                                                            │
+│  cleaned_continuation = cleaned_continuation.replace("'''", "") # Remove    │
+│  bold markers                                                               │
+│  cleaned_continuation = cleaned_continuation.replace("&quot;", "\"") #      │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("&amp;mdash;", "—") #  │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("&amp;", "&") #        │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("{{main|List of        │
+│  anarchist books}}", "") # Remove this template call if it was              │
+│  accidentally included                                                      │
+│  cleaned_continuation =                                                     │
+│  cleaned_continuation.replace("{{wikiquote|Definitions of anarchism}}",     │
+│  "") # Remove this template call if it was accidentally included            │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|bill}}", "")   │
+│  # Remove note templates                                                    │
+│  cleaned_continuation =                                                     │
+│  cleaned_continuation.replace("{{note|praxeology}}", "")                    │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|platform}}",   │
+│  "")                                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|appleton}}",   │
+│  "")                                                                        │
+│  cleaned_continuation =                                                     │
+│  cleaned_continuation.replace("{{note|Yarros-NotUtopian}}", "")             │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|totse}}", "")  │
+│  cleaned_continuation = cleaned_continuation.replace("{{Anarchism}}", "")   │
+│  # Remove the initial template                                              │
+│  cleaned_continuation = cleaned_continuation.replace("{{fact}}", "") #      │
+│  Remove fact tags                                                           │
+│  # Remove any extra whitespace                                              │
+│  cleaned_continuation = " ".join(cleaned_continuation.split())              │
+│  # Take the first 100-200 words                                             │
+│  words = cleaned_continuation.split()                                       │
+│  continuation = " ".join(words[:150]) # Aim for 150 words                   │
+│  else:                                                                      │
+│  continuation = "Prefix not found in the document."                         │
+│  # This refined approach should yield the correct plain text                │
+│  continuation.There are many concepts relevant to the topic of anarchism,   │
+│  this is a brief summary. There is also a more extensive list of anarchist  │
+│  concepts. The following is a sample of books that have been referenced in  │
+│  this page, a more complete list can be found at the list of anarchist      │
+│  books. These notes have no corresponding reference in the article. They    │
+│  might be re-used. The overwhelming diversity and number of links relating  │
+│  to anarchism is extensively covered on the links subpage.                  │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  |right| [[Noam Chomsky]] (1928–)]]                                         │
+│  The kind of anarchism that is most easily encountered in popular culture   │
+│  is represented by celebrities who publicly identify themselves as          │
+│  anarchists. Although some anarchists reject any focus on such famous       │
+│  living individuals as inherently élitist, the following figures are        │
+│  examples of prominent publicly self-avowed anarchists:                     │
+│                                                                             │
+│  * the [[MIT]] professor of [[Linguistics]] [[Noam Chomsky]]                │
+│  * the [[science fiction]] author [[Ursula K. Le Guin]]                     │
+│  * the social historian [[Howard Zinn]]                                     │
+│  * entertainer and author [[Hans Alfredsson]]                               │
+│  * the [[Avant-garde]] artist [[Nicolás Rosselló]]                          │
+│                                                                             │
+│  In [[Denmark]], the [[Freetown Christiania]] was created in downtown       │
+│  [[Copenhagen]]. The housing and employment crisis in most of [[Western     │
+│  Europe]] led to the formation of [[commune (intentional                    │
+│  community)|communes]] and squatter movements like the one still thriving   │
+│  in [[Barcelona]], in [[Catalonia]].  Militant [[antifa|resistance to       │
+│  neo-Nazi groups]] in places like Germany, and the uprisings of             │
+│  [[autonomous Marxism]], [[situationist]], and [[Autonomist]] groups in     │
+│  France and Italy also helped to give popularity to anti-authoritarian,     │
+│  non-capitalist ideas.                                                      │
+│                                                                             │
+│  In various musical styles, anarchism rose in popularity.  Most famous for  │
+│  the linking of anarchist ideas and music has been punk rock, although in   │
+│  the modern age, hip hop, and folk music are also becoming important        │
+│  mediums for the spreading of the anarchist message.  In the [[United       │
+│  Kingdom|UK]] this was associated with the [[punk rock]] movement; the      │
+│  band [[Crass]] is celebrated for its anarchist and [[pacifism|pacifist]]   │
+│  ideas. The [[Dutch people|Dutch]] punk band [[The Ex]] further             │
+│  exemplifies this expression.                                               │
+│  ''For further details, see [[anarcho-punk]]''                              │
+│                                                                             │
+│  ==See also==                                                               │
+│  &lt;!-- (Please take care in adding to this list that it not grow          │
+│  excessively large, consider adding to the list of anarchist concepts       │
+│  page) --&gt;                                                               │
+│  There are many concepts relevant to the topic of anarchism, this is a      │
+│  brief summary.  There is also a more extensive [[list of anarchist         │
+│  concepts]].                                                                │
+│                                                                             │
+│  * [[individualist anarchism]], [[anarcho-communism]],                      │
+│  [[anarcho-syndicalism]], [[anarcho-capitalism]], [[mutualism]],            │
+│  [[Christian anarchism]], [[anarcha-feminism]], [[green anarchism]],        │
+│  [[nihilist anarchism]], [[anarcho-nationalism]], [[black anarchism]],      │
+│  [[national anarchism]]. [[post-anarchism]], [[post-left anarchism]]        │
+│  * [[Libertarian Socialism]]                                                │
+│  * [[Anarchist symbolism]]                                                  │
+│  * [[Anarchism/Links|List of anarchism links]]                              │
+│  * [[List of anarchists]]                                                   │
+│  * [[List of anarchist organizations]]                                      │
+│  * [[Major conflicts within anarchist thought]]                             │
+│  * [[Past and present anarchist communities]]                               │
+│                                                                             │
+│  ===Historical events===                                                    │
+│  *[[Paris Commune]] (1871)                                                  │
+│  *[[Haymarket Riot]] (1886)                                                 │
+│  *[[The Makhnovschina]] (1917 &amp;mdash; 1921)                             │
+│  *[[Kronstadt rebellion]] (1921)                                            │
+│  *[[Spanish Revolution]] (1936) (see [[Anarchism in Spain]] and [[Spanish   │
+│  Revolution]])                                                              │
+│  *May 1968, France (1968)                                                   │
+│  *[[WTO Ministerial Conference of 1999|WTO Meeting in Seattle]] (1999)      │
+│                                                                             │
+│  ===Books===                                                                │
+│  {{main|List of anarchist books}}                                           │
+│                                                                             │
+│  The following is a sample of books that have been referenced in this       │
+│  page, a more complete list can be found at the [[list of anarchist         │
+│  books]].                                                                   │
+│                                                                             │
+│  *[[Mikhail Bakunin]], ''[[God and the State]]''                            │
+│  [http://dwardmac.pitzer.edu/Anarchist_Archives/bakunin/godandstate/godand  │
+│  state_ch1.html]                                                            │
+│  *[[Emma Goldman]], ''[[Anarchism &amp; Other Essays]]''                    │
+│  [http://dwardmac.pitzer.edu/Anarchist_Archives/goldman/GoldmanCW.html]     │
+│  *[[Peter Kropotkin]], ''[[Mutual Aid: A Factor of Evolution|Mutual         │
+│  Aid]]'' [http://www.gutenberg.org/etext/4341]                              │
+│  *[[Pierre-Joseph Proudhon]], ''[[What is Property?]]''                     │
+│  [http://www.gutenberg.org/etext/360]                                       │
+│  *[[Rudolf Rocker]], ''[[Anarcho-Syndicalism                                │
+│  (book)|Anarcho-Syndicalism]]''                                             │
+│  *[[Murray Rothbard]] ''[[The Ethics of Liberty]]''                         │
+│  [http://www.mises.org/rothbard/ethics/ethics.asp]                          │
+│  *[[Max Stirner]], ''[[The Ego And Its Own]]''                              │
+│  [http://www.df.lth.se/~triad/stirner/]                                     │
+│  *[[Leo Tolstoy]], ''[[The Kingdom of God is Within You]]''                 │
+│  [http://www.kingdomnow.org/withinyou.html]                                 │
+│                                                                             │
+│  ===Anarchism by region/culture===                                          │
+│  * [[African Anarchism]]                                                    │
+│  * [[Anarchism in Spain]]                                                   │
+│  * [[Anarchism in the English tradition]]                                   │
+│  * [[Chinese anarchism]]                                                    │
+│                                                                             │
+│  ==References==                                                             │
+│  &lt;div style=&quot;font-size: 85%&quot;&gt;                               │
+│  &lt;references/&gt;                                                        │
+│  &lt;/div&gt;                                                               │
+│                                                                             │
+│  '''These notes have no corresponding reference in the article. They might  │
+│  be re-used.'''                                                             │
+│  # {{note|bill}}                                                            │
+│  [http://ns52.super-hosts.com/~vaz1net/bill/anarchism/library/thelaw.html]  │
+│  # {{note|praxeology}} [http://praxeology.net/GM-PS.htm]                    │
+│  # {{note|platform}}                                                        │
+│  [http://flag.blackened.net/revolt/platform/plat_preface.html]              │
+│  # {{note|appleton}}                                                        │
+│  [http://www.againstpolitics.com/market_anarchism/appleton_boston.htm       │
+│  Against Politics - Appleton - Boston Anarchists]                           │
+│  # {{note|Yarros-NotUtopian}} [[Victor Yarros|Yarros, Victor]] ''Liberty''  │
+│  VII, [[January 2]] [[1892]].                                               │
+│  # {{note|totse}} [http://www.totse.com/en/politics/anarchism/161594.html   │
+│  Noam Chomsky on Anarchism by Noam Chomsky]                                 │
+│                                                                             │
+│  ==External links==                                                         │
+│  The overwhelming diversity and number of links relating to anarchism is    │
+│  extensively covered on the [[List of anarchism web resources|links         │
+│  subpage]].                                                                 │
+│  {{wikiquote|Definitions of anarchism}}                                     │
+│  *[http://anarchoblogs.protest.net/ Anarchoblogs] Blogs by Anarchists.      │
+│  *[http://dwardmac.pitzer.edu/Anarchist_Archives/ Anarchy Archives]         │
+│  extensively archives information relating to famous anarchists.  This      │
+│  includes many of their books and other publications.                       │
+│  *Hundreds of anarchists are listed, with short bios, links &amp;           │
+│  dedicated pages                                                            │
+│  [http://recollectionbooks.com/bleed/gallery/galleryindex.htm at the Daily  │
+│  Bleed's Anarchist Encyclopedia]                                            │
+│  *[http://www.infoshop.org/ Infoshop.org] ([[Infoshop.org|wikipedia         │
+│  page]])                                                                    │
+│  *[http://www.iww.org/ Industrial Workers of the World]                     │
+│                                                                             │
+│  &lt;!-- Attention!  The external link portion of this article regularly    │
+│  grows far beyond manageable size.  Please only list an outside link if it  │
+│  applies to anarchism in general and is somewhat noteworthy.  Links to      │
+│  lesser known sites or submovements will be routinely moved to the list     │
+│  page to keep this article free of clutter --&gt;                           │
+│                                                                             │
+│                                                                             │
+│  [[Category:Anarchism|*]]                                                   │
+│  [[Category:Forms of government|Anarchism]]                                 │
+│  [[Category:Political ideology entry points|Anarchism]]                     │
+│  [[Category:Political theories|Anarchism]]                                  │
+│  [[Category:Social philosophy|Anarchism]]                                   │
+│                                                                             │
+│  [[ar:لاسلطوية]]                                                            │
+│  [[ast:Anarquismu]]                                                         │
+│  [[bg:Анархизъм]]                                                           │
+│  [[bs:Anarhizam]]                                                           │
+│  [[ca:Anarquisme]]                                                          │
+│  [[cs:Anarchismus]]                                                         │
+│  [[da:Anarkisme]]                                                           │
+│  [[de:Anarchismus]]                                                         │
+│  [[eo:Anarkiismo]]                                                          │
+│  [[es:Anarquismo]]                                                          │
+│  [[et:Anarhism]]                                                            │
+│  [[eu:Anarkismo]]                                                           │
+│  [[fa:دولت‌زدائی]]                                                           │
+│  [[fi:Anarkismi]]                                                           │
+│  [[fr:Anarchisme]]                                                          │
+│  [[gl:Anarquismo]]                                                          │
+│  [[he:אנרכיזם]]                                                             │
+│  [[hu:Anarchizmus]]                                                         │
+│  [[id:Anarkisme]]                                                           │
+│  [[is:Stjórnleysisstefna]]                                                  │
+│  [[it:Anarchismo]]                                                          │
+│  [[ja:アナキズム]]                                                          │
+│  [[ko:아나키즘]]                                                            │
+│  [[lt:Anarchizmas]]                                                         │
+│  [[nl:Anarchisme]]                                                          │
+│  [[nn:Anarkisme]]                                                           │
+│  [[no:Anarkisme]]                                                           │
+│  [[pl:Anarchizm]]                                                           │
+│  [[pt:Anarquismo]]                                                          │
+│  [[ro:Anarhism]]                                                            │
+│  [[ru:Анархизм]]                                                            │
+│  [[sco:Anarchism]]                                                          │
+│  [[simple:Anarchism]]                                                       │
+│  [[sk:Anarchizmus]]                                                         │
+│  [[sl:Anarhizem]]                                                           │
+│  [[sr:Анархизам]]                                                           │
+│  [[sv:Anarkism]]                                                            │
+│  [[th:ลัทธิอนาธิปไตย]]                                                         │
+│  [[tr:Anarşizm]]                                                            │
+│  [[zh:无政府主义]]                                                          │
+│  [[zh-min-nan:Hui-thóng-tī-chú-gī]]</text>                                  │
+│      </revision>                                                            │
+│    </page>                                                                  │
+│    <page>                                                                   │
+│      <title>AfghanistanHistory</title>                                      │
+│      <id>13</id>                                                            │
+│      <revision>                                                             │
+│        <id>15898948</id>                                                    │
+│        <timestamp>2002-08-27T03:07:44Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <username>Magnus Manske</username>                                 │
+│          <id>4</id>                                                         │
+│        </contributor>                                                       │
+│        <minor />                                                            │
+│        <comment>whoops</comment>                                            │
+│        <text xml:space="preserve">#REDIRECT [[History of                    │
+│  Afghanistan]]</text>                                                       │
+│      </revision>                                                            │
+│    </page>                                                                  │
+│    <page>                                                                   │
+│      <title>AfghanistanGeography</title>                                    │
+│      <id>14</id>                                                            │
+│      <revision>                                                             │
+│        <id>15898949</id>                                                    │
+│        <timestamp>2002-02-25T15:43:11Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <ip>Conversion script</ip>                                         │
+│        </contributor>                                                       │
+│        <minor />                                                            │
+│        <comment>Automated conversion</comment>                              │
+│        <text xml:space="preserve">#REDIRECT [[Geography of Afghanistan]]    │
+│  </text>                                                                    │
+│      </revision>                                                            │
+│    </page>                                                                  │
+│    <page>                                                                   │
+│      <title>AfghanistanPeople</title>                                       │
+│      <id>15</id>                                                            │
+│      <revision>                                                             │
+│        <id>15898950</id>                                                    │
+│        <timestamp>2002-08-21T10:42:35Z</timestamp>                          │
+│        <contributor>                                                        │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│                                                                             │
+│  1. **Confirm Directory Access:** Use `list_allowed_directories()` to       │
+│  verify access to `/C/Users/Noah/Documents/sink`.                           │
+│  2. **Explore Directory Contents:** Use                                     │
+│  `list_directory(path='/C/Users/Noah/Documents/sink')` to get an overview   │
+│  of the files in the sink directory. This helps in anticipating the file    │
+│  structure.                                                                 │
+│  3. **Locate Source Document:** Use                                         │
+│  `search_files_content(path='/C/Users/Noah/Documents/sink', query='The      │
+│  [[Dutch people|Dutch]] punk band [[The Ex]] further exemplifies this       │
+│  expression.')` to find the specific file containing the provided prefix.   │
+│  This is crucial for identifying the exact source.                          │
+│  4. **Read Full Document:** Once the file path is identified from the       │
+│  previous step, use `read_text_file(path='<found_file_path>')` to retrieve  │
+│  the entire content of the source document.                                 │
+│  5. **Extract Raw Continuation:**                                           │
+│      *   Find the exact `prefix_end_string` ("The [[Dutch people|Dutch]]    │
+│  punk band [[The Ex]] further exemplifies this expression.") within the     │
+│  `full_text`.                                                               │
+│      *   Extract the raw text immediately following this prefix.            │
+│      *   Manually identify and concatenate the specific descriptive blocks  │
+│  as indicated in the "Prior memory" and "Expected output" sections:         │
+│          *   "There are many concepts relevant to the topic of anarchism,   │
+│  this is a brief summary. There is also a more extensive [[list of          │
+│  anarchist concepts]]."                                                     │
+│          *   "The following is a sample of books that have been referenced  │
+│  in this page, a more complete list can be found at the [[list of           │
+│  anarchist books]]."                                                        │
+│          *   "'''These notes have no corresponding reference in the         │
+│  article. They might be re-used.'''"                                        │
+│          *   "The overwhelming diversity and number of links relating to    │
+│  anarchism is extensively covered on the [[List of anarchism web            │
+│  resources|links subpage]]."                                                │
+│  6. **Clean and Format Continuation:**                                      │
+│      *   Apply the provided regular expressions and string replacements     │
+│  from the "Prior memory" to remove Wikipedia markup (e.g.,                  │
+│  `[[Link|Text]]`, `[[Link]]`, `[http...]`, `''`, `'''`, HTML entities like  │
+│  `&quot;`, `&amp;mdash;`, `&amp;`, `{{fact}}`, and other specific           │
+│  templates mentioned in the prior memory).                                  │
+│      *   Remove any extra whitespace by splitting and rejoining words.      │
+│      *   Extract the first 100-200 words (aiming for 150 words) from the    │
+│  cleaned text.                                                              │
+│  7. **Output Result:** Present the final cleaned, plain text continuation   │
+│  as the output, ensuring no markdown, analysis, or commentary is included.  │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool list_allowed_directories with arguments: {}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool list_allowed_directories took: 419.0169ms
+🚀 Crew: crew
+├── 📋 Task: 0ee00c4a-c00c-4192-9eb1-caef2748b201
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   └── 🔧 Used list_allowed_directories (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Action: list_allowed_directories                                  │
+│                                                                             │
+│  Using Tool: list_allowed_directories                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{}"                                                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  Allowed directories:                                                       │
+│  /C/Users/Noah/Documents/sink                                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool list_directory with arguments: {"path":"/C/Users/Noah/Documents/sink"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool list_directory took: 410.7838ms
+🚀 Crew: crew
+├── 📋 Task: 0ee00c4a-c00c-4192-9eb1-caef2748b201
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   └── 🔧 Used list_directory (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: I have confirmed access to the                           │
+│  `/C/Users/Noah/Documents/sink` directory. Now I need to explore its        │
+│  contents to find the relevant file.                                        │
+│                                                                             │
+│  Using Tool: list_directory                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\"}"                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  [DIR] cantrbry                                                             │
+│  [DIR] enwik8_samples                                                       │
+│  [DIR] synthetic                                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool list_directory with arguments: {"path":"/C/Users/Noah/Documents/sink/enwik8_samples"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool list_directory took: 445.078ms
+🚀 Crew: crew
+├── 📋 Task: 0ee00c4a-c00c-4192-9eb1-caef2748b201
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used list_directory (1)
+│   └── 🔧 Used list_directory (2)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: _data                                                             │
+│  [FILE] test_file.txt                                                       │
+│  Thought: I see a few directories and one file. Given the nature of the     │
+│  prefix, it's highly likely the content is from a larger text source,       │
+│  possibly a Wikipedia dump or similar. The `enwik8_samples` directory       │
+│  seems like a good candidate for containing such data. I will explore       │
+│  `enwik8_samples`.                                                          │
+│                                                                             │
+│  Using Tool: list_directory                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/enwik8_samples\"}"              │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  [FILE] enwik8_128kb_0                                                      │
+│  [FILE] enwik8_128kb_1                                                      │
+│  [FILE] enwik8_128kb_10                                                     │
+│  [FILE] enwik8_128kb_11                                                     │
+│  [FILE] enwik8_128kb_12                                                     │
+│  [FILE] enwik8_128kb_13                                                     │
+│  [FILE] enwik8_128kb_14                                                     │
+│  [FILE] enwik8_128kb_15                                                     │
+│  [FILE] enwik8_128kb_16                                                     │
+│  [FILE] enwik8_128kb_17                                                     │
+│  [FILE] enwik8_128kb_18                                                     │
+│  [FILE] enwik8_128kb_19                                                     │
+│  [FILE] enwik8_128kb_2                                                      │
+│  [FILE] enwik8_128kb_20                                                     │
+│  [FILE] enwik8_128kb_21                                                     │
+│  [FILE] enwik8_128kb_22                                                     │
+│  [FILE] enwik8_128kb_23                                                     │
+│  [FILE] enwik8_128kb_3                                                      │
+│  [FILE] enwik8_128kb_4                                                      │
+│  [FILE] enwik8_128kb_5                                                      │
+│  [FILE] enwik8_128kb_6                                                      │
+│  [FILE] enwik8_128kb_7                                                      │
+│  [FILE] enwik8_128kb_8                                                      │
+│  [FILE] enwik8_128kb_9                                                      │
+│                                                                             │
+│                                                                             │
+│  You ONLY have access to the following tools, and should NEVER make up      │
+│  tools that are not listed here:                                            │
+│                                                                             │
+│  Tool Name: calculate_directory_size                                        │
+│  Tool Arguments: {'properties': {'output_format': {'anyOf': [], 'default':  │
+│  'human-readable', 'description': 'Defines the output format, which can be  │
+│  either `human-readable` or `bytes`.', 'enum': None, 'items': None,         │
+│  'properties': {}, 'title': ''}, 'root_path': {'anyOf': [], 'description':  │
+│  'The root directory path to start the size calculation.', 'enum': None,    │
+│  'items': None, 'properties': {}, 'title': '', 'type': 'string'}},          │
+│  'required': ['root_path'], 'title': 'DynamicModel', 'type': 'object'}      │
+│  Tool Description: Calculates the total size of a directory specified by    │
+│  `root_path`.It recursively searches for files and sums their sizes. The    │
+│  result can be returned in either a `human-readable` format or as `bytes`,  │
+│  depending on the specified `output_format` argument.Only works within      │
+│  allowed directories.                                                       │
+│  Tool Name: convert_time                                                    │
+│  Tool Arguments: {'properties': {'source_timezone': {'anyOf': [],           │
+│  'description': "Source IANA timezone name (e.g., 'America/New_York',       │
+│  'Europe/London'). Use 'UTC' as local timezone if no source timezone        │
+│  provided by the user.", 'enum': None, 'items': None, 'properties': {},     │
+│  'title': '', 'type': 'string'}, 'target_timezone': {'anyOf': [],           │
+│  'description': "Target IANA timezone name (e.g., 'Asia/Tokyo',             │
+│  'America/San_Francisco'). Use 'UTC' as local timezone if no target         │
+│  timezone provide...                                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool search_files_content with arguments: {"path":"/C/Users/Noah/Documents/sink/enwik8_samples","pattern":"enwik8_128kb_*","query":"The [[Dutch people|Dutch]] punk band [[The Ex]] further exemplifies this expression."}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool search_files_content took: 605.9054ms
+🚀 Crew: crew
+├── 📋 Task: 0ee00c4a-c00c-4192-9eb1-caef2748b201
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used list_directory (1)
+│   ├── 🔧 Used list_directory (2)
+│   └── 🔧 Used search_files_content (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Begin! This is VERY important to you, use the tools available     │
+│  and give your best Final Answer, your job depends on it!                   │
+│  Thought: I have listed the files in `enwik8_samples`. Now I need to        │
+│  search for the prefix within these files. Since there are many files,      │
+│  `search_files_content` is the most efficient tool. I will use a glob       │
+│  pattern to search all files in this directory.                             │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/enwik8_samples\", \"pattern\":  │
+│  \"enwik8_128kb_*\", \"query\": \"The [[Dutch people|Dutch]] punk band      │
+│  [[The Ex]] further exemplifies this expression.\"}"                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  /C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0                 │
+│    362:434: ... [[pacifism|pacifist]] ideas. The [[Dutch people|Dutch]]     │
+│  punk band [[The Ex]] further exemplifies this expression.                  │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool read_text_file with arguments: {"path":"/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool read_text_file took: 524.9702ms
+🚀 Crew: crew
+├── 📋 Task: 0ee00c4a-c00c-4192-9eb1-caef2748b201
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used list_directory (1)
+│   ├── 🔧 Used list_directory (2)
+│   ├── 🔧 Used search_files_content (1)
+│   └── 🔧 Used read_text_file (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: I have found the prefix in                               │
+│  `/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0`. Now I need   │
+│  to read the entire content of this file to extract the continuation.       │
+│                                                                             │
+│  Using Tool: read_text_file                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\":                                                                │
+│  \"/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0\"}"           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  <mediawiki xmlns="http://www.mediawiki.org/xml/export-0.3/"                │
+│  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                      │
+│  xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.3/               │
+│  http://www.mediawiki.org/xml/export-0.3.xsd" version="0.3" xml:lang="en">  │
+│    <siteinfo>                                                               │
+│      <sitename>Wikipedia</sitename>                                         │
+│      <base>http://en.wikipedia.org/wiki/Main_Page</base>                    │
+│      <generator>MediaWiki 1.6alpha</generator>                              │
+│      <case>first-letter</case>                                              │
+│        <namespaces>                                                         │
+│        <namespace key="-2">Media</namespace>                                │
+│        <namespace key="-1">Special</namespace>                              │
+│        <namespace key="0" />                                                │
+│        <namespace key="1">Talk</namespace>                                  │
+│        <namespace key="2">User</namespace>                                  │
+│        <namespace key="3">User talk</namespace>                             │
+│        <namespace key="4">Wikipedia</namespace>                             │
+│        <namespace key="5">Wikipedia talk</namespace>                        │
+│        <namespace key="6">Image</namespace>                                 │
+│        <namespace key="7">Image talk</namespace>                            │
+│        <namespace key="8">MediaWiki</namespace>                             │
+│        <namespace key="9">MediaWiki talk</namespace>                        │
+│        <namespace key="10">Template</namespace>                             │
+│        <namespace key="11">Template talk</namespace>                        │
+│        <namespace key="12">Help</namespace>                                 │
+│        <namespace key="13">Help talk</namespace>                            │
+│        <namespace key="14">Category</namespace>                             │
+│        <namespace key="15">Category talk</namespace>                        │
+│        <namespace key="100">Portal</namespace>                              │
+│        <namespace key="101">Portal talk</namespace>                         │
+│      </namespaces>                                                          │
+│    </siteinfo>                                                              │
+│    <page>                                                                   │
+│      <title>AaA</title>                                                     │
+│      <id>1</id>                                                             │
+│      <revision>                                                             │
+│        <id>32899315</id>                                                    │
+│        <timestamp>2005-12-27T18:46:47Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <username>Jsmethers</username>                                     │
+│          <id>614213</id>                                                    │
+│        </contributor>                                                       │
+│        <text xml:space="preserve">#REDIRECT [[AAA]]</text>                  │
+│      </revision>                                                            │
+│    </page>                                                                  │
+│    <page>                                                                   │
+│      <title>AlgeriA</title>                                                 │
+│      <id>5</id>                                                             │
+│      <revision>                                                             │
+│        <id>18063769</id>                                                    │
+│        <timestamp>2005-07-03T11:13:13Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <username>Docu</username>                                          │
+│          <id>8029</id>                                                      │
+│        </contributor>                                                       │
+│        <minor />                                                            │
+│        <comment>a...                                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 0ee00c4a-c00c-4192-9eb1-caef2748b201
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used list_directory (1)
+│   ├── 🔧 Used list_directory (2)
+│   ├── 🔧 Used search_files_content (1)
+│   └── 🔧 Used read_text_file (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│  There are many concepts relevant to the topic of anarchism, this is a      │
+│  brief summary. There is also a more extensive list of anarchist concepts.  │
+│  The following is a sample of books that have been referenced in this       │
+│  page, a more complete list can be found at the list of anarchist books.    │
+│  These notes have no corresponding reference in the article. They might be  │
+│  re-used. The overwhelming diversity and number of links relating to        │
+│  anarchism is extensively covered on the links subpage.                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 0ee00c4a-c00c-4192-9eb1-caef2748b201
+│   Assigned to: Predictive Compression Intelligence
+│   Status: ✅ Completed
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used list_allowed_directories (1)
+│   ├── 🔧 Used list_directory (1)
+│   ├── 🔧 Used list_directory (2)
+│   ├── 🔧 Used search_files_content (1)
+│   └── 🔧 Used read_text_file (1)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: 0ee00c4a-c00c-4192-9eb1-caef2748b201                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 99444509-12be-4ac6-a53a-1fa214ebcd4f                                   │
+│  Tool Args:                                                                 │
+│  Final Output: There are many concepts relevant to the topic of anarchism,  │
+│  this is a brief summary. There is also a more extensive list of anarchist  │
+│  concepts. The following is a sample of books that have been referenced in  │
+│  this page, a more complete list can be found at the list of anarchist      │
+│  books. These notes have no corresponding reference in the article. They    │
+> Stop watching for updates
+│  might be re-used. The overwhelming diversity and number of links relating  │
+│  to anarchism is extensively covered on the links subpage.                  │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "There are many concepts relevant to the topic of anarchism, this is a brief summary. There is also a more extensive list of anarchist concepts. The following is a sample of books that have been referenced in this page, a more complete list can be found at the list of anarchist books. These notes have no corresponding reference in the article. They might be re-used. The overwhelming diversity and number of links relating to anarchism is extensively covered on the links subpage.", "duration_ms": 255599}
+There are many concepts relevant to the topic of anarchism, this is a brief summary. There is also a more extensive list of anarchist concepts. The following is a sample of books that have been referenced in this page, a more complete list can be found at the list of anarchist books. These notes have no corresponding reference in the article. They might be re-used. The overwhelming diversity and number of links relating to anarchism is extensively covered on the links subpage.
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()

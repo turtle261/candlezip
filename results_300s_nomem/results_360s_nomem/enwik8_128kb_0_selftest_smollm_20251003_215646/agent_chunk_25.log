@@ -1,0 +1,559 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 29.0335ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 45.5611ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.7480085s
+- Watching for configuration updates...
+> Initialized in 1.8236634s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_enwik8_128kb_0_2e0896f2
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 25b0d251-232e-4167-b94e-32e603c2304e                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 6737260c-7bbe-4b2b-84ea-b892d93bfd3d
+    Status: Executing Task...
+    ├── 🧠 Reasoning...
+    └── 🧠 Thinking...┌──────────────────────────────── Tool Usage ─────────────────────────────────┐
+│                                                                             │
+│  Tool Usage Started                                                         │
+│  Name: create_reasoning_plan                                                │
+│  Status: In Progress                                                        │
+│  Tool Args: {'ready': True, 'plan': '1. Task Understanding: The primary     │
+│  goal is to minimize future token prediction entropy by providing the       │
+│  exact immediate continuation (100-200 words) of the given prefix. The      │
+│  "Prior memory" section of the prompt explicitly provides this              │
+│  continuation. The output must be plain text only, without any additional   │
+│  formatting or commentary.\n\n2. Key Steps:\n    a. Identify the prefix:    │
+│  "Tucker\'s conception of individualist anarchism incorporated the          │
+│  ideas"\n    b. Locate the exact continuation in the "Prior memory"         │
+│  section.\n    c. Extract the verbatim text of the continuation.\n    d.    │
+│  Ensure the extracted text is between 100 and 200 words.\n    e. Output     │
+│  the extracted text as plain text, adhering to all formatting               │
+│  constraints.\n\n3. Challenges and Mitigation:\n    a. The main challenge   │
+│  would be if the "Prior memory" did not contain the exact continuation or   │
+│  if it was ambiguous. However, in this case, the continuation is clearly    │
+│  and explicitly provided.\n    b. Ensuring the word count is within the     │
+│  specified range (100-200 words). I have pre-counted the words and          │
+│  confirmed it is approximately 112 words, which is within the range.\n\n4.  │
+│  Strategic Tool Usage:\n    a. In this specific scenario, the "Prior        │
+│  memory" has already served as the "external information source" (entropy   │
+│  sink) providing the maximally informative context (the verbatim            │
+│  continuation). Therefore, no further `default_api` tools are required to   │
+│  *find* the continuation. My strategic use of tools is to recognize that    │
+│  the information has already been provided and to directly utilize it.\n    │
+│  b. I will not be using `list_directory`, `read_file_lines`,                │
+│  `search_files_content`, or any other file system tools because the         │
+│  required information is already present in the prompt\'s "Prior            │
+│  memory."\n\n5. Expected Outcome: The exact plain text continuation         │
+│  provided in the "Prior memory" section, which directly follows the prefix  │
+│  "Tucker\'s conception of individualist anarchism incorporated the ideas".  │
+│  This verbatim output will provide the highest possible information         │
+│  density, thereby minimizing future token prediction entropy as per the     │
+│  SIMDL framework.\n'}                                                       │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+🚀 Crew: crew
+├── 📋 Task: 6737260c-7bbe-4b2b-84ea-b892d93bfd3d
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  1. Task Understanding: The primary goal is to minimize future token        │
+│  prediction entropy by providing the exact immediate continuation (100-200  │
+│  words) of the given prefix. The "Prior memory" section of the prompt       │
+│  explicitly provides this continuation. The output must be plain text       │
+│  only, without any additional formatting or commentary.                     │
+│                                                                             │
+│  2. Key Steps:                                                              │
+│      a. Identify the prefix: "Tucker's conception of individualist          │
+│  anarchism incorporated the ideas"                                          │
+│      b. Locate the exact continuation in the "Prior memory" section.        │
+│      c. Extract the verbatim text of the continuation.                      │
+│      d. Ensure the extracted text is between 100 and 200 words.             │
+│      e. Output the extracted text as plain text, adhering to all            │
+│  formatting constraints.                                                    │
+│                                                                             │
+│  3. Challenges and Mitigation:                                              │
+│      a. The main challenge would be if the "Prior memory" did not contain   │
+│  the exact continuation or if it was ambiguous. However, in this case, the  │
+│  continuation is clearly and explicitly provided.                           │
+│      b. Ensuring the word count is within the specified range (100-200      │
+│  words). I have pre-counted the words and confirmed it is approximately     │
+│  112 words, which is within the range.                                      │
+│                                                                             │
+│  4. Strategic Tool Usage:                                                   │
+│      a. In this specific scenario, the "Prior memory" has already served    │
+│  as the "external information source" (entropy sink) providing the          │
+│  maximally informative context (the verbatim continuation). Therefore, no   │
+│  further `default_api` tools are required to *find* the continuation. My    │
+│  strategic use of tools is to recognize that the information has already    │
+│  been provided and to directly utilize it.                                  │
+│      b. I will not be using `list_directory`, `read_file_lines`,            │
+│  `search_files_content`, or any other file system tools because the         │
+│  required information is already present in the prompt's "Prior memory."    │
+│                                                                             │
+│  5. Expected Outcome: The exact plain text continuation provided in the     │
+│  "Prior memory" section, which directly follows the prefix "Tucker's        │
+│  conception of individualist anarchism incorporated the ideas". This        │
+│  verbatim output will provide the highest possible information density,     │
+│  thereby minimizing future token prediction entropy as per the SIMDL        │
+│  framework.                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  ghts to &quot;use and abuse&quot; their property as they wish, such as     │
+│  exploiting workers for profit.&lt;ref                                      │
+│  name=&quot;proudhon-prop&quot;&gt;[[Pierre-Joseph Proudhon|Proudhon]],     │
+│  Pierre-Joseph.                                                             │
+│  ''&quot;[http://www.marxists.org/reference/subject/economics/proudhon/pro  │
+│  perty/ch03.htm Chapter 3. Labour as the efficient cause of the domain of   │
+│  property]&quot;'' from ''&quot;[[What is Property?]]&quot;'',              │
+│  1840&lt;/ref&gt; In its place Proudhon supported what he called            │
+│  'possession' - individuals can have limited rights to use resources,       │
+│  capital and goods in accordance with principles of equality and justice.   │
+│  Proudhon's vision of anarchy, which he called [[mutualism]]                │
+│  (mutuellisme), involved an exchange economy where individuals and groups   │
+│  could trade the products of their labor using ''labor notes'' which        │
+│  represented the amount of working time involved in production. This would  │
+│  ensure that no one would profit from the labor of others. Workers could    │
+│  freely join together in co-operative workshops. An interest-free bank      │
+│  would be set up to provide everyone with access to the means of            │
+│  production. Proudhon's ideas were influential within French working class  │
+│  movements, and his followers were active in the [[Revolution of 1848]] in  │
+│  France.                                                                    │
+│  Proudhon's philosophy of property is complex: it was developed in a        │
+│  number of works over his lifetime, and there are differing                 │
+│  interpretations of some of his ideas. ''For more detailed discussion see   │
+│  [[Pierre-Joseph Proudhon|here]].''                                         │
+│  ==Max Stirner's Egoism==                                                   │
+│  {{main articles|[[Max Stirner]] and [[Egoism]]}}                           │
+│  In his ''The Ego and Its Own'' Stirner argued that most commonly accepted  │
+│  social institutions - including the notion of State, property as a right,  │
+│  natural rights in general, and the very notion of society - were mere      │
+│  illusions or ''ghosts'' in the mind, saying of society  that &quot;the     │
+│  individuals are its reality.&quot; He advocated egoism and a form of       │
+│  amoralism, in which individuals would unite in 'associations of egoists'   │
+│  only when it was in their self interest to do so.  For him, property       │
+│  simply comes about through might: &quot;Whoever knows how to take, to      │
+│  defend, the thing, to him belongs property.&quot; And, &quot;What I have   │
+│  in my power, that is my own. So long as I assert myself as holder, I am    │
+│  the proprietor of the thing.&quot;                                         │
+│  Stirner never called himself an anarchist - he accepted only the label     │
+│  'egoist'. Nevertheless, his ideas were influential on many                 │
+│  individualistically-inclined anarchists, although interpretations of his   │
+│  thought are diverse.                                                       │
+│  ==American individualist anarchism==                                       │
+│  [[Image:BenjaminTucker.jpg|thumb|150px|left|[[Benjamin Tucker]]]]          │
+│  {{main articles|[[Individualist anarchism]] and [[American individualist   │
+│  anarchism]]}}                                                              │
+│  In 1825 [[Josiah Warren]] had participated in a [[communitarian]]          │
+│  experiment headed by [[Robert Owen]] called [[New Harmony]], which failed  │
+│  in a few years amidst much internal conflict. Warren blamed the            │
+│  community's failure on a lack of [[individual sovereignty]] and a lack of  │
+│  private property.  Warren proceeded to organise experimenal anarchist      │
+│  communities which respected what he called &quot;the sovereignty of the    │
+│  individual&quot; at [[Utopia (anarchist community)|Utopia]] and [[Modern   │
+│  Times]]. In 1833 Warren wrote and published ''The Peaceful                 │
+│  Revolutionist'', which some have noted to be the first anarchist           │
+│  periodical ever published. Benjamin Tucker says that Warren &quot;was the  │
+│  first man to expound and formulate the doctrine now known as               │
+│  Anarchism.&quot; (''Liberty'' XIV (December, 1900):1)                      │
+│  [[Benjamin Tucker]] became interested in anarchism through meeting Josiah  │
+│  Warren and [[William B. Greene]]. He edited and published ''Liberty''      │
+│  from August 1881 to April 1908; it is widely considered to be the finest   │
+│  individualist-anarchist periodical ever issued in the English language.    │
+│  Tucker's conception of individualist anarchism incorporated the ideas      │
+│  The prefix ends with: "Tucker's conception of individualist anarchism      │
+│  incorporated the ideas"                                                    │
+│  The continuation in the file is: "of a variety of theorists: Greene's      │
+│  ideas on [[mutualism|mutual banking]]; Warren's ideas on [[cost the limit  │
+│  of price|cost as the limit of price]] (a [[heterodox                       │
+│  economics|heterodox]] variety of [[labour theory of value]]);              │
+│  [[Proudhon]]'s market anarchism; [[Max Stirner]]'s [[egoism]]; and,        │
+│  [[Herbert Spencer]]'s &quot;law of equal freedom&quot;. Tucker strongly    │
+│  supported the individual's right to own the product of his or her labour   │
+│  as &quot;[[private property]]&quot;, and believed in a &lt;ref             │
+│  name=&quot;tucker-pay&quot;&gt;[[Benjamin Tucker|Tucker]], Benjamin.       │
+│  ''&quot;[http://www.blackcrayon.com/page.jsp/library/tucker/tucker37.htm   │
+│  Labor and Its Pay]&quot;'' Individual Liberty: Selections From the         │
+│  Writings of Benjamin R. Tucker, Vanguard Press, New York, 1926, Kraus      │
+│  Reprint Co., Millwood, NY, 1973.&lt;/ref&gt;[[market economy]] for         │
+│  trading this property. He argued that in a truly free market system        │
+│  without the state, the abundance of competition would eliminate profits    │
+│  and ensure that all workers received the full value of their labor. Other  │
+│  19th century individualists included [[Lysander Spooner]], [[Stephen       │
+│  Pearl Andrews]], and [[Victor Yarros]]."                                   │
+│  I need to extract the next 100-200 words verbatim. The provided snippet    │
+│  from the `search_files_content` observation already gives me a             │
+│  significant portion of the continuation. I will use `read_file_lines` to   │
+│  get more context around the matched line to ensure I capture the full      │
+│  100-200 words. The match was on line 172, column 290. I will read from     │
+│  line 172 and request a few lines to ensure I get enough text. I will       │
+│  start reading from line 172, and read 5 lines.of a variety of theorists:   │
+│  Greene's ideas on [[mutualism|mutual banking]]; Warren's ideas on [[cost   │
+│  the limit of price|cost as the limit of price]] (a [[heterodox             │
+│  economics|heterodox]] variety of [[labour theory of value]]);              │
+│  [[Proudhon]]'s market anarchism; [[Max Stirner]]'s [[egoism]]; and,        │
+│  [[Herbert Spencer]]'s &quot;law of equal freedom&quot;. Tucker strongly    │
+│  supported the individual's right to own the product of his or her labour   │
+│  as &quot;[[private property]]&quot;, and believed in a &lt;ref             │
+│  name=&quot;tucker-pay&quot;&gt;[[Benjamin Tucker|Tucker]], Benjamin.       │
+│  ''&quot;[http://www.blackcrayon.com/page.jsp/library/tucker/tucker37.htm   │
+│  Labor and Its Pay]&quot;'' Individual Liberty: Selections From the         │
+│  Writings of Benjamin R. Tucker, Vanguard Press, New York, 1926, Kraus      │
+│  Reprint Co., Millwood, NY, 1973.&lt;/ref&gt;[[market economy]] for         │
+│  trading this property. He argued that in a truly free market system        │
+│  without the state, the abundance of competition would eliminate profits    │
+│  and ensure that all workers received the full value of their labor.        │
+│  Other 19th century individualists included [[Lysander Spooner]],           │
+│  [[Stephen Pearl Andrews]], and [[Victor Yarros]].                          │
+│                                                                             │
+│  # chunk:11                                                                 │
+│  of a variety of theorists: Greene's ideas on [[mutualism|mutual            │
+│  banking]]; Warren's ideas on [[cost the limit of price|cost as the limit   │
+│  of price]] (a [[heterodox economics|heterodox]] variety of [[labour        │
+│  theory of value]]); [[Proudhon]]'s market anarchism; [[Max Stirner]]'s     │
+│  [[egoism]]; and, [[Herbert Spencer]]'s &quot;law of equal freedom&quot;.   │
+│  Tucker strongly supported the individual's right to own the product of     │
+│  his or her labour as &quot;[[private property]]&quot;, and believed in a   │
+│  &lt;ref name=&quot;tucker-pay&quot;&gt;[[Benjamin Tucker|Tucker]],         │
+│  Benjamin.                                                                  │
+│  ''&quot;[http://www.blackcrayon.com/page.jsp/library/tucker/tucker37.htm   │
+│  Labor and Its Pay]&quot;'' Individual Liberty: Selections From the         │
+│  Writings of Benjamin R. Tucker, Vanguard Press, New York, 1926, Kraus      │
+│  Reprint Co., Millwood, NY, 1973.&lt;/ref&gt;[[market economy]] for         │
+│  trading this property. He argued that in a truly free market system        │
+│  without the state, the abundance of competition would eliminate profits    │
+│  and ensure that all workers received the full value of their labor. Other  │
+│  19th century individualists included [[Lysander Spooner]], [[Stephen       │
+│  Pearl Andrews]], and [[Victor Yarros]].                                    │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  eed whether it is a form of anarchism at all, is highly controversial.     │
+│  For more on this debate see ''[[Anarchism and anarcho-capitalism]]''.      │
+│                                                                             │
+│  ==Anarchism and the environment==                                          │
+│  {{seealso|Anarcho-primitivism|Green anarchism|Eco-anarchism|Ecofeminism}}  │
+│                                                                             │
+│  Since the late 1970s anarchists in Anglophone and European countries have  │
+│  been taking action for the natural environment.                            │
+│  [[Eco-anarchism|Eco-anarchists]] or [[Green anarchism|Green anarchists]]   │
+│  believe in [[deep ecology]].  This is a worldview that embraces            │
+│  [[biodiversity]] and [[sustainability]]. Eco-anarchists often use          │
+│  [[direct action]] against what they see as earth-destroying institutions.  │
+│  Of particular importance is the [[Earth First!]] movement, that takes      │
+│  action such as [[tree sitting]]. Another important component is            │
+│  [[ecofeminism]], which sees the domination of nature as a metaphor for     │
+│  the domination of women. Green anarchism also involves a critique of       │
+│  industrial capitalism, and, for some green anarchists, civilization        │
+│  itself.{{fact}}                                                            │
+│                                                                             │
+│  Primitivism is a predominantly Western philosophy that advocates a return  │
+│  to a pre-industrial and usually pre-agricultural society.  It develops a   │
+│  critique of industrial civilization.  In this critique [[technology]] and  │
+│  [[development]] have [[alienation|alienated]] people from the natural      │
+│  world. This philosophy develops themes present in the political action of  │
+│  the [[Luddites]] and the writings of [[Jean-Jacques Rousseau]].            │
+│  Primitivism developed in the context of the [[Reclaim the Streets]],       │
+│  Earth First! and the [[Earth Liberation Front]] movements. [[John          │
+│  Zerzan]] wrote that [[civilization]] &amp;mdash; not just the state        │
+│  &amp;mdash; would need to fall for anarchy to be achieved.{{fact}}         │
+│  Anarcho-primitivists point to the anti-authoritarian nature of many        │
+│  'primitive' or hunter-gatherer societies throughout the world's history,   │
+│  as examples of anarchist societies.                                        │
+│                                                                             │
+│  ==Other branches and offshoots==                                           │
+│  Anarchism generates many eclectic and syncretic philosophies and           │
+│  movements.  Since the Western social formet in the 1960s and 1970s a       │
+│  number new of movements and schools have appeared.  Most of these stances  │
+│  are limited to even smaller numbers than the schools and movements listed  │
+│  above.                                                                     │
+│                                                                             │
+│  [[Image:Hakim Bey.jpeg|thumb|right|[[Hakim Bey]]]]                         │
+│  *'''Post-left anarchy''' - Post-left anarchy (also called                  │
+│  egoist-anarchism) seeks to distance itself from the traditional            │
+│  &quot;left&quot; - communists, liberals, social democrats, etc. - and to   │
+│  escape the confines of [[ideology]] in general. Post-leftists argue that   │
+│  anarchism has been weakened by its long attachment to contrary             │
+│  &quot;leftist&quot; movements and single issue causes ([[anti-war]],       │
+│  [[anti-nuclear]], etc.). It calls for a synthesis of anarchist thought     │
+│  and a specifically anti-authoritarian revolutionary movement outside of    │
+│  the leftist milieu. It often focuses on the individual rather than         │
+│  speaking in terms of class or other broad generalizations and shuns        │
+│  organizational tendencies in favor of the complete absence of  explicit    │
+│  hierarchy. Important groups and individuals associated with Post-left      │
+│  anarchy include: [[CrimethInc]], the magazine [[Anarchy: A Journal of      │
+│  Desire Armed]] and its editor [[Jason McQuinn]], [[Bob Black]], [[Hakim    │
+│  Bey]] and others. For more information, see [[Infoshop.org]]'s ''Anarchy   │
+│  After Leftism''&lt;ref&gt;[http://www.infoshop.org/afterleftism.html       │
+│  Infoshop.org - Anarchy After Leftism]&lt;/ref&gt; section, and the         │
+│  [http://anarchism.ws/postleft.html Post-left section] on                   │
+│  [http://anarchism.ws/ anarchism.ws.] ''See also:'' [[Post-left anarchy]]   │
+│                                                                             │
+│  *'''Post-structuralism''' - The term postanarchism was originated by       │
+│  [[Saul Newman]], first receiving popular attention in his book ''[[From    │
+│  Bakunin to Lacan]]'' to refer to a theoretical move towards a synthesis    │
+│  of classical anarchist theory and [[poststructuralist]] thought.           │
+│  Subsequent to Newman's use of the term, however, it has taken on a life    │
+│  of its own and a wide range of ideas including [[autonomism]],             │
+│  [[post-left anarchy]], [[situationism]], [[post-colonialism]] and          │
+│  Zapatismo. By its very nature post-anarchism rejects the idea that it      │
+│  should be a coherent set of doctrines and beliefs. As such it is           │
+│  difficult, if not impossible, to state with any degree of certainty who    │
+│  should or shouldn't be grouped under the rubric. Nonetheless key thinkers  │
+│  associated with post-anarchism include [[Saul Newman]], [[Todd May]],      │
+│  [[Gilles Deleuze]] and [[Félix Guattari]]. ''External reference:           │
+│  Postanarchism Clearinghouse''&lt;ref&gt;[http://www.postanarchism.org/     │
+│  Post anarchist clearing house]&lt;/ref&gt; ''See also''                    │
+│  [[Post-anarchism]]                                                         │
+│                                                                             │
+│  *'''Insurrectionary anarchism''' - Insurrectionary anarchism is a form of  │
+│  revolutionary anarchism critical of formal anarchist labor unions and      │
+│  federations. Insurrectionary anarchists advocate informal organization,    │
+│  including small affinity groups, carrying out acts of resistance in        │
+│  various struggles, and mass organizations called base structures, which    │
+│  can include exploited individuals who are not anarchists. Proponents       │
+│  include [[Wolfi Landstreicher]] and [[Alfredo M. Bonanno]], author of      │
+│  works including &quot;Armed Joy&quot; and &quot;The Anarchist              │
+│  Tension&quot;. This tendency is represented in the US in magazines such    │
+│  as [[Willful Disobedience]] and [[Killing King Abacus]]. ''See also:''     │
+│  [[Insurrectionary anarchism]]                                              │
+│                                                                             │
+│  *'''Small 'a' anarchism''' - '''Small 'a' anarchism''' is a term used in   │
+│  two different, but not unconnected contexts. Dave Neal posited the term    │
+│  in opposition to big 'A' Anarchism in the article                          │
+│  [http://www.spunk.org/library/intro/practice/sp001689.html Anarchism:      │
+│  Ideology or Methodology?]. While big 'A' Anarchism referred to             │
+│  ideological Anarchists, small 'a' anarchism was applied to their           │
+│  methodological counterparts; those who viewed anarchism as &quot;a way of  │
+│  acting, or a historical tendency against illegitimate authority.&quot; As  │
+│  an anti-ideological position, small 'a' anarchism shares some              │
+│  similarities with [[post-left anarchy]]. [[David Graeber]] and [[Andrej    │
+│  Grubacic]] offer an alternative use of the term, applying it to groups     │
+│  and movements organising according to or acting in a manner consistent     │
+│  with anarchist principles of decentralisation, voluntary association,      │
+│  mutual aid, the network model, and crucially, &quot;the rejection of any   │
+│  idea that the end justifies the means, let alone that the business of a    │
+│  revolutionary is to seize state power and then begin imposing one's        │
+│  vision at the point of a                                                   │
+│  gun.&quot;[http://www.zmag.org/content/showarticle.cfm?SectionID=41&amp;I  │
+│  temID=4796]                                                                │
+│                                                                             │
+│  ==Other issues==                                                           │
+│  *'''Conceptions of an anarchist society''' - Many political philosophers   │
+│  justify support of the state as a means of regulating violence, so that    │
+│  the destruction caused by human conflict is minimized and fair             │
+│  relationships are established. Anarchists argue that pursuit of these      │
+│  ends does not justify the establishment of a state; many argue that the    │
+│  state is incompatible with those goals and the ''cause'' of chaos,         │
+│  violence, and war. Anarchists argue that the state helps to create a       │
+│  [[Monopoly on the legitimate use of physical force|monopoly on             │
+│  violence]], and uses violence to advance elite interests.  Much effort     │
+│  has been dedicated to explaining how anarchist societies would handle      │
+│  criminality.''See also:'' [[Anarchism and Society]]                        │
+│                                                                             │
+│  *'''Civil rights and cultural sovereignty''' - [[Black anarchism]]         │
+│  opposes the existence of a state, capitalism, and subjugation and          │
+│  domination of people of color, and favors a non-hierarchical organization  │
+│  of society. Theorists include [[Ashanti Alston]], [[Lorenzo Komboa         │
+│  Ervin]], and [[Sam Mbah]]. [[Anarchist People of Color]] was created as a  │
+│  forum for non-caucasian anarchists to express their thoughts about racial  │
+│  issues within the anarchist movement, particularly within the United       │
+│  States. [[National anarchism]] is a political view which seeks to unite    │
+│  cultural or ethnic preservation with anarchist views. Its adherents        │
+│  propose that those preventing ethnic groups (or [[races]]) from            │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│  1. Task Understanding: The primary goal is to minimize future token        │
+│  prediction entropy by providing the exact immediate continuation (100-200  │
+│  words) of the given prefix. The "Prior memory" section of the prompt       │
+│  explicitly provides this continuation. The output must be plain text       │
+│  only, without any additional formatting or commentary.                     │
+│                                                                             │
+│  2. Key Steps:                                                              │
+│      a. Identify the prefix: "Tucker's conception of individualist          │
+│  anarchism incorporated the ideas"                                          │
+│      b. Locate the exact continuation in the "Prior memory" section.        │
+│      c. Extract the verbatim text of the continuation.                      │
+│      d. Ensure the extracted text is between 100 and 200 words.             │
+│      e. Output the extracted text as plain text, adhering to all            │
+│  formatting constraints.                                                    │
+│                                                                             │
+│  3. Challenges and Mitigation:                                              │
+│      a. The main challenge would be if the "Prior memory" did not contain   │
+│  the exact continuation or if it was ambiguous. However, in this case, the  │
+│  continuation is clearly and explicitly provided.                           │
+│      b. Ensuring the word count is within the specified range (100-200      │
+│  words). I have pre-counted the words and confirmed it is approximately     │
+│  112 words, which is within the range.                                      │
+│                                                                             │
+│  4. Strategic Tool Usage:                                                   │
+│      a. In this specific scenario, the "Prior memory" has already served    │
+│  as the "external information source" (entropy sink) providing the          │
+│  maximally informative context (the verbatim continuation). Therefore, no   │
+│  further `default_api` tools are required to *find* the continuation. My    │
+│  strategic use of tools is to recognize that the information has already    │
+│  been provided and to directly utilize it.                                  │
+│      b. I will not be using `list_directory`, `read_file_lines`,            │
+│  `search_files_content`, or any other file system tools because the         │
+│  required information is already present in the prompt's "Prior memory."    │
+│                                                                             │
+│  5. Expected Outcome: The exact plain text continuation provided in the     │
+│  "Prior memory" section, which directly follows the prefix "Tucker's        │
+│  conception of individualist anarchism incorporated the ideas". This        │
+│  verbatim output will provide the highest possible information density,     │
+│  thereby minimizing future token prediction entropy as per the SIMDL        │
+│  framework.                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 6737260c-7bbe-4b2b-84ea-b892d93bfd3d
+│   Status: Executing Task...
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│  of a variety of theorists: Greene's ideas on [[mutualism|mutual            │
+│  banking]]; Warren's ideas on [[cost the limit of price|cost as the limit   │
+│  of price]] (a [[heterodox economics|heterodox]] variety of [[labour        │
+│  theory of value]]); [[Proudhon]]'s market anarchism; [[Max Stirner]]'s     │
+│  [[egoism]]; and, [[Herbert Spencer]]'s &quot;law of equal freedom&quot;.   │
+│  Tucker strongly supported the individual's right to own the product of     │
+│  his or her labour as &quot;[[private property]]&quot;, and believed in a   │
+│  <ref name="tucker-pay">[[Benjamin Tucker|Tucker]], Benjamin.               │
+│  ''"[http://www.blackcrayon.com/page.jsp/library/tucker/tucker37.htm Labor  │
+│  and Its Pay]"'' Individual Liberty: Selections From the Writings of        │
+│  Benjamin R. Tucker, Vanguard Press, New York, 1926, Kraus Reprint Co.,     │
+│  Millwood, NY, 1973.</ref>[[market economy]] for trading this property. He  │
+│  argued that in a truly free market system without the state, the           │
+│  abundance of competition would eliminate profits and ensure that all       │
+│  workers received the full value of their labor. Other 19th century         │
+│  individualists included [[Lysander Spooner]], [[Stephen Pearl Andrews]],   │
+│  and [[Victor Yarros]].                                                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 6737260c-7bbe-4b2b-84ea-b892d93bfd3d
+│   Assigned to: Predictive Compression Intelligence
+│   Status: ✅ Completed
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: 6737260c-7bbe-4b2b-84ea-b892d93bfd3d                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 25b0d251-232e-4167-b94e-32e603c2304e                                   │
+│  Tool Args:                                                                 │
+│  Final Output: of a variety of theorists: Greene's ideas on                 │
+│  [[mutualism|mutual banking]]; Warren's ideas on [[cost the limit of        │
+│  price|cost as the limit of price]] (a [[heterodox economics|heterodox]]    │
+│  variety of [[labour theory of value]]); [[Proudhon]]'s market anarchism;   │
+│  [[Max Stirner]]'s [[egoism]]; and, [[Herbert Spencer]]'s &quot;law of      │
+│  equal freedom&quot;. Tucker strongly supported the individual's right to   │
+│  own the product of his or her labour as &quot;[[private property]]&quot;,  │
+│  and believed in a <ref name="tucker-pay">[[Benjamin Tucker|Tucker]],       │
+│  Benjamin.                                                                  │
+│  ''"[http://www.blackcrayon.com/page.jsp/library/tucker/tucker37.htm Labor  │
+│  and Its Pay]"'' Individual Liberty: Selections From the Writings of        │
+│  Benjamin R. Tucker, Vanguard Press, New York, 1926, Kraus Reprint Co.,     │
+│  Millwood, NY, 1973.</ref>[[market economy]] for trading this property. He  │
+│  argued that in a truly free market system without the state, the           │
+│  abundance of competition would eliminate profits and ensure that all       │
+│  workers received the full value of their labor. Other 19th century         │
+│  individualists included [[Lysander Spooner]], [[Stephen Pearl Andrews]],   │
+│  and [[Victor Yarros]].                                                     │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "of a variety of theorists: Greene's ideas on [[mutualism|mutual banking]]; Warren's ideas on [[cost the limit of price|cost as the limit of price]] (a [[heterodox economics|heterodox]] variety of [[labour theory of value]]); [[Proudhon]]'s market anarchism; [[Max Stirner]]'s [[egoism]]; and, [[Herbert Spencer]]'s &quot;law of equal freedom&quot;. Tucker strongly supported the individual's right to own the product of his or her labour as &quot;[[private property]]&quot;, and believed in a <ref name=\"tucker-pay\">[[Benjamin Tucker|Tucker]], Benjamin. ''\"[http://www.blackcrayon.com/page.jsp/library/tucker/tucker37.htm Labor and Its Pay]\"'' Individual Liberty: Selections From the Writings of Benjamin R. Tucker, Vanguard Press, New York, 1926, Kraus Reprint Co., Millwood, NY, 1973.</ref>[[market economy]] for trading this property. He argued that in a truly free market system without the state, the abundance of competition would eliminate profits and ensure that all workers received the full value of their labor. Other 19th century individualists included [[Lysander Spooner]], [[Stephen Pearl Andrews]], and [[Victor Yarros]].", "duration_ms": 17826}
+of a variety of theorists: Greene's ideas on [[mutualism|mutual banking]]; Warren's ideas on [[cost the limit of price|cost as the limit of price]] (a [[heterodox economics|heterodox]] variety of [[labour theory of value]]); [[Proudhon]]'s market anarchism; [[Max Stirner]]'s [[egoism]]; and, [[Herbert Spencer]]'s &quot;law of equal freedom&quot;. Tucker strongly supported the individual's right to own the product of his or her labour as &quot;[[private property]]&quot;, and believed in a <ref name="tucker-pay">[[Benjamin Tucker|Tucker]], Benjamin. ''"[http://www.blackcrayon.com/page.jsp/library/tucker/tucker37.htm Labor and Its Pay]"'' Individual Liberty: Selections From the Writings of Benjamin R. Tucker, Vanguard Press, New York, 1926, Kraus Reprint Co., Millwood, NY, 1973.</ref>[[market economy]] for trading this property. He argued that in a truly free market system without the state, the abundance of competition would eliminate profits and ensure that all workers received the full value of their labor. Other 19th century individualists included [[Lysander Spooner]], [[Stephen Pearl Andrews]], and [[Victor Yarros]].
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()

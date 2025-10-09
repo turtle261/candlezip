@@ -244,13 +244,11 @@ fn ac_p_min() -> f64 {
 const FLAG_AGENT_USED: u32 = 1 << 0;
 const FLAG_AGENT_MOCK: u32 = 1 << 1;
 const FLAG_AGENT_GATES: u32 = 1 << 2; // gating bits present after header
-const FLAG_AGENT_HINTS: u32 = 1 << 3; // AGT3: per-chunk priming hint token ids present after gates
-fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, hints_present: bool, agent_chunk: usize) -> u32 {
+fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, agent_chunk: usize) -> u32 {
     let mut f = 0u32;
     if agent_used { f |= FLAG_AGENT_USED; }
     if agent_mock { f |= FLAG_AGENT_MOCK; }
     if gates_present { f |= FLAG_AGENT_GATES; }
-    if hints_present { f |= FLAG_AGENT_HINTS; }
     let chunk16 = (agent_chunk as u32) & 0xFFFF;
     f |= chunk16 << 16;
     f
@@ -258,7 +256,6 @@ fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, hints_pre
 fn flags_unpack_agent_used(flags: u32) -> bool { (flags & FLAG_AGENT_USED) != 0 }
 fn flags_unpack_agent_mock(flags: u32) -> bool { (flags & FLAG_AGENT_MOCK) != 0 }
 fn flags_unpack_agent_gates(flags: u32) -> bool { (flags & FLAG_AGENT_GATES) != 0 }
-fn flags_unpack_agent_hints(flags: u32) -> bool { (flags & FLAG_AGENT_HINTS) != 0 }
 fn flags_unpack_agent_chunk(flags: u32) -> usize { ((flags >> 16) & 0xFFFF) as usize }
 
 struct ArithmeticEncoder<W: std::io::Write> {
@@ -654,7 +651,6 @@ fn read_header_v2<R: std::io::Read>(r: &mut R) -> anyhow::Result<(HeaderBinV2, V
 
 const AGTB_MAGIC: [u8; 4] = *b"AGTB"; // marker for gating bits section
 const AGT2_MAGIC: [u8; 4] = *b"AGT2"; // structured gating section (v2)
-const AGT3_MAGIC: [u8; 4] = *b"AGT3"; // per-chunk priming hint token ids (v3)
 
 #[derive(Clone, Copy, Debug, Default)]
 struct GateRecordV2 { gate: u8, candidate_id: u8, budget_id: u8 }
@@ -679,24 +675,6 @@ fn get_gate_bit(gates_bytes: &[u8], idx: usize) -> u8 {
     if byte >= gates_bytes.len() { return 0; }
     ((gates_bytes[byte] >> bit) & 1) as u8
 }
-
-// AGT3: per-chunk hint tokens (exact slice used for priming)
-fn write_agent_hints_v3<W: std::io::Write>(w: &mut W, hints: &[Vec<u32>]) -> anyhow::Result<()> {
-    w.write_all(&AGT3_MAGIC)?;
-    write_var_u64(w, hints.len() as u64)?;
-    for h in hints {
-        write_var_u64(w, h.len() as u64)?;
-        for &tok in h { write_var_u64(w, tok as u64)?; }
-    }
-    Ok(())
-}
-
-fn read_agent_hints_v3<R: std::io::Read>(r: &mut R) -> anyhow::Result<Vec<Vec<u32>>> {
-    let mut count_buf = [0u8; 4];
-    r.read_exact(&mut count_buf)?; // we assume magic has already been read by caller; this is a helper for symmetry only
-    anyhow::bail!("read_agent_hints_v3 should be called after magic is consumed");
-}
-
 
 // ----------------------------------
 // HF Hub helpers (SmolLM backend)
@@ -1959,7 +1937,6 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     let scan_chunk = agent_chunk; // unify chunking for scan/agent
     let mut next_agent_boundary = agent_chunk; // first agent prime at boundary
     let mut gate_records: Vec<GateRecordV2> = Vec::new();
-    let mut agent_hints_tokens: Vec<Vec<u32>> = Vec::new();
     let mut total_bits_saved=0.0f64; let mut total_baseline_bits=0.0f64; let mut total_agent_calls: u64=0; let mut total_chunks: u64=0;
     let total_scan_chunks: usize = if scan_enabled { ((token_count as usize) + scan_chunk - 1) / scan_chunk } else { 0 };
     // Separate sessions for XE measurement to avoid state interference (used in scan and agent WIP proof)
@@ -2061,7 +2038,7 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 let target_ids = if chunk_end < end { &ids[chunk_end..end] } else { &[][..] };
                 if target_ids.is_empty() { continue; }
                 let mut best_bits_saved = f64::NEG_INFINITY;
-                let mut best_baseline = 0.0f64; let mut best_conditioned = 0.0f64; let mut best_cid = 0usize; let mut best_bid = 2usize; let mut best_hint_len = 0usize;
+                let mut best_baseline = 0.0f64; let mut best_conditioned = 0.0f64; let mut best_cid = 0usize; let mut best_bid = 2usize;
                 if backend=="smollm" {
                     let history_start = chunk_end.saturating_sub(session_smol.as_ref().unwrap().max_context_length().saturating_sub(1).min(chunk_end));
                     let history = &ids[history_start..chunk_end];
@@ -2072,7 +2049,7 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                             let hint_slice = if hint_ids_all.len() > b { &hint_ids_all[..b] } else { &hint_ids_all[..] };
                             let conditioned = if hint_slice.is_empty() { baseline_once } else { cross_entropy_bits_over_span(scan_session_smol.as_mut().unwrap(), history, target_ids, Some(hint_slice))? };
                             let saved = baseline_once - conditioned;
-                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline_once; best_conditioned = conditioned; best_cid = cid; best_bid = bid; best_hint_len = hint_slice.len(); }
+                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline_once; best_conditioned = conditioned; best_cid = cid; best_bid = bid; }
                         }
                     }
                 } else {
@@ -2084,7 +2061,7 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                             let hint_slice = if hint_ids_all.len() > b { &hint_ids_all[..b] } else { &hint_ids_all[..] };
                             let conditioned = if hint_slice.is_empty() { baseline_once } else { cross_entropy_bits_over_span_rwkv(scan_session_rwkv.as_mut().unwrap(), history, target_ids, Some(hint_slice), vocab_size)? };
                             let saved = baseline_once - conditioned;
-                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline_once; best_conditioned = conditioned; best_cid = cid; best_bid = bid; best_hint_len = hint_slice.len(); }
+                            if saved > best_bits_saved { best_bits_saved = saved; best_baseline = baseline_once; best_conditioned = conditioned; best_cid = cid; best_bid = bid; }
                         }
                     }
                 }
@@ -2146,7 +2123,6 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 if gate == 1 {
                     // Apply priming using selected candidate and budget deterministically
                     let selected_text = &build_candidates(&agent_text)[best_cid];
-                    let hint_ids_all: Vec<u32> = if backend=="smollm" { tokenize_hint_smol(tok_hf.as_ref().unwrap(), selected_text, cli.scan_max_hint_tokens)? } else { tokenize_hint_rwkv(tok_rwkv.as_ref().unwrap(), selected_text, cli.scan_max_hint_tokens)? };
                     let max_ctx = if backend=="smollm" { session_smol.as_ref().unwrap().max_context_length().saturating_sub(1) } else { session_rwkv.as_ref().unwrap().max_context_length().saturating_sub(1) };
                     let budgets = [max_ctx/8, max_ctx/4, max_ctx/2, (max_ctx*3)/4];
                     let budget_val = budgets[best_bid];
@@ -2155,20 +2131,19 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                         let history = &ids[..=i];
                         let hist_take = max_ctx.saturating_sub(budget_val).min(history.len());
                         if hist_take > 0 { let hist_start = history.len() - hist_take; prime.extend_from_slice(&history[hist_start..]); }
+                        let hint_ids_all: Vec<u32> = tokenize_hint_smol(tok_hf.as_ref().unwrap(), selected_text, cli.scan_max_hint_tokens)?;
                         let hint_take = hint_ids_all.len().min(budget_val);
                         if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
                         logits_t = session_smol.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
-                        // Record exact hint token ids slice applied for AGT3
-                        agent_hints_tokens.push(hint_ids_all[..hint_take].to_vec());
                     } else {
                         let mut filtered_hist: Vec<u32> = Vec::with_capacity(i + 1);
                         for &t in ids[..=i].iter() { if (t as usize) < vocab_size { filtered_hist.push(t); } }
                         let hist_take = max_ctx.saturating_sub(budget_val).min(filtered_hist.len());
                         if hist_take > 0 { prime.extend_from_slice(&filtered_hist[filtered_hist.len()-hist_take..]); }
+                        let hint_ids_all: Vec<u32> = tokenize_hint_rwkv(tok_rwkv.as_ref().unwrap(), selected_text, cli.scan_max_hint_tokens)?;
                         let hint_take = hint_ids_all.len().min(budget_val);
                         if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
                         logits_t = session_rwkv.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
-                        agent_hints_tokens.push(hint_ids_all[..hint_take].to_vec());
                     }
                     // Hold context re-prime for upcoming lookahead tokens so hint remains active
                     reprime_hold_until = i.saturating_add(cli.scan_lookahead);
@@ -2181,7 +2156,6 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                             "phase": "agent_reprime",
                             "i": i,
                             "chunk_index": chunk_index,
-                            "hint_tokens": best_hint_len,
                             "candidate_id": best_cid,
                             "budget_id": best_bid,
                             "agent_text_len": agent_text.len(),
@@ -2232,7 +2206,6 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                     let _ = write_learning_entry(&scan_dir, input, chunk_index, gate, best_bits_saved, best_baseline, best_cid, best_bid, &agent_text);
                 }
                 if let Some(dir) = wdog.as_ref() {
-                    let hint_token_count: usize = best_hint_len;
                     let rec = json!({
                         "phase":"xe_snapshot",
                         "i": i,
@@ -2240,7 +2213,6 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                         "baseline_bits": best_baseline,
                         "conditioned_bits": best_conditioned,
                         "bits_saved": best_bits_saved,
-                        "hint_tokens": hint_token_count,
                         "candidate_id": best_cid,
                         "budget_id": best_bid,
                     });
@@ -2280,7 +2252,6 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                             let hint_take = hint_ids_all.len().min(budget_val);
                             if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
                             logits_t = session_smol.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
-                            agent_hints_tokens.push(hint_ids_all[..hint_take].to_vec());
                         } else {
                             let mut filtered_hist: Vec<u32> = Vec::with_capacity(i + 1);
                             for &t in ids[..=i].iter() { if (t as usize) < vocab_size { filtered_hist.push(t); } }
@@ -2289,7 +2260,6 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                             let hint_take = hint_ids_all.len().min(budget_val);
                             if hint_take > 0 { prime.extend_from_slice(&hint_ids_all[..hint_take]); }
                             logits_t = session_rwkv.as_mut().unwrap().reprime_with_history_and_get_last_logits_tensor(&prime)?;
-                            agent_hints_tokens.push(hint_ids_all[..hint_take].to_vec());
                         }
                         // Hold context re-prime for upcoming lookahead tokens so hint remains active
                         reprime_hold_until = i.saturating_add(cli.scan_lookahead);
@@ -2393,15 +2363,13 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
 
     // Build structured gating records per boundary (candidate + budget + gate)
     let gates_present = agent_enabled;
-    let hints_present = agent_enabled && !agent_hints_tokens.is_empty();
     // Write final file: header -> optional agent gates -> payload
     {
         let mut out_file = BufWriter::new(File::create(output)?);
-        let reserved_flags = flags_pack(agent_enabled, agent_mock, gates_present, hints_present, agent_chunk);
+        let reserved_flags = flags_pack(agent_enabled, agent_mock, gates_present, agent_chunk);
         let header_v2 = HeaderBinV2 { bos_token_id: bos_id, token_count, orig_len_bytes, model_hash16, tokenizer_hash16, orig_hash16: orig_blake3_16, reserved_flags, context_window: cli.context as u32, vocab_size: vocab_size as u32, model_file_repr_len: weight_repr.len() as u32, reprime_interval: cli.reprime_interval as u32 };
         write_header_v2(&mut out_file, &header_v2, weight_repr.as_bytes())?;
         if gates_present { write_agent_gates_v2(&mut out_file, &gate_records)?; }
-        if hints_present { write_agent_hints_v3(&mut out_file, &agent_hints_tokens)?; }
         use std::io::Write as _;
         out_file.write_all(&payload_bytes)?;
         out_file.flush()?;
@@ -2498,7 +2466,6 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         // Optional gating section directly after header (supports v1 bits or v2 structured)
         let mut gates_bytes: Vec<u8> = Vec::new();
         let mut gate_records: Vec<GateRecordV2> = Vec::new();
-        let mut hints_chunks: Vec<Vec<u32>> = Vec::new();
         if flags_unpack_agent_gates(header.reserved_flags) {
             let mut magic = [0u8;4];
             rdr.read_exact(&mut magic)?;
@@ -2514,19 +2481,6 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 rdr.read_exact(&mut bytes)?;
                 gates_bytes = bytes;
             } else { anyhow::bail!("invalid gating magic"); }
-        }
-        if flags_unpack_agent_hints(header.reserved_flags) {
-            let mut magic = [0u8;4];
-            rdr.read_exact(&mut magic)?;
-            if magic != AGT3_MAGIC { anyhow::bail!("invalid hints magic"); }
-            let count = read_var_u64(&mut rdr)? as usize;
-            hints_chunks = Vec::with_capacity(count);
-            for _ in 0..count {
-                let len = read_var_u64(&mut rdr)? as usize;
-                let mut v = Vec::with_capacity(len);
-                for _ in 0..len { v.push(read_var_u64(&mut rdr)? as u32); }
-                hints_chunks.push(v);
-            }
         }
         let mut payload = Vec::new(); rdr.read_to_end(&mut payload)?; let mut acd = ArithmeticDecoder::new(&payload[..])?; let mut logits_t = session.step_logits_tensor(header.bos_token_id)?;
         let wdog = watchdog_dir();
@@ -2733,7 +2687,6 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
         // Optional gating section directly after header
         let mut gates_bytes: Vec<u8> = Vec::new();
         let mut gates_v2: Vec<GateRecordV2> = Vec::new();
-        let mut hints_chunks: Vec<Vec<u32>> = Vec::new();
         if flags_unpack_agent_gates(header.reserved_flags) {
             let mut magic = [0u8;4];
             rdr.read_exact(&mut magic)?;
@@ -2749,18 +2702,6 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                 rdr.read_exact(&mut bytes)?;
                 gates_bytes = bytes;
             } else { anyhow::bail!("invalid gating magic"); }
-        }
-        if flags_unpack_agent_hints(header.reserved_flags) {
-            let mut magic = [0u8;4]; rdr.read_exact(&mut magic)?;
-            if magic != AGT3_MAGIC { anyhow::bail!("invalid hints magic"); }
-            let count = read_var_u64(&mut rdr)? as usize;
-            hints_chunks = Vec::with_capacity(count);
-            for _ in 0..count {
-                let len = read_var_u64(&mut rdr)? as usize;
-                let mut v = Vec::with_capacity(len);
-                for _ in 0..len { v.push(read_var_u64(&mut rdr)? as u32); }
-                hints_chunks.push(v);
-            }
         }
         let mut payload = Vec::new();
         rdr.read_to_end(&mut payload)?;
@@ -2845,12 +2786,8 @@ fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
                         out
                     };
                     let candidates = build_candidates(&agent_text);
-                    let hint_ids = if !hints_chunks.is_empty() {
-                        hints_chunks.get(chunk_index.saturating_sub(1)).cloned().unwrap_or_default()
-                    } else {
-                        let selected = candidates.get(cand_id as usize).cloned().unwrap_or_else(|| agent_text.clone());
-                        tokenize_hint_rwkv(&tokenizer, &selected, cli.scan_max_hint_tokens)?
-                    };
+                    let selected = candidates.get(cand_id as usize).cloned().unwrap_or_else(|| agent_text.clone());
+                    let hint_ids = tokenize_hint_rwkv(&tokenizer, &selected, cli.scan_max_hint_tokens)?;
                     // Build prime: history + hint (match encode ordering)
                     let max_ctx = session.max_context_length().saturating_sub(1);
                     let budgets = [max_ctx/8, max_ctx/4, max_ctx/2, (max_ctx*3)/4];

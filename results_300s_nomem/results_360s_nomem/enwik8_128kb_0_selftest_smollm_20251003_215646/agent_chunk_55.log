@@ -1,0 +1,2213 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 30.4132ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 51.3058ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.728603s
+- Watching for configuration updates...
+> Initialized in 1.8118279s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_enwik8_128kb_0_2e0896f2
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: c49689a0-519d-45af-a45e-3ff1a62405bc                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+    Status: Executing Task...
+    ├── 🧠 Reasoning...
+    └── ❌ LLM Failed┌───────────────────────────────── LLM Error ─────────────────────────────────┐
+│                                                                             │
+2025-10-03 23:34:13,417 - 18828 - reasoning_handler.py-reasoning_handler:281 - WARNING: Error during function calling: list index out of range. Falling back to text parsing.
+│  ❌ LLM Call Failed                                                         │
+│  Error: list index out of range                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    └── ❌ LLM Failed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  **1. Understanding the Task from my Professional Perspective:**            │
+│                                                                             │
+│  As Predictive Compression Intelligence, my core objective is to minimize   │
+│  the information entropy of the upcoming token stream. The task requires    │
+│  me to find the exact immediate continuation (100-200 words verbatim) of a  │
+│  given text prefix. This is a direct application of my entropy              │
+│  minimization competency: by providing the precise, context-rich            │
+│  continuation from the original source, I enable the language model to      │
+│  assign maximum probability mass to the actual subsequent tokens, thereby   │
+│  achieving the highest possible compression gain (lowest description        │
+│  length). The Wikipedia-like formatting of the prefix strongly suggests     │
+│  the source is a Wikipedia article, which often contains highly structured  │
+│  and predictable content.                                                   │
+│                                                                             │
+│  **2. Key Steps to Complete the Task:**                                     │
+│                                                                             │
+│  *   **Analyze Prefix for Salient Features:** I will meticulously examine   │
+│  the provided text prefix to identify unique identifiers such as specific   │
+│  titles, authors, publication details, URLs within the "References"         │
+│  section, and distinct phrases from the main body. The Wikipedia markup     │
+│  itself (e.g., `[[...]]`, `{{...}}`, `{{cite web | ...}}`) is a strong      │
+│  indicator of the source type.                                              │
+│  *   **Directory Exploration:** I will first explore the                    │
+│  `/C/Users/Noah/Documents/sink` directory to understand its structure and   │
+│  the types of files it contains. This will inform my search strategy.       │
+│  *   **Targeted Content Search:** Leveraging the identified unique          │
+│  features, I will perform highly targeted content searches within the       │
+│  allowed directory to pinpoint the exact source document. The "References"  │
+│  section offers particularly robust search terms due to their specificity.  │
+│  *   **Verbatim Extraction:** Once the source document is identified, I     │
+│  will locate the exact prefix within it and extract the subsequent 100-200  │
+│  words.                                                                     │
+│  *   **Information Cleaning and Formatting:** The extracted text will       │
+│  likely contain Wikipedia markup. I will apply a rigorous cleaning          │
+│  process, similar to the one demonstrated in the "Prior memory" section,    │
+│  to convert it into plain text, ensuring no formatting, lists, headings,    │
+│  or meta-text remain.                                                       │
+│  *   **Word Count Adherence:** I will ensure the final output strictly      │
+│  adheres to the 100-200 word count requirement.                             │
+│                                                                             │
+│  **3. How I'll Approach Challenges:**                                       │
+│                                                                             │
+│  *   **Locating the Exact Source:** If initial specific searches fail, I    │
+│  will broaden my search terms slightly, perhaps using a unique sentence     │
+│  from the body text rather than just references, or trying multiple         │
+│  reference entries. I will prioritize phrases that are unlikely to appear   │
+│  in unrelated documents.                                                    │
+│  *   **Markup Complexity:** The "Prior memory" section provides an          │
+│  excellent template for cleaning Wikipedia markup. I will adapt and apply   │
+│  these regular expressions and string replacements to handle `[[...]]`,     │
+│  `{{...}}`, `''`, `'''`, HTML entities (`&quot;`, `&amp;`), and template    │
+│  calls.                                                                     │
+│  *   **Prefix Variations:** I will be mindful that minor whitespace or      │
+│  encoding differences might prevent an exact string match for the prefix.   │
+│  If a direct `find()` fails, I might need to normalize whitespace in both   │
+│  the prefix and the document content before attempting to locate it, or     │
+│  search for a slightly shorter, highly unique segment of the prefix.        │
+│  *   **Tool Limitations:** I understand I only have access to the           │
+│  specified directory. If the source is not found within this directory, I   │
+│  will follow the fallback instruction to generate a context-only            │
+│  continuation, but my primary focus is aggressive tool usage to find the    │
+│  exact source.                                                              │
+│                                                                             │
+│  **4. Strategic Use of Available Tools:**                                   │
+│                                                                             │
+│  1.  **`list_allowed_directories()`**: (Self-correction: The prompt         │
+│  explicitly states the allowed directory, so this step is not strictly      │
+│  necessary for discovery but good for confirmation if there were            │
+│  ambiguity).                                                                │
+│  2.  **`directory_tree('/C/Users/Noah/Documents/sink')`**: This is the      │
+│  first crucial step. It will provide a hierarchical view of the directory,  │
+│  revealing file names and types, which helps in forming a mental map of     │
+│  potential sources.                                                         │
+│  3.  **`search_files_content('/C/Users/Noah/Documents/sink', 'Rett          │
+│  syndrome (NIH Publication No. 01-4960)')`**: This is my primary search     │
+│  tool. I will start with the most specific string from the "References"     │
+│  section, as these are highly unique identifiers. If this yields no         │
+│  results, I will try other specific reference strings:                      │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Childhood   │
+│  disintegrative disorder: Results of the DSM-IV autism field trial')`       │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Pervasive   │
+│  developmental disorder not otherwise specified, or PDD-NOS, is referred    │
+│  to as a ''subthreshold'' condition')`                                      │
+│      *   If reference searches fail, I will use a unique sentence from the  │
+│  main body, e.g., `search_files_content('/C/Users/Noah/Documents/sink',     │
+│  'Autism and Asperger''s syndrome are just two of the five pervasive        │
+│  developmental disorders (PDDs).')`                                         │
+│  4.  **`read_text_file(file_path)`**: Once `search_files_content` returns   │
+│  a file path, I will use this tool to read the entire content of the        │
+│  identified source document into memory.                                    │
+│  5.  **Python String Operations and `re` module (internal processing):**    │
+│  After reading the file, I will use Python's built-in string methods        │
+│  (`.find()`, slicing) to locate the exact prefix and extract the            │
+│  subsequent text. I will then apply regular expressions (using the `re`     │
+│  module) to clean the extracted text, removing all Wikipedia markup and     │
+│  ensuring it is plain text, as per the "Prior memory" example. Finally, I   │
+│  will split the cleaned text into words and select the first 100-200        │
+│  words.                                                                     │
+│                                                                             │
+│  **5. Expected Outcome and Alignment with Goal:**                           │
+│                                                                             │
+│  The expected outcome is a block of plain text, 100-200 words long,         │
+│  representing the exact, verbatim continuation of the provided prefix from  │
+│  its original source document. This outcome directly aligns with my         │
+│  primary goal of minimizing future token prediction entropy. By providing   │
+│  this precise information, I will significantly reduce the language         │
+│  model's uncertainty about the upcoming tokens, leading to maximal          │
+│  compression efficiency.                                                    │
+│                                                                             │
+│  READY: I am ready to execute the task.                                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  They might be re-used.'''")                                                │
+│  if marker3_start != -1:                                                    │
+│  descriptive_blocks.append("'''These notes have no corresponding reference  │
+│  in the article. They might be re-used.'''")                                │
+│  # Block 4: "The overwhelming diversity and number of links..."             │
+│  marker4_start = raw_text_after_prefix.find("The overwhelming diversity     │
+│  and number of links relating to anarchism is extensively covered on the    │
+│  [[List of anarchism web resources|links subpage]].")                       │
+│  if marker4_start != -1:                                                    │
+│  descriptive_blocks.append("The overwhelming diversity and number of links  │
+│  relating to anarchism is extensively covered on the [[List of anarchism    │
+│  web resources|links subpage]].")                                           │
+│  raw_continuation_text = " ".join(descriptive_blocks)                       │
+│  # Clean up Wikipedia markup                                                │
+│  import re                                                                  │
+│  cleaned_continuation = re.sub(r'\[\[[^|\]]*\|([^\]]+)\]\]', r'\1',         │
+│  raw_continuation_text) # [[Link|Text]] -> Text                             │
+│  cleaned_continuation = re.sub(r'\[\[([^\]]+)\]\]', r'\1',                  │
+│  cleaned_continuation) # [[Link]] -> Link                                   │
+│  cleaned_continuation = re.sub(r'\[http[^\]]* ([^\]]+)\]', r'\1',           │
+│  cleaned_continuation) # [http://... Text] -> Text                          │
+│  cleaned_continuation = re.sub(r'\[http[^\]]*\]', '',                       │
+│  cleaned_continuation) # [http://...] -> (empty)                            │
+│  cleaned_continuation = cleaned_continuation.replace("''", "") # Remove     │
+│  italics markers                                                            │
+│  cleaned_continuation = cleaned_continuation.replace("'''", "") # Remove    │
+│  bold markers                                                               │
+│  cleaned_continuation = cleaned_continuation.replace("&quot;", "\"") #      │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("&amp;mdash;", "—") #  │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("&amp;", "&") #        │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("{{main|List of        │
+│  anarchist books}}", "") # Remove this template call if it was              │
+│  accidentally included                                                      │
+│  cleaned_continuation =                                                     │
+│  cleaned_continuation.replace("{{wikiquote|Definitions of anarchism}}",     │
+│  "") # Remove this template call if it was accidentally included            │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|bill}}", "")   │
+│  # Remove note templates                                                    │
+│  cleaned_continuation =                                                     │
+│  cleaned_continuation.replace("{{note|praxeology}}", "")                    │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|platform}}",   │
+│  "")                                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|appleton}}",   │
+│  "")                                                                        │
+│  cleaned_continuation =                                                     │
+│  cleaned_continuation.replace("{{note|Yarros-NotUtopian}}", "")             │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|totse}}", "")  │
+│  cleaned_continuation = cleaned_continuation.replace("{{Anarchism}}", "")   │
+│  # Remove the initial template                                              │
+│  cleaned_continuation = cleaned_continuation.replace("{{fact}}", "") #      │
+│  Remove fact tags                                                           │
+│  # Remove any extra whitespace                                              │
+│  cleaned_continuation = " ".join(cleaned_continuation.split())              │
+│  # Take the first 100-200 words                                             │
+│  words = cleaned_continuation.split()                                       │
+│  continuation = " ".join(words[:150]) # Aim for 150 words                   │
+│  else:                                                                      │
+│  continuation = "Prefix not found in the document."                         │
+│  # This refined approach should yield the correct plain text                │
+│  continuation.There are many concepts relevant to the topic of anarchism,   │
+│  this is a brief summary. There is also a more extensive list of anarchist  │
+│  concepts. The following is a sample of books that have been referenced in  │
+│  this page, a more complete list can be found at the list of anarchist      │
+│  books. These notes have no corresponding reference in the article. They    │
+│  might be re-used. The overwhelming diversity and number of links relating  │
+│  to anarchism is extensively covered on the links subpage.                  │
+│                                                                             │
+│  # chunk:41                                                                 │
+│  anger or affection in a typical way. Research has suggested that although  │
+│  autistic children are attached to their parents, their expression of this  │
+│  attachment is often immature and difficult to interpret. Children with     │
+│  autism appear to lack "theory of mind", the ability to see things from     │
+│  another person's perspective, a behavior cited as exclusive to human       │
+│  beings above the age of five and, possibly, other higher primates such as  │
+│  adult gorillas, chimpanzees and bonobos. Typical 5-year-olds can develop   │
+│  insights into other people's different knowledge, feelings, and            │
+│  intentions, interpretations based upon social cues (e.g., gestures,        │
+│  facial expressions). An individual with autism seems to lack these         │
+│  interpretation skills, an inability that leaves them unable to predict or  │
+│  understand other people's actions. The social alienation of autistic and   │
+│  Asperger's people is so intense from childhood that many of them have      │
+│  imaginary friends as companionship. However, having an imaginary friend    │
+│  is not necessarily a sign of autism and also occurs in non-autistic        │
+│  children.                                                                  │
+│                                                                             │
+│  # chunk:46                                                                 │
+│  or achievements with other people (e.g., by a lack of showing, bringing,   │
+│  or pointing out objects of interest to other people). ##restricted         │
+│  repetitive and stereotyped patterns of behavior, interests, and            │
+│  activities, as manifested by at least one of the following:                │
+│  ###encompassing preoccupation with one or more stereotyped and restricted  │
+│  patterns of interest that is abnormal either in intensity or focus         │
+│  ###apparently inflexible adherence to specific, nonfunctional routines or  │
+│  rituals ###stereotyped and repetitive motor mannerisms (e.g., hand or      │
+│  finger flapping or twisting, or complex whole-body movements)              │
+│  ###persistent preoccupation with parts of objects. B. Delays or abnormal   │
+│  functioning in at least one of the following areas, with onset prior to    │
+│  age 3 years: (1) social interaction, (2) language as used in social        │
+│  communication, or (3) symbolic or imaginative play. C. The disturbance is  │
+│  not better accounted for by Rett's Disorder or Childhood Disintegrative    │
+│  Disorder.                                                                  │
+│                                                                             │
+│  # chunk:53                                                                 │
+│  , while some of them are entirely separate conditions. Rett syndrome is    │
+│  relatively rare, affecting almost exclusively females, one out of 10,000   │
+│  to 15,000. After a period of normal development, sometime between 6 and    │
+│  18 months, autism-like symptoms begin to appear. The little girl's mental  │
+│  and social development regresses; she no longer responds to her parents    │
+│  and pulls away from any social contact. If she has been talking, she       │
+│  stops; she cannot control her feet; she wrings her hands. Some of these    │
+│  early symptoms may be confused for autism. Some of the problems            │
+│  associated with Rett syndrome can be treated. Physical, occupational, and  │
+│  speech therapy can help with problems of coordination, movement, and       │
+│  speech. Scientists sponsored by the National Institute of Child Health     │
+│  and Human Development have discovered that a mutation in the sequence of   │
+│  a single gene causes Rett syndrome, and can physically test for it with a  │
+│  80% accuracy rate. Rett syndrome in the past was sometimes classified as   │
+│  an autistic spectrum disorder, however most scientists agree that Rett     │
+│  syndrome is a separate developmental disorder and not part of the          │
+│  autistic spectrum. Childhood disintegrative disorder (CDD, and sometimes   │
+│  abbreviated as CHDD also) is a condition appearing in 3 or 4 year old      │
+│  children who have developed normally until age 2. Over several months,     │
+│  the child will deteriorate in intellectual, social, and language           │
+│  functioning from previously normal behaviour. This long period of normal   │
+│  development before regression helps differentiate CDD from Rett syndrome   │
+│  (and in fact it must be differentiated from autism in testing). The cause  │
+│  for CDD is unknown (thus it may be a spectrum disorder) but current        │
+│  evidence suggests it has something to do with the central nervous system.  │
+│  Pervasive developmental disorder not otherwise specified, or PDD-NOS, is   │
+│  referred to as a subthreshold condition because it is a classification     │
+│  which is given to someone who suffers from impairments in social           │
+│  interaction, communication, and/or stereotyped behaviour but does not      │
+│  meet the criteria for one of the other four pervasive developmental        │
+│  disorders. Unlike the other four pervasive developmental disorders,        │
+│  PDD-NOS has no specific guidelines for diagnosis, so the person may have   │
+│  a lot of characteristics of an autistic person, or few to none at all.     │
+│  Note that pervasive developmental disorder is not a diagnosis, just a      │
+│  term to refer to the five mentioned conditions, while PDD-NOS is an        │
+│  official diagnosis.                                                        │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  e are some commonalities which are specific to autism in general as a      │
+│  culture, not just &quot;autistic culture&quot;.                            │
+│                                                                             │
+│  It is a common misperception that people with autism do not marry; many    │
+│  do get married.  Often, they marry another person with autism, although    │
+│  this is not always the case.  Many times autistics are attracted to other  │
+│  autistics due to shared interests or obsessions, but more often than not   │
+│  the attraction is due to simple compatibility with personality types, the  │
+│  same as is true for non-autistics. Autistics who communicate have          │
+│  explained that companionship is as important to autistics as it is to      │
+│  anyone else. Multigenerational autistic families have also recently        │
+│  become a bit more common.                                                  │
+│                                                                             │
+│  The interests of autistic people and so-called &quot;[[geeks]]&quot; or    │
+│  &quot;[[Nerd|nerds]]&quot; can often overlap as autistic people can        │
+│  sometimes become preoccupied with certain subjects, much like the variant  │
+│  normal behavior geeks experience.  However, in practice many autistic      │
+│  people have difficulty with working in groups, which impairs them even in  │
+│  the most &quot;technical&quot; of situations.                              │
+│                                                                             │
+│  ===Autistic adults===                                                      │
+│  [[image:Grandin2.jpg|thumb|right|[[Temple Grandin]], one of the more       │
+│  successful adults with autism.                                             │
+│  &lt;small&gt;Photograph courtesy  Joshua Nathaniel Pritikin and William    │
+│  Lawrence Jarrold.&lt;/small&gt;]]                                          │
+│                                                                             │
+│  Some autistic adults are able to work successfully in mainstream jobs,     │
+│  usually those with high-functioning autism or Asperger's syndrome.         │
+│  Nevertheless, communication and social problems often cause difficulties   │
+│  in many areas of the autistic's life. Other autistics are capable of       │
+│  employment in sheltered workshops under the supervision of managers        │
+│  trained in working with persons with disabilities. A nurturing             │
+│  environment at home, at school, and later in job training and at work,     │
+│  helps autistic people continue to learn and to develop throughout their    │
+│  lives. Some argue that the internet allows autistic individuals to         │
+│  communicate and form online communities, in addition to being able to      │
+│  find occupations such as independent consulting, which does generally not  │
+│  require much human interaction offline.                                    │
+│                                                                             │
+│  In the [[United States]], the public schools' responsibility for           │
+│  providing services ends when the autistic person is in their 20s,          │
+│  depending on each state. The family is then faced with the challenge of    │
+│  finding living arrangements and employment to match the particular needs   │
+│  of their adult child, as well as the programs and facilities that can      │
+│  provide support services to achieve these goals.                           │
+│                                                                             │
+│  === Autistic savants ===                                                   │
+│  {{Main|autistic savant}}                                                   │
+│  The autistic savant phenomenon is sometimes seen in autistic people. The   │
+│  term is used to describe a person who is autistic and has extreme talent   │
+│  in a certain area of study.  Although there is a common association        │
+│  between savants and autism (an association created by the 1988 film        │
+│  ''[[Rain Man]]''), most autistic people are not [[savants]]. [[Mental      │
+│  calculator]]s and fast [[programming]] skills are the most common form.    │
+│  The famous example is [[Daniel Tammet]], the subject of the [[documentary  │
+│  film]] ''[[The Brain Man]]'' {{ref|guardianbrainman}} ([[Kim Peek]], one   │
+│  of the inspirations for [[Dustin Hoffman]]'s character in the film         │
+│  ''[[Rain Man]]'', is not autistic). &quot;Bright Splinters of the          │
+│  Mind&quot; is a book that explores this issue further.                     │
+│                                                                             │
+│  == Other pervasive developmental disorders ==                              │
+│  Autism and Asperger's syndrome are just two of the five pervasive          │
+│  developmental disorders (PDDs). The three other pervasive developmental    │
+│  disorders are [[Rett syndrome]], [[Childhood disintegrative disorder]],    │
+│  and [[PDD not otherwise specified|Pervasive developmental disorder not     │
+│  otherwise specified]]. Some of these are related to autism, while some of  │
+│  them are entirely separate conditions.                                     │
+│                                                                             │
+│  === Rett syndrome ===                                                      │
+│  [[Rett syndrome]] is relatively rare, affecting almost exclusively         │
+│  females, one out of 10,000 to 15,000. After a period of normal             │
+│  development, sometime between 6 and 18 months, autism-like symptoms begin  │
+│  to appear. The little girl's mental and social development regresses; she  │
+│  no longer responds to her parents and pulls away from any social contact.  │
+│  If she has been talking, she stops; she cannot control her feet; she       │
+│  wrings her hands. Some of these early symptoms may be confused for         │
+│  autism. Some of the problems associated with Rett syndrome can be          │
+│  treated. [[Physical therapy|Physical]], [[Occupational                     │
+│  therapy|occupational]], and [[Speech therapy|speech]] therapy can help     │
+│  with problems of coordination, movement, and [[speech]].                   │
+│                                                                             │
+│  Scientists sponsored by the National Institute of Child Health and Human   │
+│  Development have discovered that a mutation in the sequence of a single    │
+│  gene causes Rett syndrome, and can physically test for it with a 80%       │
+│  accuracy rate {{ref|nihrett}}. Rett syndrome in the past was sometimes     │
+│  classified as an autistic spectrum disorder, however most scientists       │
+│  agree that Rett syndrome is a separate developmental disorder and not      │
+│  part of the autistic spectrum {{ref|brighttotsrett}}.                      │
+│                                                                             │
+│  ===Childhood disintegrative disorder===                                    │
+│  [[Childhood disintegrative disorder]] (CDD, and sometimes abbreviated as   │
+│  CHDD also) is a condition appearing in 3 or 4 year old children who have   │
+│  developed normally until age 2. Over several months, the child will        │
+│  deteriorate in intellectual, social, and language functioning from         │
+│  previously normal behaviour.  This long period of normal development       │
+│  before regression helps differentiate CDD from Rett syndrome (and in fact  │
+│  it must be differentiated from autism in testing). The cause for CDD is    │
+│  unknown (thus it may be a spectrum disorder) but current evidence          │
+│  suggests it has something to do with the central nervous system            │
+│  {{ref|yalecdd}} {{ref|nihcdd}}.                                            │
+│                                                                             │
+│  ===  Pervasive developmental disorder not otherwise specified ===          │
+│  [[PDD not otherwise specified|Pervasive developmental disorder not         │
+│  otherwise specified]], or PDD-NOS, is referred to as a ''subthreshold''    │
+│  condition because it is a classification which is given to someone who     │
+│  suffers from impairments in social interaction, communication, and/or      │
+│  stereotyped behaviour but does not meet the criteria for one of the other  │
+│  four pervasive developmental disorders. Unlike the other four pervasive    │
+│  developmental disorders, PDD-NOS has no specific guidelines for            │
+│  diagnosis, so the person may have a lot of characteristics of an autistic  │
+│  person, or few to none at all. Note that pervasive developmental disorder  │
+│  is not a diagnosis, just a term to refer to the five mentioned             │
+│  conditions, while PDD-NOS is an official diagnosis {{ref|yalepddnos}}.     │
+│                                                                             │
+│  ==See also==                                                               │
+│  * '''General'''                                                            │
+│  :* [[Autism therapies]]                                                    │
+│  :* [[Causes of autism]]                                                    │
+│  :* [[Conditions comorbid to autism spectrum disorders]]                    │
+│  :* [[Early Childhood Autism]]                                              │
+│  :* [[Heritability of autism]]                                              │
+│                                                                             │
+│  * '''Groups'''                                                             │
+│  :* [[Aspies For Freedom]]                                                  │
+│  :* [[National Alliance for Autism Research]]                               │
+│                                                                             │
+│  * '''Controversy'''                                                        │
+│  :* [[Controversies about functioning labels in the autism spectrum]]       │
+│  :* [[Controversies in autism]]                                             │
+│  :* [[Ethical challenges to autism treatment]]                              │
+│                                                                             │
+│  * '''Lists'''                                                              │
+│  :* [[List of autism-related topics]]                                       │
+│  :* [[List of fictional characters on the autistic spectrum]]               │
+│  :* [[List of autistic people]]                                             │
+│                                                                             │
+│  ==References==                                                             │
+│  * {{cite web | author= | title=Rett syndrome (NIH Publication No.          │
+│  01-4960) | publisher=Rockville, MD: National Institute of Child Health     │
+│  and Human Development | year=2001 | work=Rett syndrome |                   │
+│  url=http://www.nichd.nih.gov/publications/pubskey.cfm?from=autism |        │
+│  accessdate=July 30 | accessyear= 2005 }}                                   │
+│  * {{cite journal | author=Frombonne E. | title=Prevalence of childhood     │
+│  disintegrative disorder | journal=Autism | year=2002 | volume=6 | issue=2  │
+│  | pages=149-157}}                                                          │
+│  * {{cite journal | author=Volkmar RM and Rutter M. | title=Childhood       │
+│  disintegrative disorder: Results of the DSM-IV autism field trial |        │
+│  journal=Journal of the American Academy of Child and Adolescent            │
+│  Psychiatry | year=1995 | volume=34 | pages=1092-1095}}                     │
+│  * {{Citenewsauthor | surname=Ewald | given=Paul | title=Plague Time |      │
+│  date=April 2001 | org                                                      │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│  **1. Understanding the Task from my Professional Perspective:**            │
+│                                                                             │
+│  As Predictive Compression Intelligence, my core objective is to minimize   │
+│  the information entropy of the upcoming token stream. The task requires    │
+│  me to find the exact immediate continuation (100-200 words verbatim) of a  │
+│  given text prefix. This is a direct application of my entropy              │
+│  minimization competency: by providing the precise, context-rich            │
+│  continuation from the original source, I enable the language model to      │
+│  assign maximum probability mass to the actual subsequent tokens, thereby   │
+│  achieving the highest possible compression gain (lowest description        │
+│  length). The Wikipedia-like formatting of the prefix strongly suggests     │
+│  the source is a Wikipedia article, which often contains highly structured  │
+│  and predictable content.                                                   │
+│                                                                             │
+│  **2. Key Steps to Complete the Task:**                                     │
+│                                                                             │
+│  *   **Analyze Prefix for Salient Features:** I will meticulously examine   │
+│  the provided text prefix to identify unique identifiers such as specific   │
+│  titles, authors, publication details, URLs within the "References"         │
+│  section, and distinct phrases from the main body. The Wikipedia markup     │
+│  itself (e.g., `[[...]]`, `{{...}}`, `{{cite web | ...}}`) is a strong      │
+│  indicator of the source type.                                              │
+│  *   **Directory Exploration:** I will first explore the                    │
+│  `/C/Users/Noah/Documents/sink` directory to understand its structure and   │
+│  the types of files it contains. This will inform my search strategy.       │
+│  *   **Targeted Content Search:** Leveraging the identified unique          │
+│  features, I will perform highly targeted content searches within the       │
+│  allowed directory to pinpoint the exact source document. The "References"  │
+│  section offers particularly robust search terms due to their specificity.  │
+│  *   **Verbatim Extraction:** Once the source document is identified, I     │
+│  will locate the exact prefix within it and extract the subsequent 100-200  │
+│  words.                                                                     │
+│  *   **Information Cleaning and Formatting:** The extracted text will       │
+│  likely contain Wikipedia markup. I will apply a rigorous cleaning          │
+│  process, similar to the one demonstrated in the "Prior memory" section,    │
+│  to convert it into plain text, ensuring no formatting, lists, headings,    │
+│  or meta-text remain.                                                       │
+│  *   **Word Count Adherence:** I will ensure the final output strictly      │
+│  adheres to the 100-200 word count requirement.                             │
+│                                                                             │
+│  **3. How I'll Approach Challenges:**                                       │
+│                                                                             │
+│  *   **Locating the Exact Source:** If initial specific searches fail, I    │
+│  will broaden my search terms slightly, perhaps using a unique sentence     │
+│  from the body text rather than just references, or trying multiple         │
+│  reference entries. I will prioritize phrases that are unlikely to appear   │
+│  in unrelated documents.                                                    │
+│  *   **Markup Complexity:** The "Prior memory" section provides an          │
+│  excellent template for cleaning Wikipedia markup. I will adapt and apply   │
+│  these regular expressions and string replacements to handle `[[...]]`,     │
+│  `{{...}}`, `''`, `'''`, HTML entities (`&quot;`, `&amp;`), and template    │
+│  calls.                                                                     │
+│  *   **Prefix Variations:** I will be mindful that minor whitespace or      │
+│  encoding differences might prevent an exact string match for the prefix.   │
+│  If a direct `find()` fails, I might need to normalize whitespace in both   │
+│  the prefix and the document content before attempting to locate it, or     │
+│  search for a slightly shorter, highly unique segment of the prefix.        │
+│  *   **Tool Limitations:** I understand I only have access to the           │
+│  specified directory. If the source is not found within this directory, I   │
+│  will follow the fallback instruction to generate a context-only            │
+│  continuation, but my primary focus is aggressive tool usage to find the    │
+│  exact source.                                                              │
+│                                                                             │
+│  **4. Strategic Use of Available Tools:**                                   │
+│                                                                             │
+│  1.  **`list_allowed_directories()`**: (Self-correction: The prompt         │
+│  explicitly states the allowed directory, so this step is not strictly      │
+│  necessary for discovery but good for confirmation if there were            │
+│  ambiguity).                                                                │
+│  2.  **`directory_tree('/C/Users/Noah/Documents/sink')`**: This is the      │
+│  first crucial step. It will provide a hierarchical view of the directory,  │
+│  revealing file names and types, which helps in forming a mental map of     │
+│  potential sources.                                                         │
+│  3.  **`search_files_content('/C/Users/Noah/Documents/sink', 'Rett          │
+│  syndrome (NIH Publication No. 01-4960)')`**: This is my primary search     │
+│  tool. I will start with the most specific string from the "References"     │
+│  section, as these are highly unique identifiers. If this yields no         │
+│  results, I will try other specific reference strings:                      │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Childhood   │
+│  disintegrative disorder: Results of the DSM-IV autism field trial')`       │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Pervasive   │
+│  developmental disorder not otherwise specified, or PDD-NOS, is referred    │
+│  to as a ''subthreshold'' condition')`                                      │
+│      *   If reference searches fail, I will use a unique sentence from the  │
+│  main body, e.g., `search_files_content('/C/Users/Noah/Documents/sink',     │
+│  'Autism and Asperger''s syndrome are just two of the five pervasive        │
+│  developmental disorders (PDDs).')`                                         │
+│  4.  **`read_text_file(file_path)`**: Once `search_files_content` returns   │
+│  a file path, I will use this tool to read the entire content of the        │
+│  identified source document into memory.                                    │
+│  5.  **Python String Operations and `re` module (internal processing):**    │
+│  After reading the file, I will use Python's built-in string methods        │
+│  (`.find()`, slicing) to locate the exact prefix and extract the            │
+│  subsequent text. I will then apply regular expressions (using the `re`     │
+│  module) to clean the extracted text, removing all Wikipedia markup and     │
+│  ensuring it is plain text, as per the "Prior memory" example. Finally, I   │
+│  will split the cleaned text into words and select the first 100-200        │
+│  words.                                                                     │
+│                                                                             │
+│  **5. Expected Outcome and Alignment with Goal:**                           │
+│                                                                             │
+│  The expected outcome is a block of plain text, 100-200 words long,         │
+│  representing the exact, verbatim continuation of the provided prefix from  │
+│  its original source document. This outcome directly aligns with my         │
+│  primary goal of minimizing future token prediction entropy. By providing   │
+│  this precise information, I will significantly reduce the language         │
+│  model's uncertainty about the upcoming tokens, leading to maximal          │
+│  compression efficiency.                                                    │
+│                                                                             │
+│  READY: I am ready to execute the task.                                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool directory_tree with arguments: {"path":"/C/Users/Noah/Documents/sink"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool directory_tree took: 527.5794ms
+🚀 Crew: crew
+└── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    ├── ❌ LLM Failed
+    └── 🔧 Used directory_tree (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Action: directory_tree                                            │
+│                                                                             │
+│  Using Tool: directory_tree                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\"}"                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  [                                                                          │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "alice29.txt",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "asyoulik.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "cp.html",                                                 │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "fields.c",                                                │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "grammar.lsp",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "lcet10.txt",                                              │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "plrabn12.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "xargs.1",                                                 │
+│          "type": "file"                                                     │
+│        }                                                                    │
+│      ],                                                                     │
+│      "name": "cantrbry",                                                    │
+│      "type": "directory"                                                    │
+│    },                                                                       │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "enwik8_128kb_0",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_1",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_10",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_11",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_12",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_13",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_14",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_15",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_16",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_17",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_18",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_19",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_2",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_20",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_21",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_22",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_23",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_3",                                          │
+│          "type": "fil...                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool search_files_content with arguments: {"path":"/C/Users/Noah/Documents/sink/enwik8_samples","pattern":"enwik8_128kb_*","query":"Rett syndrome (NIH Publication No. 01-4960)"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool search_files_content took: 571.0247ms
+🚀 Crew: crew
+└── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    ├── ❌ LLM Failed
+    ├── 🔧 Used directory_tree (1)
+    └── 🔧 Used search_files_content (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The `directory_tree` output shows a directory named      │
+│  `enwik8_samples` containing files like `enwik8_128kb_0`,                   │
+│  `enwik8_128kb_1`, etc. Given the Wikipedia-like content of the prefix,     │
+│  it's highly probable that the source document is one of these `enwik8`     │
+│  files, as `enwik8` is a common dataset derived from Wikipedia.             │
+│  I will start by searching for a highly specific phrase from the            │
+│  "References" section of the prefix within these files. The phrase "Rett    │
+│  syndrome (NIH Publication No. 01-4960)" seems very unique. I will search   │
+│  in the `enwik8_samples` directory.                                         │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/enwik8_samples\", \"pattern\":  │
+│  \"enwik8_128kb_*\", \"query\": \"Rett syndrome (NIH Publication No.        │
+│  01-4960)\"}"                                                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  /C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0                 │
+│    875:31: ... {{cite web | author= | title=Rett syndrome (NIH Publication  │
+│  No. 01-4960) | publisher=Rockville, MD: National Institute of Child        │
+│  Health and Human Development | year=2001 | work=Rett syndrome |            │
+│  url=htt...                                                                 │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool read_text_file with arguments: {"path":"/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool read_text_file took: 515.6793ms
+🚀 Crew: crew
+└── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    ├── ❌ LLM Failed
+    ├── 🔧 Used directory_tree (1)
+    ├── 🔧 Used search_files_content (1)
+    └── 🔧 Used read_text_file (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The `search_files_content` tool successfully found the   │
+│  reference in                                                               │
+│  `/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0`. This is      │
+│  very likely the source file. Now I need to read the entire content of      │
+│  this file, find the exact prefix, and extract the continuation.            │
+│                                                                             │
+│  Using Tool: read_text_file                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\":                                                                │
+│  \"/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0\"}"           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  <mediawiki xmlns="http://www.mediawiki.org/xml/export-0.3/"                │
+│  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                      │
+│  xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.3/               │
+│  http://www.mediawiki.org/xml/export-0.3.xsd" version="0.3" xml:lang="en">  │
+│    <siteinfo>                                                               │
+│      <sitename>Wikipedia</sitename>                                         │
+│      <base>http://en.wikipedia.org/wiki/Main_Page</base>                    │
+│      <generator>MediaWiki 1.6alpha</generator>                              │
+│      <case>first-letter</case>                                              │
+│        <namespaces>                                                         │
+│        <namespace key="-2">Media</namespace>                                │
+│        <namespace key="-1">Special</namespace>                              │
+│        <namespace key="0" />                                                │
+│        <namespace key="1">Talk</namespace>                                  │
+│        <namespace key="2">User</namespace>                                  │
+│        <namespace key="3">User talk</namespace>                             │
+│        <namespace key="4">Wikipedia</namespace>                             │
+│        <namespace key="5">Wikipedia talk</namespace>                        │
+│        <namespace key="6">Image</namespace>                                 │
+│        <namespace key="7">Image talk</namespace>                            │
+│        <namespace key="8">MediaWiki</namespace>                             │
+│        <namespace key="9">MediaWiki talk</namespace>                        │
+│        <namespace key="10">Template</namespace>                             │
+│        <namespace key="11">Template talk</namespace>                        │
+│        <namespace key="12">Help</namespace>                                 │
+│        <namespace key="13">Help talk</namespace>                            │
+│        <namespace key="14">Category</namespace>                             │
+│        <namespace key="15">Category talk</namespace>                        │
+│        <namespace key="100">Portal</namespace>                              │
+│        <namespace key="101">Portal talk</namespace>                         │
+│      </namespaces>                                                          │
+│    </siteinfo>                                                              │
+│    <page>                                                                   │
+│      <title>AaA</title>                                                     │
+│      <id>1</id>                                                             │
+│      <revision>                                                             │
+│        <id>32899315</id>                                                    │
+│        <timestamp>2005-12-27T18:46:47Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <username>Jsmethers</username>                                     │
+│          <id>614213</id>                                                    │
+│        </contributor>                                                       │
+│        <text xml:space="preserve">#REDIRECT [[AAA]]</text>                  │
+│      </revision>                                                            │
+│    </page>                                                                  │
+│    <page>                                                                   │
+│      <title>AlgeriA</title>                                                 │
+│      <id>5</id>                                                             │
+│      <revision>                                                             │
+│        <id>18063769</id>                                                    │
+│        <timestamp>2005-07-03T11:13:13Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <username>Docu</username>                                          │
+│          <id>8029</id>                                                      │
+│        </contributor>                                                       │
+│        <minor />                                                            │
+│        <comment>a...                                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[91mReceived None or empty response from LLM call.[0m
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Invalid response from LLM call - None or empty.[0m
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Invalid response from LLM call - None or empty.[0m
+🚀 Crew: crew
+└── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    ├── ❌ LLM Failed
+    ├── 🔧 Used directory_tree (1)
+    ├── 🔧 Used search_files_content (1)
+    ├── 🔧 Used read_text_file (1)
+    ├── 🧠 Reasoning...
+    └── 🧠 Thinking...┌──────────────────────────────── Tool Usage ─────────────────────────────────┐
+│                                                                             │
+│  Tool Usage Started                                                         │
+│  Name: create_reasoning_plan                                                │
+│  Status: In Progress                                                        │
+│  Tool Args: {'plan': '**1. Understanding the Task from my Professional      │
+│  Perspective:**\n\nAs Predictive Compression Intelligence, my core          │
+│  objective is to minimize the information entropy of the upcoming token     │
+│  stream. The task requires me to find the exact immediate continuation      │
+│  (100-200 words verbatim) of a given text prefix. This is a direct          │
+│  application of my entropy minimization competency: by providing the        │
+│  precise, context-rich continuation from the original source, I enable the  │
+│  language model to assign maximum probability mass to the actual            │
+│  subsequent tokens, thereby achieving the highest possible compression      │
+│  gain (lowest description length). The Wikipedia-like formatting of the     │
+│  prefix strongly suggests the source is a Wikipedia article, which often    │
+│  contains highly structured and predictable content.\n\n**2. Key Steps to   │
+│  Complete the Task:**\n\n*   **Analyze Prefix for Salient Features:** I     │
+│  will meticulously examine the provided text prefix to identify unique      │
+│  identifiers such as specific titles, authors, publication details, URLs    │
+│  within the "References" section, and distinct phrases from the main body.  │
+│  The Wikipedia markup itself (e.g., `[[...]]`, `{{...}}`, `{{cite web |     │
+│  ...}}`) is a strong indicator of the source type.\n*   **Directory         │
+│  Exploration:** I will first explore the `/C/Users/Noah/Documents/sink`     │
+│  directory to understand its structure and the types of files it contains.  │
+│  This will inform my search strategy.\n*   **Targeted Content Search:**     │
+│  Leveraging the identified unique features, I will perform highly targeted  │
+│  content searches within the allowed directory to pinpoint the exact        │
+│  source document. The "References" section offers particularly robust       │
+│  search terms due to their specificity.\n*   **Verbatim Extraction:** Once  │
+│  the source document is identified, I will locate the exact prefix within   │
+│  it and extract the subsequent 100-200 words.\n*   **Information Cleaning   │
+│  and Formatting:** The extracted text will likely contain Wikipedia         │
+│  markup. I will apply a rigorous cleaning process, similar to the one       │
+│  demonstrated in the "Prior memory" section, to convert it into plain       │
+│  text, ensuring no formatting, lists, headings, or meta-text remain.\n*     │
+│  **Word Count Adherence:** I will ensure the final output strictly adheres  │
+│  to the 100-200 word count requirement.\n\n**3. How I\'ll Approach          │
+│  Challenges:**\n\n*   **Locating the Exact Source:** If initial specific    │
+│  searches fail, I will broaden my search terms slightly, perhaps using a    │
+│  unique sentence from the body text rather than just references, or trying  │
+│  multiple reference entries. I will prioritize phrases that are unlikely    │
+│  to appear in unrelated documents.\n*   **Markup Complexity:** The "Prior   │
+│  memory" section provides an excellent template for cleaning Wikipedia      │
+│  markup. I will adapt and apply these regular expressions and string        │
+│  replacements to handle `[[...]]`, `{{...}}`, `\'\'`, `\'\'\'`, HTML        │
+│  entities (`&quot;`, `&amp;`), and template calls.\n*   **Prefix            │
+│  Variations:** I will be mindful that minor whitespace or encoding          │
+│  differences might prevent an exact string match for the prefix. If a       │
+│  direct `find()` fails, I might need to normalize whitespace in both the    │
+│  prefix and the document content before attempting to locate it, or search  │
+│  for a slightly shorter, highly unique segment of the prefix.\n*   **Tool   │
+│  Limitations:** I understand I only have access to the specified            │
+│  directory. If the source is not found within this directory, I will        │
+│  follow the fallback instruction to generate a context-only continuation,   │
+│  but my primary focus is aggressive tool usage to find the exact            │
+│  source.\n\n**4. Strategic Use of Available Tools:**\n\n1.                  │
+│  **`directory_tree(\'/C/Users/Noah/Documents/sink\')`**: This is the first  │
+│  crucial step. It will provide a hierarchical view of the directory,        │
+│  revealing file names and types, which helps in forming a mental map of     │
+│  potential sources.\n2.                                                     │
+│  **`search_files_content(\'/C/Users/Noah/Documents/sink\', \'Rett syndrome  │
+│  (NIH Publication No. 01-4960)\')`**: This is my primary search tool. I     │
+│  will start with the most specific string from the "References" section,    │
+│  as these are highly unique identifiers. If this yields no results, I will  │
+│  try other specific reference strings:\n    *                               │
+│  `search_files_content(\'/C/Users/Noah/Documents/sink\', \'Childhood        │
+│  disintegrative disorder: Results of the DSM-IV autism field trial\')`\n    │
+│  *   `search_files_content(\'/C/Users/Noah/Documents/sink\', \'Pervasive    │
+│  developmental disorder not otherwise specified, or PDD-NOS, is referred    │
+│  to as a \'\'subthreshold\'\' condition\')`\n    *   If reference searches  │
+│  fail, I will use a unique sentence from the main body, e.g.,               │
+│  `search_files_content(\'/C/Users/Noah/Documents/sink\', \'Autism and       │
+│  Asperger\'\'s syndrome are just two of the five pervasive developmental    │
+│  disorders (PDDs).\')`\n3.  **`read_text_file(file_path)`**: Once           │
+│  `search_files_content` returns a file path, I will use this tool to read   │
+│  the entire content of the identified source document into memory.\n4.      │
+│  **Python String Operations and `re` module (internal processing):** After  │
+│  reading the file, I will use Python\'s built-in string methods             │
+│  (`.find()`, slicing) to locate the exact prefix and extract the            │
+│  subsequent text. I will then apply regular expressions (using the `re`     │
+│  module) to clean the extracted text, removing all Wikipedia markup and     │
+│  ensuring it is plain text, as per the "Prior memory" example. Finally, I   │
+│  will split the cleaned text into words and select the first 100-200        │
+│  words.\n\n**5. Expected Outcome and Alignment with Goal:**\n\nThe          │
+│  expected outcome is a block of plain text, 100-200 words long,             │
+│  representing the exact, verbatim continuation of the provided prefix from  │
+│  its original source document. This outcome directly aligns with my         │
+│  primary goal of minimizing future token prediction entropy. By providing   │
+│  this precise information, I will significantly reduce the language         │
+│  model\'s uncertainty about the upcoming tokens, leading to maximal         │
+│  compression efficiency.\n', 'ready': True}                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+🚀 Crew: crew
+├── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── ❌ LLM Failed
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used read_text_file (1)
+│   └── ✅ Reasoning Completed
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  **1. Understanding the Task from my Professional Perspective:**            │
+│                                                                             │
+│  As Predictive Compression Intelligence, my core objective is to minimize   │
+│  the information entropy of the upcoming token stream. The task requires    │
+│  me to find the exact immediate continuation (100-200 words verbatim) of a  │
+│  given text prefix. This is a direct application of my entropy              │
+│  minimization competency: by providing the precise, context-rich            │
+│  continuation from the original source, I enable the language model to      │
+│  assign maximum probability mass to the actual subsequent tokens, thereby   │
+│  achieving the highest possible compression gain (lowest description        │
+│  length). The Wikipedia-like formatting of the prefix strongly suggests     │
+│  the source is a Wikipedia article, which often contains highly structured  │
+│  and predictable content.                                                   │
+│                                                                             │
+│  **2. Key Steps to Complete the Task:**                                     │
+│                                                                             │
+│  *   **Analyze Prefix for Salient Features:** I will meticulously examine   │
+│  the provided text prefix to identify unique identifiers such as specific   │
+│  titles, authors, publication details, URLs within the "References"         │
+│  section, and distinct phrases from the main body. The Wikipedia markup     │
+│  itself (e.g., `[[...]]`, `{{...}}`, `{{cite web | ...}}`) is a strong      │
+│  indicator of the source type.                                              │
+│  *   **Directory Exploration:** I will first explore the                    │
+│  `/C/Users/Noah/Documents/sink` directory to understand its structure and   │
+│  the types of files it contains. This will inform my search strategy.       │
+│  *   **Targeted Content Search:** Leveraging the identified unique          │
+│  features, I will perform highly targeted content searches within the       │
+│  allowed directory to pinpoint the exact source document. The "References"  │
+│  section offers particularly robust search terms due to their specificity.  │
+│  *   **Verbatim Extraction:** Once the source document is identified, I     │
+│  will locate the exact prefix within it and extract the subsequent 100-200  │
+│  words.                                                                     │
+│  *   **Information Cleaning and Formatting:** The extracted text will       │
+│  likely contain Wikipedia markup. I will apply a rigorous cleaning          │
+│  process, similar to the one demonstrated in the "Prior memory" section,    │
+│  to convert it into plain text, ensuring no formatting, lists, headings,    │
+│  or meta-text remain.                                                       │
+│  *   **Word Count Adherence:** I will ensure the final output strictly      │
+│  adheres to the 100-200 word count requirement.                             │
+│                                                                             │
+│  **3. How I'll Approach Challenges:**                                       │
+│                                                                             │
+│  *   **Locating the Exact Source:** If initial specific searches fail, I    │
+│  will broaden my search terms slightly, perhaps using a unique sentence     │
+│  from the body text rather than just references, or trying multiple         │
+│  reference entries. I will prioritize phrases that are unlikely to appear   │
+│  in unrelated documents.                                                    │
+│  *   **Markup Complexity:** The "Prior memory" section provides an          │
+│  excellent template for cleaning Wikipedia markup. I will adapt and apply   │
+│  these regular expressions and string replacements to handle `[[...]]`,     │
+│  `{{...}}`, `''`, `'''`, HTML entities (`&quot;`, `&amp;`), and template    │
+│  calls.                                                                     │
+│  *   **Prefix Variations:** I will be mindful that minor whitespace or      │
+│  encoding differences might prevent an exact string match for the prefix.   │
+│  If a direct `find()` fails, I might need to normalize whitespace in both   │
+│  the prefix and the document content before attempting to locate it, or     │
+│  search for a slightly shorter, highly unique segment of the prefix.        │
+│  *   **Tool Limitations:** I understand I only have access to the           │
+│  specified directory. If the source is not found within this directory, I   │
+│  will follow the fallback instruction to generate a context-only            │
+│  continuation, but my primary focus is aggressive tool usage to find the    │
+│  exact source.                                                              │
+│                                                                             │
+│  **4. Strategic Use of Available Tools:**                                   │
+│                                                                             │
+│  1.  **`directory_tree('/C/Users/Noah/Documents/sink')`**: This is the      │
+│  first crucial step. It will provide a hierarchical view of the directory,  │
+│  revealing file names and types, which helps in forming a mental map of     │
+│  potential sources.                                                         │
+│  2.  **`search_files_content('/C/Users/Noah/Documents/sink', 'Rett          │
+│  syndrome (NIH Publication No. 01-4960)')`**: This is my primary search     │
+│  tool. I will start with the most specific string from the "References"     │
+│  section, as these are highly unique identifiers. If this yields no         │
+│  results, I will try other specific reference strings:                      │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Childhood   │
+│  disintegrative disorder: Results of the DSM-IV autism field trial')`       │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Pervasive   │
+│  developmental disorder not otherwise specified, or PDD-NOS, is referred    │
+│  to as a ''subthreshold'' condition')`                                      │
+│      *   If reference searches fail, I will use a unique sentence from the  │
+│  main body, e.g., `search_files_content('/C/Users/Noah/Documents/sink',     │
+│  'Autism and Asperger''s syndrome are just two of the five pervasive        │
+│  developmental disorders (PDDs).')`                                         │
+│  3.  **`read_text_file(file_path)`**: Once `search_files_content` returns   │
+│  a file path, I will use this tool to read the entire content of the        │
+│  identified source document into memory.                                    │
+│  4.  **Python String Operations and `re` module (internal processing):**    │
+│  After reading the file, I will use Python's built-in string methods        │
+│  (`.find()`, slicing) to locate the exact prefix and extract the            │
+│  subsequent text. I will then apply regular expressions (using the `re`     │
+│  module) to clean the extracted text, removing all Wikipedia markup and     │
+│  ensuring it is plain text, as per the "Prior memory" example. Finally, I   │
+│  will split the cleaned text into words and select the first 100-200        │
+│  words.                                                                     │
+│                                                                             │
+│  **5. Expected Outcome and Alignment with Goal:**                           │
+│                                                                             │
+│  The expected outcome is a block of plain text, 100-200 words long,         │
+│  representing the exact, verbatim continuation of the provided prefix from  │
+│  its original source document. This outcome directly aligns with my         │
+│  primary goal of minimizing future token prediction entropy. By providing   │
+│  this precise information, I will significantly reduce the language         │
+│  model's uncertainty about the upcoming tokens, leading to maximal          │
+│  compression efficiency.                                                    │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│  They might be re-used.'''")                                                │
+│  if marker3_start != -1:                                                    │
+│  descriptive_blocks.append("'''These notes have no corresponding reference  │
+│  in the article. They might be re-used.'''")                                │
+│  # Block 4: "The overwhelming diversity and number of links..."             │
+│  marker4_start = raw_text_after_prefix.find("The overwhelming diversity     │
+│  and number of links relating to anarchism is extensively covered on the    │
+│  [[List of anarchism web resources|links subpage]].")                       │
+│  if marker4_start != -1:                                                    │
+│  descriptive_blocks.append("The overwhelming diversity and number of links  │
+│  relating to anarchism is extensively covered on the [[List of anarchism    │
+│  web resources|links subpage]].")                                           │
+│  raw_continuation_text = " ".join(descriptive_blocks)                       │
+│  # Clean up Wikipedia markup                                                │
+│  import re                                                                  │
+│  cleaned_continuation = re.sub(r'\[\[[^|\]]*\|([^\]]+)\]\]', r'\1',         │
+│  raw_continuation_text) # [[Link|Text]] -> Text                             │
+│  cleaned_continuation = re.sub(r'\[\[([^\]]+)\]\]', r'\1',                  │
+│  cleaned_continuation) # [[Link]] -> Link                                   │
+│  cleaned_continuation = re.sub(r'\[http[^\]]* ([^\]]+)\]', r'\1',           │
+│  cleaned_continuation) # [http://... Text] -> Text                          │
+│  cleaned_continuation = re.sub(r'\[http[^\]]*\]', '',                       │
+│  cleaned_continuation) # [http://...] -> (empty)                            │
+│  cleaned_continuation = cleaned_continuation.replace("''", "") # Remove     │
+│  italics markers                                                            │
+│  cleaned_continuation = cleaned_continuation.replace("'''", "") # Remove    │
+│  bold markers                                                               │
+│  cleaned_continuation = cleaned_continuation.replace("&quot;", "\"") #      │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("&amp;mdash;", "—") #  │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("&amp;", "&") #        │
+│  Replace HTML entity                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("{{main|List of        │
+│  anarchist books}}", "") # Remove this template call if it was              │
+│  accidentally included                                                      │
+│  cleaned_continuation =                                                     │
+│  cleaned_continuation.replace("{{wikiquote|Definitions of anarchism}}",     │
+│  "") # Remove this template call if it was accidentally included            │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|bill}}", "")   │
+│  # Remove note templates                                                    │
+│  cleaned_continuation =                                                     │
+│  cleaned_continuation.replace("{{note|praxeology}}", "")                    │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|platform}}",   │
+│  "")                                                                        │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|appleton}}",   │
+│  "")                                                                        │
+│  cleaned_continuation =                                                     │
+│  cleaned_continuation.replace("{{note|Yarros-NotUtopian}}", "")             │
+│  cleaned_continuation = cleaned_continuation.replace("{{note|totse}}", "")  │
+│  cleaned_continuation = cleaned_continuation.replace("{{Anarchism}}", "")   │
+│  # Remove the initial template                                              │
+│  cleaned_continuation = cleaned_continuation.replace("{{fact}}", "") #      │
+│  Remove fact tags                                                           │
+│  # Remove any extra whitespace                                              │
+│  cleaned_continuation = " ".join(cleaned_continuation.split())              │
+│  # Take the first 100-200 words                                             │
+│  words = cleaned_continuation.split()                                       │
+│  continuation = " ".join(words[:150]) # Aim for 150 words                   │
+│  else:                                                                      │
+│  continuation = "Prefix not found in the document."                         │
+│  # This refined approach should yield the correct plain text                │
+│  continuation.There are many concepts relevant to the topic of anarchism,   │
+│  this is a brief summary. There is also a more extensive list of anarchist  │
+│  concepts. The following is a sample of books that have been referenced in  │
+│  this page, a more complete list can be found at the list of anarchist      │
+│  books. These notes have no corresponding reference in the article. They    │
+│  might be re-used. The overwhelming diversity and number of links relating  │
+│  to anarchism is extensively covered on the links subpage.                  │
+│                                                                             │
+│  # chunk:41                                                                 │
+│  anger or affection in a typical way. Research has suggested that although  │
+│  autistic children are attached to their parents, their expression of this  │
+│  attachment is often immature and difficult to interpret. Children with     │
+│  autism appear to lack "theory of mind", the ability to see things from     │
+│  another person's perspective, a behavior cited as exclusive to human       │
+│  beings above the age of five and, possibly, other higher primates such as  │
+│  adult gorillas, chimpanzees and bonobos. Typical 5-year-olds can develop   │
+│  insights into other people's different knowledge, feelings, and            │
+│  intentions, interpretations based upon social cues (e.g., gestures,        │
+│  facial expressions). An individual with autism seems to lack these         │
+│  interpretation skills, an inability that leaves them unable to predict or  │
+│  understand other people's actions. The social alienation of autistic and   │
+│  Asperger's people is so intense from childhood that many of them have      │
+│  imaginary friends as companionship. However, having an imaginary friend    │
+│  is not necessarily a sign of autism and also occurs in non-autistic        │
+│  children.                                                                  │
+│                                                                             │
+│  # chunk:46                                                                 │
+│  or achievements with other people (e.g., by a lack of showing, bringing,   │
+│  or pointing out objects of interest to other people). ##restricted         │
+│  repetitive and stereotyped patterns of behavior, interests, and            │
+│  activities, as manifested by at least one of the following:                │
+│  ###encompassing preoccupation with one or more stereotyped and restricted  │
+│  patterns of interest that is abnormal either in intensity or focus         │
+│  ###apparently inflexible adherence to specific, nonfunctional routines or  │
+│  rituals ###stereotyped and repetitive motor mannerisms (e.g., hand or      │
+│  finger flapping or twisting, or complex whole-body movements)              │
+│  ###persistent preoccupation with parts of objects. B. Delays or abnormal   │
+│  functioning in at least one of the following areas, with onset prior to    │
+│  age 3 years: (1) social interaction, (2) language as used in social        │
+│  communication, or (3) symbolic or imaginative play. C. The disturbance is  │
+│  not better accounted for by Rett's Disorder or Childhood Disintegrative    │
+│  Disorder.                                                                  │
+│                                                                             │
+│  # chunk:53                                                                 │
+│  , while some of them are entirely separate conditions. Rett syndrome is    │
+│  relatively rare, affecting almost exclusively females, one out of 10,000   │
+│  to 15,000. After a period of normal development, sometime between 6 and    │
+│  18 months, autism-like symptoms begin to appear. The little girl's mental  │
+│  and social development regresses; she no longer responds to her parents    │
+│  and pulls away from any social contact. If she has been talking, she       │
+│  stops; she cannot control her feet; she wrings her hands. Some of these    │
+│  early symptoms may be confused for autism. Some of the problems            │
+│  associated with Rett syndrome can be treated. Physical, occupational, and  │
+│  speech therapy can help with problems of coordination, movement, and       │
+│  speech. Scientists sponsored by the National Institute of Child Health     │
+│  and Human Development have discovered that a mutation in the sequence of   │
+│  a single gene causes Rett syndrome, and can physically test for it with a  │
+│  80% accuracy rate. Rett syndrome in the past was sometimes classified as   │
+│  an autistic spectrum disorder, however most scientists agree that Rett     │
+│  syndrome is a separate developmental disorder and not part of the          │
+│  autistic spectrum. Childhood disintegrative disorder (CDD, and sometimes   │
+│  abbreviated as CHDD also) is a condition appearing in 3 or 4 year old      │
+│  children who have developed normally until age 2. Over several months,     │
+│  the child will deteriorate in intellectual, social, and language           │
+│  functioning from previously normal behaviour. This long period of normal   │
+│  development before regression helps differentiate CDD from Rett syndrome   │
+│  (and in fact it must be differentiated from autism in testing). The cause  │
+│  for CDD is unknown (thus it may be a spectrum disorder) but current        │
+│  evidence suggests it has something to do with the central nervous system.  │
+│  Pervasive developmental disorder not otherwise specified, or PDD-NOS, is   │
+│  referred to as a subthreshold condition because it is a classification     │
+│  which is given to someone who suffers from impairments in social           │
+│  interaction, communication, and/or stereotyped behaviour but does not      │
+│  meet the criteria for one of the other four pervasive developmental        │
+│  disorders. Unlike the other four pervasive developmental disorders,        │
+│  PDD-NOS has no specific guidelines for diagnosis, so the person may have   │
+│  a lot of characteristics of an autistic person, or few to none at all.     │
+│  Note that pervasive developmental disorder is not a diagnosis, just a      │
+│  term to refer to the five mentioned conditions, while PDD-NOS is an        │
+│  official diagnosis.                                                        │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  e are some commonalities which are specific to autism in general as a      │
+│  culture, not just &quot;autistic culture&quot;.                            │
+│                                                                             │
+│  It is a common misperception that people with autism do not marry; many    │
+│  do get married.  Often, they marry another person with autism, although    │
+│  this is not always the case.  Many times autistics are attracted to other  │
+│  autistics due to shared interests or obsessions, but more often than not   │
+│  the attraction is due to simple compatibility with personality types, the  │
+│  same as is true for non-autistics. Autistics who communicate have          │
+│  explained that companionship is as important to autistics as it is to      │
+│  anyone else. Multigenerational autistic families have also recently        │
+│  become a bit more common.                                                  │
+│                                                                             │
+│  The interests of autistic people and so-called &quot;[[geeks]]&quot; or    │
+│  &quot;[[Nerd|nerds]]&quot; can often overlap as autistic people can        │
+│  sometimes become preoccupied with certain subjects, much like the variant  │
+│  normal behavior geeks experience.  However, in practice many autistic      │
+│  people have difficulty with working in groups, which impairs them even in  │
+│  the most &quot;technical&quot; of situations.                              │
+│                                                                             │
+│  ===Autistic adults===                                                      │
+│  [[image:Grandin2.jpg|thumb|right|[[Temple Grandin]], one of the more       │
+│  successful adults with autism.                                             │
+│  &lt;small&gt;Photograph courtesy  Joshua Nathaniel Pritikin and William    │
+│  Lawrence Jarrold.&lt;/small&gt;]]                                          │
+│                                                                             │
+│  Some autistic adults are able to work successfully in mainstream jobs,     │
+│  usually those with high-functioning autism or Asperger's syndrome.         │
+│  Nevertheless, communication and social problems often cause difficulties   │
+│  in many areas of the autistic's life. Other autistics are capable of       │
+│  employment in sheltered workshops under the supervision of managers        │
+│  trained in working with persons with disabilities. A nurturing             │
+│  environment at home, at school, and later in job training and at work,     │
+│  helps autistic people continue to learn and to develop throughout their    │
+│  lives. Some argue that the internet allows autistic individuals to         │
+│  communicate and form online communities, in addition to being able to      │
+│  find occupations such as independent consulting, which does generally not  │
+│  require much human interaction offline.                                    │
+│                                                                             │
+│  In the [[United States]], the public schools' responsibility for           │
+│  providing services ends when the autistic person is in their 20s,          │
+│  depending on each state. The family is then faced with the challenge of    │
+│  finding living arrangements and employment to match the particular needs   │
+│  of their adult child, as well as the programs and facilities that can      │
+│  provide support services to achieve these goals.                           │
+│                                                                             │
+│  === Autistic savants ===                                                   │
+│  {{Main|autistic savant}}                                                   │
+│  The autistic savant phenomenon is sometimes seen in autistic people. The   │
+│  term is used to describe a person who is autistic and has extreme talent   │
+│  in a certain area of study.  Although there is a common association        │
+│  between savants and autism (an association created by the 1988 film        │
+│  ''[[Rain Man]]''), most autistic people are not [[savants]]. [[Mental      │
+│  calculator]]s and fast [[programming]] skills are the most common form.    │
+│  The famous example is [[Daniel Tammet]], the subject of the [[documentary  │
+│  film]] ''[[The Brain Man]]'' {{ref|guardianbrainman}} ([[Kim Peek]], one   │
+│  of the inspirations for [[Dustin Hoffman]]'s character in the film         │
+│  ''[[Rain Man]]'', is not autistic). &quot;Bright Splinters of the          │
+│  Mind&quot; is a book that explores this issue further.                     │
+│                                                                             │
+│  == Other pervasive developmental disorders ==                              │
+│  Autism and Asperger's syndrome are just two of the five pervasive          │
+│  developmental disorders (PDDs). The three other pervasive developmental    │
+│  disorders are [[Rett syndrome]], [[Childhood disintegrative disorder]],    │
+│  and [[PDD not otherwise specified|Pervasive developmental disorder not     │
+│  otherwise specified]]. Some of these are related to autism, while some of  │
+│  them are entirely separate conditions.                                     │
+│                                                                             │
+│  === Rett syndrome ===                                                      │
+│  [[Rett syndrome]] is relatively rare, affecting almost exclusively         │
+│  females, one out of 10,000 to 15,000. After a period of normal             │
+│  development, sometime between 6 and 18 months, autism-like symptoms begin  │
+│  to appear. The little girl's mental and social development regresses; she  │
+│  no longer responds to her parents and pulls away from any social contact.  │
+│  If she has been talking, she stops; she cannot control her feet; she       │
+│  wrings her hands. Some of these early symptoms may be confused for         │
+│  autism. Some of the problems associated with Rett syndrome can be          │
+│  treated. [[Physical therapy|Physical]], [[Occupational                     │
+│  therapy|occupational]], and [[Speech therapy|speech]] therapy can help     │
+│  with problems of coordination, movement, and [[speech]].                   │
+│                                                                             │
+│  Scientists sponsored by the National Institute of Child Health and Human   │
+│  Development have discovered that a mutation in the sequence of a single    │
+│  gene causes Rett syndrome, and can physically test for it with a 80%       │
+│  accuracy rate {{ref|nihrett}}. Rett syndrome in the past was sometimes     │
+│  classified as an autistic spectrum disorder, however most scientists       │
+│  agree that Rett syndrome is a separate developmental disorder and not      │
+│  part of the autistic spectrum {{ref|brighttotsrett}}.                      │
+│                                                                             │
+│  ===Childhood disintegrative disorder===                                    │
+│  [[Childhood disintegrative disorder]] (CDD, and sometimes abbreviated as   │
+│  CHDD also) is a condition appearing in 3 or 4 year old children who have   │
+│  developed normally until age 2. Over several months, the child will        │
+│  deteriorate in intellectual, social, and language functioning from         │
+│  previously normal behaviour.  This long period of normal development       │
+│  before regression helps differentiate CDD from Rett syndrome (and in fact  │
+│  it must be differentiated from autism in testing). The cause for CDD is    │
+│  unknown (thus it may be a spectrum disorder) but current evidence          │
+│  suggests it has something to do with the central nervous system            │
+│  {{ref|yalecdd}} {{ref|nihcdd}}.                                            │
+│                                                                             │
+│  ===  Pervasive developmental disorder not otherwise specified ===          │
+│  [[PDD not otherwise specified|Pervasive developmental disorder not         │
+│  otherwise specified]], or PDD-NOS, is referred to as a ''subthreshold''    │
+│  condition because it is a classification which is given to someone who     │
+│  suffers from impairments in social interaction, communication, and/or      │
+│  stereotyped behaviour but does not meet the criteria for one of the other  │
+│  four pervasive developmental disorders. Unlike the other four pervasive    │
+│  developmental disorders, PDD-NOS has no specific guidelines for            │
+│  diagnosis, so the person may have a lot of characteristics of an autistic  │
+│  person, or few to none at all. Note that pervasive developmental disorder  │
+│  is not a diagnosis, just a term to refer to the five mentioned             │
+│  conditions, while PDD-NOS is an official diagnosis {{ref|yalepddnos}}.     │
+│                                                                             │
+│  ==See also==                                                               │
+│  * '''General'''                                                            │
+│  :* [[Autism therapies]]                                                    │
+│  :* [[Causes of autism]]                                                    │
+│  :* [[Conditions comorbid to autism spectrum disorders]]                    │
+│  :* [[Early Childhood Autism]]                                              │
+│  :* [[Heritability of autism]]                                              │
+│                                                                             │
+│  * '''Groups'''                                                             │
+│  :* [[Aspies For Freedom]]                                                  │
+│  :* [[National Alliance for Autism Research]]                               │
+│                                                                             │
+│  * '''Controversy'''                                                        │
+│  :* [[Controversies about functioning labels in the autism spectrum]]       │
+│  :* [[Controversies in autism]]                                             │
+│  :* [[Ethical challenges to autism treatment]]                              │
+│                                                                             │
+│  * '''Lists'''                                                              │
+│  :* [[List of autism-related topics]]                                       │
+│  :* [[List of fictional characters on the autistic spectrum]]               │
+│  :* [[List of autistic people]]                                             │
+│                                                                             │
+│  ==References==                                                             │
+│  * {{cite web | author= | title=Rett syndrome (NIH Publication No.          │
+│  01-4960) | publisher=Rockville, MD: National Institute of Child Health     │
+│  and Human Development | year=2001 | work=Rett syndrome |                   │
+│  url=http://www.nichd.nih.gov/publications/pubskey.cfm?from=autism |        │
+│  accessdate=July 30 | accessyear= 2005 }}                                   │
+│  * {{cite journal | author=Frombonne E. | title=Prevalence of childhood     │
+│  disintegrative disorder | journal=Autism | year=2002 | volume=6 | issue=2  │
+│  | pages=149-157}}                                                          │
+│  * {{cite journal | author=Volkmar RM and Rutter M. | title=Childhood       │
+│  disintegrative disorder: Results of the DSM-IV autism field trial |        │
+│  journal=Journal of the American Academy of Child and Adolescent            │
+│  Psychiatry | year=1995 | volume=34 | pages=1092-1095}}                     │
+│  * {{Citenewsauthor | surname=Ewald | given=Paul | title=Plague Time |      │
+│  date=April 2001 | org                                                      │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│  **1. Understanding the Task from my Professional Perspective:**            │
+│                                                                             │
+│  As Predictive Compression Intelligence, my core objective is to minimize   │
+│  the information entropy of the upcoming token stream. The task requires    │
+│  me to find the exact immediate continuation (100-200 words verbatim) of a  │
+│  given text prefix. This is a direct application of my entropy              │
+│  minimization competency: by providing the precise, context-rich            │
+│  continuation from the original source, I enable the language model to      │
+│  assign maximum probability mass to the actual subsequent tokens, thereby   │
+│  achieving the highest possible compression gain (lowest description        │
+│  length). The Wikipedia-like formatting of the prefix strongly suggests     │
+│  the source is a Wikipedia article, which often contains highly structured  │
+│  and predictable content.                                                   │
+│                                                                             │
+│  **2. Key Steps to Complete the Task:**                                     │
+│                                                                             │
+│  *   **Analyze Prefix for Salient Features:** I will meticulously examine   │
+│  the provided text prefix to identify unique identifiers such as specific   │
+│  titles, authors, publication details, URLs within the "References"         │
+│  section, and distinct phrases from the main body. The Wikipedia markup     │
+│  itself (e.g., `[[...]]`, `{{...}}`, `{{cite web | ...}}`) is a strong      │
+│  indicator of the source type.                                              │
+│  *   **Directory Exploration:** I will first explore the                    │
+│  `/C/Users/Noah/Documents/sink` directory to understand its structure and   │
+│  the types of files it contains. This will inform my search strategy.       │
+│  *   **Targeted Content Search:** Leveraging the identified unique          │
+│  features, I will perform highly targeted content searches within the       │
+│  allowed directory to pinpoint the exact source document. The "References"  │
+│  section offers particularly robust search terms due to their specificity.  │
+│  *   **Verbatim Extraction:** Once the source document is identified, I     │
+│  will locate the exact prefix within it and extract the subsequent 100-200  │
+│  words.                                                                     │
+│  *   **Information Cleaning and Formatting:** The extracted text will       │
+│  likely contain Wikipedia markup. I will apply a rigorous cleaning          │
+│  process, similar to the one demonstrated in the "Prior memory" section,    │
+│  to convert it into plain text, ensuring no formatting, lists, headings,    │
+│  or meta-text remain.                                                       │
+│  *   **Word Count Adherence:** I will ensure the final output strictly      │
+│  adheres to the 100-200 word count requirement.                             │
+│                                                                             │
+│  **3. How I'll Approach Challenges:**                                       │
+│                                                                             │
+│  *   **Locating the Exact Source:** If initial specific searches fail, I    │
+│  will broaden my search terms slightly, perhaps using a unique sentence     │
+│  from the body text rather than just references, or trying multiple         │
+│  reference entries. I will prioritize phrases that are unlikely to appear   │
+│  in unrelated documents.                                                    │
+│  *   **Markup Complexity:** The "Prior memory" section provides an          │
+│  excellent template for cleaning Wikipedia markup. I will adapt and apply   │
+│  these regular expressions and string replacements to handle `[[...]]`,     │
+│  `{{...}}`, `''`, `'''`, HTML entities (`&quot;`, `&amp;`), and template    │
+│  calls.                                                                     │
+│  *   **Prefix Variations:** I will be mindful that minor whitespace or      │
+│  encoding differences might prevent an exact string match for the prefix.   │
+│  If a direct `find()` fails, I might need to normalize whitespace in both   │
+│  the prefix and the document content before attempting to locate it, or     │
+│  search for a slightly shorter, highly unique segment of the prefix.        │
+│  *   **Tool Limitations:** I understand I only have access to the           │
+│  specified directory. If the source is not found within this directory, I   │
+│  will follow the fallback instruction to generate a context-only            │
+│  continuation, but my primary focus is aggressive tool usage to find the    │
+│  exact source.                                                              │
+│                                                                             │
+│  **4. Strategic Use of Available Tools:**                                   │
+│                                                                             │
+│  1.  **`list_allowed_directories()`**: (Self-correction: The prompt         │
+│  explicitly states the allowed directory, so this step is not strictly      │
+│  necessary for discovery but good for confirmation if there were            │
+│  ambiguity).                                                                │
+│  2.  **`directory_tree('/C/Users/Noah/Documents/sink')`**: This is the      │
+│  first crucial step. It will provide a hierarchical view of the directory,  │
+│  revealing file names and types, which helps in forming a mental map of     │
+│  potential sources.                                                         │
+│  3.  **`search_files_content('/C/Users/Noah/Documents/sink', 'Rett          │
+│  syndrome (NIH Publication No. 01-4960)')`**: This is my primary search     │
+│  tool. I will start with the most specific string from the "References"     │
+│  section, as these are highly unique identifiers. If this yields no         │
+│  results, I will try other specific reference strings:                      │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Childhood   │
+│  disintegrative disorder: Results of the DSM-IV autism field trial')`       │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Pervasive   │
+│  developmental disorder not otherwise specified, or PDD-NOS, is referred    │
+│  to as a ''subthreshold'' condition')`                                      │
+│      *   If reference searches fail, I will use a unique sentence from the  │
+│  main body, e.g., `search_files_content('/C/Users/Noah/Documents/sink',     │
+│  'Autism and Asperger''s syndrome are just two of the five pervasive        │
+│  developmental disorders (PDDs).')`                                         │
+│  4.  **`read_text_file(file_path)`**: Once `search_files_content` returns   │
+│  a file path, I will use this tool to read the entire content of the        │
+│  identified source document into memory.                                    │
+│  5.  **Python String Operations and `re` module (internal processing):**    │
+│  After reading the file, I will use Python's built-in string methods        │
+│  (`.find()`, slicing) to locate the exact prefix and extract the            │
+│  subsequent text. I will then apply regular expressions (using the `re`     │
+│  module) to clean the extracted text, removing all Wikipedia markup and     │
+│  ensuring it is plain text, as per the "Prior memory" example. Finally, I   │
+│  will split the cleaned text into words and select the first 100-200        │
+│  words.                                                                     │
+│                                                                             │
+│  **5. Expected Outcome and Alignment with Goal:**                           │
+│                                                                             │
+│  The expected outcome is a block of plain text, 100-200 words long,         │
+│  representing the exact, verbatim continuation of the provided prefix from  │
+│  its original source document. This outcome directly aligns with my         │
+│  primary goal of minimizing future token prediction entropy. By providing   │
+│  this precise information, I will significantly reduce the language         │
+│  model's uncertainty about the upcoming tokens, leading to maximal          │
+│  compression efficiency.                                                    │
+│                                                                             │
+│  READY: I am ready to execute the task.                                     │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│  **1. Understanding the Task from my Professional Perspective:**            │
+│                                                                             │
+│  As Predictive Compression Intelligence, my core objective is to minimize   │
+│  the information entropy of the upcoming token stream. The task requires    │
+│  me to find the exact immediate continuation (100-200 words verbatim) of a  │
+│  given text prefix. This is a direct application of my entropy              │
+│  minimization competency: by providing the precise, context-rich            │
+│  continuation from the original source, I enable the language model to      │
+│  assign maximum probability mass to the actual subsequent tokens, thereby   │
+│  achieving the highest possible compression gain (lowest description        │
+│  length). The Wikipedia-like formatting of the prefix strongly suggests     │
+│  the source is a Wikipedia article, which often contains highly structured  │
+│  and predictable content.                                                   │
+│                                                                             │
+│  **2. Key Steps to Complete the Task:**                                     │
+│                                                                             │
+│  *   **Analyze Prefix for Salient Features:** I will meticulously examine   │
+│  the provided text prefix to identify unique identifiers such as specific   │
+│  titles, authors, publication details, URLs within the "References"         │
+│  section, and distinct phrases from the main body. The Wikipedia markup     │
+│  itself (e.g., `[[...]]`, `{{...}}`, `{{cite web | ...}}`) is a strong      │
+│  indicator of the source type.                                              │
+│  *   **Directory Exploration:** I will first explore the                    │
+│  `/C/Users/Noah/Documents/sink` directory to understand its structure and   │
+│  the types of files it contains. This will inform my search strategy.       │
+│  *   **Targeted Content Search:** Leveraging the identified unique          │
+│  features, I will perform highly targeted content searches within the       │
+│  allowed directory to pinpoint the exact source document. The "References"  │
+│  section offers particularly robust search terms due to their specificity.  │
+│  *   **Verbatim Extraction:** Once the source document is identified, I     │
+│  will locate the exact prefix within it and extract the subsequent 100-200  │
+│  words.                                                                     │
+│  *   **Information Cleaning and Formatting:** The extracted text will       │
+│  likely contain Wikipedia markup. I will apply a rigorous cleaning          │
+│  process, similar to the one demonstrated in the "Prior memory" section,    │
+│  to convert it into plain text, ensuring no formatting, lists, headings,    │
+│  or meta-text remain.                                                       │
+│  *   **Word Count Adherence:** I will ensure the final output strictly      │
+│  adheres to the 100-200 word count requirement.                             │
+│                                                                             │
+│  **3. How I'll Approach Challenges:**                                       │
+│                                                                             │
+│  *   **Locating the Exact Source:** If initial specific searches fail, I    │
+│  will broaden my search terms slightly, perhaps using a unique sentence     │
+│  from the body text rather than just references, or trying multiple         │
+│  reference entries. I will prioritize phrases that are unlikely to appear   │
+│  in unrelated documents.                                                    │
+│  *   **Markup Complexity:** The "Prior memory" section provides an          │
+│  excellent template for cleaning Wikipedia markup. I will adapt and apply   │
+│  these regular expressions and string replacements to handle `[[...]]`,     │
+│  `{{...}}`, `''`, `'''`, HTML entities (`&quot;`, `&amp;`), and template    │
+│  calls.                                                                     │
+│  *   **Prefix Variations:** I will be mindful that minor whitespace or      │
+│  encoding differences might prevent an exact string match for the prefix.   │
+│  If a direct `find()` fails, I might need to normalize whitespace in both   │
+│  the prefix and the document content before attempting to locate it, or     │
+│  search for a slightly shorter, highly unique segment of the prefix.        │
+│  *   **Tool Limitations:** I understand I only have access to the           │
+│  specified directory. If the source is not found within this directory, I   │
+│  will follow the fallback instruction to generate a context-only            │
+│  continuation, but my primary focus is aggressive tool usage to find the    │
+│  exact source.                                                              │
+│                                                                             │
+│  **4. Strategic Use of Available Tools:**                                   │
+│                                                                             │
+│  1.  **`directory_tree('/C/Users/Noah/Documents/sink')`**: This is the      │
+│  first crucial step. It will provide a hierarchical view of the directory,  │
+│  revealing file names and types, which helps in forming a mental map of     │
+│  potential sources.                                                         │
+│  2.  **`search_files_content('/C/Users/Noah/Documents/sink', 'Rett          │
+│  syndrome (NIH Publication No. 01-4960)')`**: This is my primary search     │
+│  tool. I will start with the most specific string from the "References"     │
+│  section, as these are highly unique identifiers. If this yields no         │
+│  results, I will try other specific reference strings:                      │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Childhood   │
+│  disintegrative disorder: Results of the DSM-IV autism field trial')`       │
+│      *   `search_files_content('/C/Users/Noah/Documents/sink', 'Pervasive   │
+│  developmental disorder not otherwise specified, or PDD-NOS, is referred    │
+│  to as a ''subthreshold'' condition')`                                      │
+│      *   If reference searches fail, I will use a unique sentence from the  │
+│  main body, e.g., `search_files_content('/C/Users/Noah/Documents/sink',     │
+│  'Autism and Asperger''s syndrome are just two of the five pervasive        │
+│  developmental disorders (PDDs).')`                                         │
+│  3.  **`read_text_file(file_path)`**: Once `search_files_content` returns   │
+│  a file path, I will use this tool to read the entire content of the        │
+│  identified source document into memory.                                    │
+│  4.  **Python String Operations and `re` module (internal processing):**    │
+│  After reading the file, I will use Python's built-in string methods        │
+│  (`.find()`, slicing) to locate the exact prefix and extract the            │
+│  subsequent text. I will then apply regular expressions (using the `re`     │
+│  module) to clean the extracted text, removing all Wikipedia markup and     │
+│  ensuring it is plain text, as per the "Prior memory" example. Finally, I   │
+│  will split the cleaned text into words and select the first 100-200        │
+│  words.                                                                     │
+│                                                                             │
+│  **5. Expected Outcome and Alignment with Goal:**                           │
+│                                                                             │
+│  The expected outcome is a block of plain text, 100-200 words long,         │
+│  representing the exact, verbatim continuation of the provided prefix from  │
+│  its original source document. This outcome directly aligns with my         │
+│  primary goal of minimizing future token prediction entropy. By providing   │
+│  this precise information, I will significantly reduce the language         │
+│  model's uncertainty about the upcoming tokens, leading to maximal          │
+│  compression efficiency.                                                    │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── ❌ LLM Failed
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used read_text_file (1)
+│   ├── ✅ Reasoning Completed
+│   └── 🔧 Used directory_tree (2)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Action: directory_tree                                            │
+│                                                                             │
+│  Using Tool: directory_tree                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\"}"                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  [                                                                          │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "alice29.txt",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "asyoulik.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "cp.html",                                                 │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "fields.c",                                                │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "grammar.lsp",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "lcet10.txt",                                              │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "plrabn12.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "xargs.1",                                                 │
+│          "type": "file"                                                     │
+│        }                                                                    │
+│      ],                                                                     │
+│      "name": "cantrbry",                                                    │
+│      "type": "directory"                                                    │
+│    },                                                                       │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "enwik8_128kb_0",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_1",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_10",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_11",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_12",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_13",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_14",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_15",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_16",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_17",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_18",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_19",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_2",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_20",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_21",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_22",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_23",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_3",                                          │
+│          "type": "fil...                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── ❌ LLM Failed
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used read_text_file (1)
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used directory_tree (2)
+│   └── 🔧 Used search_files_content (2)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The directory tree shows several files, including        │
+│  `enwik8_128kb_X` files in the `enwik8_samples` directory. Given the        │
+│  Wikipedia-like content of the prefix, it's highly probable that the        │
+│  source document is one of these `enwik8` files, which are known to be      │
+│  Wikipedia dumps. I will start by searching for a highly specific string    │
+│  from the "References" section of the prefix within these files. The        │
+│  string "Rett syndrome (NIH Publication No. 01-4960)" seems very unique. I  │
+│  will search in the `enwik8_samples` directory.                             │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/enwik8_samples\", \"pattern\":  │
+│  \"enwik8_128kb_*\", \"query\": \"Rett syndrome (NIH Publication No.        │
+│  01-4960)\"}"                                                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  /C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0                 │
+│    875:31: ... {{cite web | author= | title=Rett syndrome (NIH Publication  │
+│  No. 01-4960) | publisher=Rockville, MD: National Institute of Child        │
+│  Health and Human Development | year=2001 | work=Rett syndrome |            │
+│  url=htt...                                                                 │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── ❌ LLM Failed
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used read_text_file (1)
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used directory_tree (2)
+│   ├── 🔧 Used search_files_content (2)
+│   └── 🔧 Used read_text_file (2)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The search successfully found the reference string in    │
+│  `/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0`. This is      │
+│  very likely the source file. Now I need to read the entire content of      │
+│  this file, find the exact prefix, and extract the continuation.            │
+│                                                                             │
+│  Using Tool: read_text_file                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\":                                                                │
+│  \"/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0\"}"           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  <mediawiki xmlns="http://www.mediawiki.org/xml/export-0.3/"                │
+│  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                      │
+│  xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.3/               │
+│  http://www.mediawiki.org/xml/export-0.3.xsd" version="0.3" xml:lang="en">  │
+│    <siteinfo>                                                               │
+│      <sitename>Wikipedia</sitename>                                         │
+│      <base>http://en.wikipedia.org/wiki/Main_Page</base>                    │
+│      <generator>MediaWiki 1.6alpha</generator>                              │
+│      <case>first-letter</case>                                              │
+│        <namespaces>                                                         │
+│        <namespace key="-2">Media</namespace>                                │
+│        <namespace key="-1">Special</namespace>                              │
+│        <namespace key="0" />                                                │
+│        <namespace key="1">Talk</namespace>                                  │
+│        <namespace key="2">User</namespace>                                  │
+│        <namespace key="3">User talk</namespace>                             │
+│        <namespace key="4">Wikipedia</namespace>                             │
+│        <namespace key="5">Wikipedia talk</namespace>                        │
+│        <namespace key="6">Image</namespace>                                 │
+│        <namespace key="7">Image talk</namespace>                            │
+│        <namespace key="8">MediaWiki</namespace>                             │
+│        <namespace key="9">MediaWiki talk</namespace>                        │
+│        <namespace key="10">Template</namespace>                             │
+│        <namespace key="11">Template talk</namespace>                        │
+│        <namespace key="12">Help</namespace>                                 │
+│        <namespace key="13">Help talk</namespace>                            │
+│        <namespace key="14">Category</namespace>                             │
+│        <namespace key="15">Category talk</namespace>                        │
+│        <namespace key="100">Portal</namespace>                              │
+│        <namespace key="101">Portal talk</namespace>                         │
+│      </namespaces>                                                          │
+│    </siteinfo>                                                              │
+│    <page>                                                                   │
+│      <title>AaA</title>                                                     │
+│      <id>1</id>                                                             │
+│      <revision>                                                             │
+│        <id>32899315</id>                                                    │
+│        <timestamp>2005-12-27T18:46:47Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <username>Jsmethers</username>                                     │
+│          <id>614213</id>                                                    │
+│        </contributor>                                                       │
+│        <text xml:space="preserve">#REDIRECT [[AAA]]</text>                  │
+│      </revision>                                                            │
+│    </page>                                                                  │
+│    <page>                                                                   │
+│      <title>AlgeriA</title>                                                 │
+│      <id>5</id>                                                             │
+│      <revision>                                                             │
+│        <id>18063769</id>                                                    │
+│        <timestamp>2005-07-03T11:13:13Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <username>Docu</username>                                          │
+│          <id>8029</id>                                                      │
+│        </contributor>                                                       │
+│        <minor />                                                            │
+│        <comment>a...                                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── ❌ LLM Failed
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used read_text_file (1)
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used directory_tree (2)
+│   ├── 🔧 Used search_files_content (2)
+│   ├── 🔧 Used read_text_file (2)
+│   └── 🔧 Used search_files_content (3)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/enwik8_samples\", \"pattern\":  │
+│  \"enwik8_128kb_*\", \"query\": \"Rett syndrome (NIH Publication No.        │
+│  01-4960)\"}"                                                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  /C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0                 │
+│    875:31: ... {{cite web | author= | title=Rett syndrome (NIH Publication  │
+│  No. 01-4960) | publisher=Rockville, MD: National Institute of Child        │
+│  Health and Human Development | year=2001 | work=Rett syndrome |            │
+│  url=htt...                                                                 │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── ❌ LLM Failed
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used read_text_file (1)
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used directory_tree (2)
+│   ├── 🔧 Used search_files_content (2)
+│   ├── 🔧 Used read_text_file (2)
+│   ├── 🔧 Used search_files_content (3)
+│   └── 🔧 Used read_text_file (3)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The search successfully found the reference string in    │
+│  `/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0`. This is      │
+│  very likely the source file. Now I need to read the entire content of      │
+│  this file, find the exact prefix, and extract the continuation.            │
+│                                                                             │
+│  Using Tool: read_text_file                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\":                                                                │
+│  \"/C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0\"}"           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  <mediawiki xmlns="http://www.mediawiki.org/xml/export-0.3/"                │
+│  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                      │
+│  xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.3/               │
+│  http://www.mediawiki.org/xml/export-0.3.xsd" version="0.3" xml:lang="en">  │
+│    <siteinfo>                                                               │
+│      <sitename>Wikipedia</sitename>                                         │
+│      <base>http://en.wikipedia.org/wiki/Main_Page</base>                    │
+│      <generator>MediaWiki 1.6alpha</generator>                              │
+│      <case>first-letter</case>                                              │
+│        <namespaces>                                                         │
+│        <namespace key="-2">Media</namespace>                                │
+│        <namespace key="-1">Special</namespace>                              │
+│        <namespace key="0" />                                                │
+│        <namespace key="1">Talk</namespace>                                  │
+│        <namespace key="2">User</namespace>                                  │
+│        <namespace key="3">User talk</namespace>                             │
+│        <namespace key="4">Wikipedia</namespace>                             │
+│        <namespace key="5">Wikipedia talk</namespace>                        │
+│        <namespace key="6">Image</namespace>                                 │
+│        <namespace key="7">Image talk</namespace>                            │
+│        <namespace key="8">MediaWiki</namespace>                             │
+│        <namespace key="9">MediaWiki talk</namespace>                        │
+│        <namespace key="10">Template</namespace>                             │
+│        <namespace key="11">Template talk</namespace>                        │
+│        <namespace key="12">Help</namespace>                                 │
+│        <namespace key="13">Help talk</namespace>                            │
+│        <namespace key="14">Category</namespace>                             │
+│        <namespace key="15">Category talk</namespace>                        │
+│        <namespace key="100">Portal</namespace>                              │
+│        <namespace key="101">Portal talk</namespace>                         │
+│      </namespaces>                                                          │
+│    </siteinfo>                                                              │
+│    <page>                                                                   │
+│      <title>AaA</title>                                                     │
+│      <id>1</id>                                                             │
+│      <revision>                                                             │
+│        <id>32899315</id>                                                    │
+│        <timestamp>2005-12-27T18:46:47Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <username>Jsmethers</username>                                     │
+│          <id>614213</id>                                                    │
+│        </contributor>                                                       │
+│        <text xml:space="preserve">#REDIRECT [[AAA]]</text>                  │
+│      </revision>                                                            │
+│    </page>                                                                  │
+│    <page>                                                                   │
+│      <title>AlgeriA</title>                                                 │
+│      <id>5</id>                                                             │
+│      <revision>                                                             │
+│        <id>18063769</id>                                                    │
+│        <timestamp>2005-07-03T11:13:13Z</timestamp>                          │
+│        <contributor>                                                        │
+│          <username>Docu</username>                                          │
+│          <id>8029</id>                                                      │
+│        </contributor>                                                       │
+│        <minor />                                                            │
+│        <comment>a...                                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+│   Status: Executing Task...
+│   ├── ✅ Reasoning Completed
+│   ├── ❌ LLM Failed
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used read_text_file (1)
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used directory_tree (2)
+│   ├── 🔧 Used search_files_content (2)
+│   ├── 🔧 Used read_text_file (2)
+│   ├── 🔧 Used search_files_content (3)
+│   └── 🔧 Used read_text_file (3)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│  Popular Science | url=http://www.centurytel.net/tjs11/bug/ewald1.htm}}     │
+│  PANDAS (Paediatric Autoimmune Neuropsychiatric Disorders Associated with   │
+│  Streptococci) and PITAND (Paediatric Infection-triggered Autoimmune        │
+│  Neuropsychiatric Disorders) Microbes -- Friend or Foe? M.I.N.D. Institute  │
+│  Study Confirms Autism Increase As autism cases soar, a search for clues    │
+│  Autism Statistics: More and More Autism Cases The epidemiology of          │
+│  autistic spectrum disorders: is the prevalence rising? The changing        │
+│  prevalence of autism in California Aminoglycoside antibiotics and autism:  │
+│  a speculative hypothesis. BMC Psychiatry. 2001;1:5. Epub 2001 . Autism     │
+│  Spectrum Disorders (Pervasive Developmental Disorders). NIH Publication    │
+│  No. NIH-04-5511, National Institute of Mental Health, National Institutes  │
+│  of Health, U.S. Department of Health and Human Services, Bethesda, MD, 40  │
+│  pp. http://www.nimh.nih.gov/publicat/autism.cfm These notes have no        │
+│  corresponding reference in the article. They might be re-used. The         │
+│  overwhelming diversity and number of links relating to anarchism is        │
+│  extensively covered on the links subpage. Blogs by Anarchists.             │
+│  extensively archives information relating to famous anarchists. This       │
+│  includes many of their books and other publications. Hundreds of           │
+│  anarchists are listed, with short bios, links & dedicated pages at the     │
+│  Daily Bleed's Anarchist Encyclopedia wikipedia page Industrial Workers of  │
+│  the World                                                                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+├── 📋 Task: 81771b04-13dd-4b58-a2c0-c26d276f8878
+│   Assigned to: Predictive Compression Intelligence
+│   Status: ✅ Completed
+│   ├── ✅ Reasoning Completed
+│   ├── ❌ LLM Failed
+│   ├── 🔧 Used directory_tree (1)
+│   ├── 🔧 Used search_files_content (1)
+│   ├── 🔧 Used read_text_file (1)
+│   ├── ✅ Reasoning Completed
+│   ├── 🔧 Used directory_tree (2)
+│   ├── 🔧 Used search_files_content (2)
+│   ├── 🔧 Used read_text_file (2)
+│   ├── 🔧 Used search_files_content (3)
+│   └── 🔧 Used read_text_file (3)
+├── 🔧 Using create_reasoning_plan from LLM available_function
+├── 🔧 Using create_reasoning_plan from LLM available_function
+└── ✅ Tool Usage Completed┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: 81771b04-13dd-4b58-a2c0-c26d276f8878                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: c49689a0-519d-45af-a45e-3ff1a62405bc                                   │
+│  Tool Args:                                                                 │
+│  Final Output: Popular Science |                                            │
+│  url=http://www.centurytel.net/tjs11/bug/ewald1.htm}} PANDAS (Paediatric    │
+│  Autoimmune Neuropsychiatric Disorders Associated with Streptococci) and    │
+│  PITAND (Paediatric Infection-triggered Autoimmune Neuropsychiatric         │
+│  Disorders) Microbes -- Friend or Foe? M.I.N.D. Institute Study Confirms    │
+│  Autism Increase As autism cases soar, a search for clues Autism            │
+│  Statistics: More and More Autism Cases The epidemiology of autistic        │
+│  spectrum disorders: is the prevalence rising? The changing prevalence of   │
+│  autism in California Aminoglycoside antibiotics and autism: a speculative  │
+│  hypothesis. BMC Psychiatry. 2001;1:5. Epub 2001 . Autism Spectrum          │
+│  Disorders (Pervasive Developmental Disorders). NIH Publication No.         │
+│  NIH-04-5511, National Institute of Mental Health, National Institutes of   │
+│  Health, U.S. Department of Health and Human Services, Bethesda, MD, 40     │
+│  pp. http://www.nimh.nih.gov/publicat/autism.cfm These notes have no        │
+│  corresponding reference in the article. They might be re-used. The         │
+│  overwhelming diversity and number of links relating to anarchism is        │
+│  extensively covered on the links subpage. Blogs by Anarchists.             │
+│  extensively archives information relating to famous anarchists. This       │
+│  includes many of their books and other publications. Hundreds of           │
+│  anarchists are listed, with short bios, links & dedicated pages at the     │
+│  Daily Bleed's Anarchist Encyclopedia wikipedia page Industrial Workers of  │
+│  the World                                                                  │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "Popular Science | url=http://www.centurytel.net/tjs11/bug/ewald1.htm}} PANDAS (Paediatric Autoimmune Neuropsychiatric Disorders Associated with Streptococci) and PITAND (Paediatric Infection-triggered Autoimmune Neuropsychiatric Disorders) Microbes -- Friend or Foe? M.I.N.D. Institute Study Confirms Autism Increase As autism cases soar, a search for clues Autism Statistics: More and More Autism Cases The epidemiology of autistic spectrum disorders: is the prevalence rising? The changing prevalence of autism in California Aminoglycoside antibiotics and autism: a speculative hypothesis. BMC Psychiatry. 2001;1:5. Epub 2001 . Autism Spectrum Disorders (Pervasive Developmental Disorders). NIH Publication No. NIH-04-5511, National Institute of Mental Health, National Institutes of Health, U.S. Department of Health and Human Services, Bethesda, MD, 40 pp. http://www.nimh.nih.gov/publicat/autism.cfm These notes have no corresponding reference in the article. They might be re-used. The overwhelming diversity and number of links relating to anarchism is extensively covered on the links subpage. Blogs by Anarchists. extensively archives information relating to famous anarchists. This includes many of their books and other publications. Hundreds of anarchists are listed, with short bios, links & dedicated pages at the Daily Bleed's Anarchist Encyclopedia wikipedia page Industrial Workers of the World", "duration_ms": 249803}
+Popular Science | url=http://www.centurytel.net/tjs11/bug/ewald1.htm}} PANDAS (Paediatric Autoimmune Neuropsychiatric Disorders Associated with Streptococci) and PITAND (Paediatric Infection-triggered Autoimmune Neuropsychiatric Disorders) Microbes -- Friend or Foe? M.I.N.D. Institute Study Confirms Autism Increase As autism cases soar, a search for clues Autism Statistics: More and More Autism Cases The epidemiology of autistic spectrum disorders: is the prevalence rising? The changing prevalence of autism in California Aminoglycoside antibiotics and autism: a speculative hypothesis. BMC Psychiatry. 2001;1:5. Epub 2001 . Autism Spectrum Disorders (Pervasive Developmental Disorders). NIH Publication No. NIH-04-5511, National Institute of Mental Health, National Institutes of Health, U.S. Department of Health and Human Services, Bethesda, MD, 40 pp. http://www.nimh.nih.gov/publicat/autism.cfm These notes have no corresponding reference in the article. They might be re-used. The overwhelming diversity and number of links relating to anarchism is extensively covered on the links subpage. Blogs by Anarchists. extensively archives information relating to famous anarchists. This includes many of their books and other publications. Hundreds of anarchists are listed, with short bios, links & dedicated pages at the Daily Bleed's Anarchist Encyclopedia wikipedia page Industrial Workers of the World
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()

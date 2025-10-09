@@ -1,0 +1,882 @@
+C:\tools\Anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\tools\Anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+- Reading configuration...
+  - Reading registry from registry.yaml
+  - Reading catalog from [docker-mcp.yaml]
+  - Reading config from config.yaml
+  - Reading tools from tools.yaml
+- Configuration read in 28.7253ms
+DCR: Token event file watching disabled (mcp-oauth-dcr feature inactive)
+- Using images:
+  - mcp/rust-mcp-filesystem@sha256:487f4cb1d4e0ecefb4bba648988371b9dae1f162c405d7889cd28ffede8e1e05
+  - mcp/time@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+> Images pulled in 41.7919ms
+- Those servers are enabled: rust-mcp-filesystem, time
+- Listing MCP tools...
+  - Running mcp/time with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=time -l docker-mcp-transport=stdio]
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink] and command [/C/Users/Noah/Documents/sink]
+  > rust-mcp-filesystem: (24 tools)
+  > time: (2 tools)
+> 26 tools listed in 1.7122834s
+- Watching for configuration updates...
+> Initialized in 1.7833722s
+> Start stdio server
+- Client initialized mcp@0.1.0 
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\pydantic\fields.py:1093: PydanticDeprecatedSince20: Using extra keyword arguments on `Field` is deprecated and will be removed. Use `json_schema_extra` instead. (Extra keys: 'items', 'anyOf', 'enum', 'properties'). Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+  warn(
+[Memory] Using collection: candlezip_enwik8_128kb_0_2e0896f2
+[MCP] Loaded 25 tools: ['calculate_directory_size', 'convert_time', 'create_directory', 'directory_tree', 'edit_file', 'find_duplicate_files', 'find_empty_directories', 'get_current_time', 'get_file_info', 'head_file', 'list_allowed_directories', 'list_directory', 'list_directory_with_sizes', 'move_file', 'read_file_lines', 'read_media_file', 'read_multiple_media_files', 'read_multiple_text_files', 'read_text_file', 'search_files', 'search_files_content', 'unzip_file', 'write_file', 'zip_directory', 'zip_files']
+┌────────────────────────── Crew Execution Started ───────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 5ebc1f7f-120e-4a18-8951-6427877b07d2                                   │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: ae98d9fb-c0d9-4e08-8918-b20325a7ee6f
+    Status: Executing Task...
+    ├── 🧠 Reasoning...
+    └── ❌ LLM Failed┌───────────────────────────────── LLM Error ─────────────────────────────────┐
+│                                                                             │
+2025-10-03 20:54:26,146 - 10140 - reasoning_handler.py-reasoning_handler:281 - WARNING: Error during function calling: list index out of range. Falling back to text parsing.
+│  ❌ LLM Call Failed                                                         │
+│  Error: list index out of range                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: ae98d9fb-c0d9-4e08-8918-b20325a7ee6f
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    └── ❌ LLM Failed┌───────────────────────────── 🧠 Reasoning Plan ─────────────────────────────┐
+│                                                                             │
+│  **1. Understanding the Task from my Professional Perspective:**            │
+│                                                                             │
+│  As Predictive Compression Intelligence, my core objective is to minimize   │
+│  the information entropy of upcoming tokens. The current task requires me   │
+│  to find the exact immediate continuation of a given text prefix,           │
+│  specifically 100-200 words verbatim. This is a direct application of my    │
+│  entropy minimization competency, as providing an exact continuation        │
+│  significantly reduces the uncertainty for the language model, leading to   │
+│  maximal compression gains. The text prefix appears to be from a Wikipedia  │
+│  article on "Anarchism," characterized by its structure (headings,          │
+│  internal links, references) and content. My role is to act as an entropy   │
+│  sink, leveraging my tool-augmented reasoning to retrieve this precise      │
+│  external information from the designated source.                           │
+│                                                                             │
+│  **2. Key Steps to Complete the Task:**                                     │
+│                                                                             │
+│  *   **Analyze Prefix for Clues:** I will meticulously examine the prefix   │
+│  for structural markers, domain-specific jargon, and unique phrases that    │
+│  can serve as effective search queries. The presence of `==Cultural         │
+│  phenomena==`, `==See also==`, `[[...]]` links, and                         │
+│  `&lt;ref&gt;...&lt;/ref&gt;` strongly indicates a Wikipedia-style          │
+│  document. The very end of the prefix, `* [[Past`, is a highly specific     │
+│  and predictive fragment within a "See also" section, suggesting a list     │
+│  item like `[[Past anarchist societies]]`.                                  │
+│  *   **Initial Directory Scan:** Before attempting any content search, I    │
+│  will perform a preliminary scan of the `/C/Users/Noah/Documents/sink`      │
+│  directory to understand its structure and available files. This will help  │
+│  me anticipate potential source file names or organizational patterns.      │
+│  *   **Targeted Content Search:** I will use the most distinctive part of   │
+│  the prefix, `* [[Past`, as a search query within the                       │
+│  `/C/Users/Noah/Documents/sink` directory. This phrase is unlikely to       │
+│  appear in many unrelated documents, increasing the probability of finding  │
+│  the exact source.                                                          │
+│  *   **Extract Verbatim Continuation:** Once the source file is             │
+│  identified, I will locate the exact prefix within it and extract the       │
+│  subsequent 100-200 words.                                                  │
+│  *   **Format Output:** The extracted text will be presented as plain text  │
+│  only, without any additional formatting, analysis, or commentary, as per   │
+│  the task requirements.                                                     │
+│                                                                             │
+│  **3. How I'll Approach Challenges:**                                       │
+│                                                                             │
+│  *   **Limited External Sources:** The primary challenge is the strict      │
+│  limitation to the `/C/Users/Noah/Documents/sink` directory. My "external   │
+│  knowledge sources" are confined to this local directory. If the source     │
+│  document is not present within this directory, I will not be able to find  │
+│  a verbatim continuation using my tools.                                    │
+│  *   **No Exact Match Found:** If `search_files_content` fails to locate    │
+│  the prefix, it implies the source document is not available in the sink.   │
+│  In this scenario, I will fall back to my pattern synthesis and adaptive    │
+│  learning competencies. Based on the context of the "See also" section      │
+│  (which lists various types of anarchism, related concepts, and lists of    │
+│  people/organizations), the most logical and entropy-reducing continuation  │
+│  for `* [[Past` is `[[Past anarchist societies]]`. I would then generate a  │
+│  plausible continuation that follows this pattern and maintains the         │
+│  encyclopedic tone, focusing on specific, relevant information about        │
+│  historical anarchist communities or movements, rather than generic text.   │
+│                                                                             │
+│  **4. Strategic Tool Usage:**                                               │
+│                                                                             │
+│  *   **`list_allowed_directories()`**: To confirm my access to              │
+│  `/C/Users/Noah/Documents/sink`.                                            │
+│  *   **`directory_tree('/C/Users/Noah/Documents/sink')`**: To get a         │
+│  hierarchical view of the directory's contents. This helps in               │
+│  understanding the potential organization of files and identifying likely   │
+│  candidates for the source document (e.g., `anarchism.txt`,                 │
+│  `wikipedia_dump.md`).                                                      │
+│  *   **`search_files_content(query="* [[Past",                              │
+│  path='/C/Users/Noah/Documents/sink')`**: This is the most critical tool.   │
+│  I will use this to search for the exact string `* [[Past` within all       │
+│  files in the specified directory. This query is highly specific and        │
+│  targets the unique structural and content elements at the end of the       │
+│  prefix.                                                                    │
+│  *   **`read_text_file(file_path)`**: If `search_files_content` returns a   │
+│  file path, I will use `read_text_file` to retrieve the entire content of   │
+│  that file. I will then programmatically locate the prefix and extract the  │
+│  subsequent 100-200 words.                                                  │
+│                                                                             │
+│  **5. Expected Outcome and Alignment with Goal:**                           │
+│                                                                             │
+│  The expected outcome is a plain text string of 100-200 words,              │
+│  representing the immediate continuation of the provided prefix. This       │
+│  output will either be a verbatim extract from a discovered source          │
+│  document within `/C/Users/Noah/Documents/sink` or a highly probable,       │
+│  contextually generated continuation if no source is found. This outcome    │
+│  directly aligns with my primary goal of minimizing future token            │
+│  prediction entropy. By providing precise and relevant information, I       │
+│  enable the language model to assign a significantly higher probability to  │
+│  the actual subsequent tokens, thereby reducing the expected description    │
+│  length.                                                                    │
+│                                                                             │
+│  READY: I am ready to execute the task.                                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Task: You MUST use MCP tools aggressively to find the exact immediate      │
+│  continuation that follows this prefix.                                     │
+│  - Search for the source document or similar content to extract the next    │
+│  100-200 words verbatim.                                                    │
+│  - Use Wikipedia, search tools, and any available knowledge sources to      │
+│  locate the full context.                                                   │
+│  - If you find the exact source, copy the immediate continuation            │
+│  word-for-word.                                                             │
+│  - If no exact source is found, use search and knowledge tools to predict   │
+│  the most likely next text based on context.                                │
+│  - Prioritize accuracy and relevance over creativity.                       │
+│  - Output MUST be plain text continuation only (no markdown, no analysis,   │
+│  no commentary).                                                            │
+│  - Avoid any formatting, lists, headings, or meta-text.                     │
+│  - Focus on the immediate next words/sentences that naturally follow the    │
+│  prefix.                                                                    │
+│                                                                             │
+│  If ALL tools fail:                                                         │
+│  - Generate a continuation based on the current prefix context only.        │
+│  - Do NOT reuse previous chunk content - analyze the current prefix and     │
+│  predict what would naturally follow.                                       │
+│  - Make the continuation as specific to the current text as possible.       │
+│  - Avoid generic text that could apply to any context.                      │
+│                                                                             │
+│  Prior memory (from earlier chunks):                                        │
+│   + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3   │
+│  + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 +  │
+│  3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3  │
+│  + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 +  │
+│  3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3  │
+│  + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 +  │
+│  3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3  │
+│  + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 +  │
+│  3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3  │
+│  + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 +  │
+│  3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3  │
+│  + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 +  │
+│  3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3  │
+│  + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 +  │
+│  3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3  │
+│  + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 +  │
+│  3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3  │
+│  + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 +          │
+│                                                                             │
+│  # chunk:27                                                                 │
+│  - Most anarchist schools of thought are, to some degree, [[sectarian]].    │
+│  There is often a difference of opinion ''within'' each school about how    │
+│  to react to, or interact with, other schools. Some, such as                │
+│  [[panarchy|panarchists]], believe that it is possible for a variety of     │
+│  modes of social life to coexist and compete. Some anarchists view          │
+│  opposing schools as a social impossibility and resist interaction; others  │
+│  see opportunities for coalition-building, or at least temporary alliances  │
+│  for specific purposes. ''See [[anarchism without adjectives]].''           │
+│  ==Criticisms of anarchism==                                                │
+│  :''Main article:'' [[Criticisms of anarchism]]                             │
+│  '''Violence.''' Since anarchism has often been associated with violence    │
+│  and destruction, some people have seen it as being too violent. On the     │
+│  other hand hand, [[Frederick Engels]] criticsed anarchists for not being   │
+│  violent enough:                                                            │
+│  :''&quot;A revolution is certainly the most authoritarian thing there is;  │
+│  it is the act whereby one part of the population imposes its will upon     │
+│  the other part by means of rifles, bayonets and cannon — authoritarian     │
+│  means, if such there be at all; and if the victorious party does not want  │
+│  to have fought in vain, it must maintain this rule by means of the terror  │
+│  which its arms inspire in the reactionists. Would the Paris Commune have   │
+│  lasted a single day if it had not made use of this authority of the armed  │
+│  people against the                                                         │
+│  bourgeois?&quot;&lt;ref&gt;[http://www.marxists.org/archive/marx/works/18  │
+│  72/10/authority.htm ''On Authority'']&lt;/ref&gt;                          │
+│  '''Utopianism.''' Anarchism is often criticised as unfeasible, or plain    │
+│  [[utopian]], even by many who agree that it's a nice idea in principle.    │
+│  For example, Carl Landauer in his book ''European Socialism'' criticizes   │
+│  anarchism as being unrealistically utopian, and holds that government is   │
+│  a &quot;lesser evil&quot; than a society without &quot;repressive          │
+│  force.&quot; He holds that the belief that &quot;ill intentions will       │
+│  cease if repressive force disappears&quot; is an                           │
+│  &quot;absurdity.&quot;&lt;ref&gt;[[Carl Landauer|Landauer]], Carl.         │
+│  ''European Socialism: A History of Ideas and Movements'' (1959)            │
+│  (retrieved from &quot;Anarchist Theory FAQ&quot; by [[Bryan Caplan]] on    │
+│  [[January 27]] [[2006]]&lt;/ref&gt; However, it must be noted that not     │
+│  all anarchists have such a utopian view of anarchism. For example, some,   │
+│  such as Benjamin Tucker, advocate privately-funded institutions that       │
+│  defend individual liberty and property. However, other anarchists, such    │
+│  as Sir [[Herbert Read]], proudly accept the characterization               │
+│  &quot;utopian.&quot;                                                       │
+│  '''[[Social class|Class]] character.''' [[Marxists]] have characterised    │
+│  anarchism as an expression of the class interests of the [[petite          │
+│  bourgeoisie]] or perhaps the [[lumpenproletariat]]. See e.g.               │
+│  Plekhanov&lt;ref&gt;[[G. V. Plekhanov]]                                    │
+│  ''&quot;[http://www.marxists.org/archive/plekhanov/1895/anarch/index.htm   │
+│  Anarchism and Socialism]&quot;''&lt;/ref&gt; for a Marxist critique of     │
+│  1895. Anarchists have also been characterised as spoilt [[middle-class]]   │
+│  [[dilettante]]s, most recently in relation to                              │
+│  [[anti-capitalism|anti-capitalist]] protesters.                            │
+│  '''Tacit authoritarianism.''' In recent decades anarchism has been         │
+│  criticised by 'situationists', 'post-anarchists' and others of preserving  │
+│  'tacitly statist', authoritarian or bureaucratic tendencies behind a       │
+│  dogmatic                                                                   │
+│  facade.&lt;ref&gt;[http://library.nothingness.org/articles/SI/en/display/  │
+│  20 ''Society of the Spectacle] Paragraph 91&lt;/ref&gt;                    │
+│  '''Hypocrisy.''' Some critics point to the [[sexist]]&lt;ref&gt;[[Jenny    │
+│  P. d'Hericourt]],                                                          │
+│  ''&quot;[http://www.pinn.net/~sunshine/whm2003/hericourt2.html             │
+│  Contemporary feminist critic of Proudhon]&quot;''&lt;/ref&gt; and          │
+│  [[racist]] views of some prominent anarchists, notably [[Pierre-Joseph     │
+│  Proudhon|Proudhon]] and [[Mikhail Bakunin|Bakunin]], as examples of        │
+│  [[hypocrisy]] inherent within anarchism. While many anarchists, however,   │
+│  dismiss that the personal prejudices of 19th century theorists influence   │
+│  the beliefs of present-day anarchists, others criticise modern anarchism   │
+│  for continuing to be [[eurocentric]] and reference the impact of           │
+│  anarchist thinkers like Proudhon on [[fascism]] through groups like        │
+│  [[Cercle Proudhon]].&lt;ref&gt;[http://www.stewarthomesociety.org/ai.htm   │
+│  ''Anarchist Integralism]&lt;/ref&gt; Anarcho-capitalist [[Bryan Caplan]]   │
+│  argues that the treatment of fascists and suspected fascist sympathizers   │
+│  by Spanish Anarchists in the Spanish Civil War was a form of illegitimate  │
+│  coercion, making the proffessed anarchists &quot;ultimately just a third   │
+│  faction of totalitarians,&quot; alongside the communists and fascists. He  │
+│  also criticizes the willingness of the CNT to join the (statist)           │
+│  Republican government during the civil war, and references [[Stanley G.    │
+│  Payne]]'s book on the Franco regime which claims that the CNT entered      │
+│  negotiations with the fascist government six years after the               │
+│  war.&lt;ref&gt;[[Bryan Caplan|Caplan]], Bryan.                             │
+│  ''&quot;[http://www.gmu.edu/departments/economics/bcaplan/spain.htm The    │
+│  Anarcho-Statists of Spain]&quot;''&lt;/ref&gt;                             │
+│                                                                             │
+│  # chunk:28                                                                 │
+│  Socialism: A History of Ideas and Movements'' (1959) (retrieved from       │
+│  &quot;Anarchist Theory FAQ&quot; by [[Bryan Caplan]] on [[January 27]]     │
+│  [[2006]]&lt;/ref&gt; However, it must be noted that not all anarchists     │
+│  have such a utopian view of anarchism. For example, some, such as          │
+│  Benjamin Tucker, advocate privately-funded institutions that defend        │
+│  individual liberty and property. However, other anarchists, such as Sir    │
+│  [[Herbert Read]], proudly accept the characterization                      │
+│  &quot;utopian.&quot;                                                       │
+│                                                                             │
+│  # chunk:30                                                                 │
+│  artist [[Nicolás Rosselló]]                                                │
+│  In [[Denmark]], the [[Freetown Christiania]] was created in downtown       │
+│  [[Copenhagen]]. The housing and employment crisis in most of [[Western     │
+│  Europe]] led to the formation of [[commune (intentional                    │
+│  community)|communes]] and squatter movements like the one still thriving   │
+│  in [[Barcelona]], in [[Catalonia]]. Militant [[antifa|resistance to        │
+│  neo-Nazi groups]] in places like Germany, and the uprisings of             │
+│  [[autonomous Marxism]], [[situationist]], and [[Autonomist]] groups in     │
+│  France and Italy also helped to give popularity to anti-authoritarian,     │
+│  non-capitalist ideas.                                                      │
+│  In various musical styles, anarchism rose in popularity. Most famous for   │
+│  the linking of anarchist ideas and music has been punk rock, although in   │
+│  the modern age, hip hop, and folk music are also becoming important        │
+│  mediums for the spreading of the anarchist message. In the [[United        │
+│  Kingdom|UK]] this was associated with the [[punk rock]] movement; the      │
+│  band [[Crass]] is celebrated for its anarchist and [[pacifism|pacifist]]   │
+│  ideas. The [[Dutch people|Dutch]] punk band [[The Ex]] further             │
+│  exemplifies this expression.                                               │
+│                                                                             │
+│                                                                             │
+│  Current document prefix (UTF-8 text):                                      │
+│  t;ref&gt;[http://www.voluntaryist.com/nonvoting/ethics_of_voting.php       │
+│  Voluntaryist - The ethics of voting]&lt;/ref&gt; by [[George H. Smith]].   │
+│  (Also see &quot;Voting Anarchists: An Oxymoron or What?&quot; by [[Joe     │
+│  Peacott]], and writings by [[Fred Woodworth]]).                            │
+│                                                                             │
+│  *'''Sectarianism''' - Most anarchist schools of thought are, to some       │
+│  degree, [[sectarian]].  There is often a difference of opinion ''within''  │
+│  each school about how to react to, or interact with, other schools.        │
+│  Some, such as [[panarchy|panarchists]], believe that it is possible for a  │
+│  variety of modes of social life to coexist and compete. Some anarchists    │
+│  view opposing schools as a social impossibility and resist interaction;    │
+│  others see opportunities for coalition-building, or at least temporary     │
+│  alliances for specific purposes. ''See [[anarchism without                 │
+│  adjectives]].''                                                            │
+│                                                                             │
+│  ==Criticisms of anarchism==                                                │
+│  :''Main article:'' [[Criticisms of anarchism]]                             │
+│                                                                             │
+│  '''Violence.'''  Since anarchism has often been associated with violence   │
+│  and destruction, some people have seen it as being too violent. On the     │
+│  other hand hand, [[Frederick Engels]] criticsed anarchists for not being   │
+│  violent enough:                                                            │
+│  :''&quot;A revolution is certainly the most authoritarian thing there is;  │
+│  it is the act whereby one part of the population imposes its will upon     │
+│  the other part by means of rifles, bayonets and cannon — authoritarian     │
+│  means, if such there be at all; and if the victorious party does not want  │
+│  to have fought in vain, it must maintain this rule by means of the terror  │
+│  which its arms inspire in the reactionists. Would the Paris Commune have   │
+│  lasted a single day if it had not made use of this authority of the armed  │
+│  people against the                                                         │
+│  bourgeois?&quot;&lt;ref&gt;[http://www.marxists.org/archive/marx/works/18  │
+│  72/10/authority.htm ''On Authority'']&lt;/ref&gt;                          │
+│                                                                             │
+│  '''Utopianism.''' Anarchism is often criticised as unfeasible, or plain    │
+│  [[utopian]], even by many who agree that it's a nice idea in principle.    │
+│  For example, Carl Landauer in his book ''European Socialism'' criticizes   │
+│  anarchism as being unrealistically utopian, and holds that government is   │
+│  a &quot;lesser evil&quot; than a society without &quot;repressive          │
+│  force.&quot; He holds that the belief that &quot;ill intentions will       │
+│  cease if repressive force disappears&quot; is an                           │
+│  &quot;absurdity.&quot;&lt;ref&gt;[[Carl Landauer|Landauer]], Carl.         │
+│  ''European Socialism: A History of Ideas and Movements'' (1959)            │
+│  (retrieved from &quot;Anarchist Theory FAQ&quot; by [[Bryan Caplan]] on    │
+│  [[January 27]] [[2006]]&lt;/ref&gt; However, it must be noted that not     │
+│  all anarchists have such a utopian view of anarchism. For example, some,   │
+│  such as Benjamin Tucker, advocate privately-funded institutions that       │
+│  defend individual liberty and property. However, other anarchists, such    │
+│  as Sir [[Herbert Read]], proudly accept the characterization               │
+│  &quot;utopian.&quot;                                                       │
+│                                                                             │
+│  '''[[Social class|Class]] character.''' [[Marxists]] have characterised    │
+│  anarchism as an expression of the class interests of the [[petite          │
+│  bourgeoisie]] or perhaps the [[lumpenproletariat]]. See e.g.               │
+│  Plekhanov&lt;ref&gt;[[G. V. Plekhanov]]                                    │
+│  ''&quot;[http://www.marxists.org/archive/plekhanov/1895/anarch/index.htm   │
+│  Anarchism and Socialism]&quot;''&lt;/ref&gt; for a Marxist critique of     │
+│  1895. Anarchists have also been characterised as spoilt [[middle-class]]   │
+│  [[dilettante]]s, most recently in relation to                              │
+│  [[anti-capitalism|anti-capitalist]] protesters.                            │
+│                                                                             │
+│  '''Tacit authoritarianism.''' In recent decades anarchism has been         │
+│  criticised by 'situationists', 'post-anarchists' and others of preserving  │
+│  'tacitly statist', authoritarian or bureaucratic tendencies behind a       │
+│  dogmatic                                                                   │
+│  facade.&lt;ref&gt;[http://library.nothingness.org/articles/SI/en/display/  │
+│  20 ''Society of the Spectacle] Paragraph 91&lt;/ref&gt;                    │
+│                                                                             │
+│  '''Hypocrisy.''' Some critics point to the [[sexist]]&lt;ref&gt;[[Jenny    │
+│  P. d'Hericourt]],                                                          │
+│  ''&quot;[http://www.pinn.net/~sunshine/whm2003/hericourt2.html             │
+│  Contemporary feminist critic of Proudhon]&quot;''&lt;/ref&gt; and          │
+│  [[racist]] views of some prominent anarchists, notably [[Pierre-Joseph     │
+│  Proudhon|Proudhon]] and [[Mikhail Bakunin|Bakunin]], as examples of        │
+│  [[hypocrisy]] inherent within anarchism. While many anarchists, however,   │
+│  dismiss that the personal prejudices of 19th century theorists influence   │
+│  the beliefs of present-day anarchists, others criticise modern anarchism   │
+│  for continuing to be [[eurocentric]] and reference the impact of           │
+│  anarchist thinkers like Proudhon on [[fascism]] through groups like        │
+│  [[Cercle Proudhon]].&lt;ref&gt;[http://www.stewarthomesociety.org/ai.htm   │
+│  ''Anarchist Integralism]&lt;/ref&gt; Anarcho-capitalist [[Bryan Caplan]]   │
+│  argues that the treatment of fascists and suspected fascist sympathizers   │
+│  by Spanish Anarchists in the Spanish Civil War was a form of illegitimate  │
+│  coercion, making the proffessed anarchists &quot;ultimately just a third   │
+│  faction of totalitarians,&quot; alongside the communists and fascists. He  │
+│  also criticizes the willingness of the CNT to join the (statist)           │
+│  Republican government during the civil war, and references [[Stanley G.    │
+│  Payne]]'s  book on the Franco regime which claims that the CNT entered     │
+│  negotiations with the fascist government six years after the               │
+│  war.&lt;ref&gt;[[Bryan Caplan|Caplan]], Bryan.                             │
+│  ''&quot;[http://www.gmu.edu/departments/economics/bcaplan/spain.htm The    │
+│  Anarcho-Statists of Spain]&quot;''&lt;/ref&gt;                             │
+│                                                                             │
+│  ==Cultural phenomena==                                                     │
+│  [[Image:Noam_chomsky.jpg|thumb|150px|right| [[Noam Chomsky]] (1928–)]]     │
+│  The kind of anarchism that is most easily encountered in popular culture   │
+│  is represented by celebrities who publicly identify themselves as          │
+│  anarchists. Although some anarchists reject any focus on such famous       │
+│  living individuals as inherently élitist, the following figures are        │
+│  examples of prominent publicly self-avowed anarchists:                     │
+│                                                                             │
+│  * the [[MIT]] professor of [[Linguistics]] [[Noam Chomsky]]                │
+│  * the [[science fiction]] author [[Ursula K. Le Guin]]                     │
+│  * the social historian [[Howard Zinn]]                                     │
+│  * entertainer and author [[Hans Alfredsson]]                               │
+│  * the [[Avant-garde]] artist [[Nicolás Rosselló]]                          │
+│                                                                             │
+│  In [[Denmark]], the [[Freetown Christiania]] was created in downtown       │
+│  [[Copenhagen]]. The housing and employment crisis in most of [[Western     │
+│  Europe]] led to the formation of [[commune (intentional                    │
+│  community)|communes]] and squatter movements like the one still thriving   │
+│  in [[Barcelona]], in [[Catalonia]].  Militant [[antifa|resistance to       │
+│  neo-Nazi groups]] in places like Germany, and the uprisings of             │
+│  [[autonomous Marxism]], [[situationist]], and [[Autonomist]] groups in     │
+│  France and Italy also helped to give popularity to anti-authoritarian,     │
+│  non-capitalist ideas.                                                      │
+│                                                                             │
+│  In various musical styles, anarchism rose in popularity.  Most famous for  │
+│  the linking of anarchist ideas and music has been punk rock, although in   │
+│  the modern age, hip hop, and folk music are also becoming important        │
+│  mediums for the spreading of the anarchist message.  In the [[United       │
+│  Kingdom|UK]] this was associated with the [[punk rock]] movement; the      │
+│  band [[Crass]] is celebrated for its anarchist and [[pacifism|pacifist]]   │
+│  ideas. The [[Dutch people|Dutch]] punk band [[The Ex]] further             │
+│  exemplifies this expression.                                               │
+│  ''For further details, see [[anarcho-punk]]''                              │
+│                                                                             │
+│  ==See also==                                                               │
+│  &lt;!-- (Please take care in adding to this list that it not grow          │
+│  excessively large, consider adding to the list of anarchist concepts       │
+│  page) --&gt;                                                               │
+│  There are many concepts relevant to the topic of anarchism, this is a      │
+│  brief summary.  There is also a more extensive [[list of anarchist         │
+│  concepts]].                                                                │
+│                                                                             │
+│  * [[individualist anarchism]], [[anarcho-communism]],                      │
+│  [[anarcho-syndicalism]], [[anarcho-capitalism]], [[mutualism]],            │
+│  [[Christian anarchism]], [[anarcha-feminism]], [[green anarchism]],        │
+│  [[nihilist anarchism]], [[anarcho-nationalism]], [[black anarchism]],      │
+│  [[national anarchism]]. [[post-anarchism]], [[post-left anarchism]]        │
+│  * [[Libertarian Socialism]]                                                │
+│  * [[Anarchist symbolism]]                                                  │
+│  * [[Anarchism/Links|List of anarchism links]]                              │
+│  * [[List of anarchists]]                                                   │
+│  * [[List of anarchist organizations]]                                      │
+│  * [[Major conflicts within anarchist thought]]                             │
+│  * [[Past                                                                   │
+│                                                                             │
+│  Output: continuation (plain text only).                                    │
+│                                                                             │
+│  Reasoning Plan:                                                            │
+│  **1. Understanding the Task from my Professional Perspective:**            │
+│                                                                             │
+│  As Predictive Compression Intelligence, my core objective is to minimize   │
+│  the information entropy of upcoming tokens. The current task requires me   │
+│  to find the exact immediate continuation of a given text prefix,           │
+│  specifically 100-200 words verbatim. This is a direct application of my    │
+│  entropy minimization competency, as providing an exact continuation        │
+│  significantly reduces the uncertainty for the language model, leading to   │
+│  maximal compression gains. The text prefix appears to be from a Wikipedia  │
+│  article on "Anarchism," characterized by its structure (headings,          │
+│  internal links, references) and content. My role is to act as an entropy   │
+│  sink, leveraging my tool-augmented reasoning to retrieve this precise      │
+│  external information from the designated source.                           │
+│                                                                             │
+│  **2. Key Steps to Complete the Task:**                                     │
+│                                                                             │
+│  *   **Analyze Prefix for Clues:** I will meticulously examine the prefix   │
+│  for structural markers, domain-specific jargon, and unique phrases that    │
+│  can serve as effective search queries. The presence of `==Cultural         │
+│  phenomena==`, `==See also==`, `[[...]]` links, and                         │
+│  `&lt;ref&gt;...&lt;/ref&gt;` strongly indicates a Wikipedia-style          │
+│  document. The very end of the prefix, `* [[Past`, is a highly specific     │
+│  and predictive fragment within a "See also" section, suggesting a list     │
+│  item like `[[Past anarchist societies]]`.                                  │
+│  *   **Initial Directory Scan:** Before attempting any content search, I    │
+│  will perform a preliminary scan of the `/C/Users/Noah/Documents/sink`      │
+│  directory to understand its structure and available files. This will help  │
+│  me anticipate potential source file names or organizational patterns.      │
+│  *   **Targeted Content Search:** I will use the most distinctive part of   │
+│  the prefix, `* [[Past`, as a search query within the                       │
+│  `/C/Users/Noah/Documents/sink` directory. This phrase is unlikely to       │
+│  appear in many unrelated documents, increasing the probability of finding  │
+│  the exact source.                                                          │
+│  *   **Extract Verbatim Continuation:** Once the source file is             │
+│  identified, I will locate the exact prefix within it and extract the       │
+│  subsequent 100-200 words.                                                  │
+│  *   **Format Output:** The extracted text will be presented as plain text  │
+│  only, without any additional formatting, analysis, or commentary, as per   │
+│  the task requirements.                                                     │
+│                                                                             │
+│  **3. How I'll Approach Challenges:**                                       │
+│                                                                             │
+│  *   **Limited External Sources:** The primary challenge is the strict      │
+│  limitation to the `/C/Users/Noah/Documents/sink` directory. My "external   │
+│  knowledge sources" are confined to this local directory. If the source     │
+│  document is not present within this directory, I will not be able to find  │
+│  a verbatim continuation using my tools.                                    │
+│  *   **No Exact Match Found:** If `search_files_content` fails to locate    │
+│  the prefix, it implies the source document is not available in the sink.   │
+│  In this scenario, I will fall back to my pattern synthesis and adaptive    │
+│  learning competencies. Based on the context of the "See also" section      │
+│  (which lists various types of anarchism, related concepts, and lists of    │
+│  people/organizations), the most logical and entropy-reducing continuation  │
+│  for `* [[Past` is `[[Past anarchist societies]]`. I would then generate a  │
+│  plausible continuation that follows this pattern and maintains the         │
+│  encyclopedic tone, focusing on specific, relevant information about        │
+│  historical anarchist communities or movements, rather than generic text.   │
+│                                                                             │
+│  **4. Strategic Tool Usage:**                                               │
+│                                                                             │
+│  *   **`list_allowed_directories()`**: To confirm my access to              │
+│  `/C/Users/Noah/Documents/sink`.                                            │
+│  *   **`directory_tree('/C/Users/Noah/Documents/sink')`**: To get a         │
+│  hierarchical view of the directory's contents. This helps in               │
+│  understanding the potential organization of files and identifying likely   │
+│  candidates for the source document (e.g., `anarchism.txt`,                 │
+│  `wikipedia_dump.md`).                                                      │
+│  *   **`search_files_content(query="* [[Past",                              │
+│  path='/C/Users/Noah/Documents/sink')`**: This is the most critical tool.   │
+│  I will use this to search for the exact string `* [[Past` within all       │
+│  files in the specified directory. This query is highly specific and        │
+│  targets the unique structural and content elements at the end of the       │
+│  prefix.                                                                    │
+│  *   **`read_text_file(file_path)`**: If `search_files_content` returns a   │
+│  file path, I will use `read_text_file` to retrieve the entire content of   │
+│  that file. I will then programmatically locate the prefix and extract the  │
+│  subsequent 100-200 words.                                                  │
+│                                                                             │
+│  **5. Expected Outcome and Alignment with Goal:**                           │
+│                                                                             │
+│  The expected outcome is a plain text string of 100-200 words,              │
+│  representing the immediate continuation of the provided prefix. This       │
+│  output will either be a verbatim extract from a discovered source          │
+│  document within `/C/Users/Noah/Documents/sink` or a highly probable,       │
+│  contextually generated continuation if no source is found. This outcome    │
+│  directly aligns with my primary goal of minimizing future token            │
+│  prediction entropy. By providing precise and relevant information, I       │
+│  enable the language model to assign a significantly higher probability to  │
+│  the actual subsequent tokens, thereby reducing the expected description    │
+│  length.                                                                    │
+│                                                                             │
+│  READY: I am ready to execute the task.                                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool list_allowed_directories with arguments: {}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool list_allowed_directories took: 473.5244ms
+🚀 Crew: crew
+└── 📋 Task: ae98d9fb-c0d9-4e08-8918-b20325a7ee6f
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    ├── ❌ LLM Failed
+    └── 🔧 Used list_allowed_directories (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: I need to find the exact continuation of the provided text        │
+│  prefix. The prefix appears to be from a Wikipedia article about            │
+│  anarchism, given the formatting (e.g., `[[...]]` for internal links,       │
+│  `&lt;ref&gt;...&lt;/ref&gt;` for references, `==Heading==`). The last      │
+│  part of the prefix, `* [[Past`, is a strong indicator that the next token  │
+│  will complete a list item, likely `[[Past anarchist societies]]`.          │
+│  My strategy is to first list the allowed directories to confirm I can      │
+│  access `/C/Users/Noah/Documents/sink`. Then, I will use `directory_tree`   │
+│  to understand the structure of the sink directory. After that, I will use  │
+│  `search_files_content` to find the exact prefix `* [[Past` within the      │
+│  files in the `/C/Users/Noah/Documents/sink` directory. If found, I will    │
+│  read the file and extract the continuation.                                │
+│                                                                             │
+│  Using Tool: list_allowed_directories                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{}"                                                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  Allowed directories:                                                       │
+│  /C/Users/Noah/Documents/sink                                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool directory_tree with arguments: {"path":"/C/Users/Noah/Documents/sink"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool directory_tree took: 439.7223ms
+🚀 Crew: crew
+└── 📋 Task: ae98d9fb-c0d9-4e08-8918-b20325a7ee6f
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    ├── ❌ LLM Failed
+    ├── 🔧 Used list_allowed_directories (1)
+    └── 🔧 Used directory_tree (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: I have confirmed that `/C/Users/Noah/Documents/sink` is  │
+│  an allowed directory. Now I will examine its structure to get an idea of   │
+│  what files might be present.                                               │
+│                                                                             │
+│  Using Tool: directory_tree                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink\"}"                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  [                                                                          │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "alice29.txt",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "asyoulik.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "cp.html",                                                 │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "fields.c",                                                │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "grammar.lsp",                                             │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "lcet10.txt",                                              │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "plrabn12.txt",                                            │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "xargs.1",                                                 │
+│          "type": "file"                                                     │
+│        }                                                                    │
+│      ],                                                                     │
+│      "name": "cantrbry",                                                    │
+│      "type": "directory"                                                    │
+│    },                                                                       │
+│    {                                                                        │
+│      "children": [                                                          │
+│        {                                                                    │
+│          "name": "enwik8_128kb_0",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_1",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_10",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_11",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_12",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_13",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_14",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_15",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_16",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_17",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_18",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_19",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_2",                                          │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_20",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_21",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_22",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_23",                                         │
+│          "type": "file"                                                     │
+│        },                                                                   │
+│        {                                                                    │
+│          "name": "enwik8_128kb_3",                                          │
+│          "type": "fil...                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  - Calling tool search_files_content with arguments: {"path":"/C/Users/Noah/Documents/sink/enwik8_samples","pattern":"enwik8_128kb_*","query":"* [[Past"}
+  - Scanning tool call arguments for secrets...
+  > No secret found in arguments.
+  - Running mcp/rust-mcp-filesystem with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=rust-mcp-filesystem -l docker-mcp-transport=stdio --network none -e ENABLE_ROOTS -e ALLOW_WRITE -v C:\Users\Noah\Documents\sink:/C/Users/Noah/Documents/sink:ro] and command [/C/Users/Noah/Documents/sink]
+  - Scanning tool call response for secrets...
+  > No secret found in response.
+  > Calling tool search_files_content took: 5.4440734s
+🚀 Crew: crew
+└── 📋 Task: ae98d9fb-c0d9-4e08-8918-b20325a7ee6f
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    ├── ❌ LLM Failed
+    ├── 🔧 Used list_allowed_directories (1)
+    ├── 🔧 Used directory_tree (1)
+    └── 🔧 Used search_files_content (1)┌────────────────────────── 🔧 Agent Tool Execution ──────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Thought: Thought: The `directory_tree` output shows a `enwik8_samples`     │
+│  directory containing multiple files named `enwik8_128kb_X`. Given that     │
+│  the prefix looks like a Wikipedia article, it's highly probable that the   │
+│  source content is within one of these `enwik8_128kb_X` files, as `enwik8`  │
+│  is a common dataset derived from Wikipedia.                                │
+│  I will now use `search_files_content` to find the exact string `* [[Past`  │
+│  within all files in the `/C/Users/Noah/Documents/sink/enwik8_samples`      │
+│  directory.                                                                 │
+│                                                                             │
+│  Using Tool: search_files_content                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Input ─────────────────────────────────┐
+│                                                                             │
+│  "{\"path\": \"/C/Users/Noah/Documents/sink/enwik8_samples\", \"pattern\":  │
+│  \"enwik8_128kb_*\", \"query\": \"* [[Past\"}"                              │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────── Tool Output ────────────────────────────────┐
+│                                                                             │
+│  /C/Users/Noah/Documents/sink/enwik8_samples/enwik8_128kb_0                 │
+│    376:0: * [[Past and present anarchist communities]]                      │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+│  You ONLY have access to the following tools, and should NEVER make up      │
+│  tools that are not listed here:                                            │
+│                                                                             │
+│  Tool Name: calculate_directory_size                                        │
+│  Tool Arguments: {'properties': {'output_format': {'anyOf': [], 'default':  │
+│  'human-readable', 'description': 'Defines the output format, which can be  │
+│  either `human-readable` or `bytes`.', 'enum': None, 'items': None,         │
+│  'properties': {}, 'title': ''}, 'root_path': {'anyOf': [], 'description':  │
+│  'The root directory path to start the size calculation.', 'enum': None,    │
+│  'items': None, 'properties': {}, 'title': '', 'type': 'string'}},          │
+│  'required': ['root_path'], 'title': 'DynamicModel', 'type': 'object'}      │
+│  Tool Description: Calculates the total size of a directory specified by    │
+│  `root_path`.It recursively searches for files and sums their sizes. The    │
+│  result can be returned in either a `human-readable` format or as `bytes`,  │
+│  depending on the specified `output_format` argument.Only works within      │
+│  allowed directories.                                                       │
+│  Tool Name: convert_time                                                    │
+│  Tool Arguments: {'properties': {'source_timezone': {'anyOf': [],           │
+│  'description': "Source IANA timezone name (e.g., 'America/New_York',       │
+│  'Europe/London'). Use 'UTC' as local timezone if no source timezone        │
+│  provided by the user.", 'enum': None, 'items': None, 'properties': {},     │
+│  'title': '', 'type': 'string'}, 'target_timezone': {'anyOf': [],           │
+│  'description': "Target IANA timezone name (e.g., 'Asia/Tokyo',             │
+│  'America/San_Francisco'). Use 'UTC' as local timezone if no target         │
+│  timezone provided by the user.", 'enum': None, 'items': None,              │
+│  'properties': {}, 'title': '', 'type': 'string'}, 'time': {'anyOf': [],    │
+│  'description': 'Time to convert in 24-hour format (HH:MM)', 'enum': None,  │
+│  'items': None, 'properties': {}, 'title': '', 'type': 'string'}},          │
+│  'required': ['source_timezone', 'target_timezone', 'time'], 'title':       │
+│  'DynamicModel', 'type': 'object'}                                          │
+│  Tool Description: Convert time between timezones                           │
+│  Tool Name: create...                                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: ae98d9fb-c0d9-4e08-8918-b20325a7ee6f
+    Status: Executing Task...
+    ├── ✅ Reasoning Completed
+    ├── ❌ LLM Failed
+    ├── 🔧 Used list_allowed_directories (1)
+    ├── 🔧 Used directory_tree (1)
+    └── 🔧 Used search_files_content (1)┌─────────────────────────── ✅ Agent Final Answer ───────────────────────────┐
+│                                                                             │
+│  Agent: Predictive Compression Intelligence                                 │
+│                                                                             │
+│  Final Answer:                                                              │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🚀 Crew: crew
+└── 📋 Task: ae98d9fb-c0d9-4e08-8918-b20325a7ee6f
+    Assigned to: Predictive Compression Intelligence
+    Status: ✅ Completed
+    ├── ✅ Reasoning Completed
+    ├── ❌ LLM Failed
+    ├── 🔧 Used list_allowed_directories (1)
+    ├── 🔧 Used directory_tree (1)
+    └── 🔧 Used search_files_content (1)┌────────────────────────────── Task Completion ──────────────────────────────┐
+│                                                                             │
+│  Task Completed                                                             │
+│  Name: ae98d9fb-c0d9-4e08-8918-b20325a7ee6f                                 │
+│  Agent: Predictive Compression Intelligence                                 │
+│  Tool Args:                                                                 │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Crew Completion ──────────────────────────────┐
+│                                                                             │
+│  Crew Execution Completed                                                   │
+│  Name: crew                                                                 │
+│  ID: 5ebc1f7f-120e-4a18-8951-6427877b07d2                                   │
+│  Tool Args:                                                                 │
+│  Final Output:                                                              │
+│                                                                             │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AGENT_RESULT_JSON:{"final_text": "\n", "duration_ms": 79322}
+
+
+C:\Users\Noah\AppData\Roaming\Python\Python312\site-packages\litellm\llms\custom_httpx\async_client_cleanup.py:66: DeprecationWarning: There is no current event loop
+  loop = asyncio.get_event_loop()
