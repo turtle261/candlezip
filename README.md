@@ -33,6 +33,25 @@ CandleZip implements a sink-inclusive minimum description length workflow (SIMDL
   self-test benchmarks/your_file.txt
 
 ```
+
+## Human-in-the-Loop (HITL) Usage
+
+You can run CandleZip with a human-in-the-loop agent to have a person provide predictions (instead of an LLM). This is useful for benchmarking human vs. model entropy reduction per cost. The repository includes a drop-in HITL agent (`agent/agent_human.py`) that launches a web UI and returns the human's plaintext continuation to CandleZip.
+
+Example:
+
+```bash
+# Self-test with human in the loop
+./target/release/candlezip.exe --backend smollm --agent --scan \
+  --scan-lookahead 512 --context 512 --reprime-interval 512 \
+  --scan-agent-script agent/agent_human.py --scan_max_steps 12 \
+  self-test benchmarks/your_file.txt
+```
+
+We also provide a screenshot of the HITL UI (`./imgs/hitl_image.png`) to demonstrate how MCP tools are made human-accessible inside the interface.
+
+![HITL UI](./imgs/hitl_image.png)
+
 ## DOI:
 [10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 

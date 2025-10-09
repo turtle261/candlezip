@@ -557,7 +557,7 @@ HTML_TEMPLATE = """
     <div class="container">
         <div class="header">
             <h1>🧠 CandleZip HITL</h1>
-            <p>Human Intelligence Compression - Research Grade Interface</p>
+            <p>Human Text Compression: Benchmark your own Entropy Reduction per Cost!</p>
             <div class="timer" id="timer">⏱ 00:00</div>
         </div>
         

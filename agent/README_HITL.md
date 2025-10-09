@@ -3,6 +3,9 @@
 ## Overview
 
 The HITL agent provides a research-grade web interface that allows humans to perform compression prediction tasks with full access to MCP tools. This enables empirical comparison between human and LLM performance in the Agentic Compression framework, as theorized in the paper.
+This leaves minimal ambiguity between human-AI evaluations as the toolset is identical, through MCP.
+
+In practice, you can evaluate tool ROI **manually** with this strategy.
 
 ## Features
 
@@ -116,7 +119,13 @@ The HITL agent loads and exposes all MCP tools from your configuration:
 
 ### Main Interface
 
-The interface is divided into responsive panels:
+The interface is divided into responsive panels. The UI title and header emphasize human-driven compression as a benchmarkable task:
+
+- **Title**: "Human Text Compression: Benchmark your own Entropy Reduction per Cost!"
+
+We make MCP tools human-accessible inside the UI so humans can invoke the same set of tools available to LLM agents. See the screenshot below for an example of the HITL interface.
+
+![HITL UI](../imgs/hitl_image.png)
 
 1. **Header**: Timer showing elapsed time
 2. **Task Panel**: Displays current prefix and prior memory
@@ -338,6 +347,8 @@ For issues or questions:
 
 ---
 
-**Research-grade human intelligence compression interface.**
+**Research-grade human text compression interface.**
 **Damn good looking, too.** 🧠✨
+
+**Note:** Use `--scan-agent-script agent/agent_human.py` to run CandleZip with the HITL agent; the toolset exposed in the UI comes from your `mcp_config.json`.
 
