@@ -29,7 +29,14 @@ use chrono::Utc;
 use csv;
 
 mod models;
+mod finezip;
 use models::{LanguageModelSession, SmolLmSession, Rwkv7Session};
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum Mode {
+    LlmZip,
+    FineZip,
+}
 
 #[derive(Parser, Debug, Clone)]
 #[command(name="candezip", about="Unified model-based compressor with optional scan mode")]
@@ -131,6 +138,39 @@ struct Cli {
     /// Policy for tool selection: aligned (default), randomized, leave-one-out:<tool_id>, always-on, react-unpriced, retrieval-only
     #[arg(long, default_value = "aligned")]
     policy: String,
+
+    /// Compression mode: llmzip (default) or finezip
+    #[arg(long, default_value = "llmzip")]
+    mode: String,
+
+    /// Enable FineZip mode (alternative to --mode finezip)
+    #[arg(long, default_value_t = false)]
+    finezip: bool,
+
+    /// Use arithmetic coding in FineZip mode (default: false for rank-based compression)
+    #[arg(long, default_value_t = false)]
+    use_ac: bool,
+
+    // FineZip LoRA hyperparameters
+    /// LoRA rank
+    #[arg(long, default_value_t = 16)]
+    lora_rank: usize,
+
+    /// LoRA alpha (scaling factor)
+    #[arg(long, default_value_t = 16)]
+    lora_alpha: usize,
+
+    /// LoRA learning rate
+    #[arg(long, default_value = "1e-4")]
+    lora_lr: String,
+
+    /// LoRA training epochs
+    #[arg(long, default_value_t = 3)]
+    lora_epochs: usize,
+
+    /// LoRA quantization: none, 4bit, 8bit, 16bit, 32bit
+    #[arg(long, default_value = "none")]
+    lora_quant: String,
 }
 
 #[derive(Subcommand, Debug, Clone)]
@@ -144,16 +184,28 @@ fn detect_device(force_cpu: bool) -> candle_core::Device {
     if force_cpu { candle_core::Device::Cpu } else { candle_core::Device::new_cuda(0).unwrap_or(candle_core::Device::Cpu) }
 }
 
-fn main() -> Result<()> {
-    let cli = Cli::parse();
-    match &cli.command {
-        Commands::Compress { input, output } => encode_file(&cli, input, output),
-        Commands::Decompress { input, output } => decode_file(&cli, input, output),
-        Commands::SelfTest { input } => self_test(&cli, input),
+fn parse_mode(cli: &Cli) -> Result<Mode> {
+    let mode_str = cli.mode.to_lowercase();
+    let explicit_finezip = cli.finezip;
+
+    match (mode_str.as_str(), explicit_finezip) {
+        ("llmzip", false) => Ok(Mode::LlmZip),
+        ("finezip", _) | (_, true) => Ok(Mode::FineZip),
+        _ => bail!("Invalid mode '{}'. Supported modes: llmzip, finezip", cli.mode),
     }
 }
 
-fn self_test(cli: &Cli, input: &Path) -> Result<()> {
+fn main() -> Result<()> {
+    let cli = Cli::parse();
+    let mode = parse_mode(&cli)?;
+    match &cli.command {
+        Commands::Compress { input, output } => encode_file(&cli, mode, input, output),
+        Commands::Decompress { input, output } => decode_file(&cli, mode, input, output),
+        Commands::SelfTest { input } => self_test(&cli, mode, input),
+    }
+}
+
+fn self_test(cli: &Cli, mode: Mode, input: &Path) -> Result<()> {
     let tmp_out = input.with_extension("canz");
     let tmp_dec = input.with_extension("roundtrip.txt");
 
@@ -173,14 +225,14 @@ fn self_test(cli: &Cli, input: &Path) -> Result<()> {
     std::env::set_var("CANDLEZIP_WATCHDOG_DIR", &run_dir);
 
     let t0 = std::time::Instant::now();
-    encode_file(cli, input, &tmp_out)?;
+    encode_file(cli, mode, input, &tmp_out)?;
     let t1 = std::time::Instant::now();
 
     // Decode with watchdog comparison against the encode trace
     // Enable --reuse for deterministic decode during self-test
     let mut decode_cli = cli.clone();
     decode_cli.reuse = true;
-    let decode_res = decode_file(&decode_cli, &tmp_out, &tmp_dec);
+    let decode_res = decode_file(&decode_cli, mode, &tmp_out, &tmp_dec);
     let t2 = std::time::Instant::now();
 
     let src = fs::read(input)?;
@@ -239,16 +291,24 @@ fn ac_p_min() -> f64 {
 
 // * Reserved flags bit layout (VERSION=2):
 // * bit 0: agent conditioning used (1=yes)
-// * bits 1..15: reserved (0)
+// * bit 1: agent mock used (1=yes)
+// * bit 2: agent gating bits present after header (1=yes)
+// * bit 3: compression mode (0=llmzip, 1=finezip)
+// * bit 4: finezip use arithmetic coding (0=rank-based, 1=arithmetic coding)
+// * bits 5..15: reserved (0)
 // * bits 16..31: agent chunk size (tokens), 16-bit unsigned
 const FLAG_AGENT_USED: u32 = 1 << 0;
 const FLAG_AGENT_MOCK: u32 = 1 << 1;
 const FLAG_AGENT_GATES: u32 = 1 << 2; // gating bits present after header
-fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, agent_chunk: usize) -> u32 {
+const FLAG_MODE_FINEZIP: u32 = 1 << 3;
+const FLAG_FINEZIP_USE_AC: u32 = 1 << 4;
+fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, agent_chunk: usize, mode: Mode, use_ac: bool) -> u32 {
     let mut f = 0u32;
     if agent_used { f |= FLAG_AGENT_USED; }
     if agent_mock { f |= FLAG_AGENT_MOCK; }
     if gates_present { f |= FLAG_AGENT_GATES; }
+    if matches!(mode, Mode::FineZip) { f |= FLAG_MODE_FINEZIP; }
+    if use_ac { f |= FLAG_FINEZIP_USE_AC; }
     let chunk16 = (agent_chunk as u32) & 0xFFFF;
     f |= chunk16 << 16;
     f
@@ -256,6 +316,10 @@ fn flags_pack(agent_used: bool, agent_mock: bool, gates_present: bool, agent_chu
 fn flags_unpack_agent_used(flags: u32) -> bool { (flags & FLAG_AGENT_USED) != 0 }
 fn flags_unpack_agent_mock(flags: u32) -> bool { (flags & FLAG_AGENT_MOCK) != 0 }
 fn flags_unpack_agent_gates(flags: u32) -> bool { (flags & FLAG_AGENT_GATES) != 0 }
+fn flags_unpack_mode(flags: u32) -> Mode {
+    if (flags & FLAG_MODE_FINEZIP) != 0 { Mode::FineZip } else { Mode::LlmZip }
+}
+fn flags_unpack_finezip_use_ac(flags: u32) -> bool { (flags & FLAG_FINEZIP_USE_AC) != 0 }
 fn flags_unpack_agent_chunk(flags: u32) -> usize { ((flags >> 16) & 0xFFFF) as usize }
 
 struct ArithmeticEncoder<W: std::io::Write> {
@@ -1790,7 +1854,200 @@ fn cross_entropy_bits_over_span_rwkv(
 // Encode / Decode (unified)
 // ----------------------------------
 
-fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
+fn encode_file(cli: &Cli, mode: Mode, input: &Path, output: &Path) -> anyhow::Result<()> {
+    match mode {
+        Mode::FineZip => encode_file_finezip(cli, input, output),
+        Mode::LlmZip => encode_file_llmzip(cli, input, output),
+    }
+}
+
+fn encode_file_finezip(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
+    let t0 = std::time::Instant::now();
+    let device = detect_device(cli.cpu);
+    eprintln!("Device: {}", if device.is_cuda() { "CUDA" } else { "CPU" });
+    eprintln!("Mode: FineZip (LoRA-based compression)");
+
+    // Read input
+    let data = fs::read(input).with_context(|| "reading input")?;
+    let orig_len_bytes = data.len() as u64;
+    let orig_blake3_16 = blake3_bytes_bin16(&data);
+
+    // Tokenize input (reuse tokenization logic from LLMZip)
+    let backend = cli.backend.to_lowercase();
+    let (tokens, model_hash16, tokenizer_hash16, weight_repr, bos_id, vocab_size) = if backend == "smollm" {
+        tokenize_smol(&data, cli)?
+    } else if backend == "rwkv7" {
+        tokenize_rwkv(&data, cli)?
+    } else {
+        bail!("Unknown backend {}", backend);
+    };
+
+    // Set up LoRA configuration
+    let lora_config = finezip::lora::LoraConfig {
+        rank: cli.lora_rank,
+        alpha: cli.lora_alpha as f64,
+        dropout: 0.0, // TODO: make configurable
+    };
+
+    let training_config = finezip::lora::LoraTrainingConfig {
+        learning_rate: cli.lora_lr.parse().unwrap_or(1e-4),
+        epochs: cli.lora_epochs,
+        batch_size: 1, // TODO: make configurable
+        gradient_clip: 1.0, // TODO: make configurable
+        warmup_steps: 0, // TODO: make configurable
+        save_steps: 100, // TODO: make configurable
+    };
+
+    let quant_level = finezip::lora::quantization::QuantizationLevel::from_str(&cli.lora_quant)
+        .unwrap_or(finezip::lora::quantization::QuantizationLevel::None);
+
+    let finezip_config = finezip::encode::FineZipConfig {
+        lora_config,
+        training_config,
+        quantization: quant_level,
+        use_ac: cli.use_ac,
+        context_window: cli.context,
+    };
+
+    // Create LoRA manager based on backend
+    let manager: Box<dyn finezip::lora::LoraManager> = if backend == "smollm" {
+        Box::new(finezip::lora::SmolLmLoraManager::new(&device))
+    } else {
+        Box::new(finezip::lora::Rwkv7LoraManager::new(&device))
+    };
+
+    // Create encoder
+    let mut encoder = finezip::encode::FineZipEncoder::new(manager, finezip_config);
+
+    // Train LoRA adapters
+    eprintln!("Training LoRA adapters...");
+    encoder.train_lora(&tokens)?;
+
+    // Encode to ranks
+    eprintln!("Encoding to ranks...");
+    let ranks = encoder.encode_to_ranks(&tokens)?;
+
+    // Compress ranks
+    eprintln!("Compressing ranks...");
+    let compressed_ranks = encoder.compress_ranks(&ranks)?;
+
+    // Get adapter data
+    eprintln!("Serializing adapters...");
+    let adapter_data = encoder.get_adapter_data()?;
+
+    // Write container (similar to LLMZip but with FineZip sections)
+    write_finezip_container(
+        output,
+        &finezip::encode::HeaderData {
+            bos_token_id: bos_id,
+            token_count: tokens.len() as u64,
+            orig_len_bytes,
+            model_hash16,
+            tokenizer_hash16,
+            orig_hash16: orig_blake3_16,
+            context_window: cli.context as u32,
+            vocab_size: vocab_size as u32,
+            model_file_repr: weight_repr.clone(),
+            reprime_interval: cli.reprime_interval as u32,
+            use_ac: cli.use_ac,
+        },
+        &adapter_data,
+        &compressed_ranks,
+        cli,
+    )?;
+
+    let enc_bytes = fs::metadata(output)?.len() as u64;
+    let elapsed = t0.elapsed();
+    let bpb = (8.0 * enc_bytes as f64) / (orig_len_bytes as f64);
+
+    println!("FineZip Encoded: {} bytes -> {} bytes | bits/byte={:.3} | time={:.2?}",
+             orig_len_bytes, enc_bytes, bpb, elapsed);
+
+    Ok(())
+}
+
+// Helper functions for FineZip tokenization
+fn tokenize_smol(data: &[u8], cli: &Cli) -> Result<(Vec<u32>, [u8; 16], [u8; 16], String, u32, usize)> {
+    let (weight_paths, weight_repr_s, config_p) = ensure_model_artifacts_smol(&cli.model_repo, &cli.model_file, &cli.model)?;
+    let tok_path = ensure_local_file(&cli.tokenizer_repo, &cli.tokenizer_file, &cli.tokenizer)?;
+    let model_hash16 = blake3_files_bin16(&weight_paths)?;
+    let tokenizer_hash16 = blake3_file_bin16(&tok_path)?;
+    let tokenizer = HfTokenizer::from_file(tok_path.to_str().unwrap()).map_err(|e| anyhow::anyhow!("failed loading tokenizer: {e}"))?;
+    let bos_id = detect_bos_id_smol(&tokenizer, &config_p)?;
+    let vocab_size = tokenizer.get_vocab_size(true) as usize;
+
+    // Tokenize the data
+    let text = String::from_utf8_lossy(data);
+    let encoding = tokenizer.encode(text.as_ref(), true).map_err(|e| anyhow::anyhow!("tokenization failed: {e}"))?;
+    let tokens = encoding.get_ids().to_vec();
+
+    Ok((tokens, model_hash16, tokenizer_hash16, weight_repr_s, bos_id, vocab_size))
+}
+
+fn tokenize_rwkv(data: &[u8], cli: &Cli) -> Result<(Vec<u32>, [u8; 16], [u8; 16], String, u32, usize)> {
+    let model_path = cli.rwkv_model.clone();
+    let config_p = cli.rwkv_config.clone();
+    let tok_path = cli.rwkv_tokenizer.clone();
+    let model_hash16 = blake3_file_bin16(&model_path)?;
+    let tokenizer_hash16 = blake3_file_bin16(&tok_path)?;
+    let tokenizer = candlerwkv7::models::rwkv7::Tokenizer::new(&tok_path)?;
+    let bos_id = 0;
+    let vocab_size = tokenizer.vocab_size();
+
+    // Tokenize the data
+    let text = String::from_utf8_lossy(data);
+    let tokens = tokenizer.encode(&text)?;
+
+    Ok((tokens, model_hash16, tokenizer_hash16, model_path.file_name().and_then(|s| s.to_str()).unwrap_or("model.safetensors").to_string(), bos_id, vocab_size))
+}
+
+// FineZip container writer
+fn write_finezip_container(
+    output: &Path,
+    header_data: &finezip::encode::HeaderData,
+    adapter_data: &[u8],
+    compressed_ranks: &[u8],
+    cli: &Cli,
+) -> Result<()> {
+    use byteorder::WriteBytesExt;
+
+    let mut out_file = BufWriter::new(File::create(output)?);
+
+    // Write header (extended version for FineZip)
+    out_file.write_u32::<byteorder::LittleEndian>(MAGIC)?;
+    out_file.write_u16::<byteorder::LittleEndian>(VERSION)?;
+    out_file.write_u32::<byteorder::LittleEndian>(header_data.bos_token_id)?;
+    write_var_u64(&mut out_file, header_data.token_count)?;
+    write_var_u64(&mut out_file, header_data.orig_len_bytes)?;
+    out_file.write_all(&header_data.model_hash16)?;
+    out_file.write_all(&header_data.tokenizer_hash16)?;
+    out_file.write_all(&header_data.orig_hash16)?;
+
+    // Extended reserved flags for FineZip
+    let reserved_flags = flags_pack(false, false, false, cli.reprime_interval, Mode::FineZip, header_data.use_ac);
+    out_file.write_u32::<byteorder::LittleEndian>(reserved_flags)?;
+    out_file.write_u32::<byteorder::LittleEndian>(header_data.context_window)?;
+    out_file.write_u32::<byteorder::LittleEndian>(header_data.vocab_size)?;
+    write_var_u64(&mut out_file, adapter_data.len() as u64)?;
+    write_var_u64(&mut out_file, compressed_ranks.len() as u64)?;
+    out_file.write_u32::<byteorder::LittleEndian>(header_data.reprime_interval)?;
+
+    // Write model file representation
+    let model_repr_bytes = header_data.model_file_repr.as_bytes();
+    out_file.write_u32::<byteorder::LittleEndian>(model_repr_bytes.len() as u32)?;
+    out_file.write_all(model_repr_bytes)?;
+
+    // Write adapter data
+    out_file.write_all(adapter_data)?;
+
+    // Write compressed ranks
+    out_file.write_all(compressed_ranks)?;
+
+    out_file.flush()?;
+    Ok(())
+}
+
+fn encode_file_llmzip(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     let t0 = std::time::Instant::now();
     // reuse scan directory flag (defined below when scan is initialized)
     let device = detect_device(cli.cpu);
@@ -2366,7 +2623,7 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     // Write final file: header -> optional agent gates -> payload
     {
         let mut out_file = BufWriter::new(File::create(output)?);
-        let reserved_flags = flags_pack(agent_enabled, agent_mock, gates_present, agent_chunk);
+        let reserved_flags = flags_pack(agent_enabled, agent_mock, gates_present, agent_chunk, mode, cli.use_ac);
         let header_v2 = HeaderBinV2 { bos_token_id: bos_id, token_count, orig_len_bytes, model_hash16, tokenizer_hash16, orig_hash16: orig_blake3_16, reserved_flags, context_window: cli.context as u32, vocab_size: vocab_size as u32, model_file_repr_len: weight_repr.len() as u32, reprime_interval: cli.reprime_interval as u32 };
         write_header_v2(&mut out_file, &header_v2, weight_repr.as_bytes())?;
         if gates_present { write_agent_gates_v2(&mut out_file, &gate_records)?; }
@@ -2404,11 +2661,40 @@ fn encode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn decode_file(cli: &Cli, input: &Path, output: &Path) -> anyhow::Result<()> {
+fn decode_file_finezip(cli: &Cli, input: &Path, output: &Path, header: HeaderBinV2, model_file_repr: Vec<u8>) -> anyhow::Result<()> {
+    // TODO: Implement FineZip decoding
+    // This will involve:
+    // 1. Loading base model
+    // 2. Reading LoRA adapters from container
+    // 3. Setting up LoRA manager
+    // 4. Decompressing ranks
+    // 5. Decoding ranks to tokens
+    // 6. Detokenizing to text
+
+    bail!("FineZip decoding not yet implemented")
+}
+
+fn decode_file(cli: &Cli, mode: Mode, input: &Path, output: &Path) -> anyhow::Result<()> {
     let reuse_scan_mode = cli.reuse_scan_dir.is_some();
     let device = detect_device(cli.cpu);
     let mut rdr = BufReader::new(File::open(input)?);
     let (header, model_file_repr) = read_header_v2(&mut rdr)?;
+
+    // Check mode from header flags
+    let header_mode = flags_unpack_mode(header.reserved_flags);
+    if header_mode != mode {
+        eprintln!("Warning: Header indicates {:?} mode but CLI specifies {:?} mode", header_mode, mode);
+    }
+
+    match mode {
+        Mode::FineZip => decode_file_finezip(cli, input, output, header, model_file_repr),
+        Mode::LlmZip => decode_file_llmzip(cli, input, output, header, model_file_repr),
+    }
+}
+
+fn decode_file_llmzip(cli: &Cli, input: &Path, output: &Path, header: HeaderBinV2, model_file_repr: Vec<u8>) -> anyhow::Result<()> {
+    let reuse_scan_mode = cli.reuse_scan_dir.is_some();
+    let device = detect_device(cli.cpu);
     let backend = cli.backend.to_lowercase();
     let vocab_size = header.vocab_size as usize;
     let agent_in_header = flags_unpack_agent_used(header.reserved_flags);
