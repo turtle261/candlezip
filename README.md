@@ -43,8 +43,8 @@ Therefore, Intelligence can be measured by lossless compression, where reduced f
 size is quite literally entropy reduction (more precisely, relocation).
 
 This is substrate Agnostic--human intelligence can be measured using Candlezip, by
-using a UI python script, rather than the LLM Agent script provided--this is WIP.
-Feel free to implement this and PR.
+using a UI python script, rather than the LLM Agent script provided--this is provided and results are detailed. 
+there is a working demonstration of this below.
 
 **How CandleZip measures it.**
 - We track **gross entropy reduction.** _ER_: the integer-bit drop between
