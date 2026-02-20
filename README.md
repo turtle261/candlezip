@@ -4,7 +4,7 @@ CandleZip exists to turn the well-known statement "compression = intelligence" i
 engineering instrument. The project frames every tool call as a priced entropy sink:
 an agent should only spend resources when those resources route chaos(entropy) out of
 the data stream. The result is a research-grade benchmark directly measures intelligence, and emits an integer-bit
-signal you can trust, cite, and extend. Measure something that compresses **everything**, and that definitionally is general intelligence!
+signal you can trust, cite, and extend. 
 
 DOI: [10.5281/zenodo.17282860](https://doi.org/10.5281/zenodo.17282860)
 
